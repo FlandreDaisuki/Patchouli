@@ -4,7 +4,7 @@
 // @namespace   https://github.com/FlandreDaisuki
 // @include     http://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
-// @version     2016.06.08
+// @version     2016.06.09
 // @author      FlandreDaisuki
 // @grant       none
 // @noframes
@@ -257,7 +257,7 @@ const Patchouli = {
 
 			e.elem.style.order = (this.koakuma.autosort) ? -e.bookmark : 0;
 
-			if(this.conf.hasAuthor && this.koakuma.markfollowed) {
+			if(this.conf.hasAuthor && this.koakuma.markfollowed && e.followed) {
 				e.elem.querySelector('a.user').style.color = 'red';
 			}
 		});
