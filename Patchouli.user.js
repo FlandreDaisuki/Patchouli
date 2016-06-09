@@ -6,6 +6,7 @@
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
 // @version     2016.06.09
 // @author      FlandreDaisuki
+// @updateURL   https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/Patchouli.user.js
 // @grant       none
 // @noframes
 // ==/UserScript==
