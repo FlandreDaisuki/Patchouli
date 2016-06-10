@@ -5,6 +5,7 @@
 - 自動找圖(不用翻頁，不用滑鼠滾輪)
 - 過濾結果(標籤, 書籤數, 星星數)
 - 對結果排序
+- [Demo video](https://youtu.be/krEXgteyAwk)
 
 ##Installation 安裝
 1. 安裝 Chrome 的 [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) 或 Firefox 的 [GreaseMonkey](https://addons.mozilla.org/zh-tw/firefox/addon/greasemonkey/)
