@@ -551,10 +551,10 @@ function setupEvent() {
 
 // Program Entry Point
 Patchouli.init();
+removeJama();
 if (Patchouli.supported) {
 	setupHTML();
 	setupEvent();
-	removeJama();
 	Patchouli.page = Patchouli.pageGenerator();
 	Patchouli.np = Patchouli.page.next().value;
 }
