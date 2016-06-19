@@ -4,7 +4,7 @@
 // @namespace   https://github.com/FlandreDaisuki
 // @include     http://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
-// @version     2016.06.18
+// @version     2016.06.19
 // @author      FlandreDaisuki
 // @updateURL   https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/Patchouli.user.js
 // @grant       none
@@ -180,6 +180,7 @@ const Patchouli = {
 
 				page.thumbs = $doc.find(this.conf.selector)
 					.toArray()
+					.filter((elem) => elem.querySelector('a.work'))
 					.map((elem) => new Thumb(elem))
 					.filter((elem) => {
 						// Pixiv inner error, like image been deleted
