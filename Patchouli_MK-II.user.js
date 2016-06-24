@@ -16,7 +16,7 @@ function fetchWithcookie(url) {
             .then(response => response.text());
 }
 
-function fetchBookmarkCount(illust_id) {
+function getBookmarkCount(illust_id) {
     const url = `http://www.pixiv.net/bookmark_detail.php?illust_id=${illust_id}`;
     return fetchWithcookie(url)
             .then((html)=>{
@@ -58,6 +58,7 @@ const BASE = (() => {
     const pn = bu.pathname();
     const ss = URI.parseQuery(bu.query());
     const baseURI = bu.toString();
+    const tt = $('input[name="tt"]').val();
 
     let supported = true;
     let li_type = 'search';
@@ -84,13 +85,14 @@ const BASE = (() => {
     }
 
     return {
+        tt,
         baseURI,
-        supported,
         li_type,
+        supported,
     };
 })();
 
-function fetchBatch(url) {
+function getBatch(url) {
     return fetchWithcookie(url)
         .then(html => parseToDOM(html))
         .then(doc => $(doc))
@@ -108,11 +110,29 @@ function fetchBatch(url) {
         });
 }
 
+/**
+ * return object which key is illust_id
+ */
+function getIllustsDetails(illust_ids) {
+    const api = `http://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${illust_ids.join(',')}&tt=${BASE.tt}`;
+    return fetchWithcookie(api).then(json => JSON.parse(json).body);
+}
+
+/**
+ * return an array
+ */
+function getUsersDetails(user_ids) {
+    const api = `http://www.pixiv.net/rpc/get_profile.php?user_ids=${user_ids.join(',')}&tt=${BASE.tt}`;
+    return fetchWithcookie(api).then(json => JSON.parse(json).body);
+}
+
 //Debugging
 window.fetchWithcookie = fetchWithcookie;
-window.fetchBookmarkCount = fetchBookmarkCount;
-window.fetchBatch = fetchBatch;
+window.getBookmarkCount = getBookmarkCount;
+window.getBatch = getBatch;
+window.getIllustsDetails = getIllustsDetails;
+window.getUsersDetails = getUsersDetails;
 window.parseToDOM = parseToDOM;
 window.removeAnnoyance = removeAnnoyance;
-window.URI = URI;
 window.BASE = BASE;
+window.URI = URI;
