@@ -25,6 +25,40 @@ function getBookmarkCount(illust_id) {
             });
 }
 
+function getBatch(url) {
+    return fetchWithcookie(url)
+        .then(html => parseToDOM(html))
+        .then(doc => $(doc))
+        .then($doc => {
+            removeAnnoyance($doc);
+            const next = $doc.find('.next a').attr('href');
+            const nextLink = (next) ? BASE.baseURI.replace(/\?.*/, next) : null;
+            const illust_ids = $doc.find('li.image-item > a.work')
+                                .toArray()
+                                .map(x => URI.parseQuery(x.href).illust_id);
+            return {
+                nextLink,
+                illust_ids,
+            };
+        });
+}
+
+/**
+ * return object which key is illust_id
+ */
+function getIllustsDetails(illust_ids) {
+    const api = `http://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${illust_ids.join(',')}&tt=${BASE.tt}`;
+    return fetchWithcookie(api).then(json => JSON.parse(json).body);
+}
+
+/**
+ * return an array
+ */
+function getUsersDetails(user_ids) {
+    const api = `http://www.pixiv.net/rpc/get_profile.php?user_ids=${user_ids.join(',')}&tt=${BASE.tt}`;
+    return fetchWithcookie(api).then(json => JSON.parse(json).body);
+}
+
 function parseToDOM(html) {
     return (new DOMParser()).parseFromString(html, 'text/html');
 }
@@ -59,6 +93,8 @@ const BASE = (() => {
     const ss = URI.parseQuery(bu.query());
     const baseURI = bu.toString();
     const tt = $('input[name="tt"]').val();
+    const container = $('li.image-items').parent()[0];
+    container.id = 'Koa-container';
 
     let supported = true;
     let li_type = 'search';
@@ -89,42 +125,11 @@ const BASE = (() => {
         baseURI,
         li_type,
         supported,
+        container,
     };
 })();
 
-function getBatch(url) {
-    return fetchWithcookie(url)
-        .then(html => parseToDOM(html))
-        .then(doc => $(doc))
-        .then($doc => {
-            removeAnnoyance($doc);
-            const next = $doc.find('.next a').attr('href');
-            const nextLink = (next) ? BASE.baseURI.replace(/\?.*/, next) : null;
-            const illust_ids = $doc.find('li.image-item > a.work')
-                                .toArray()
-                                .map(x => URI.parseQuery(x.href).illust_id);
-            return {
-                nextLink,
-                illust_ids,
-            };
-        });
-}
 
-/**
- * return object which key is illust_id
- */
-function getIllustsDetails(illust_ids) {
-    const api = `http://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${illust_ids.join(',')}&tt=${BASE.tt}`;
-    return fetchWithcookie(api).then(json => JSON.parse(json).body);
-}
-
-/**
- * return an array
- */
-function getUsersDetails(user_ids) {
-    const api = `http://www.pixiv.net/rpc/get_profile.php?user_ids=${user_ids.join(',')}&tt=${BASE.tt}`;
-    return fetchWithcookie(api).then(json => JSON.parse(json).body);
-}
 
 //Debugging
 window.fetchWithcookie = fetchWithcookie;
