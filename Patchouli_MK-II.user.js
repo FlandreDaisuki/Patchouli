@@ -60,7 +60,7 @@ const BASE = (() => {
     const baseURI = bu.toString();
 
     let supported = true;
-    let li_type = 'new';
+    let li_type = 'search';
     /** li_type - the DOM type to show li.image-item
      *
      *  'search'(default) : illust_150 + illust_title + user_name + bookmark_count
@@ -100,7 +100,7 @@ function fetchBatch(url) {
             const nextLink = (next) ? BASE.baseURI.replace(/\?.*/, next) : null;
             const illust_ids = $doc.find('li.image-item > a.work')
                                 .toArray()
-                                .map(x => URI.parseQuery(x.href).illust_id)
+                                .map(x => URI.parseQuery(x.href).illust_id);
             return {
                 nextLink,
                 illust_ids,
