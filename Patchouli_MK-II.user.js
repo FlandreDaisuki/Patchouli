@@ -94,7 +94,9 @@ const BASE = (() => {
     const baseURI = bu.toString();
     const tt = $('input[name="tt"]').val();
     const container = $('li.image-item').parent()[0];
-    container.id = 'Koa-container';
+    if(container){
+        container.id = 'Koa-container';
+    }
 
     let supported = true;
     let li_type = 'search';
