@@ -93,7 +93,7 @@ const BASE = (() => {
     const ss = URI.parseQuery(bu.query());
     const baseURI = bu.toString();
     const tt = $('input[name="tt"]').val();
-    const container = $('li.image-items').parent()[0];
+    const container = $('li.image-item').parent()[0];
     container.id = 'Koa-container';
 
     let supported = true;
@@ -129,6 +129,25 @@ const BASE = (() => {
     };
 })();
 
+removeAnnoyance();
+
+const VM = new Vue({
+    el: '#Koa-container',
+    template: '<ul><imageitem v-for="th in thumbs" :content="th"></imageitem></ul>',
+    data: {
+        thumbs: [{
+            msg:'XDXDXD'
+        }, {
+            msg:'wwwwww'
+        }]
+    },
+    components: {
+        imageitem: {
+            props:['content'],
+            template: '<li class="image-item" style="order: 0;">{{ content.msg }}</li>'
+        }
+    }
+});
 
 
 //Debugging
@@ -140,4 +159,6 @@ window.getUsersDetails = getUsersDetails;
 window.parseToDOM = parseToDOM;
 window.removeAnnoyance = removeAnnoyance;
 window.BASE = BASE;
+window.VM = VM;
+window.Vue = Vue;
 window.URI = URI;
