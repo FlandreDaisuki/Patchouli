@@ -269,18 +269,13 @@ const VM = new Vue({
     computed: {
         li_type: function() {
             return 'imageitem-' + BASE.li_type;
-        },
+        }
     }
 });
 
 function setupHTML() {
 $(`
     <style>
-    /* Pixiv Better */
-    #wrapper {
-        width: initial;
-    }
-
     #Koa-container {
         display: flex;
         flex-wrap: wrap;
