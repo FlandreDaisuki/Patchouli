@@ -234,7 +234,7 @@ Vue.component('edit-link', {
 
 Vue.component('imageitem-search', {
     props:['thdata'],
-    template: `<li class="image-item" style="order: 0;">
+    template: `<li class="image-item">
                 <img150 :thd="thdata"></img150>
                 <illust-title :thd="thdata"></illust-title>
                 <user-name :thd="thdata"></user-name>
@@ -243,7 +243,7 @@ Vue.component('imageitem-search', {
 
 Vue.component('imageitem-member-illust', {
     props:['thdata'],
-    template: `<li class="image-item" style="order: 0;">
+    template: `<li class="image-item">
                 <img150 :thd="thdata"></img150>
                 <illust-title :thd="thdata"></illust-title>
                 <count-list :thd="thdata"></count-list></li>`
@@ -251,7 +251,7 @@ Vue.component('imageitem-member-illust', {
 
 Vue.component('imageitem-mybookmark', {
     props:['thdata'],
-    template: `<li class="image-item" style="order: 0;">
+    template: `<li class="image-item">
                 <bookmark-checkbox v-if="false" :thd="thdata"></bookmark-checkbox>
                 <img150 :thd="thdata"></img150>
                 <illust-title :thd="thdata"></illust-title>
@@ -262,9 +262,10 @@ Vue.component('imageitem-mybookmark', {
 
 const VM = new Vue({
     el: '#Koa-container',
-    template: '<ul><component :is="li_type" v-for="th in thumbs" :thdata="th"></component></ul>',
+    template: `<ul><component :is="li_type" v-for="th in thumbs | orderBy order_t -1" :thdata="th"></component></ul>`,
     data: {
-        thumbs: []
+        thumbs: [],
+        order_t: 'illust_id', // or bookmark_count
     },
     computed: {
         li_type: function() {
@@ -306,8 +307,9 @@ $(`
 
 setupHTML();
 
-(function() {
-    window.testing = getBatch(location.href)
+function tf() {
+    window.testing_next = window.testing_next || location.href;
+    window.testing = getBatch(window.testing_next)
         .then(bat => {
             console.log(bat);
             return getIllustsDetails(bat.illust_ids)
@@ -337,9 +339,11 @@ setupHTML();
             console.log(parseDataFromBatch(bat));
             VM.$data.thumbs.push(...parseDataFromBatch(bat));
             window.testing_bat = bat;
+            window.testing_next = bat.nextLink;
             return bat;
         });
-})();
+}
+tf();
 
 //Debugging
 window.fetchWithcookie = fetchWithcookie;
@@ -348,8 +352,11 @@ window.getBatch = getBatch;
 window.getIllustsDetails = getIllustsDetails;
 window.getUsersDetails = getUsersDetails;
 window.parseToDOM = parseToDOM;
+window.parseDataFromBatch = parseDataFromBatch;
 window.removeAnnoyance = removeAnnoyance;
 window.BASE = BASE;
 window.VM = VM;
 window.Vue = Vue;
 window.URI = URI;
+
+window.tf = tf;
