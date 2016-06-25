@@ -75,7 +75,7 @@ function parseDataFromBatch(batch) {
         const is_ugoira = iinfo.illust_type === '2';
         const is_manga = iinfo.illust_type === '1';
         const src150 = (is_ugoira) ?
-                            iinfo.url.big.replace(/([^-]+)(?:-original)([^_]+)(?:.+)/,'$1-inf$2_s.jpg') : 
+                            iinfo.url.big.replace(/([^-]+)(?:-original)([^_]+)(?:[^\.]+)(.+)/,'$1-inf$2_s$3') : 
                             iinfo.url.m.replace(/600x600/,'150x150');
         return {
             bookmark_count,
