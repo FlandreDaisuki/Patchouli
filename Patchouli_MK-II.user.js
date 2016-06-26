@@ -2,7 +2,7 @@
 // @name        Patchuli MK-II
 // @namespace   https://github.com/FlandreDaisuki
 // @include     http://www.pixiv.net/*
-// @version     1
+// @version     2016.06.27
 // @author      FlandreDaisuki
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.25/vue.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
@@ -74,7 +74,7 @@ function parseDataFromBatch(batch) {
     const illust_d = batch.illust_d;
     const user_d = batch.user_d;
     const bookmark_d = batch.bookmark_d;
-    return batch.illust_ids.map(x => {
+    return batch.illust_ids.filter(x => x).map(x => {
         const iinfo = illust_d[x];
         const uinfo = user_d[iinfo.user_id];
         const binfo = bookmark_d[x];
