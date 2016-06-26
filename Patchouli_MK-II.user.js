@@ -16,15 +16,19 @@ function fetchWithcookie(url) {
             .then(response => response.text());
 }
 
-function getBookmarkCount(illust_id) {
+function getBookmarkCountAndTags(illust_id) {
     const url = `http://www.pixiv.net/bookmark_detail.php?illust_id=${illust_id}`;
     return fetchWithcookie(url)
-            .then((html)=>{
-                let m = html.match(/<\/i>(\d+)/);
-                const bookmark_count =  m ? parseInt(m[1]) : 0;
+            .then(html => parseToDOM(html))
+            .then(doc => $(doc))
+            .then($doc => {
+                let m = $doc.find('a.bookmark-count').text();
+                const bookmark_count =  m ? parseInt(m) : 0;
+                const tags = Array.from($doc.find('ul.tags:first a')).map(x => x.innerText);
                 return {
                     bookmark_count,
                     illust_id,
+                    tags,
                 };
             });
 }
@@ -71,14 +75,13 @@ function parseDataFromBatch(batch) {
     return batch.illust_ids.map(x => {
         const iinfo = illust_d[x];
         const uinfo = user_d[iinfo.user_id];
-        const bookmark_count = bookmark_d[x];
+        const binfo = bookmark_d[x];
         const is_ugoira = iinfo.illust_type === '2';
         const is_manga = iinfo.illust_type === '1';
         const src150 = (is_ugoira) ?
                             iinfo.url.big.replace(/([^-]+)(?:-original)([^_]+)(?:[^\.]+)(.+)/,'$1-inf$2_s$3') : 
                             iinfo.url.m.replace(/600x600/,'150x150');
         return {
-            bookmark_count,
             is_ugoira,
             is_manga,
             src150,
@@ -89,6 +92,8 @@ function parseDataFromBatch(batch) {
             user_id: uinfo.user_id,
             user_name: uinfo.user_name,
             is_follow: uinfo.is_follow,
+            tags: binfo.tags,
+            bookmark_count: binfo.bookmark_count,
         };
     });
 }
@@ -138,6 +143,15 @@ const BASE = (() => {
      *  'member-illust'   : illust_150 + illust_title +           + bookmark_count
      *  'mybookmark'      : illust_150 + illust_title + user_name + bookmark_count + checkbox + editlink
      */
+
+    let order_t = '';
+    /** order_t - default ordering attr
+     *
+     *  ''(default) or 'illust_id'
+     *  'bookmark_count'
+     */
+
+
     if (pn === '/member_illust.php' && ss.id) {
         li_type = 'member-illust';
     } else if (pn === '/search.php') {
@@ -165,6 +179,7 @@ const BASE = (() => {
         li_type,
         supported,
         container,
+        order_t,
     };
 })();
 
@@ -265,7 +280,7 @@ const VM = new Vue({
     template: `<ul><component :is="li_type" v-for="th in thumbs | orderBy order_t -1" :thdata="th"></component></ul>`,
     data: {
         thumbs: [],
-        order_t: 'illust_id', // or bookmark_count
+        order_t: BASE.order_t,
     },
     computed: {
         li_type: function() {
@@ -328,10 +343,10 @@ function tf() {
                 });
         })
         .then(bat => {
-            return Promise.all(Object.keys(bat.illust_d).map((k) => bat.illust_d[k]).map(x => getBookmarkCount(x.illust_id)))
+            return Promise.all(Object.keys(bat.illust_d).map((k) => bat.illust_d[k]).map(x => getBookmarkCountAndTags(x.illust_id)))
                 .then(bookmark_d => {
                     bat.bookmark_d = {};
-                    bookmark_d.forEach(x => bat.bookmark_d[x.illust_id] = x.bookmark_count);
+                    bookmark_d.forEach(x => bat.bookmark_d[x.illust_id] = x);
                     return bat;
                 });
         })
@@ -347,7 +362,7 @@ tf();
 
 //Debugging
 window.fetchWithcookie = fetchWithcookie;
-window.getBookmarkCount = getBookmarkCount;
+window.getBookmarkCountAndTags = getBookmarkCountAndTags;
 window.getBatch = getBatch;
 window.getIllustsDetails = getIllustsDetails;
 window.getUsersDetails = getUsersDetails;
