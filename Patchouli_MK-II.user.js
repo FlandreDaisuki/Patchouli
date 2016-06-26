@@ -195,7 +195,8 @@ Vue.component('user-name', {
     props:['thd'],
     template: `<a class="user ui-profile-popup"
                  :href="thd.user_id | user_href" :title="thd.user_name"
-                 :data-user_id="thd.user_id" :data-user_name="thd.user_name">
+                 :data-user_id="thd.user_id" :data-user_name="thd.user_name"
+                 :class="{'followed': thd.is_follow}">
                     {{thd.user_name}}</a>`,
     filters: {
         user_href: function(user_id) {
@@ -253,6 +254,7 @@ Vue.component('imageitem-mybookmark', {
                 <bookmark-checkbox v-if="false" :thd="thdata"></bookmark-checkbox>
                 <img150 :thd="thdata"></img150>
                 <illust-title :thd="thdata"></illust-title>
+                <user-name :thd="thdata"></user-name>
                 <count-list :thd="thdata"></count-list>
                 <edit-link :thd="thdata"></edit-link>
                 </li>`,
@@ -360,30 +362,63 @@ function setupHTML() {
     .layout-a.fullwidth {
         margin: 10px 20px;
     }
+    .followed.followed.followed {
+        font-weight: bold;
+        color: red;
+    }
     </style>`).appendTo('head');
 }
 
 function setupEvent() {
+
+    const $KoaController = $('#Koa-controller');
     const $KoaBookmarkInput = $('#Koa-bookmark-input');
     const $KoaBtnInput = $('#Koa-btn-input');
     const $KoaFullwidthInput = $('#Koa-fullwidth-input');
     const $KoaOrderingInput = $('#Koa-ordering-input');
 
-    $KoaBookmarkInput.on('wheel', function(event) {
+    $KoaController
+    .on('mouseenter', function() {
+        $KoaController.children().show(1);
+    })
+    .on('mouseleave', function() {
+        $KoaController.children().show(1).delay(2000).hide(100);
+    });
+
+
+    $KoaBookmarkInput
+    .on('wheel', function(event) {
         this.blur();
         if(event.originalEvent.deltaY > 0) {
             this.stepDown(20);
         } else {
             this.stepUp(20);
         }
+        MuQ.Koakuma.$data.limit = parseInt(this.value);
         return false;
+    })
+    .on('blur', function(event) {
+        if(!this.validity.valid){
+            console.log(this.validationMessage);
+        } else {
+            MuQ.Koakuma.$data.limit = parseInt(this.value);
+        }
     });
 
     $KoaBtnInput.click(function(event) {
         if(!$KoaBookmarkInput[0].validity.valid){
             console.log($KoaBookmarkInput[0].validationMessage);
         } else {
-
+            if (MuQ.intervalID) {
+                clearInterval(MuQ.intervalID);
+                MuQ.intervalID = null;
+                this.value = '找';
+            } else {
+                MuQ.intervalID = setInterval(function(){
+                    MuQ.nextPage();
+                }, 1000);
+                this.value = '停';
+            }
         }
         return false;
     });
@@ -405,7 +440,7 @@ function setupEvent() {
 
 const MuQ = {
     nextLink: location.href,
-    intervalId: null,
+    intervalID: null,
     init: function() {
         if(BASE.supported){
             if(BASE.container) {
@@ -424,14 +459,19 @@ const MuQ = {
         }
     },
     nextPage: function() {
-        this.np = this.np.then(n => this.page.next(n.nextLink).value );
+        this.np = this.np.then(n => this.page.next(n.nextLink).value )
+                    .catch(err => {
+                        console.error(err);
+                        clearInterval(this.intervalID);
+                        this.intervalID = null;
+                        $('#Koa-btn-input').attr('disabled', true).val('完');
+                    });
     },
     np_gen: function* () {
-        while(true) {
+        while(this.nextLink) {
             this.nextLink = 
                 yield getBatch(this.nextLink)
                     .then(bat => {
-                        console.log(bat);
                         return getIllustsDetails(bat.illust_ids)
                             .then(illust_d => {
                                 bat.illust_d = illust_d;
@@ -455,10 +495,9 @@ const MuQ = {
                             });
                     })
                     .then(bat => {
-                        console.log(parseDataFromBatch(bat));
                         this.Koakuma.$data.thumbs.push(...parseDataFromBatch(bat));
                         return bat;
-                    }).catch((err) => {
+                    }).catch(err => {
                         console.error(err);
                     });
         }
