@@ -13,26 +13,28 @@
 
 function fetchWithcookie(url) {
     return fetch(url, {credentials: 'same-origin'})
-            .then(response => response.text())
-            .catch(err => { console.error(err); });
+        .then(response => response.text())
+        .catch(err => { console.error(err); });
 }
 
 function getBookmarkCountAndTags(illust_id) {
     const url = `http://www.pixiv.net/bookmark_detail.php?illust_id=${illust_id}`;
+
     return fetchWithcookie(url)
-            .then(html => parseToDOM(html))
-            .then(doc => $(doc))
-            .then($doc => {
-                let m = $doc.find('a.bookmark-count').text();
-                const bookmark_count =  m ? parseInt(m) : 0;
-                const tags = Array.from($doc.find('ul.tags:first a')).map(x => x.innerText);
-                return {
-                    bookmark_count,
-                    illust_id,
-                    tags,
-                };
-            })
-            .catch(err => { console.error(err); });
+        .then(html => parseToDOM(html))
+        .then(doc => $(doc))
+        .then($doc => {
+            let m = $doc.find('a.bookmark-count').text();
+            const bookmark_count =  m ? parseInt(m) : 0;
+            const tags = Array.from($doc.find('ul.tags:first a')).map(x => x.innerText);
+
+            return {
+                bookmark_count,
+                illust_id,
+                tags,
+            };
+        })
+        .catch(err => { console.error(err); });
 }
 
 function getBatch(url) {
@@ -43,9 +45,12 @@ function getBatch(url) {
             removeAnnoyance($doc);
             const next = $doc.find('.next a').attr('href');
             const nextLink = (next) ? new URI(BASE.baseURI).query(next).toString() : null;
-            const illust_ids = $doc.find('li.image-item > a.work')
-                                .toArray()
-                                .map(x => URI.parseQuery($(x).attr('href')).illust_id);
+
+            const illust_ids = $doc
+                .find('li.image-item > a.work')
+                .toArray()
+                .map(x => URI.parseQuery($(x).attr('href')).illust_id);
+
             return {
                 nextLink,
                 illust_ids,
@@ -59,6 +64,7 @@ function getBatch(url) {
  */
 function getIllustsDetails(illust_ids) {
     const api = `http://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${illust_ids.join(',')}&tt=${BASE.tt}`;
+
     return fetchWithcookie(api).then(json => JSON.parse(json).body).catch(err => { console.error(err); });
 }
 
@@ -74,30 +80,34 @@ function parseDataFromBatch(batch) {
     const illust_d = batch.illust_d;
     const user_d = batch.user_d;
     const bookmark_d = batch.bookmark_d;
-    return batch.illust_ids.filter(x => x).map(x => {
-        const iinfo = illust_d[x];
-        const uinfo = user_d[iinfo.user_id];
-        const binfo = bookmark_d[x];
-        const is_ugoira = iinfo.illust_type === '2';
-        const is_manga = iinfo.illust_type === '1';
-        const src150 = (is_ugoira) ?
-                            iinfo.url.big.replace(/([^-]+)(?:-original)([^_]+)(?:[^\.]+)(.+)/,'$1-inf$2_s$3') : 
-                            iinfo.url.m.replace(/600x600/,'150x150');
-        return {
-            is_ugoira,
-            is_manga,
-            src150,
-            srcbig: iinfo.url.big,
-            is_multiple: iinfo.is_multiple,
-            illust_id: iinfo.illust_id,
-            illust_title: iinfo.illust_title,
-            user_id: uinfo.user_id,
-            user_name: uinfo.user_name,
-            is_follow: uinfo.is_follow,
-            tags: binfo.tags,
-            bookmark_count: binfo.bookmark_count,
-        };
-    });
+
+    return batch.illust_ids
+        .filter(x => x)
+        .map(x => {
+            const iinfo = illust_d[x];
+            const uinfo = user_d[iinfo.user_id];
+            const binfo = bookmark_d[x];
+            const is_ugoira = iinfo.illust_type === '2';
+            const is_manga = iinfo.illust_type === '1';
+            const src150 = (is_ugoira) ?
+                iinfo.url.big.replace(/([^-]+)(?:-original)([^_]+)(?:[^\.]+)(.+)/,'$1-inf$2_s$3') : 
+                iinfo.url.m.replace(/600x600/,'150x150');
+
+            return {
+                is_ugoira,
+                is_manga,
+                src150,
+                srcbig: iinfo.url.big,
+                is_multiple: iinfo.is_multiple,
+                illust_id: iinfo.illust_id,
+                illust_title: iinfo.illust_title,
+                user_id: uinfo.user_id,
+                user_name: uinfo.user_name,
+                is_follow: uinfo.is_follow,
+                tags: binfo.tags,
+                bookmark_count: binfo.bookmark_count,
+            };
+        });
 }
 
 function parseToDOM(html) {
@@ -172,7 +182,7 @@ const BASE = (() => {
     };
 })();
 
-removeAnnoyance();
+
 
 Vue.filter('illust_href', function(illust_id) {
     return 'http://www.pixiv.net/member_illust.php?mode=medium&illust_id='+illust_id;
@@ -180,8 +190,12 @@ Vue.filter('illust_href', function(illust_id) {
 
 Vue.component('img150', {
     props:['thd'],
-    template: `<a class="work _work" :href="thd.illust_id | illust_href"
-                 :class="{'ugoku-illust': thd.is_ugoira, 'manga': thd.is_manga, 'multiple': thd.is_multiple}">
+    template: `<a class="work _work"
+                 :href="thd.illust_id | illust_href"
+                 :class="{
+                    'ugoku-illust': thd.is_ugoira,
+                    'manga': thd.is_manga,
+                    'multiple': thd.is_multiple}">
                     <div class="_layout-thumbnail"><img class="_thumbnail" :src="thd.src150"></img></div></a>`,
 
 });
@@ -194,10 +208,11 @@ Vue.component('illust-title', {
 Vue.component('user-name', {
     props:['thd'],
     template: `<a class="user ui-profile-popup"
-                 :href="thd.user_id | user_href" :title="thd.user_name"
-                 :data-user_id="thd.user_id" :data-user_name="thd.user_name"
-                 :class="{'followed': thd.is_follow}">
-                    {{thd.user_name}}</a>`,
+                 :href="thd.user_id | user_href"
+                 :title="thd.user_name"
+                 :data-user_id="thd.user_id"
+                 :data-user_name="thd.user_name"
+                 :class="{'followed': thd.is_follow}"> {{thd.user_name}}</a>`,
     filters: {
         user_href: function(user_id) {
             return 'http://www.pixiv.net/member_illust.php?id='+user_id;
@@ -209,7 +224,9 @@ Vue.component('count-list', {
     props:['thd'],
     template: `<ul class="count-list">
                     <li v-if="thd.bookmark_count > 0">
-                        <a :href="thd.illust_id | bookmark_detail_href" class="bookmark-count _ui-tooltip" :data-tooltip="thd.bookmark_count | datatooltip">
+                        <a class="bookmark-count _ui-tooltip"
+                          :href="thd.illust_id | bookmark_detail_href"
+                          :data-tooltip="thd.bookmark_count | datatooltip">
                             <i class="_icon sprites-bookmark-badge"></i>{{thd.bookmark_count}}</a></li></ul>`,
     filters: {
         datatooltip: function(bookmark_count) {
@@ -234,30 +251,32 @@ Vue.component('edit-link', {
 Vue.component('imageitem-search', {
     props:['thdata'],
     template: `<li class="image-item">
-                <img150 :thd="thdata"></img150>
-                <illust-title :thd="thdata"></illust-title>
-                <user-name :thd="thdata"></user-name>
-                <count-list :thd="thdata"></count-list></li>`,
+                   <img150 :thd="thdata"></img150>
+                   <illust-title :thd="thdata"></illust-title>
+                   <user-name :thd="thdata"></user-name>
+                   <count-list :thd="thdata"></count-list>
+               </li>`,
 });
 
 Vue.component('imageitem-member-illust', {
     props:['thdata'],
     template: `<li class="image-item">
-                <img150 :thd="thdata"></img150>
-                <illust-title :thd="thdata"></illust-title>
-                <count-list :thd="thdata"></count-list></li>`,
+                    <img150 :thd="thdata"></img150>
+                    <illust-title :thd="thdata"></illust-title>
+                    <count-list :thd="thdata"></count-list>
+               </li>`,
 });
 
 Vue.component('imageitem-mybookmark', {
     props:['thdata'],
     template: `<li class="image-item">
-                <bookmark-checkbox v-if="false" :thd="thdata"></bookmark-checkbox>
-                <img150 :thd="thdata"></img150>
-                <illust-title :thd="thdata"></illust-title>
-                <user-name :thd="thdata"></user-name>
-                <count-list :thd="thdata"></count-list>
-                <edit-link :thd="thdata"></edit-link>
-                </li>`,
+                    <bookmark-checkbox v-if="false" :thd="thdata"></bookmark-checkbox>
+                    <img150 :thd="thdata"></img150>
+                    <illust-title :thd="thdata"></illust-title>
+                    <user-name :thd="thdata"></user-name>
+                    <count-list :thd="thdata"></count-list>
+                    <edit-link :thd="thdata"></edit-link>
+               </li>`,
 });
 
 function setupHTML() {
@@ -378,32 +397,32 @@ function setupEvent() {
     const $KoaOrderingInput = $('#Koa-ordering-input');
 
     $KoaController
-    .on('mouseenter', function() {
-        $KoaController.children().show(1);
-    })
-    .on('mouseleave', function() {
-        $KoaController.children().show(1).delay(2000).hide(100);
-    });
+        .on('mouseenter', function() {
+            $KoaController.children().show(1);
+        })
+        .on('mouseleave', function() {
+            $KoaController.children().show(1).delay(2000).hide(100);
+        });
 
 
     $KoaBookmarkInput
-    .on('wheel', function(event) {
-        this.blur();
-        if(event.originalEvent.deltaY > 0) {
-            this.stepDown(20);
-        } else {
-            this.stepUp(20);
-        }
-        MuQ.Koakuma.$data.limit = parseInt(this.value);
-        return false;
-    })
-    .on('blur', function(event) {
-        if(!this.validity.valid){
-            console.log(this.validationMessage);
-        } else {
+        .on('wheel', function(event) {
+            this.blur();
+            if(event.originalEvent.deltaY > 0) {
+                this.stepDown(20);
+            } else {
+                this.stepUp(20);
+            }
             MuQ.Koakuma.$data.limit = parseInt(this.value);
-        }
-    });
+            return false;
+        })
+        .on('blur', function(event) {
+            if(!this.validity.valid){
+                console.log(this.validationMessage);
+            } else {
+                MuQ.Koakuma.$data.limit = parseInt(this.value);
+            }
+        });
 
     $KoaBtnInput.click(function(event) {
         if(!$KoaBookmarkInput[0].validity.valid){
@@ -459,47 +478,50 @@ const MuQ = {
         }
     },
     nextPage: function() {
-        this.np = this.np.then(n => this.page.next(n.nextLink).value )
-                    .catch(err => {
-                        console.error(err);
-                        clearInterval(this.intervalID);
-                        this.intervalID = null;
-                        $('#Koa-btn-input').attr('disabled', true).val('完');
-                    });
+        this.np = this.np
+            .then(n => this.page.next(n.nextLink).value )
+            .catch(err => {
+                console.error(err);
+                clearInterval(this.intervalID);
+                this.intervalID = null;
+                $('#Koa-btn-input').attr('disabled', true).val('完');
+            });
     },
     np_gen: function* () {
         while(this.nextLink) {
-            this.nextLink = 
-                yield getBatch(this.nextLink)
-                    .then(bat => {
-                        return getIllustsDetails(bat.illust_ids)
-                            .then(illust_d => {
-                                bat.illust_d = illust_d;
-                                return bat;
-                            });
-                    })
-                    .then(bat => {
-                        return getUsersDetails(Object.keys(bat.illust_d).map((k) => bat.illust_d[k].user_id))
-                            .then(user_d => {
-                                bat.user_d = {};
-                                user_d.forEach(x => bat.user_d[x.user_id] = x);
-                                return bat;
-                            });
-                    })
-                    .then(bat => {
-                        return Promise.all(Object.keys(bat.illust_d).map((k) => bat.illust_d[k]).map(x => getBookmarkCountAndTags(x.illust_id)))
-                            .then(bookmark_d => {
-                                bat.bookmark_d = {};
-                                bookmark_d.forEach(x => bat.bookmark_d[x.illust_id] = x);
-                                return bat;
-                            });
-                    })
-                    .then(bat => {
-                        this.Koakuma.$data.thumbs.push(...parseDataFromBatch(bat));
-                        return bat;
-                    }).catch(err => {
-                        console.error(err);
-                    });
+            this.nextLink = yield getBatch(this.nextLink)
+                .then(bat => {
+                    return getIllustsDetails(bat.illust_ids)
+                        .then(illust_d => {
+                            bat.illust_d = illust_d;
+                            return bat;
+                        });
+                })
+                .then(bat => {
+                    return getUsersDetails(Object.keys(bat.illust_d)
+                        .map((k) => bat.illust_d[k].user_id))
+                        .then(user_d => {
+                            bat.user_d = {};
+                            user_d.forEach(x => bat.user_d[x.user_id] = x);
+                            return bat;
+                        });
+                })
+                .then(bat => {
+                    return Promise.all(Object.keys(bat.illust_d)
+                        .map((k) => bat.illust_d[k])
+                        .map(x => getBookmarkCountAndTags(x.illust_id)))
+                        .then(bookmark_d => {
+                            bat.bookmark_d = {};
+                            bookmark_d.forEach(x => bat.bookmark_d[x.illust_id] = x);
+                            return bat;
+                        });
+                })
+                .then(bat => {
+                    this.Koakuma.$data.thumbs.push(...parseDataFromBatch(bat));
+                    return bat;
+                }).catch(err => {
+                    console.error(err);
+                });
         }
     },
     Koakuma: new Vue({
@@ -522,6 +544,7 @@ const MuQ = {
     }),
 };
 
+removeAnnoyance();
 MuQ.init();
 
 //Debugging
