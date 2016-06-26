@@ -19,7 +19,7 @@ function fetchWithcookie(url) {
 
 function getBookmarkCountAndTags(illust_id) {
     const url = `http://www.pixiv.net/bookmark_detail.php?illust_id=${illust_id}`;
-
+    
     return fetchWithcookie(url)
         .then(html => parseToDOM(html))
         .then(doc => $(doc))
@@ -45,7 +45,7 @@ function getBatch(url) {
             removeAnnoyance($doc);
             const next = $doc.find('.next a').attr('href');
             const nextLink = (next) ? new URI(BASE.baseURI).query(next).toString() : null;
-
+            
             const illust_ids = $doc
                 .find('li.image-item > a.work')
                 .toArray()
@@ -64,7 +64,7 @@ function getBatch(url) {
  */
 function getIllustsDetails(illust_ids) {
     const api = `http://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${illust_ids.join(',')}&tt=${BASE.tt}`;
-
+    
     return fetchWithcookie(api).then(json => JSON.parse(json).body).catch(err => { console.error(err); });
 }
 
@@ -92,7 +92,7 @@ function parseDataFromBatch(batch) {
             const src150 = (is_ugoira) ?
                 iinfo.url.big.replace(/([^-]+)(?:-original)([^_]+)(?:[^\.]+)(.+)/,'$1-inf$2_s$3') : 
                 iinfo.url.m.replace(/600x600/,'150x150');
-
+            
             return {
                 is_ugoira,
                 is_manga,
@@ -281,39 +281,116 @@ Vue.component('imageitem-mybookmark', {
 
 function setupHTML() {
     $(`
-    <div id="Koa-controller">
-        <div id="Koa-found"><span id="Koa-found-value">0</span></div>
-        <div id="Koa-bookmark">
-            <span>★書籤</span>：
-            <input id="Koa-bookmark-input" type="number" min="0" step="1" value="0" required/>
-        </div>
-        <div id="Koa-btn">
-            <input id="Koa-btn-input" type="button" value="找"/>
-        </div>
-        <div id="Koa-options">
-            全<input id="Koa-fullwidth-input" type="checkbox"/>
-            排序<input id="Koa-ordering-input" type="checkbox"/>
+    <div id="Koa-controller" class="tachi">
+        <div id="Koa-controller-child">
+            <div id="Koa-found"><span id="Koa-found-value">0</span></div>
+            <div id="Koa-bookmark">
+                <span>★書籤</span>：
+                <input id="Koa-bookmark-input" type="number" min="0" step="1" value="0" required/>
+            </div>
+            <div id="Koa-btn">
+                <input id="Koa-btn-input" type="button" value="找"/>
+            </div>
+            <div id="Koa-options">
+                全<input id="Koa-fullwidth-input" type="checkbox"/>
+                排序<input id="Koa-ordering-input" type="checkbox"/>
+            </div>
         </div>
     </div>`).appendTo('body');
 
     $(`
     <style>
-    #Koa-controller {
-        max-width: 180px;
-        background-color: #E15EDF;
+    #Koa-controller.tachi {
+        background-color: #8F2019;
         position: fixed;
         bottom: 0px;
         left: 0px;
-        margin: 20px;
-        padding: 10px;
-        border-radius: 10px;
+        margin: 10px 30px;
+        padding: 15px 8px 0px;
+        border-radius: 15px 15px 8px 8px;
         font-size: 16px;
         cursor: default;
         z-index: 10;
     }
 
-    #Koa-controller > div {
-        background-color: rgb(224, 153, 255);
+    #Koa-controller::before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 30px 0 0 100px;
+        border-color: transparent transparent transparent #000000;
+        left: 0px;
+        top: 0px;
+        z-index: -1;
+        transform-origin: 50% 50%;
+        transform: translate(-45px,40px) skew(20deg, 0deg) rotate(-20deg);
+    }
+
+    #Koa-controller::after {
+        border-width: 0 0 30px 100px;
+        border-color: transparent transparent #000000 transparent;
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        right: 0px;
+        top: 0px;
+        z-index: -1;
+        transform-origin: 50% 50%;
+        transform: translate(45px,40px) skew(-20deg, 0deg) rotate(20deg);
+    }
+
+    #Koa-controller.chibi {
+        width: 60px;
+        background-color: #8F2019;
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        margin: 10px 30px;
+        padding: 10px 4px 15px;
+        border-radius: 50%;
+        font-size: 16px;
+        cursor: default;
+        z-index: 10;
+        color: white;
+    }
+    
+    #Koa-controller.chibi::before {
+        transform: translate(-45px,10px) skew(20deg, 0deg) rotate(-10deg) scale(0.4);
+    }
+
+    #Koa-controller.chibi::after {
+        transform: translate(45px,10px) skew(-20deg, 0deg) rotate(10deg) scale(0.4);
+    }
+    
+    #Koa-controller.tachi #Koa-controller-child {
+        background-color: #FEE6CA;
+        border-bottom: 30px solid black;
+        border-radius: 10px 10px 20px 20px;
+    }
+
+    #Koa-controller.chibi #Koa-controller-child {
+        background-color: #8F2019;
+        width: 100%;
+        height: 30px;
+        border-radius: 50%;
+        margin-top: -2px;
+    }
+
+    #Koa-controller.chibi #Koa-controller-child::after {
+        content: " ' ' ";
+        display: block;
+        text-align: center;
+        font-size: 32px;
+        padding-right: 5px;
+        transform: rotate(10deg);
+    }
+    
+    #Koa-controller.chibi #Koa-controller-child > div {
+        display: none;
     }
 
     #Koa-found,
@@ -321,7 +398,21 @@ function setupHTML() {
         text-align: center;
     }
 
-    #Koa-bookmark > span{
+    #Koa-controller.tachi #Koa-btn {
+        border-left: 15px solid white;
+        border-right: 15px solid white;
+        background-color: black;
+        color: white;
+    }
+
+    #Koa-controller.tachi #Koa-options {
+        border-left: 15px solid white;
+        border-right: 15px solid white;
+        background-color: black;
+        color: white;
+    }
+
+    #Koa-bookmark > span {
         color: #0069b1;
         background-color: #cceeff;
     }
@@ -352,8 +443,14 @@ function setupHTML() {
         cursor: initial;
     }
 
-    #Koa-btn-input {
+    #Koa-controller.tachi #Koa-btn-input {
         border: none;
+        background-color: #FFFF00;
+        height: 100%;
+        margin: 0px auto;
+        display: block;
+        border-radius: 0% 0% 50% 50%;
+        font-size: 22px;
     }
 
     #Koa-container {
@@ -397,11 +494,16 @@ function setupEvent() {
     const $KoaOrderingInput = $('#Koa-ordering-input');
 
     $KoaController
-        .on('mouseenter', function() {
-            $KoaController.children().show(1);
+        .on('click', function() {
+            if($(this).hasClass('chibi')){
+                $(this).removeClass('chibi');
+                $(this).addClass('tachi');
+            }
         })
         .on('mouseleave', function() {
-            $KoaController.children().show(1).delay(2000).hide(100);
+            $(this).addClass('chibi');
+            $(this).removeClass('tachi');
+            $KoaBookmarkInput.focusout();
         });
 
 
@@ -416,7 +518,8 @@ function setupEvent() {
             MuQ.Koakuma.$data.limit = parseInt(this.value);
             return false;
         })
-        .on('blur', function(event) {
+        .on('focusout', function(event) {
+            this.blur();
             if(!this.validity.valid){
                 console.log(this.validationMessage);
             } else {
@@ -432,11 +535,13 @@ function setupEvent() {
                 clearInterval(MuQ.intervalID);
                 MuQ.intervalID = null;
                 this.value = '找';
+                $KoaController.removeClass('working');
             } else {
                 MuQ.intervalID = setInterval(function(){
                     MuQ.nextPage();
                 }, 1000);
                 this.value = '停';
+                $KoaController.addClass('working');
             }
         }
         return false;
