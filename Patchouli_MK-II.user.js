@@ -13,7 +13,8 @@
 
 function fetchWithcookie(url) {
     return fetch(url, {credentials: 'same-origin'})
-            .then(response => response.text());
+            .then(response => response.text())
+            .catch(err => { console.error(err); });
 }
 
 function getBookmarkCountAndTags(illust_id) {
@@ -30,7 +31,8 @@ function getBookmarkCountAndTags(illust_id) {
                     illust_id,
                     tags,
                 };
-            });
+            })
+            .catch(err => { console.error(err); });
 }
 
 function getBatch(url) {
@@ -40,16 +42,16 @@ function getBatch(url) {
         .then($doc => {
             removeAnnoyance($doc);
             const next = $doc.find('.next a').attr('href');
-            const nextLink = (next) ? BASE.baseURI.replace(/\?.*/, next) : null;
+            const nextLink = (next) ? new URI(BASE.baseURI).query(next).toString() : null;
             const illust_ids = $doc.find('li.image-item > a.work')
                                 .toArray()
                                 .map(x => URI.parseQuery($(x).attr('href')).illust_id);
-            //debugger;
             return {
                 nextLink,
                 illust_ids,
             };
-        });
+        })
+        .catch(err => { console.error(err); });
 }
 
 /**
@@ -57,7 +59,7 @@ function getBatch(url) {
  */
 function getIllustsDetails(illust_ids) {
     const api = `http://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${illust_ids.join(',')}&tt=${BASE.tt}`;
-    return fetchWithcookie(api).then(json => JSON.parse(json).body);
+    return fetchWithcookie(api).then(json => JSON.parse(json).body).catch(err => { console.error(err); });
 }
 
 /**
@@ -65,7 +67,7 @@ function getIllustsDetails(illust_ids) {
  */
 function getUsersDetails(user_ids) {
     const api = `http://www.pixiv.net/rpc/get_profile.php?user_ids=${user_ids.join(',')}&tt=${BASE.tt}`;
-    return fetchWithcookie(api).then(json => JSON.parse(json).body);
+    return fetchWithcookie(api).then(json => JSON.parse(json).body).catch(err => { console.error(err); });
 }
 
 function parseDataFromBatch(batch) {
@@ -133,7 +135,7 @@ const BASE = (() => {
     const baseURI = bu.toString();
     const tt = $('input[name="tt"]').val();
     const container = $('li.image-item').parent()[0];
-    const fullwidthElement = $('#wrapper div:first-child')[0];
+    const $fullwidthElement = $('#wrapper div:first');
 
     let supported = true;
     let li_type = 'search';
@@ -143,14 +145,6 @@ const BASE = (() => {
      *  'member-illust'   : illust_150 + illust_title +           + bookmark_count
      *  'mybookmark'      : illust_150 + illust_title + user_name + bookmark_count + checkbox + editlink
      */
-
-    let order_t = '';
-    /** order_t - default ordering attr
-     *
-     *  ''(default) or 'illust_id'
-     *  'bookmark_count'
-     */
-
 
     if (pn === '/member_illust.php' && ss.id) {
         li_type = 'member-illust';
@@ -168,18 +162,13 @@ const BASE = (() => {
         supported = false;
     }
 
-    if(supported && container) {
-        container.id = 'Koa-container';
-        $('#wrapper').width('initial');
-    }
-
     return {
         tt,
         baseURI,
         li_type,
         supported,
         container,
-        order_t,
+        $fullwidthElement,
     };
 })();
 
@@ -269,44 +258,81 @@ Vue.component('imageitem-mybookmark', {
                 </li>`,
 });
 
-const VM = new Vue({
-    el: '#Koa-container',
-    template: `<ul><component :is="li_type" v-for="th in thumbs | bookmark_gt bkc_limit | orderBy order_t -1" :thdata="th"></component></ul>`,
-    data: {
-        thumbs: [],
-        order_t: 'bookmark_count',
-        bkc_limit: 50,
-    },
-    computed: {
-        li_type: function() {
-            return 'imageitem-' + BASE.li_type;
-        },
-    },
-    filters: {
-        bookmark_gt: function(data, limit) {
-            return data.filter(x => x.bookmark_count >= limit);
-        },
-    },
-});
-
 function setupHTML() {
     $(`
     <div id="Koa-controller">
-
-
+        <div id="Koa-found"><span id="Koa-found-value">0</span></div>
+        <div id="Koa-bookmark">
+            <span>★書籤</span>：
+            <input id="Koa-bookmark-input" type="number" min="0" step="1" value="0" required/>
+        </div>
+        <div id="Koa-btn">
+            <input id="Koa-btn-input" type="button" value="找"/>
+        </div>
+        <div id="Koa-options">
+            全<input id="Koa-fullwidth-input" type="checkbox"/>
+            排序<input id="Koa-ordering-input" type="checkbox"/>
+        </div>
     </div>`).appendTo('body');
 
     $(`
     <style>
     #Koa-controller {
-        height: 40px;
-        width: 40px;
+        max-width: 180px;
         background-color: #E15EDF;
         position: fixed;
         bottom: 0px;
         left: 0px;
         margin: 20px;
-        border-radius: 50%;
+        padding: 10px;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: default;
+        z-index: 10;
+    }
+
+    #Koa-controller > div {
+        background-color: rgb(224, 153, 255);
+    }
+
+    #Koa-found,
+    #Koa-btn {
+        text-align: center;
+    }
+
+    #Koa-bookmark > span{
+        color: #0069b1;
+        background-color: #cceeff;
+    }
+
+    input#Koa-bookmark-input::-webkit-inner-spin-button, 
+    input#Koa-bookmark-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input#Koa-bookmark-input {
+        -moz-appearance: textfield;
+    }
+
+    input#Koa-bookmark-input {
+        border: none;
+        background-color: transparent;
+        padding: 0px;
+        color: blue;
+        font-size: 16px;
+        display: inline-block;
+        width: 50px;
+        cursor: ns-resize;
+        text-align: center;
+    }
+
+    input#Koa-bookmark-input:focus {
+        cursor: initial;
+    }
+
+    #Koa-btn-input {
+        border: none;
     }
 
     #Koa-container {
@@ -337,45 +363,127 @@ function setupHTML() {
     </style>`).appendTo('head');
 }
 
-setupHTML();
+function setupEvent() {
+    const $KoaBookmarkInput = $('#Koa-bookmark-input');
+    const $KoaBtnInput = $('#Koa-btn-input');
+    const $KoaFullwidthInput = $('#Koa-fullwidth-input');
+    const $KoaOrderingInput = $('#Koa-ordering-input');
 
-function tf() {
-    window.testing_next = window.testing_next || location.href;
-    window.testing = getBatch(window.testing_next)
-        .then(bat => {
-            console.log(bat);
-            return getIllustsDetails(bat.illust_ids)
-                .then(illust_d => {
-                    bat.illust_d = illust_d;
-                    return bat;
-                });
-        })
-        .then(bat => {
-            //debugger;
-            return getUsersDetails(Object.keys(bat.illust_d).map((k) => bat.illust_d[k].user_id))
-                .then(user_d => {
-                    bat.user_d = {};
-                    user_d.forEach(x => bat.user_d[x.user_id] = x);
-                    return bat;
-                });
-        })
-        .then(bat => {
-            return Promise.all(Object.keys(bat.illust_d).map((k) => bat.illust_d[k]).map(x => getBookmarkCountAndTags(x.illust_id)))
-                .then(bookmark_d => {
-                    bat.bookmark_d = {};
-                    bookmark_d.forEach(x => bat.bookmark_d[x.illust_id] = x);
-                    return bat;
-                });
-        })
-        .then(bat => {
-            console.log(parseDataFromBatch(bat));
-            VM.$data.thumbs.push(...parseDataFromBatch(bat));
-            window.testing_bat = bat;
-            window.testing_next = bat.nextLink;
-            return bat;
-        });
+    $KoaBookmarkInput.on('wheel', function(event) {
+        this.blur();
+        if(event.originalEvent.deltaY > 0) {
+            this.stepDown(20);
+        } else {
+            this.stepUp(20);
+        }
+        return false;
+    });
+
+    $KoaBtnInput.click(function(event) {
+        if(!$KoaBookmarkInput[0].validity.valid){
+            console.log($KoaBookmarkInput[0].validationMessage);
+        } else {
+
+        }
+        return false;
+    });
+
+    $KoaFullwidthInput.click(function(event){
+        const node = BASE.$fullwidthElement;
+        if (this.checked) {
+            node.addClass('fullwidth');
+        } else {
+            node.removeClass('fullwidth');
+        }
+    });
+
+    $KoaOrderingInput.click(function(event){
+        const order_t = this.checked ? 'bookmark_count' : '';
+        MuQ.Koakuma.$data.order_t = order_t;
+    });
 }
-tf();
+
+const MuQ = {
+    nextLink: location.href,
+    intervalId: null,
+    init: function() {
+        if(BASE.supported){
+            if(BASE.container) {
+                BASE.container.id = 'Koa-container';
+            }
+            $('#wrapper').width('initial');
+            setupHTML();
+            setupEvent();
+            this.Koakuma.$mount('#Koa-container');
+            this.Koakuma.$watch('thumbs', function(newVal, oldVal) {
+                $('#Koa-found-value').text(newVal.length);
+            });
+
+            this.page = this.np_gen();
+            this.np = this.page.next().value;
+        }
+    },
+    nextPage: function() {
+        this.np = this.np.then(n => this.page.next(n.nextLink).value );
+    },
+    np_gen: function* () {
+        while(true) {
+            this.nextLink = 
+                yield getBatch(this.nextLink)
+                    .then(bat => {
+                        console.log(bat);
+                        return getIllustsDetails(bat.illust_ids)
+                            .then(illust_d => {
+                                bat.illust_d = illust_d;
+                                return bat;
+                            });
+                    })
+                    .then(bat => {
+                        return getUsersDetails(Object.keys(bat.illust_d).map((k) => bat.illust_d[k].user_id))
+                            .then(user_d => {
+                                bat.user_d = {};
+                                user_d.forEach(x => bat.user_d[x.user_id] = x);
+                                return bat;
+                            });
+                    })
+                    .then(bat => {
+                        return Promise.all(Object.keys(bat.illust_d).map((k) => bat.illust_d[k]).map(x => getBookmarkCountAndTags(x.illust_id)))
+                            .then(bookmark_d => {
+                                bat.bookmark_d = {};
+                                bookmark_d.forEach(x => bat.bookmark_d[x.illust_id] = x);
+                                return bat;
+                            });
+                    })
+                    .then(bat => {
+                        console.log(parseDataFromBatch(bat));
+                        this.Koakuma.$data.thumbs.push(...parseDataFromBatch(bat));
+                        return bat;
+                    }).catch((err) => {
+                        console.error(err);
+                    });
+        }
+    },
+    Koakuma: new Vue({
+        template: `<ul><component :is="li_type" v-for="th in thumbs | bookmark_gt limit | orderBy order_t -1" :thdata="th"></component></ul>`,
+        data: {
+            thumbs: [],
+            order_t: '',
+            limit: 0,
+        },
+        computed: {
+            li_type: function() {
+                return 'imageitem-' + BASE.li_type;
+            },
+        },
+        filters: {
+            bookmark_gt: function(data, limit) {
+                return data.filter(x => x.bookmark_count >= limit);
+            },
+        },
+    }),
+};
+
+MuQ.init();
 
 //Debugging
 window.fetchWithcookie = fetchWithcookie;
@@ -387,8 +495,6 @@ window.parseToDOM = parseToDOM;
 window.parseDataFromBatch = parseDataFromBatch;
 window.removeAnnoyance = removeAnnoyance;
 window.BASE = BASE;
-window.VM = VM;
+window.MuQ = MuQ;
 window.Vue = Vue;
 window.URI = URI;
-
-window.tf = tf;
