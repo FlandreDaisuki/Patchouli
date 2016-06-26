@@ -185,39 +185,21 @@ const BASE = (() => {
 
 removeAnnoyance();
 
-Vue.filter('datatooltip', function(bookmark_count) {
-    return bookmark_count+'件のブックマーク';
-});
-
-Vue.filter('bookmark_detail_href', function(illust_id) {
-    return 'http://www.pixiv.net/bookmark_detail.php?illust_id='+illust_id;
-});
-
 Vue.filter('illust_href', function(illust_id) {
     return 'http://www.pixiv.net/member_illust.php?mode=medium&illust_id='+illust_id;
 });
 
-Vue.filter('user_href', function(user_id) {
-    return 'http://www.pixiv.net/member_illust.php?id='+user_id;
-});
-
-Vue.filter('edit_href', function(illust_id) {
-    return `http://www.pixiv.net/bookmark_add.php?type=illust&illust_id=${ illust_id }&tag=&rest=show&p=1`;
-});
-
-Vue.filter('prefix', function(value, prefix) {
-    return ''+prefix+value;
-});
-
 Vue.component('img150', {
     props:['thd'],
-    template: `<a class="work _work" :href="thd.illust_id | illust_href" :class="{'ugoku-illust': thd.is_ugoira, 'manga': thd.is_manga, 'multiple': thd.is_multiple}">
-                    <div class="_layout-thumbnail"><img class="_thumbnail" :src="thd.src150"></img></div></a>`
+    template: `<a class="work _work" :href="thd.illust_id | illust_href"
+                 :class="{'ugoku-illust': thd.is_ugoira, 'manga': thd.is_manga, 'multiple': thd.is_multiple}">
+                    <div class="_layout-thumbnail"><img class="_thumbnail" :src="thd.src150"></img></div></a>`,
+
 });
 
 Vue.component('illust-title', {
     props:['thd'],
-    template: '<a :href="thd.illust_id | illust_href"><h1 class="title" :title="thd.illust_title">{{thd.illust_title}}</h1></a>'
+    template: '<a :href="thd.illust_id | illust_href"><h1 class="title" :title="thd.illust_title">{{thd.illust_title}}</h1></a>',
 });
 
 Vue.component('user-name', {
@@ -225,7 +207,12 @@ Vue.component('user-name', {
     template: `<a class="user ui-profile-popup"
                  :href="thd.user_id | user_href" :title="thd.user_name"
                  :data-user_id="thd.user_id" :data-user_name="thd.user_name">
-                    {{thd.user_name}}</a>`
+                    {{thd.user_name}}</a>`,
+    filters: {
+        user_href: function(user_id) {
+            return 'http://www.pixiv.net/member_illust.php?id='+user_id;
+        },
+    },
 });
 
 Vue.component('count-list', {
@@ -233,18 +220,25 @@ Vue.component('count-list', {
     template: `<ul class="count-list">
                     <li v-if="thd.bookmark_count > 0">
                         <a :href="thd.illust_id | bookmark_detail_href" class="bookmark-count _ui-tooltip" :data-tooltip="thd.bookmark_count | datatooltip">
-                            <i class="_icon sprites-bookmark-badge"></i>{{thd.bookmark_count}}</a></li></ul>`
-});
-
-Vue.component('bookmark-checkbox', {
-    // the value is magic number that a can't calculate it
-    props:['thd'],
-    template: '<input name="book_id[]" id="i_2378092188" value="2378092188" onclick="select_illust(2378092188)" type="checkbox">'
+                            <i class="_icon sprites-bookmark-badge"></i>{{thd.bookmark_count}}</a></li></ul>`,
+    filters: {
+        datatooltip: function(bookmark_count) {
+            return bookmark_count+'件のブックマーク';
+        },
+        bookmark_detail_href: function(illust_id) {
+            return 'http://www.pixiv.net/bookmark_detail.php?illust_id='+illust_id;
+        },
+    },
 });
 
 Vue.component('edit-link', {
     props:['thd'],
-    template: '<a :href="thd.illust_id | edit_href" class="edit-work"><span class="edit-bookmark edit_link">編集</span></a>'
+    template: '<a :href="thd.illust_id | edit_href" class="edit-work"><span class="edit-bookmark edit_link">編集</span></a>',
+    filters: {
+        edit_href: function(illust_id) {
+            return `http://www.pixiv.net/bookmark_add.php?type=illust&illust_id=${ illust_id }&tag=&rest=show&p=1`;
+        },
+    },
 });
 
 Vue.component('imageitem-search', {
@@ -253,7 +247,7 @@ Vue.component('imageitem-search', {
                 <img150 :thd="thdata"></img150>
                 <illust-title :thd="thdata"></illust-title>
                 <user-name :thd="thdata"></user-name>
-                <count-list :thd="thdata"></count-list></li>`
+                <count-list :thd="thdata"></count-list></li>`,
 });
 
 Vue.component('imageitem-member-illust', {
@@ -261,7 +255,7 @@ Vue.component('imageitem-member-illust', {
     template: `<li class="image-item">
                 <img150 :thd="thdata"></img150>
                 <illust-title :thd="thdata"></illust-title>
-                <count-list :thd="thdata"></count-list></li>`
+                <count-list :thd="thdata"></count-list></li>`,
 });
 
 Vue.component('imageitem-mybookmark', {
@@ -272,26 +266,49 @@ Vue.component('imageitem-mybookmark', {
                 <illust-title :thd="thdata"></illust-title>
                 <count-list :thd="thdata"></count-list>
                 <edit-link :thd="thdata"></edit-link>
-                </li>`
+                </li>`,
 });
 
 const VM = new Vue({
     el: '#Koa-container',
-    template: `<ul><component :is="li_type" v-for="th in thumbs | orderBy order_t -1" :thdata="th"></component></ul>`,
+    template: `<ul><component :is="li_type" v-for="th in thumbs | bookmark_gt bkc_limit | orderBy order_t -1" :thdata="th"></component></ul>`,
     data: {
         thumbs: [],
-        order_t: BASE.order_t,
+        order_t: 'bookmark_count',
+        bkc_limit: 50,
     },
     computed: {
         li_type: function() {
             return 'imageitem-' + BASE.li_type;
-        }
-    }
+        },
+    },
+    filters: {
+        bookmark_gt: function(data, limit) {
+            return data.filter(x => x.bookmark_count >= limit);
+        },
+    },
 });
 
 function setupHTML() {
-$(`
+    $(`
+    <div id="Koa-controller">
+
+
+    </div>`).appendTo('body');
+
+    $(`
     <style>
+    #Koa-controller {
+        height: 40px;
+        width: 40px;
+        background-color: #E15EDF;
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        margin: 20px;
+        border-radius: 50%;
+    }
+
     #Koa-container {
         display: flex;
         flex-wrap: wrap;
