@@ -4,7 +4,7 @@
 // @namespace   https://github.com/FlandreDaisuki
 // @include     http://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
-// @version     2016.06.19
+// @version     2016.06.27
 // @author      FlandreDaisuki
 // @updateURL   https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/Patchouli.user.js
 // @grant       none
@@ -49,7 +49,7 @@ function getBaseInfo() {
 		//フォロー新着作品
 	} else if (pn === '/new_illust.php') {
 		//みんなの新着作品
-	} else if (pn === 'mypixiv_new_illust.php') {
+	} else if (pn === '/mypixiv_new_illust.php') {
 		//マイピク新着イラスト
 	} else if (pn === '/new_illust_r18.php') {
 		//みんなのR-18新着作品

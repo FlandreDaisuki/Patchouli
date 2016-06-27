@@ -1,11 +1,13 @@
 // ==UserScript==
 // @name        Patchuli MK-II
+// @description An image searching/browsing tool on Pixiv
 // @namespace   https://github.com/FlandreDaisuki
 // @include     http://www.pixiv.net/*
-// @version     2016.06.27
-// @author      FlandreDaisuki
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.25/vue.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
+// @version     2016.06.27
+// @author      FlandreDaisuki
+// @updateURL   https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/Patchouli_MK-II.user.js
 // @grant       none
 // @noframes
 // ==/UserScript==
