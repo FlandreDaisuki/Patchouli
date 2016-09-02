@@ -4,7 +4,7 @@
 // @namespace   https://github.com/FlandreDaisuki
 // @include     http://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
-// @version     2016.06.27
+// @version     2016.09.02
 // @author      FlandreDaisuki
 // @updateURL   https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/Patchouli.user.js
 // @grant       none
@@ -65,7 +65,6 @@ function getBaseInfo() {
 function removeJama($doc = $(document)) {
 	[
 		'iframe',
-		'aside',
 		//Ad
 		'.ad',
 		'.ads_area',

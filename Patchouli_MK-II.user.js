@@ -5,7 +5,7 @@
 // @include     http://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.25/vue.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
-// @version     2016.06.27
+// @version     2016.09.02
 // @author      FlandreDaisuki
 // @updateURL   https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/Patchouli_MK-II.user.js
 // @grant       none
@@ -119,7 +119,6 @@ function parseToDOM(html) {
 function removeAnnoyance($doc = $(document)) {
     [
         'iframe',
-        'aside',
         //Ad
         '.ad',
         '.ads_area',
