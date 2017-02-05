@@ -1,10 +1,11 @@
 ﻿// ==UserScript==
-// @name        Patchouli
+// @name        Patchuli MK-II
 // @description An image searching/browsing tool on Pixiv
 // @namespace   https://github.com/FlandreDaisuki
 // @include     http://www.pixiv.net/*
+// @require     https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.25/vue.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
-// @version     2016.09.02
+// @version     2017.02.06
 // @author      FlandreDaisuki
 // @updateURL   https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/Patchouli.user.js
 // @grant       none
@@ -12,549 +13,660 @@
 // ==/UserScript==
 /* jshint esnext: true */
 
-const baseURI = document.baseURI;
-
-console.log('jQuery version:', $.fn.jquery);
-console.log('URI version:', URI.version);
-console.log('baseURI:', baseURI);
-
-function getBaseInfo() {
-	const retval = {
-		supported: true,
-		imgitemConf: {
-			selector: 'li.image-item',
-			hasAuthor: true,
-			hasBookmark: false,
-			needFillwidth: true,
-		},
-	};
-	retval.$container = $(retval.imgitemConf.selector).parent();
-
-	const pbu = new URI(baseURI);
-	const pn = pbu.pathname();
-	const ss = URI.parseQuery(pbu.query());
-
-	if (pn === '/member_illust.php' && ss.id) {
-		//作品一覧
-		retval.imgitemConf.hasAuthor = false;
-		retval.imgitemConf.needFillwidth = false;
-	} else if (pn === '/search.php') {
-		//作品の検索
-		retval.imgitemConf.hasBookmark = true;
-	} else if (pn === '/bookmark.php' && !ss.type) {
-		//ブックマーク
-		retval.imgitemConf.hasBookmark = true;
-		retval.imgitemConf.needFillwidth = false;
-	} else if (pn === '/bookmark_new_illust.php') {
-		//フォロー新着作品
-	} else if (pn === '/new_illust.php') {
-		//みんなの新着作品
-	} else if (pn === '/mypixiv_new_illust.php') {
-		//マイピク新着イラスト
-	} else if (pn === '/new_illust_r18.php') {
-		//みんなのR-18新着作品
-	} else if (pn === '/bookmark_new_illust_r18.php') {
-		//フォローユーザーR-18新着イラスト
-	} else {
-		//Not Support Pages
-		retval.supported = false;
-	}
-	return retval;
+function fetchWithcookie(url) {
+    return fetch(url, {credentials: 'same-origin'})
+        .then(response => response.text())
+        .catch(err => { console.error(err); });
 }
 
-function removeJama($doc = $(document)) {
-	[
-		'iframe',
-		//Ad
-		'.ad',
-		'.ads_area',
-		'.ad-footer',
-		'.ads_anchor',
-		'.comic-hot-works',
-		'.user-ad-container',
-		'.ads_area_no_margin',
-		//Premium
-		'.ad-printservice',
-		'.bookmark-ranges',
-		'.require-premium',
-		'.showcase-reminder',
-		'.sample-user-search',
-		'.popular-introduction',
-	].forEach((e) => {
-		$doc.find(e).remove();
-	});
+function getBookmarkCountAndTags(illust_id) {
+    const url = `http://www.pixiv.net/bookmark_detail.php?illust_id=${illust_id}`;
+    
+    return fetchWithcookie(url)
+        .then(html => parseToDOM(html))
+        .then(doc => $(doc))
+        .then($doc => {
+            let m = $doc.find('a.bookmark-count').text();
+            const bookmark_count =  m ? parseInt(m) : 0;
+            const tags = Array.from($doc.find('ul.tags:first a')).map(x => x.innerText);
+
+            return {
+                bookmark_count,
+                illust_id,
+                tags,
+            };
+        })
+        .catch(err => { console.error(err); });
 }
 
-function getThumbPageInfo(tpageURI) {
-	// complete URI String
-	return fetch(tpageURI, {
-			credentials: 'same-origin' // with cookies
-		})
-		.then(response => response.text())
-		.then(html => new DOMParser().parseFromString(html, 'text/html'))
-		.then(doc => $(doc))
-		.then(($doc) => {
-			removeJama($doc);
+function getBatch(url) {
+    return fetchWithcookie(url)
+        .then(html => parseToDOM(html))
+        .then(doc => $(doc))
+        .then($doc => {
+            removeAnnoyance($doc);
+            const next = $doc.find('.next a').attr('href');
+            const nextLink = (next) ? new URI(BASE.baseURI).query(next).toString() : null;
+            
+            const illust_ids = $doc
+                .find('li.image-item > a.work')
+                .toArray()
+                .map(x => URI.parseQuery($(x).attr('href')).illust_id);
 
-			const tpage = {};
-			tpage.followed = $doc.find('#favorite-button').hasClass('following');
-			tpage.tags = $doc.find('li.tag .text').toArray().map(e => e.innerText);
-			tpage.type = (function($wd) {
-				if ($wd.find('._work.multiple').length > 0) {
-					return 'manga';
-				} else if ($wd.find('._ugoku-illust-player-container').length > 0) {
-					return 'ugoira';
-				} else {
-					return 'illust';
-				}
-			})($doc.find('.works_display'));
-			tpage.rating = ~~$doc.find('dd.score-count').text();
-			return tpage;
-		})
-		.catch((err) => {
-			console.error(err);
-		});
+            return {
+                nextLink,
+                illust_ids,
+            };
+        })
+        .catch(err => { console.error(err); });
 }
 
-// Class Thumb
-function Thumb(imgitem) {
-	const workURI = new URI(imgitem.querySelector('a.work').getAttribute('href'));
-	const bk = imgitem.querySelector('.bookmark-count');
-
-	this.elem = imgitem;
-	this.elem.removeAttribute('style');
-	this.URI = workURI.absoluteTo(baseURI);
-	this.workId = URI.parseQuery(this.URI.query()).illust_id;
-	this.autherId = Patchouli.conf.hasAuthor ? imgitem.querySelector('.user').dataset.user_id : null;
-	this.bookmark = bk ? ~~bk.innerText : 0;
-	this.hide = false;
+/**
+ * return object which key is illust_id
+ */
+function getIllustsDetails(illust_ids) {
+    const api = `http://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${illust_ids.join(',')}&tt=${BASE.tt}`;
+    
+    return fetchWithcookie(api).then(json => JSON.parse(json).body).catch(err => { console.error(err); });
 }
 
-//Main Class
-const Patchouli = {
-	init: function() {
-		this.Tbooks = [];
-		const BI = getBaseInfo();
-		this.conf = BI.imgitemConf;
-		this.supported = BI.supported;
-		this.$container = BI.$container;
-		this.koakuma = {
-			ratingStep: 1000,
-			bookmarkStep: 50,
-			keywords: '',
-			rating: 0,
-			bookmark: 0,
-			autosort: false,
-			markfollowed: true,
-		};
-		this.intervalFetcherId = null;
-		console.log('Patchouli', this);
-	},
+/**
+ * return an array
+ */
+function getUsersDetails(user_ids) {
+    const api = `http://www.pixiv.net/rpc/get_profile.php?user_ids=${user_ids.join(',')}&tt=${BASE.tt}`;
+    return fetchWithcookie(api).then(json => JSON.parse(json).body).catch(err => { console.error(err); });
+}
 
-	getPageInfo: function(pageURI) {
-		// complete URI String
-		console.log(URI.decode(pageURI));
-		return new Promise((resolve, reject) => {
-				if (pageURI) {
-					resolve();
-				} else {
-					reject('pageURI is null');
-				}
-			})
-			.then(() => {
-				return fetch(pageURI.toString(), {
-						credentials: 'same-origin' // with cookies
-					})
-					.then(response => response.text())
-					.then(html => new DOMParser().parseFromString(html, 'text/html'))
-					.then(doc => $(doc));
-			})
-			.then(($doc) => {
-				removeJama($doc);
-				const page = {};
+function parseDataFromBatch(batch) {
+    const illust_d = batch.illust_d;
+    const user_d = batch.user_d;
+    const bookmark_d = batch.bookmark_d;
 
-				page.URI = pageURI;
-				const next = $doc.find('.next a').attr('href');
-				page.nextURI = (next) ? new URI(baseURI).query(next).toString() : null;
+    return batch.illust_ids
+        .filter(x => x)
+        .map(x => {
+            const iinfo = illust_d[x];
+            const uinfo = user_d[iinfo.user_id];
+            const binfo = bookmark_d[x];
+            const is_ugoira = iinfo.illust_type === '2';
+            const is_manga = iinfo.illust_type === '1';
+            const src150 = (is_ugoira) ?
+                iinfo.url.big.replace(/([^-]+)(?:-original)([^_]+)(?:[^\.]+)(.+)/,'$1-inf$2_s$3') : 
+                iinfo.url.m.replace(/600x600/,'150x150');
+            
+            return {
+                is_ugoira,
+                is_manga,
+                src150,
+                srcbig: iinfo.url.big,
+                is_multiple: iinfo.is_multiple,
+                illust_id: iinfo.illust_id,
+                illust_title: iinfo.illust_title,
+                user_id: uinfo.user_id,
+                user_name: uinfo.user_name,
+                is_follow: uinfo.is_follow,
+                tags: binfo.tags,
+                bookmark_count: binfo.bookmark_count,
+            };
+        });
+}
 
-				page.thumbs = $doc.find(this.conf.selector)
-					.toArray()
-					.filter((elem) => elem.querySelector('a.work'))
-					.map((elem) => new Thumb(elem))
-					.filter((elem) => {
-						// Pixiv inner error, like image been deleted
-						return elem.workId;
-					});
-				return page;
-			})
-			.then((page) => {
-				// valid imgitems
+function parseToDOM(html) {
+    return (new DOMParser()).parseFromString(html, 'text/html');
+}
 
-				let innerp = page.thumbs.map((thumb) => {
-					return Promise.resolve(getThumbPageInfo(thumb.URI))
-						.then((tpi)=> {
-							for(let k in tpi) {
-								thumb[k] = tpi[k];
-							}
-							return thumb;
-						});
-				});
+function removeAnnoyance($doc = $(document)) {
+    [
+        'iframe',
+        //Ad
+        '.ad',
+        '.ads_area',
+        '.ad-footer',
+        '.ads_anchor',
+        '.ads-top-info',
+        '.comic-hot-works',
+        '.user-ad-container',
+        '.ads_area_no_margin',
+        //Premium
+        '.ad-printservice',
+        '.bookmark-ranges',
+        '.require-premium',
+        '.showcase-reminder',
+        '.sample-user-search',
+        '.popular-introduction',
+    ].forEach((e) => {
+        $doc.find(e).remove();
+    });
+}
 
-				return Promise.all(innerp).then(() => {
-					return page;
-				});
-			})
-			.catch((err) => {
-				console.error(err);
-			});
-	},
+const BASE = (() => {
+    const bu = new URI(document.baseURI);
+    const pn = bu.pathname();
+    const ss = URI.parseQuery(bu.query());
+    const baseURI = bu.toString();
+    const tt = $('input[name="tt"]').val();
+    const container = $('li.image-item').parent()[0];
+    const $fullwidthElement = $('#wrapper div:first');
 
-	pageGenerator: function* () {
-		let next = baseURI;
-		while(true) {
-			next = yield this.getPageInfo(next)
-					.then((p)=> {
-						const filtered = this.koakumaFilter(p.thumbs);
-						
-						[].push.apply(this.Tbooks, filtered);
+    let supported = true;
+    let li_type = 'search';
+    /** li_type - the DOM type to show li.image-item
+     *
+     *  'search'(default) : illust_150 + illust_title + user_name + bookmark_count
+     *  'member-illust'   : illust_150 + illust_title +           + bookmark_count
+     *  'mybookmark'      : illust_150 + illust_title + user_name + bookmark_count + checkbox + editlink
+     */
 
-						filtered.forEach((e) => {
-							//append elem reference, Do NOT use jQuery
-							this.$container[0].appendChild(e.elem);
-						});
+    if (pn === '/member_illust.php' && ss.id) {
+        li_type = 'member-illust';
+    } else if (pn === '/search.php') {
+    } else if (pn === '/bookmark.php' && !ss.type) {
+        if (!ss.id) {
+            li_type = 'mybookmark';
+        }
+    } else if (pn === '/bookmark_new_illust.php') {
+    } else if (pn === '/new_illust.php') {
+    } else if (pn === '/mypixiv_new_illust.php') {
+    } else if (pn === '/new_illust_r18.php') {
+    } else if (pn === '/bookmark_new_illust_r18.php') {
+    } else {
+        supported = false;
+    }
 
-						$('#Koakuma-processed').text(this.Tbooks.length);
-						return p.nextURI;
-					}).catch((err) => {
-						console.log(err);
-					});
-		}
-	},
+    return {
+        tt,
+        baseURI,
+        li_type,
+        supported,
+        container,
+        $fullwidthElement,
+    };
+})();
 
-	koakumaFilter: function(thumbs) {
-		if (this.koakuma.keywords) {
-			const kw = this.koakuma.keywords;
 
-			thumbs.forEach(e => {
-				e.hide = true;
-				for(let t of e.tags) {
-					if(kw.indexOf(t) >= 0) {
-						e.hide = false;
-						break;
-					}
-				}
-			});
-		} else {
-			thumbs.forEach(e => e.hide = false);
-		}
-		thumbs.forEach(e => e.hide = e.hide || e.rating < this.koakuma.rating);
-		thumbs.forEach(e => e.hide = e.hide || e.bookmark < this.koakuma.bookmark);
-		thumbs.forEach(e => {
-			if (e.hide) {
-				e.elem.classList.add('filter-hidden');
-			} else {
-				e.elem.classList.remove('filter-hidden');
-			}
 
-			e.elem.style.order = (this.koakuma.autosort) ? -e.bookmark : 0;
+Vue.filter('illust_href', function(illust_id) {
+    return 'http://www.pixiv.net/member_illust.php?mode=medium&illust_id='+illust_id;
+});
 
-			if(this.conf.hasAuthor && this.koakuma.markfollowed && e.followed) {
-				e.elem.querySelector('a.user').style.color = 'red';
-			}
-		});
-		return thumbs;
-	}
-};
+Vue.component('img150', {
+    props:['thd'],
+    template: `<a class="work _work"
+                 :href="thd.illust_id | illust_href"
+                 :class="{
+                    'ugoku-illust': thd.is_ugoira,
+                    'manga': thd.is_manga,
+                    'multiple': thd.is_multiple}">
+                    <div class="_layout-thumbnail"><img class="_thumbnail" :src="thd.src150"></img></div></a>`,
+
+});
+
+Vue.component('illust-title', {
+    props:['thd'],
+    template: '<a :href="thd.illust_id | illust_href"><h1 class="title" :title="thd.illust_title">{{thd.illust_title}}</h1></a>',
+});
+
+Vue.component('user-name', {
+    props:['thd'],
+    template: `<a class="user ui-profile-popup"
+                 :href="thd.user_id | user_href"
+                 :title="thd.user_name"
+                 :data-user_id="thd.user_id"
+                 :data-user_name="thd.user_name"
+                 :class="{'followed': thd.is_follow}"> {{thd.user_name}}</a>`,
+    filters: {
+        user_href: function(user_id) {
+            return 'http://www.pixiv.net/member_illust.php?id='+user_id;
+        },
+    },
+});
+
+Vue.component('count-list', {
+    props:['thd'],
+    template: `<ul class="count-list">
+                    <li v-if="thd.bookmark_count > 0">
+                        <a class="bookmark-count _ui-tooltip"
+                          :href="thd.illust_id | bookmark_detail_href"
+                          :data-tooltip="thd.bookmark_count | datatooltip">
+                            <i class="_icon sprites-bookmark-badge"></i>{{thd.bookmark_count}}</a></li></ul>`,
+    filters: {
+        datatooltip: function(bookmark_count) {
+            return bookmark_count+'件のブックマーク';
+        },
+        bookmark_detail_href: function(illust_id) {
+            return 'http://www.pixiv.net/bookmark_detail.php?illust_id='+illust_id;
+        },
+    },
+});
+
+Vue.component('edit-link', {
+    props:['thd'],
+    template: '<a :href="thd.illust_id | edit_href" class="edit-work"><span class="edit-bookmark edit_link">編集</span></a>',
+    filters: {
+        edit_href: function(illust_id) {
+            return `http://www.pixiv.net/bookmark_add.php?type=illust&illust_id=${ illust_id }&tag=&rest=show&p=1`;
+        },
+    },
+});
+
+Vue.component('imageitem-search', {
+    props:['thdata'],
+    template: `<li class="image-item">
+                   <img150 :thd="thdata"></img150>
+                   <illust-title :thd="thdata"></illust-title>
+                   <user-name :thd="thdata"></user-name>
+                   <count-list :thd="thdata"></count-list>
+               </li>`,
+});
+
+Vue.component('imageitem-member-illust', {
+    props:['thdata'],
+    template: `<li class="image-item">
+                    <img150 :thd="thdata"></img150>
+                    <illust-title :thd="thdata"></illust-title>
+                    <count-list :thd="thdata"></count-list>
+               </li>`,
+});
+
+Vue.component('imageitem-mybookmark', {
+    props:['thdata'],
+    template: `<li class="image-item">
+                    <bookmark-checkbox v-if="false" :thd="thdata"></bookmark-checkbox>
+                    <img150 :thd="thdata"></img150>
+                    <illust-title :thd="thdata"></illust-title>
+                    <user-name :thd="thdata"></user-name>
+                    <count-list :thd="thdata"></count-list>
+                    <edit-link :thd="thdata"></edit-link>
+               </li>`,
+});
 
 function setupHTML() {
-	$(`
-	<div id="Koakuma">
-		<div id="Koakuma-processed-box">
-			已處理 <strong id="Koakuma-processed">0</strong> 張 
-		</div>
-		<div id="Koakuma-main-box">
-			<div class="keyword">
-				<span>標籤過濾：</span>
-				<input type="text" id="Koakuma-keyword">
-			</div>
-			<div class="rating">
-				<span>★評分</span>：
-				<span id="Koakuma-rating">0</span>
-				以上
-			</div>
-			<div class="bookmark">
-				<span>★書籤</span>：
-				<span id="Koakuma-bookmark">0</span>
-				以上
-			</div>
-			<div class="func">
-				<a href="javascript:;" id="Koakuma-fetcher">找</a>
-				<a href="javascript:;" id="Koakuma-stop">停</a>
-			</div>
-			<div class="config">
-				<a href="javascript:;" id="Koakuma-config">⚒更多選項</a>
-			</div>
-		</div>
-		<div id="Koakuma-config-box">
-			<div>標示已追蹤 <input type="checkbox" id="Koakuma-config-markfollowed"/></div>
-			<div>滿版頁寬 <input type="checkbox" id="Koakuma-config-fillwidth"/></div>
-			<div>書籤排序 <input type="checkbox" id="Koakuma-config-autosort"/></div>
-		</div>
-	</div>`).appendTo('body');
+    $(`
+    <div id="Koa-controller" class="tachi">
+        <div id="Koa-controller-child">
+            <div id="Koa-found"><span id="Koa-found-value">0</span></div>
+            <div id="Koa-bookmark">
+                <span>★書籤</span>：
+                <input id="Koa-bookmark-input" type="number" min="0" step="1" value="0" required/>
+            </div>
+            <div id="Koa-btn">
+                <input id="Koa-btn-input" type="button" value="找"/>
+            </div>
+            <div id="Koa-options">
+                全<input id="Koa-fullwidth-input" type="checkbox"/>
+                排序<input id="Koa-ordering-input" type="checkbox"/>
+            </div>
+        </div>
+    </div>`).appendTo('body');
 
-	$(`
-	<style>
-	/* Koakuma */
-	#Koakuma {
-		width: 150px;
-		position: fixed;
-		left: 10px;
-		bottom: 10px;
-		background-color: #E4E7EE;
-		box-shadow: 0px 0px 3px 0px;
-		font-size: 16px;
-		padding: 10px;
-		border-radius: 10px;
-		z-index: 10;
-	}
+    $(`
+    <style>
+    #Koa-controller.tachi {
+        background-color: #8F2019;
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        margin: 10px 30px;
+        padding: 15px 8px 0px;
+        border-radius: 15px 15px 8px 8px;
+        font-size: 16px;
+        cursor: default;
+        z-index: 10;
+    }
 
-	#Koakuma a{
-		text-decoration: none;
-		display: inline-block;
-	}
+    #Koa-controller::before {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        border-width: 30px 0 0 100px;
+        border-color: transparent transparent transparent #000000;
+        left: 0px;
+        top: 0px;
+        z-index: -1;
+        transform-origin: 50% 50%;
+        transform: translate(-45px,40px) skew(20deg, 0deg) rotate(-20deg);
+    }
 
-	#Koakuma-processed-box,
-	#Koakuma-rating,
-	#Koakuma-bookmark {
-		cursor: pointer;
-	}
-	#Koakuma-processed-box,
-	#Koakuma-main-box > div.func {
-		text-align: center;
-	}
+    #Koa-controller::after {
+        border-width: 0 0 30px 100px;
+        border-color: transparent transparent #000000 transparent;
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-style: solid;
+        right: 0px;
+        top: 0px;
+        z-index: -1;
+        transform-origin: 50% 50%;
+        transform: translate(45px,40px) skew(-20deg, 0deg) rotate(20deg);
+    }
 
-	#Koakuma-main-box > div {
-		margin: 3px auto;
-	}
+    #Koa-controller.chibi {
+        width: 60px;
+        background-color: #8F2019;
+        position: fixed;
+        bottom: 0px;
+        left: 0px;
+        margin: 10px 30px;
+        padding: 10px 4px 15px;
+        border-radius: 50%;
+        font-size: 16px;
+        cursor: default;
+        z-index: 10;
+        color: white;
+    }
+    
+    #Koa-controller.chibi::before {
+        transform: translate(-45px,10px) skew(20deg, 0deg) rotate(-10deg) scale(0.4);
+    }
 
-	#Koakuma-keyword {
-		width: 140px;
-	}
+    #Koa-controller.chibi::after {
+        transform: translate(45px,10px) skew(-20deg, 0deg) rotate(10deg) scale(0.4);
+    }
+    
+    #Koa-controller.tachi #Koa-controller-child {
+        background-color: #FEE6CA;
+        border-bottom: 30px solid black;
+        border-radius: 10px 10px 20px 20px;
+    }
 
-	#Koakuma-main-box .rating span:nth-of-type(1){
-		color: #F18300;
-	}
+    #Koa-controller.chibi #Koa-controller-child {
+        background-color: #8F2019;
+        width: 100%;
+        height: 30px;
+        border-radius: 50%;
+        margin-top: -2px;
+    }
 
-	#Koakuma-main-box .bookmark span:nth-of-type(1){
-		color: #0069b1;
-		background-color: #cceeff;
-	}
+    #Koa-controller.chibi #Koa-controller-child::after {
+        content: " ' ' ";
+        display: block;
+        text-align: center;
+        font-size: 32px;
+        padding-right: 5px;
+        transform: rotate(10deg);
+    }
+    
+    #Koa-controller.chibi #Koa-controller-child > div {
+        display: none;
+    }
 
-	#Koakuma-main-box > div.func > a {
-		padding: 5px 50px;
-		border-radius: 5px;
-		font-size: 20px;
-		color: black;
-	}
+    #Koa-found,
+    #Koa-btn {
+        text-align: center;
+    }
 
-	#Koakuma-main-box > div.func > a:hover {
-		transform: translate(-2px, -2px);
-		box-shadow: 1px 1px 1px #533;
-	}
+    #Koa-controller.tachi #Koa-btn {
+        border-left: 15px solid white;
+        border-right: 15px solid white;
+        background-color: black;
+        color: white;
+    }
 
-	#Koakuma-main-box > div.func > a:active {
-		transform: translate(0px, 0px);
-		box-shadow: none;
-	}
+    #Koa-controller.tachi #Koa-options {
+        border-left: 15px solid white;
+        border-right: 15px solid white;
+        background-color: black;
+        color: white;
+    }
 
-	#Koakuma-stop {
-		background-color: rgb(230, 160, 160);
-	}
+    #Koa-bookmark > span {
+        color: #0069b1;
+        background-color: #cceeff;
+    }
 
-	#Koakuma-stop:hover {
-		background-color: rgb(240, 170, 170);
-	}
+    input#Koa-bookmark-input::-webkit-inner-spin-button, 
+    input#Koa-bookmark-input::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 
-	#Koakuma-stop:active {
-		background-color: rgb(220, 150, 150);
-	}
+    input#Koa-bookmark-input {
+        -moz-appearance: textfield;
+    }
 
-	#Koakuma-fetcher {
-		background-color: rgb(160, 230, 160);
-	}
+    input#Koa-bookmark-input {
+        border: none;
+        background-color: transparent;
+        padding: 0px;
+        color: blue;
+        font-size: 16px;
+        display: inline-block;
+        width: 50px;
+        cursor: ns-resize;
+        text-align: center;
+    }
 
-	#Koakuma-fetcher:hover {
-		background-color: rgb(170, 240, 170);
-	}
+    input#Koa-bookmark-input:focus {
+        cursor: initial;
+    }
 
-	#Koakuma-fetcher:active {
-		background-color: rgb(150, 220, 150);
-	}
+    #Koa-controller.tachi #Koa-btn-input {
+        border: none;
+        background-color: #FFFF00;
+        height: 100%;
+        margin: 0px auto;
+        display: block;
+        border-radius: 0% 0% 50% 50%;
+        font-size: 22px;
+    }
 
-	.Tbooks-container {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: space-around;
-		margin-left: initial;
-	}
+    #Koa-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin-left: initial;
+    }
 
-	.Tbooks-container > li.image-item {
-		margin: 21px 4px 0;
-		padding: 0 8px 0;
-	}
+    .fullwidth {
+        width: initial;
+    }
 
-	.filter-editing {
-		color: red;
-		font-size: 18px;
-	}
+    .layout-a.fullwidth {
+        display: flex;
+        flex-direction: row-reverse;
+    }
 
-	.filter-hidden {
-		display: none;
-	}
+    .layout-a.fullwidth .layout-column-2{
+        flex: 1;
+        margin-left: 20px;
+    }
 
-	/* Pixiv Better */
-	#wrapper {
-		width: initial;
-	}
-
-	.fillwidth {
-		width: initial;
-	}
-	</style>`).appendTo('head');
-
-	Patchouli.$container.children().remove();
-	Patchouli.$container.addClass('Tbooks-container');
+    .layout-body.fullwidth,
+    .layout-a.fullwidth {
+        margin: 10px 20px;
+    }
+    .followed.followed.followed {
+        font-weight: bold;
+        color: red;
+    }
+    </style>`).appendTo('head');
 }
 
 function setupEvent() {
-	$('#Koakuma-config-box').hide();
-	$('#Koakuma-stop').hide();
 
-	if (!Patchouli.conf.hasAuthor) {
-		$('#Koakuma-config-markfollowed').parent().remove();
-	} else {
-		$('#Koakuma-config-markfollowed').attr('checked', true);
-	}
+    const $KoaController = $('#Koa-controller');
+    const $KoaBookmarkInput = $('#Koa-bookmark-input');
+    const $KoaBtnInput = $('#Koa-btn-input');
+    const $KoaFullwidthInput = $('#Koa-fullwidth-input');
+    const $KoaOrderingInput = $('#Koa-ordering-input');
 
-	if (!Patchouli.conf.hasBookmark) {
-		$('#Koakuma-config-autosort').parent().remove();
-		$('#Koakuma-main-box > .bookmark').remove();
-	}
+    $KoaController
+        .on('click', function() {
+            if($(this).hasClass('chibi')){
+                $(this).removeClass('chibi');
+                $(this).addClass('tachi');
+            }
+        })
+        .on('mouseleave', function() {
+            $(this).addClass('chibi');
+            $(this).removeClass('tachi');
+            $KoaBookmarkInput.focusout();
+        });
 
-	if (!Patchouli.conf.needFillwidth) {
-		$('#Koakuma-config-fillwidth').parent().remove();
-	}
 
-	$('#Koakuma-processed-box').on('click', function(event) {
-		$('#Koakuma-main-box').toggle(300);
-		$('#Koakuma-config-box').hide(300);
-	});
+    $KoaBookmarkInput
+        .on('wheel', function(event) {
+            this.blur();
+            if(event.originalEvent.deltaY > 0) {
+                this.stepDown(20);
+            } else {
+                this.stepUp(20);
+            }
+            MuQ.Koakuma.$data.limit = parseInt(this.value);
+            return false;
+        })
+        .on('focusout', function(event) {
+            this.blur();
+            if(!this.validity.valid){
+                console.log(this.validationMessage);
+            } else {
+                MuQ.Koakuma.$data.limit = parseInt(this.value);
+            }
+        });
 
-	$('#Koakuma-config').on('click', function(event) {
-		$('#Koakuma-config-box').toggle(300);
-	});
+    $KoaBtnInput.click(function(event) {
+        if(!$KoaBookmarkInput[0].validity.valid){
+            console.log($KoaBookmarkInput[0].validationMessage);
+        } else {
+            if (MuQ.intervalID) {
+                clearInterval(MuQ.intervalID);
+                MuQ.intervalID = null;
+                this.value = '找';
+                $KoaController.removeClass('working');
+            } else {
+                MuQ.intervalID = setInterval(function(){
+                    MuQ.nextPage();
+                }, 1000);
+                this.value = '停';
+                $KoaController.addClass('working');
+            }
+        }
+        return false;
+    });
 
-	$('#Koakuma-rating').on('click', function(event) {
-		if (!Patchouli.intervalFetcherId) {
-			$('#Koakuma-rating').toggleClass('filter-editing');
-		}
-		$('#Koakuma-bookmark').removeClass('filter-editing');
-	});
+    $KoaFullwidthInput.click(function(event){
+        const node = BASE.$fullwidthElement;
+        if (this.checked) {
+            node.addClass('fullwidth');
+        } else {
+            node.removeClass('fullwidth');
+        }
+    });
 
-	$('#Koakuma-bookmark').on('click', function(event) {
-		if (!Patchouli.intervalFetcherId) {
-			$('#Koakuma-bookmark').toggleClass('filter-editing');
-		}
-		$('#Koakuma-rating').removeClass('filter-editing');
-	});
-
-	$('#Koakuma-stop').on('click', function(event) {
-		$('#Koakuma-stop').hide();
-		$('#Koakuma-fetcher').show();
-		$('#Koakuma-main-box > div:not(.func)').show();
-
-		clearInterval(Patchouli.intervalFetcherId);
-		Patchouli.intervalFetcherId = null;
-	});
-
-	$('#Koakuma-fetcher').on('click', function(event) {
-		$('#Koakuma-fetcher').hide();
-		$('#Koakuma-stop').show();
-		$('.filter-editing').removeClass('filter-editing');
-		$('#Koakuma-main-box > div:not(.func)').hide();
-		$('#Koakuma-config-box').hide();
-
-		Patchouli.koakuma.keywords = $('#Koakuma-keyword').val();
-		Patchouli.koakumaFilter(Patchouli.Tbooks);
-		Patchouli.intervalFetcherId = setInterval(function() {
-			Patchouli.np = Patchouli.np.then((n) => Patchouli.page.next(n).value);
-		}, 1000);
-	});
-
-	$('#Koakuma-config-markfollowed').on('click', function(event) {
-		if (event.target.checked) {
-			Patchouli.koakuma.markfollowed = true;
-			Patchouli.Tbooks.forEach((e) => {
-				if (e.followed) {
-					e.elem.querySelector('a.user').style.color = 'red';
-				}
-			});
-		} else {
-			Patchouli.koakuma.markfollowed = false;
-			Patchouli.Tbooks.forEach((e) => {
-				e.elem.querySelector('a.user').style.color = '';
-			});
-		}
-	});
-
-	$('#Koakuma-config-autosort').on('click', function(event) {
-		if (event.target.checked) {
-			Patchouli.koakuma.autosort = true;
-		} else {
-			Patchouli.koakuma.autosort = false;
-		}
-	});
-
-	$('#Koakuma-config-fillwidth').on('click', function(event) {
-		if (event.target.checked) {
-			$('.layout-body').addClass('fillwidth');
-		} else {
-			$('.layout-body').removeClass('fillwidth');
-		}
-	});
-
-	$('#Koakuma').on('wheel', function(event) {
-		const t = event.originalEvent.deltaY < 0 ? 1 : -1;
-		const fe = $('.filter-editing');
-		if(fe.length > 0) {
-			const feid = fe[0].id;
-			if (feid === 'Koakuma-rating') {
-				const tt = Patchouli.koakuma.ratingStep * t;
-				fe.text(Math.max(0, ~~fe.text() + tt));
-				Patchouli.koakuma.rating = ~~fe.text();
-			} else if (feid === 'Koakuma-bookmark') {
-				const tt = Patchouli.koakuma.bookmarkStep * t;
-				fe.text(Math.max(0, ~~fe.text() + tt));
-				Patchouli.koakuma.bookmark = ~~fe.text();
-			} else {
-				console.log(feid);
-			}
-		} else {
-			return;
-		}
-	});
+    $KoaOrderingInput.click(function(event){
+        const order_t = this.checked ? 'bookmark_count' : '';
+        MuQ.Koakuma.$data.order_t = order_t;
+    });
 }
 
-//for debugging
-// window.Patchouli = Patchouli;
-// window.URI = URI;
+const MuQ = {
+    nextLink: location.href,
+    intervalID: null,
+    init: function() {
+        if(BASE.supported){
+            if(BASE.container) {
+                BASE.container.id = 'Koa-container';
+            }
+            $('#wrapper').width('initial');
+            setupHTML();
+            setupEvent();
 
-// Program Entry Point
-Patchouli.init();
-removeJama();
-if (Patchouli.supported) {
-	setupHTML();
-	setupEvent();
-	Patchouli.page = Patchouli.pageGenerator();
-	Patchouli.np = Patchouli.page.next().value;
-}
+            this.Koakuma.$watch('thumbs', function(newVal, oldVal) {
+                $('#Koa-found-value').text(newVal.length);
+            });
+
+            this.page = this.np_gen();
+            this.np = this.page.next().value.then(v => {
+                this.Koakuma.$mount('#Koa-container');
+                return v;
+            });
+        }
+    },
+    nextPage: function() {
+        this.np = this.np
+            .then(n => this.page.next(n.nextLink).value )
+            .catch(err => {
+                console.error(err);
+                clearInterval(this.intervalID);
+                this.intervalID = null;
+                $('#Koa-btn-input').attr('disabled', true).val('完');
+            });
+    },
+    np_gen: function* () {
+        while(this.nextLink) {
+            this.nextLink = yield getBatch(this.nextLink)
+                .then(bat => {
+                    return getIllustsDetails(bat.illust_ids)
+                        .then(illust_d => {
+                            bat.illust_d = illust_d;
+                            return bat;
+                        });
+                })
+                .then(bat => {
+                    return getUsersDetails(Object.keys(bat.illust_d)
+                        .map((k) => bat.illust_d[k].user_id))
+                        .then(user_d => {
+                            bat.user_d = {};
+                            user_d.forEach(x => bat.user_d[x.user_id] = x);
+                            return bat;
+                        });
+                })
+                .then(bat => {
+                    return Promise.all(Object.keys(bat.illust_d)
+                        .map((k) => bat.illust_d[k])
+                        .map(x => getBookmarkCountAndTags(x.illust_id)))
+                        .then(bookmark_d => {
+                            bat.bookmark_d = {};
+                            bookmark_d.forEach(x => bat.bookmark_d[x.illust_id] = x);
+                            return bat;
+                        });
+                })
+                .then(bat => {
+                    this.Koakuma.$data.thumbs.push(...parseDataFromBatch(bat));
+                    return bat;
+                }).catch(err => {
+                    console.error(err);
+                });
+        }
+    },
+    Koakuma: new Vue({
+        template: `<ul><component :is="li_type" v-for="th in thumbs | bookmark_gt limit | orderBy order_t -1" :thdata="th"></component></ul>`,
+        data: {
+            thumbs: [],
+            order_t: '',
+            limit: 0,
+        },
+        computed: {
+            li_type: function() {
+                return 'imageitem-' + BASE.li_type;
+            },
+        },
+        filters: {
+            bookmark_gt: function(data, limit) {
+                return data.filter(x => x.bookmark_count >= limit);
+            },
+        },
+    }),
+};
+
+removeAnnoyance();
+MuQ.init();
+
+//Debugging
+window.fetchWithcookie = fetchWithcookie;
+window.getBookmarkCountAndTags = getBookmarkCountAndTags;
+window.getBatch = getBatch;
+window.getIllustsDetails = getIllustsDetails;
+window.getUsersDetails = getUsersDetails;
+window.parseToDOM = parseToDOM;
+window.parseDataFromBatch = parseDataFromBatch;
+window.removeAnnoyance = removeAnnoyance;
+window.BASE = BASE;
+window.MuQ = MuQ;
+window.Vue = Vue;
+window.URI = URI;
