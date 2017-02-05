@@ -1,5 +1,5 @@
 ﻿// ==UserScript==
-// @name        Patchuli MK-II
+// @name        Patchuli
 // @description An image searching/browsing tool on Pixiv
 // @namespace   https://github.com/FlandreDaisuki
 // @include     http://www.pixiv.net/*
