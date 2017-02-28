@@ -228,7 +228,8 @@ const globalStore = {
 		orderBy: 'illust_id',
 	},
 	patchouliToMount: (() => {
-		return document.querySelector('li.image-item').parentElement;
+		const _a = document.querySelector('li.image-item');
+		return _a ? _a.parentElement : null;
 	})(),
 	koakumaToMount: (() => {
 		return document.querySelector('#toolbar-items');
@@ -262,7 +263,14 @@ const globalStore = {
 				}
 				break;
 			case '/bookmark.php':
-				type = search.has('id') ? 'default' : 'mybookmark';
+				if(search.has('id')) {
+					type = 'default';
+				} else if(!search.has('type')) {
+					type = 'mybookmark';
+				} else {
+					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
+					supported = false;
+				}
 				break;
 			default:
 				supported = false;
