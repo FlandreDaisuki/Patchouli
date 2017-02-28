@@ -3,32 +3,15 @@ class Pixiv {
 		this.tt = document.querySelector('input[name="tt"]').value;
 	}
 
-	fetch(url, type = 'text') {
-		const cookie = {credentials: 'same-origin'};
-		return fetch(url, cookie)
-			.then(res => res[type]())
-			.catch(err => {
-				console.error(err);
-				return this.fetchX(url, type);
-			});
-	}
-
-	fetchX(url, type = 'text') {
-		return new Promise((resolve, reject) => {
-			GM_xmlhttpRequest({
-				method: "GET",
-				url,
-				headers: {
-					'Cookie': document.cookie,
-				},
-				onerror: reject,
-				onload(response) {
-					resolve(type === 'json' ?
-						JSON.parse(response.responseText) :
-						response.responseText);
-				}
-			});
-		}).catch(console.error);
+	fetch(url) {
+		return axios.get(url)
+			.then(res => {
+				return new Promise((resolve, reject) => {
+					(res.statusText !== 'OK') ?
+						reject(res) : resolve(res.data);
+				});
+			})
+			.catch(console.error);
 	}
 
 	static toDOM(html) {
@@ -153,7 +136,7 @@ class Pixiv {
 		const _a = illust_ids.join(',');
 		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${_a}&tt=${this.tt}`;
 
-		return this.fetch(url, 'json')
+		return this.fetch(url)
 			.then(json => json.body)
 			.catch(console.error);
 	}
@@ -162,7 +145,7 @@ class Pixiv {
 		const _a = user_ids.join(',');
 		const url = `/rpc/get_profile.php?user_ids=${_a}&tt=${this.tt}`;
 
-		return this.fetch(url, 'json')
+		return this.fetch(url)
 			.then(json => json.body)
 			.then(arr => arr.reduce((a, b) => {
 				// make the same output of getIllustsDetail
