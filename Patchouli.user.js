@@ -773,6 +773,9 @@ if (globalStore.page.supported) {
 	#koakuma-switch:active {
 		box-shadow: 1px 1px gray inset;
 	}
+	#koakuma-switch:focus {
+		outline: 0;
+	}
 	#koakuma-switch.toSearch {
 		background-color: lightgreen;
 	}
