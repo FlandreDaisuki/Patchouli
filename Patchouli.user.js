@@ -691,105 +691,108 @@ if (globalStore.page.supported) {
 Pixiv.rmAnnoyance();
 utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 
-utils.addStyle(`
-#wrapper.fullwidth,
-#wrapper.fullwidth .layout-a,
-#wrapper.fullwidth .layout-body {
-	width: initial;
-}
-#wrapper.fullwidth .layout-a {
-	display: flex;
-	flex-direction: row-reverse;
-}
-#wrapper.fullwidth .layout-column-2{
-	flex: 1;
-	margin-left: 20px;
-}
-#wrapper.fullwidth .layout-body,
-#wrapper.fullwidth .layout-a {
-	margin: 10px 20px;
-}
+if (globalStore.page.supported) {
+	utils.addStyle(`
+	#wrapper.fullwidth,
+	#wrapper.fullwidth .layout-a,
+	#wrapper.fullwidth .layout-body {
+		width: initial;
+	}
+	#wrapper.fullwidth .layout-a {
+		display: flex;
+		flex-direction: row-reverse;
+	}
+	#wrapper.fullwidth .layout-column-2{
+		flex: 1;
+		margin-left: 20px;
+	}
+	#wrapper.fullwidth .layout-body,
+	#wrapper.fullwidth .layout-a {
+		margin: 10px 20px;
+	}
 
 
-.followed.followed.followed {
-	font-weight: bold;
-	color: red;
-}
-.rating_score {
-	background-color: #FFEE88;
-	color: #FF7700;
-	border-radius: 3px;
-	display: inline-block !important;
-	margin: 0 1px;
-	padding: 0 6px !important;
-	font: bold 10px/18px "lucida grande", sans-serif !important;
-	text-decoration: none;
-	cursor: default;
-}
-#パチュリー {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: space-around;
-}
+	.followed.followed.followed {
+		font-weight: bold;
+		color: red;
+	}
+	.rating_score {
+		background-color: #FFEE88;
+		color: #FF7700;
+		border-radius: 3px;
+		display: inline-block !important;
+		margin: 0 1px;
+		padding: 0 6px !important;
+		font: bold 10px/18px "lucida grande", sans-serif !important;
+		text-decoration: none;
+		cursor: default;
+	}
+	#パチュリー {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
+	}
 
 
-#koakuma-bookmark {
-	display: flex;
+	#koakuma-bookmark {
+		display: flex;
+	}
+	#koakuma-bookmark label{
+		white-space: nowrap;
+		color: #0069b1 !important;
+		background-color: #cceeff;
+		border-radius: 3px;
+		padding: 0 6px;
+	}
+	#koakuma-bookmark-input::-webkit-inner-spin-button,
+	#koakuma-bookmark-input::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	#koakuma-bookmark-input {
+		-moz-appearance: textfield;
+		border: none;
+		background-color: transparent;
+		padding: 0px;
+		color: blue;
+		font-size: 16px;
+		display: inline-block;
+		cursor: ns-resize;
+		text-align: center;
+		min-width: 0;
+	}
+	#koakuma-bookmark-input:focus {
+		cursor: initial;
+	}
+	#koakuma-switch {
+		border: 0;
+		padding: 3px 20px;
+		border-radius: 3px;
+		font-size: 16px;
+	}
+	#koakuma-switch.toSearch {
+		background-color: lightgreen;
+	}
+	#koakuma-switch.toStop {
+		background-color: lightpink;
+	}
+	#koakuma-switch.ended {
+		background-color: lightgrey;
+	}
+	#こあくま {
+		position: fixed;
+		left: 10px;
+		bottom: 10px;
+		z-index: 1;
+		background-color: aliceblue;
+		border-radius: 10px;
+		padding: 5px;
+		font-size: 16px;
+		text-align: center;
+		width: 140px;
+	}
+	#こあくま > * {
+		margin: 2px 0;
+	}`);
 }
-#koakuma-bookmark label{
-	white-space: nowrap;
-	color: #0069b1 !important;
-	background-color: #cceeff;
-	border-radius: 3px;
-	padding: 0 6px;
-}
-#koakuma-bookmark-input::-webkit-inner-spin-button, 
-#koakuma-bookmark-input::-webkit-outer-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-}
-#koakuma-bookmark-input {
-	-moz-appearance: textfield;
-	border: none;
-	background-color: transparent;
-	padding: 0px;
-	color: blue;
-	font-size: 16px;
-	display: inline-block;
-	cursor: ns-resize;
-	text-align: center;
-	min-width: 0;
-}
-#koakuma-bookmark-input:focus {
-	cursor: initial;
-}
-#koakuma-switch {
-	border: 0;
-	padding: 3px 20px;
-	border-radius: 3px;
-	font-size: 16px;
-}
-#koakuma-switch.toSearch {
-	background-color: lightgreen;
-}
-#koakuma-switch.toStop {
-	background-color: lightpink;
-}
-#koakuma-switch.ended {
-	background-color: lightgrey;
-}
-#こあくま {
-	position: fixed;
-	left: 10px;
-	bottom: 10px;
-	z-index: 1;
-	background-color: aliceblue;
-	border-radius: 10px;
-	padding: 5px;
-	font-size: 16px;
-	text-align: center;
-	width: 140px;
-}
-#こあくま > * {
-	margin: 2px 0;
-}`);
+
