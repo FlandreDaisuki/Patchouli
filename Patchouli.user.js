@@ -1,672 +1,798 @@
-﻿// ==UserScript==
-// @name        Patchouli
-// @description An image searching/browsing tool on Pixiv
-// @namespace   https://github.com/FlandreDaisuki
-// @include     http://www.pixiv.net/*
-// @require     https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.25/vue.js
-// @require     https://cdnjs.cloudflare.com/ajax/libs/URI.js/1.18.1/URI.min.js
-// @version     2017.02.06
-// @author      FlandreDaisuki
-// @updateURL   https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/Patchouli.user.js
-// @grant       none
+// ==UserScript==
+// @name		Patchouli
+// @description	An image searching/browsing tool on Pixiv
+// @namespace	https://github.com/FlandreDaisuki
+// @author		FlandreDaisuki
+// @include		http://www.pixiv.net/*
+// @require		https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js
+// @updateURL	https://github.com/FlandreDaisuki/Patchouli/raw/master/Patchouli.user.js
+// @version		2017.02.28
+// @icon		http://i.imgur.com/VwoYc5w.png
+// @grant		GM_xmlhttpRequest
 // @noframes
 // ==/UserScript==
-/* jshint esnext: true */
+class Pixiv {
+	constructor() {
+		this.tt = document.querySelector('input[name="tt"]').value;
+	}
 
-function fetchWithcookie(url) {
-    return fetch(url, {credentials: 'same-origin'})
-        .then(response => response.text())
-        .catch(err => { console.error(err); });
+	fetch(url, type = 'text') {
+		const cookie = {credentials: 'same-origin'};
+		return fetch(url, cookie)
+			.then(res => res[type]())
+			.catch(err => {
+				console.error(err);
+				return this.fetchX(url, type);
+			});
+	}
+
+	fetchX(url, type = 'text') {
+		return new Promise((resolve, reject) => {
+			GM_xmlhttpRequest({
+				method: "GET",
+				url,
+				headers: {
+					'Cookie': document.cookie,
+				},
+				onerror: reject,
+				onload(response) {
+					resolve(type === 'json' ?
+						JSON.parse(response.responseText) :
+						response.responseText);
+				}
+			});
+		}).catch(console.error);
+	}
+
+	static toDOM(html) {
+		return (new DOMParser()).parseFromString(html, 'text/html');
+	}
+
+	static rmAnnoyance(doc = document) {
+		[
+			'iframe',
+			//Ad
+			'.ad',
+			'.ads_area',
+			'.ad-footer',
+			'.ads_anchor',
+			'.ads-top-info',
+			'.comic-hot-works',
+			'.user-ad-container',
+			'.ads_area_no_margin',
+			//Premium
+			'.ad-printservice',
+			'.bookmark-ranges',
+			'.require-premium',
+			'.showcase-reminder',
+			'.sample-user-search',
+			'.popular-introduction',
+		].forEach(cl => {
+			Array.from(doc.querySelectorAll(cl)).forEach(el => {
+				el.remove();
+			});
+		});
+	}
+
+	static storageGet() {
+		if(!localStorage.getItem('むきゅー')) {
+			Pixiv.storageSet({});
+		}
+		return JSON.parse(localStorage.getItem('むきゅー'));
+	}
+
+	static storageSet(obj) {
+		localStorage.setItem('むきゅー', JSON.stringify(obj));
+	}
+
+	static hrefAttr(elem) {
+		const a = elem;
+		if (!a) {
+			return '';
+		} else if(a.href) {
+			// Firefox
+			return a.href;
+		} else {
+			// Chrome
+			const m = a.outerHTML.match(/href="([^"]+)"/);
+			if (!m) {
+				return '';
+			}
+			const query = m[1].replace(/&amp;/g, '&');
+
+			return `${location.pathname}${query}`;
+		}
+	}
+
+	getBookmarkCount(illust_id) {
+		const url = `/bookmark_detail.php?illust_id=${illust_id}`;
+
+		return this.fetch(url)
+			.then(Pixiv.toDOM)
+			.then(doc => {
+				const _a = doc.querySelector('a.bookmark-count');
+				const bookmark_count = _a ? parseInt(_a.innerText) : 0;
+
+				return {
+					bookmark_count,
+					illust_id,
+				};
+			})
+			.catch(console.error);
+	}
+
+	getBookmarksDetail(illust_ids) {
+		const _f = this.getBookmarkCount.bind(this);
+		const bookmarks = illust_ids.map(_f);
+
+		return Promise.all(bookmarks)
+			.then(arr => arr.reduce((a, b) => {
+				a[b.illust_id] = b;
+				return a;
+			}, {}))
+			.catch(console.error);
+	}
+
+	getIllustPageDetail(illust_id) {
+		const url = `/member_illust.php?mode=medium&illust_id=${illust_id}`;
+
+		return this.fetch(url)
+			.then(Pixiv.toDOM)
+			.then(doc => {
+				const _a = doc.querySelector('.score-count');
+				const rating_score = _a ? parseInt(_a.innerText) : 0;
+				return {
+					illust_id,
+					rating_score,
+				};
+			})
+			.catch(console.error);
+	}
+
+	getIllustPagesDetail(illust_ids) {
+		const _f = this.getIllustPageDetail.bind(this);
+		const pages = illust_ids.map(_f);
+
+		return Promise.all(pages)
+			.then(arr => arr.reduce((a, b) => {
+				a[b.illust_id] = b;
+				return a;
+			}, {}))
+			.catch(console.error);
+	}
+
+	getIllustsDetail(illust_ids) {
+		const _a = illust_ids.join(',');
+		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${_a}&tt=${this.tt}`;
+
+		return this.fetch(url, 'json')
+			.then(json => json.body)
+			.catch(console.error);
+	}
+
+	getUsersDetail(user_ids) {
+		const _a = user_ids.join(',');
+		const url = `/rpc/get_profile.php?user_ids=${_a}&tt=${this.tt}`;
+
+		return this.fetch(url, 'json')
+			.then(json => json.body)
+			.then(arr => arr.reduce((a, b) => {
+				// make the same output of getIllustsDetail
+				a[b.user_id] = b;
+				return a;
+			}, {}))
+			.catch(console.error);
+	}
+
+	getPageInformationAndNext(url) {
+		return this.fetch(url)
+		.then(Pixiv.toDOM)
+		.then(doc => {
+			Pixiv.rmAnnoyance(doc);
+			const _a = doc.querySelector('.next a');
+			const next_url = Pixiv.hrefAttr(_a); //FF & Chrome issue
+			const _b = doc.querySelectorAll('.image-item img');
+			const illusts = Array.from(_b).map(x => ({
+								illust_id: x.dataset.id,
+								thumb_src: x.dataset.src,
+								user_id: x.dataset.userId,
+								tags: x.dataset.tags.split(' '),
+							})).filter(x => x.illust_id !== '0');
+			return {
+				next_url,
+				illusts,
+			};
+		})
+		.catch(console.error);
+	}
 }
 
-function getBookmarkCountAndTags(illust_id) {
-    const url = `http://www.pixiv.net/bookmark_detail.php?illust_id=${illust_id}`;
-    
-    return fetchWithcookie(url)
-        .then(html => parseToDOM(html))
-        .then(doc => $(doc))
-        .then($doc => {
-            let m = $doc.find('a.bookmark-count').text();
-            const bookmark_count =  m ? parseInt(m) : 0;
-            const tags = Array.from($doc.find('ul.tags:first a')).map(x => x.innerText);
+const utils = {
+	linkStyle: function(url) {
+		const link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = url;
+		document.head.appendChild(link);
+	},
+	linkScript: function(url) {
+		const script = document.createElement('script');
+		script.src = url;
+		document.head.appendChild(script);
+	},
+	createIcon: function(name, options = {}) {
+		const el = document.createElement('i');
+		el.classList.add('fa');
+		el.classList.add(`fa-${name}`);
+		el.setAttribute('aria-hidden', 'true');
+		return el;
+	},
+	addStyle: function(text) {
+		const style = document.createElement('style');
+		style.innerHTML = text;
+		document.head.appendChild(style);
+	},
+	asyncWhile: function(condition, action, options = {}) {
+		options = Object.assign({
+			first: undefined,
+			ctx: this,
+		}, options);
+		const ctx = options.ctx;
+		const first = options.first;
+		const whilst = function(data) {
+			return condition.call(ctx, data) ?
+				Promise.resolve(action.call(ctx, data)).then(whilst) :
+				data;
+		};
 
-            return {
-                bookmark_count,
-                illust_id,
-                tags,
-            };
-        })
-        .catch(err => { console.error(err); });
-}
-
-function getBatch(url) {
-    return fetchWithcookie(url)
-        .then(html => parseToDOM(html))
-        .then(doc => $(doc))
-        .then($doc => {
-            removeAnnoyance($doc);
-            const next = $doc.find('.next a').attr('href');
-            const nextLink = (next) ? new URI(BASE.baseURI).query(next).toString() : null;
-            
-            const illust_ids = $doc
-                .find('li.image-item > a.work')
-                .toArray()
-                .map(x => URI.parseQuery($(x).attr('href')).illust_id);
-
-            return {
-                nextLink,
-                illust_ids,
-            };
-        })
-        .catch(err => { console.error(err); });
-}
-
-/**
- * return object which key is illust_id
- */
-function getIllustsDetails(illust_ids) {
-    const api = `http://www.pixiv.net/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${illust_ids.join(',')}&tt=${BASE.tt}`;
-    
-    return fetchWithcookie(api).then(json => JSON.parse(json).body).catch(err => { console.error(err); });
-}
-
-/**
- * return an array
- */
-function getUsersDetails(user_ids) {
-    const api = `http://www.pixiv.net/rpc/get_profile.php?user_ids=${user_ids.join(',')}&tt=${BASE.tt}`;
-    return fetchWithcookie(api).then(json => JSON.parse(json).body).catch(err => { console.error(err); });
-}
-
-function parseDataFromBatch(batch) {
-    const illust_d = batch.illust_d;
-    const user_d = batch.user_d;
-    const bookmark_d = batch.bookmark_d;
-
-    return batch.illust_ids
-        .filter(x => x)
-        .map(x => {
-            const iinfo = illust_d[x];
-            const uinfo = user_d[iinfo.user_id];
-            const binfo = bookmark_d[x];
-            const is_ugoira = iinfo.illust_type === '2';
-            const is_manga = iinfo.illust_type === '1';
-            const src150 = (is_ugoira) ?
-                iinfo.url.big.replace(/([^-]+)(?:-original)([^_]+)(?:[^\.]+)(.+)/,'$1-inf$2_s$3') : 
-                iinfo.url.m.replace(/600x600/,'150x150');
-            
-            return {
-                is_ugoira,
-                is_manga,
-                src150,
-                srcbig: iinfo.url.big,
-                is_multiple: iinfo.is_multiple,
-                illust_id: iinfo.illust_id,
-                illust_title: iinfo.illust_title,
-                user_id: uinfo.user_id,
-                user_name: uinfo.user_name,
-                is_follow: uinfo.is_follow,
-                tags: binfo.tags,
-                bookmark_count: binfo.bookmark_count,
-            };
-        });
-}
-
-function parseToDOM(html) {
-    return (new DOMParser()).parseFromString(html, 'text/html');
-}
-
-function removeAnnoyance($doc = $(document)) {
-    [
-        'iframe',
-        //Ad
-        '.ad',
-        '.ads_area',
-        '.ad-footer',
-        '.ads_anchor',
-        '.ads-top-info',
-        '.comic-hot-works',
-        '.user-ad-container',
-        '.ads_area_no_margin',
-        //Premium
-        '.ad-printservice',
-        '.bookmark-ranges',
-        '.require-premium',
-        '.showcase-reminder',
-        '.sample-user-search',
-        '.popular-introduction',
-    ].forEach((e) => {
-        $doc.find(e).remove();
-    });
-}
-
-const BASE = (() => {
-    const bu = new URI(document.baseURI);
-    const pn = bu.pathname();
-    const ss = URI.parseQuery(bu.query());
-    const baseURI = bu.toString();
-    const tt = $('input[name="tt"]').val();
-    const container = $('li.image-item').parent()[0];
-    const $fullwidthElement = $('#wrapper div:first');
-
-    let supported = true;
-    let li_type = 'search';
-    /** li_type - the DOM type to show li.image-item
-     *
-     *  'search'(default) : illust_150 + illust_title + user_name + bookmark_count
-     *  'member-illust'   : illust_150 + illust_title +           + bookmark_count
-     *  'mybookmark'      : illust_150 + illust_title + user_name + bookmark_count + checkbox + editlink
-     */
-
-    if (pn === '/member_illust.php' && ss.id) {
-        li_type = 'member-illust';
-    } else if (pn === '/search.php') {
-    } else if (pn === '/bookmark.php' && !ss.type) {
-        if (!ss.id) {
-            li_type = 'mybookmark';
-        }
-    } else if (pn === '/bookmark_new_illust.php') {
-    } else if (pn === '/new_illust.php') {
-    } else if (pn === '/mypixiv_new_illust.php') {
-    } else if (pn === '/new_illust_r18.php') {
-    } else if (pn === '/bookmark_new_illust_r18.php') {
-    } else {
-        supported = false;
-    }
-
-    return {
-        tt,
-        baseURI,
-        li_type,
-        supported,
-        container,
-        $fullwidthElement,
-    };
-})();
-
-
-
-Vue.filter('illust_href', function(illust_id) {
-    return 'http://www.pixiv.net/member_illust.php?mode=medium&illust_id='+illust_id;
-});
-
-Vue.component('img150', {
-    props:['thd'],
-    template: `<a class="work _work"
-                 :href="thd.illust_id | illust_href"
-                 :class="{
-                    'ugoku-illust': thd.is_ugoira,
-                    'manga': thd.is_manga,
-                    'multiple': thd.is_multiple}">
-                    <div class="_layout-thumbnail"><img class="_thumbnail" :src="thd.src150"></img></div></a>`,
-
-});
-
-Vue.component('illust-title', {
-    props:['thd'],
-    template: '<a :href="thd.illust_id | illust_href"><h1 class="title" :title="thd.illust_title">{{thd.illust_title}}</h1></a>',
-});
-
-Vue.component('user-name', {
-    props:['thd'],
-    template: `<a class="user ui-profile-popup"
-                 :href="thd.user_id | user_href"
-                 :title="thd.user_name"
-                 :data-user_id="thd.user_id"
-                 :data-user_name="thd.user_name"
-                 :class="{'followed': thd.is_follow}"> {{thd.user_name}}</a>`,
-    filters: {
-        user_href: function(user_id) {
-            return 'http://www.pixiv.net/member_illust.php?id='+user_id;
-        },
-    },
-});
-
-Vue.component('count-list', {
-    props:['thd'],
-    template: `<ul class="count-list">
-                    <li v-if="thd.bookmark_count > 0">
-                        <a class="bookmark-count _ui-tooltip"
-                          :href="thd.illust_id | bookmark_detail_href"
-                          :data-tooltip="thd.bookmark_count | datatooltip">
-                            <i class="_icon sprites-bookmark-badge"></i>{{thd.bookmark_count}}</a></li></ul>`,
-    filters: {
-        datatooltip: function(bookmark_count) {
-            return bookmark_count+'件のブックマーク';
-        },
-        bookmark_detail_href: function(illust_id) {
-            return 'http://www.pixiv.net/bookmark_detail.php?illust_id='+illust_id;
-        },
-    },
-});
-
-Vue.component('edit-link', {
-    props:['thd'],
-    template: '<a :href="thd.illust_id | edit_href" class="edit-work"><span class="edit-bookmark edit_link">編集</span></a>',
-    filters: {
-        edit_href: function(illust_id) {
-            return `http://www.pixiv.net/bookmark_add.php?type=illust&illust_id=${ illust_id }&tag=&rest=show&p=1`;
-        },
-    },
-});
-
-Vue.component('imageitem-search', {
-    props:['thdata'],
-    template: `<li class="image-item">
-                   <img150 :thd="thdata"></img150>
-                   <illust-title :thd="thdata"></illust-title>
-                   <user-name :thd="thdata"></user-name>
-                   <count-list :thd="thdata"></count-list>
-               </li>`,
-});
-
-Vue.component('imageitem-member-illust', {
-    props:['thdata'],
-    template: `<li class="image-item">
-                    <img150 :thd="thdata"></img150>
-                    <illust-title :thd="thdata"></illust-title>
-                    <count-list :thd="thdata"></count-list>
-               </li>`,
-});
-
-Vue.component('imageitem-mybookmark', {
-    props:['thdata'],
-    template: `<li class="image-item">
-                    <bookmark-checkbox v-if="false" :thd="thdata"></bookmark-checkbox>
-                    <img150 :thd="thdata"></img150>
-                    <illust-title :thd="thdata"></illust-title>
-                    <user-name :thd="thdata"></user-name>
-                    <count-list :thd="thdata"></count-list>
-                    <edit-link :thd="thdata"></edit-link>
-               </li>`,
-});
-
-function setupHTML() {
-    $(`
-    <div id="Koa-controller" class="tachi">
-        <div id="Koa-controller-child">
-            <div id="Koa-found"><span id="Koa-found-value">0</span></div>
-            <div id="Koa-bookmark">
-                <span>★書籤</span>：
-                <input id="Koa-bookmark-input" type="number" min="0" step="1" value="0" required/>
-            </div>
-            <div id="Koa-btn">
-                <input id="Koa-btn-input" type="button" value="找"/>
-            </div>
-            <div id="Koa-options">
-                全<input id="Koa-fullwidth-input" type="checkbox"/>
-                排序<input id="Koa-ordering-input" type="checkbox"/>
-            </div>
-        </div>
-    </div>`).appendTo('body');
-
-    $(`
-    <style>
-    #Koa-controller.tachi {
-        background-color: #8F2019;
-        position: fixed;
-        bottom: 0px;
-        left: 0px;
-        margin: 10px 30px;
-        padding: 15px 8px 0px;
-        border-radius: 15px 15px 8px 8px;
-        font-size: 16px;
-        cursor: default;
-        z-index: 10;
-    }
-
-    #Koa-controller::before {
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 30px 0 0 100px;
-        border-color: transparent transparent transparent #000000;
-        left: 0px;
-        top: 0px;
-        z-index: -1;
-        transform-origin: 50% 50%;
-        transform: translate(-45px,40px) skew(20deg, 0deg) rotate(-20deg);
-    }
-
-    #Koa-controller::after {
-        border-width: 0 0 30px 100px;
-        border-color: transparent transparent #000000 transparent;
-        content: '';
-        position: absolute;
-        width: 0;
-        height: 0;
-        border-style: solid;
-        right: 0px;
-        top: 0px;
-        z-index: -1;
-        transform-origin: 50% 50%;
-        transform: translate(45px,40px) skew(-20deg, 0deg) rotate(20deg);
-    }
-
-    #Koa-controller.chibi {
-        width: 60px;
-        background-color: #8F2019;
-        position: fixed;
-        bottom: 0px;
-        left: 0px;
-        margin: 10px 30px;
-        padding: 10px 4px 15px;
-        border-radius: 50%;
-        font-size: 16px;
-        cursor: default;
-        z-index: 10;
-        color: white;
-    }
-    
-    #Koa-controller.chibi::before {
-        transform: translate(-45px,10px) skew(20deg, 0deg) rotate(-10deg) scale(0.4);
-    }
-
-    #Koa-controller.chibi::after {
-        transform: translate(45px,10px) skew(-20deg, 0deg) rotate(10deg) scale(0.4);
-    }
-    
-    #Koa-controller.tachi #Koa-controller-child {
-        background-color: #FEE6CA;
-        border-bottom: 30px solid black;
-        border-radius: 10px 10px 20px 20px;
-    }
-
-    #Koa-controller.chibi #Koa-controller-child {
-        background-color: #8F2019;
-        width: 100%;
-        height: 30px;
-        border-radius: 50%;
-        margin-top: -2px;
-    }
-
-    #Koa-controller.chibi #Koa-controller-child::after {
-        content: " ' ' ";
-        display: block;
-        text-align: center;
-        font-size: 32px;
-        padding-right: 5px;
-        transform: rotate(10deg);
-    }
-    
-    #Koa-controller.chibi #Koa-controller-child > div {
-        display: none;
-    }
-
-    #Koa-found,
-    #Koa-btn {
-        text-align: center;
-    }
-
-    #Koa-controller.tachi #Koa-btn {
-        border-left: 15px solid white;
-        border-right: 15px solid white;
-        background-color: black;
-        color: white;
-    }
-
-    #Koa-controller.tachi #Koa-options {
-        border-left: 15px solid white;
-        border-right: 15px solid white;
-        background-color: black;
-        color: white;
-    }
-
-    #Koa-bookmark > span {
-        color: #0069b1;
-        background-color: #cceeff;
-    }
-
-    input#Koa-bookmark-input::-webkit-inner-spin-button, 
-    input#Koa-bookmark-input::-webkit-outer-spin-button {
-        -webkit-appearance: none;
-        margin: 0;
-    }
-
-    input#Koa-bookmark-input {
-        -moz-appearance: textfield;
-    }
-
-    input#Koa-bookmark-input {
-        border: none;
-        background-color: transparent;
-        padding: 0px;
-        color: blue;
-        font-size: 16px;
-        display: inline-block;
-        width: 50px;
-        cursor: ns-resize;
-        text-align: center;
-    }
-
-    input#Koa-bookmark-input:focus {
-        cursor: initial;
-    }
-
-    #Koa-controller.tachi #Koa-btn-input {
-        border: none;
-        background-color: #FFFF00;
-        height: 100%;
-        margin: 0px auto;
-        display: block;
-        border-radius: 0% 0% 50% 50%;
-        font-size: 22px;
-    }
-
-    #Koa-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-around;
-        margin-left: initial;
-    }
-
-    .fullwidth {
-        width: initial;
-    }
-
-    .layout-a.fullwidth {
-        display: flex;
-        flex-direction: row-reverse;
-    }
-
-    .layout-a.fullwidth .layout-column-2{
-        flex: 1;
-        margin-left: 20px;
-    }
-
-    .layout-body.fullwidth,
-    .layout-a.fullwidth {
-        margin: 10px 20px;
-    }
-    .followed.followed.followed {
-        font-weight: bold;
-        color: red;
-    }
-    </style>`).appendTo('head');
-}
-
-function setupEvent() {
-
-    const $KoaController = $('#Koa-controller');
-    const $KoaBookmarkInput = $('#Koa-bookmark-input');
-    const $KoaBtnInput = $('#Koa-btn-input');
-    const $KoaFullwidthInput = $('#Koa-fullwidth-input');
-    const $KoaOrderingInput = $('#Koa-ordering-input');
-
-    $KoaController
-        .on('click', function() {
-            if($(this).hasClass('chibi')){
-                $(this).removeClass('chibi');
-                $(this).addClass('tachi');
-            }
-        })
-        .on('mouseleave', function() {
-            $(this).addClass('chibi');
-            $(this).removeClass('tachi');
-            $KoaBookmarkInput.focusout();
-        });
-
-
-    $KoaBookmarkInput
-        .on('wheel', function(event) {
-            this.blur();
-            if(event.originalEvent.deltaY > 0) {
-                this.stepDown(20);
-            } else {
-                this.stepUp(20);
-            }
-            MuQ.Koakuma.$data.limit = parseInt(this.value);
-            return false;
-        })
-        .on('focusout', function(event) {
-            this.blur();
-            if(!this.validity.valid){
-                console.log(this.validationMessage);
-            } else {
-                MuQ.Koakuma.$data.limit = parseInt(this.value);
-            }
-        });
-
-    $KoaBtnInput.click(function(event) {
-        if(!$KoaBookmarkInput[0].validity.valid){
-            console.log($KoaBookmarkInput[0].validationMessage);
-        } else {
-            if (MuQ.intervalID) {
-                clearInterval(MuQ.intervalID);
-                MuQ.intervalID = null;
-                this.value = '找';
-                $KoaController.removeClass('working');
-            } else {
-                MuQ.intervalID = setInterval(function(){
-                    MuQ.nextPage();
-                }, 1000);
-                this.value = '停';
-                $KoaController.addClass('working');
-            }
-        }
-        return false;
-    });
-
-    $KoaFullwidthInput.click(function(event){
-        const node = BASE.$fullwidthElement;
-        if (this.checked) {
-            node.addClass('fullwidth');
-        } else {
-            node.removeClass('fullwidth');
-        }
-    });
-
-    $KoaOrderingInput.click(function(event){
-        const order_t = this.checked ? 'bookmark_count' : '';
-        MuQ.Koakuma.$data.order_t = order_t;
-    });
-}
-
-const MuQ = {
-    nextLink: location.href,
-    intervalID: null,
-    init: function() {
-        if(BASE.supported){
-            if(BASE.container) {
-                BASE.container.id = 'Koa-container';
-            }
-            $('#wrapper').width('initial');
-            setupHTML();
-            setupEvent();
-
-            this.Koakuma.$watch('thumbs', function(newVal, oldVal) {
-                $('#Koa-found-value').text(newVal.length);
-            });
-
-            this.page = this.np_gen();
-            this.np = this.page.next().value.then(v => {
-                this.Koakuma.$mount('#Koa-container');
-                return v;
-            });
-        }
-    },
-    nextPage: function() {
-        this.np = this.np
-            .then(n => this.page.next(n.nextLink).value )
-            .catch(err => {
-                console.error(err);
-                clearInterval(this.intervalID);
-                this.intervalID = null;
-                $('#Koa-btn-input').attr('disabled', true).val('完');
-            });
-    },
-    np_gen: function* () {
-        while(this.nextLink) {
-            this.nextLink = yield getBatch(this.nextLink)
-                .then(bat => {
-                    return getIllustsDetails(bat.illust_ids)
-                        .then(illust_d => {
-                            bat.illust_d = illust_d;
-                            return bat;
-                        });
-                })
-                .then(bat => {
-                    return getUsersDetails(Object.keys(bat.illust_d)
-                        .map((k) => bat.illust_d[k].user_id))
-                        .then(user_d => {
-                            bat.user_d = {};
-                            user_d.forEach(x => bat.user_d[x.user_id] = x);
-                            return bat;
-                        });
-                })
-                .then(bat => {
-                    return Promise.all(Object.keys(bat.illust_d)
-                        .map((k) => bat.illust_d[k])
-                        .map(x => getBookmarkCountAndTags(x.illust_id)))
-                        .then(bookmark_d => {
-                            bat.bookmark_d = {};
-                            bookmark_d.forEach(x => bat.bookmark_d[x.illust_id] = x);
-                            return bat;
-                        });
-                })
-                .then(bat => {
-                    this.Koakuma.$data.thumbs.push(...parseDataFromBatch(bat));
-                    return bat;
-                }).catch(err => {
-                    console.error(err);
-                });
-        }
-    },
-    Koakuma: new Vue({
-        template: `<ul><component :is="li_type" v-for="th in thumbs | bookmark_gt limit | orderBy order_t -1" :thdata="th"></component></ul>`,
-        data: {
-            thumbs: [],
-            order_t: '',
-            limit: 0,
-        },
-        computed: {
-            li_type: function() {
-                return 'imageitem-' + BASE.li_type;
-            },
-        },
-        filters: {
-            bookmark_gt: function(data, limit) {
-                return data.filter(x => x.bookmark_count >= limit);
-            },
-        },
-    }),
+		return whilst(first);
+	}
 };
 
-removeAnnoyance();
-MuQ.init();
+const globalStore = {
+	api: new Pixiv(),
+	books: [],
+	filters: {
+		limit: 0,
+		orderBy: 'illust_id',
+	},
+	patchouliToMount: (() => {
+		return document.querySelector('li.image-item').parentElement;
+	})(),
+	koakumaToMount: (() => {
+		return document.querySelector('#toolbar-items');
+	})(),
+	page: (() => {
+		let type = 'default';
+		let supported = true;
+		let path = location.pathname;
+		let search = new URLSearchParams(location.search);
 
-//Debugging
-window.fetchWithcookie = fetchWithcookie;
-window.getBookmarkCountAndTags = getBookmarkCountAndTags;
-window.getBatch = getBatch;
-window.getIllustsDetails = getIllustsDetails;
-window.getUsersDetails = getUsersDetails;
-window.parseToDOM = parseToDOM;
-window.parseDataFromBatch = parseDataFromBatch;
-window.removeAnnoyance = removeAnnoyance;
-window.BASE = BASE;
-window.MuQ = MuQ;
-window.Vue = Vue;
-window.URI = URI;
+		/** type - for patchouli <image-item>
+		 *
+		 *	default: thumb + title + user + count-list
+		 *	member-illust: default w/o user
+		 *	mybookmark:  default with bookmark-edit
+		 */
+
+		switch(path) {
+			case '/search.php':
+			case '/bookmark_new_illust.php':
+			case '/new_illust.php':
+			case '/mypixiv_new_illust.php':
+			case '/new_illust_r18.php':
+			case '/bookmark_new_illust_r18.php':
+				break;
+			case '/member_illust.php':
+				if (search.has('id')) {
+					type = 'member-illust';
+				} else {
+					supported = false;
+				}
+				break;
+			case '/bookmark.php':
+				type = search.has('id') ? 'default' : 'mybookmark';
+				break;
+			default:
+				supported = false;
+		}
+
+		return {
+			supported,
+			type,
+		};
+	})(),
+};
+
+globalStore.favorite = (()=>{
+	const _f = Object.assign({
+		fullwidth: 1,
+		order: 0,
+	}, Pixiv.storageGet());
+
+	if (_f.fullwidth) {
+		document.querySelector('#wrapper').classList.add('fullwidth');
+	}
+
+	if (_f.order) {
+		globalStore.filters.orderBy = 'bookmark_count';
+	}
+
+	Pixiv.storageSet(_f);
+	return _f;
+})();
+
+Vue.component('koakuma-settings', {
+	props: ['favorite'],
+	methods: {
+		fullwidthClick(event) {
+			this.$emit('fullwidthUpdate', event.target.checked);
+		},
+		orderClick(event) {
+			this.$emit('orderUpdate', event.target.checked);
+		},
+	},
+	template: `
+	<div>
+		<input id="koakuma-settings-fullwidth" type="checkbox"
+			:checked="favorite.fullwidth"
+			@click="fullwidthClick"> 全寬
+		<input id="koakuma-settings-order" type="checkbox"
+			:checked="favorite.order"
+			@click="orderClick"> 排序
+	</div>`,
+});
+
+Vue.component('koakuma-bookmark', {
+	props: ['limit'],
+	methods: {
+		blur(event) {
+			const self = event.target;
+			if(!self.validity.valid) {
+				console.error('koakuma-bookmark', self.validationMessage);
+			}
+		},
+		input(event) {
+			let val = parseInt(event.target.value);
+			val = Math.max(0, val);
+			this.limit = val;
+			this.$emit('limitUpdate', val);
+		},
+		wheel(event) {
+			let val;
+			if (event.deltaY < 0) {
+				val = this.limit + 20;
+			} else {
+				val = Math.max(0, this.limit - 20);
+			}
+			this.limit = val;
+			this.$emit('limitUpdate', val);
+		},
+	},
+	template:`
+	<div id="koakuma-bookmark">
+		<label for="koakuma-bookmark-input">★書籤</label>
+		<input id="koakuma-bookmark-input"
+			type="number" min="0" step="1"
+			:value="limit"
+			@wheel.stop.prevent="wheel"
+			@blur="blur"
+			@input="input"/>
+	</div>`,
+});
+
+// Vue.component('koakuma-tag-filter', {
+// //todo
+// });
+
+const koakuma = new Vue({
+	// make koakuma to left side
+	data: {
+		books: globalStore.books,
+		filters: globalStore.filters,
+		api: globalStore.api,
+		favorite: globalStore.favorite,
+		next_url: location.href,
+		isStoped: true,
+		isEnded: false,
+	},
+	methods: {
+		start(times = Infinity) {
+			this.isStoped = false;
+
+			return utils.asyncWhile(next_url => {
+				if (!next_url) {
+					this.isStoped = this.isEnded = true;
+					return false;
+				}
+				if (times > 0) {
+					times--;
+				} else {
+					this.isStoped = true;
+				}
+				return !this.isStoped;
+			}, url => {
+				return this.api.getPageInformationAndNext(url)
+					.then(inf => {
+						return new Promise((resolve, reject) => {
+							if (inf.next_url === this.next_url) {
+								reject(`Duplicated url: ${url}`);
+							} else {
+								resolve(inf);
+							}
+						});
+					})
+					.then(inf => {
+						this.next_url = inf.next_url;
+
+						const user_ids = inf.illusts.map(x => x.user_id);
+						const illust_ids = inf.illusts.map(x => x.illust_id);
+						const usersDetail = this.api.getUsersDetail(user_ids);
+						const illustsDetail = this.api.getIllustsDetail(illust_ids);
+						const illustPagesDetail = this.api.getIllustPagesDetail(illust_ids);
+						const bookmarkDetail = this.api.getBookmarksDetail(illust_ids);
+
+						return new Promise((resolve, reject) => {
+							Promise.all([usersDetail, illustsDetail, illustPagesDetail, bookmarkDetail])
+								.then(resolve)
+								.catch(reject);
+						})
+						.then(details => {
+							return {
+								next_url: inf.next_url,
+								illusts: inf.illusts,
+								usersDetail: details[0],
+								illustsDetail: details[1],
+								illustPagesDetail: details[2],
+								bookmarkDetail: details[3],
+							};
+						})
+						.catch(console.error);
+					})
+					.then(inf => {
+						const books = inf.illusts.map(illust => {
+							const ud = inf.usersDetail;
+							const ild = inf.illustsDetail;
+							const ipd = inf.illustPagesDetail;
+							const bd = inf.bookmarkDetail;
+
+							return {
+								illust_id: illust.illust_id,
+								thumb_src: illust.thumb_src,
+								user_id: illust.user_id,
+								tags: illust.tags,
+								user_name: ud[illust.user_id].user_name,
+								is_follow: ud[illust.user_id].is_follow,
+								illust_title: ild[illust.illust_id].illust_title,
+								is_multiple: ild[illust.illust_id].is_multiple,
+								is_manga: ild[illust.illust_id].illust_type === 1,
+								is_ugoira: !!ild[illust.illust_id].ugoira_meta,
+								bookmark_count: bd[illust.illust_id].bookmark_count,
+								rating_score: ipd[illust.illust_id].rating_score,
+							};
+						});
+
+						this.books.push(...books);
+						return inf;
+					})
+					.then(inf => {
+						return inf.next_url;
+					})
+					.catch(console.error);
+			}, {
+				first: this.next_url,
+			});
+		},
+		stop() {
+			this.isStoped = true;
+		},
+		switchSearching() {
+			if (this.isStoped) {
+				this.start();
+			} else {
+				this.stop();
+			}
+		},
+		limitUpdate(value) {
+			globalStore.filters.limit = isNaN(value) ? 0 : value;
+		},
+		fullwidthUpdate(todo) {
+			if(todo) {
+				document.querySelector('#wrapper').classList.add('fullwidth');
+				globalStore.favorite.fullwidth = 1;
+			} else {
+				document.querySelector('#wrapper').classList.remove('fullwidth');
+				globalStore.favorite.fullwidth = 0;
+			}
+			Pixiv.storageSet(globalStore.favorite);
+		},
+		orderUpdate(todo) {
+			if(todo) {
+				globalStore.filters.orderBy = 'bookmark_count';
+				globalStore.favorite.order = 1;
+			} else {
+				globalStore.filters.orderBy = 'illust_id';
+				globalStore.favorite.order = 0;
+			}
+			Pixiv.storageSet(globalStore.favorite);
+		},
+	},
+	computed: {
+		switchText() {
+			return this.isEnded ? "完" : (this.isStoped ? "找" : "停");
+		},
+		switchStyle() {
+			return {
+				ended: this.isEnded,
+				toSearch: !this.isEnded && this.isStoped,
+				toStop: !this.isEnded && !this.isStoped,
+			};
+		},
+	},
+	template: `
+		<div id="こあくま">
+			<div>已處理 {{books.length}} 張</div>
+			<koakuma-bookmark :limit="filters.limit" @limitUpdate="limitUpdate"></koakuma-bookmark>
+			<button id="koakuma-switch"
+				@click="switchSearching"
+				:disabled="isEnded"
+				:class="switchStyle">{{ switchText }}</button>
+			<koakuma-settings :favorite="favorite"
+				@fullwidthUpdate="fullwidthUpdate"
+				@orderUpdate="orderUpdate"></koakuma-settings>
+		</div>`,
+});
+
+Vue.component('image-item-thumb', {
+	props:['detail'],
+	template:`
+		<a class="work" :href="detail.href">
+			<div><img :src="detail.src"></div>
+		</a>`,
+});
+
+Vue.component('image-item-title', {
+	props:['detail'],
+	template:`
+		<a :href="detail.href">
+			<h1 class="title" :title="detail.title">{{ detail.title }}</h1>
+		</a>`,
+});
+
+Vue.component('image-item-user', {
+	props:['user'],
+	computed: {
+		href() {
+			return `/member_illust.php?id=${this.user.id}`;
+		},
+		vClass() {
+			return {
+				followed: this.user.is_follow,
+			};
+		},
+	},
+	template:`
+		<a class="user ui-profile-popup"
+			:class="vClass"
+			:href="href"
+			:title="user.name"
+			:data-user_id="user.id">{{ user.name }}</a>`,
+});
+
+Vue.component('image-item-count-list', {
+	props:['detail'],
+	computed: {
+		tooltip() {
+			return `${this.detail.bmkcount}件のブックマーク`;
+		},
+		shortRating() {
+			return (this.detail.rating > 10000) ? `${(this.detail.rating / 1e3).toFixed(1)}K` : this.detail.rating;
+		},
+	},
+	template:`
+		<ul class="count-list">
+			<li v-if="detail.bmkcount > 0">
+				<a class="bookmark-count _ui-tooltip"
+					:href="detail.bmkhref"
+					:data-tooltip="tooltip">
+					<i class="_icon sprites-bookmark-badge"></i>
+					{{detail.bmkcount}}
+				</a>
+			</li>
+			<li v-if="detail.rating > 0">
+				<span class="rating_score">
+					<i class="fa fa-star" aria-hidden="true"></i>
+					{{shortRating}}
+				<span>
+			</li>
+		</ul>`,
+});
+
+Vue.component('image-item', {
+	props:['detail', 'pagetype'],
+	computed: {
+		illust_page_href() {
+			return `/member_illust.php?mode=medium&illust_id=${this.detail.illust_id}`;
+		},
+		bookmark_detail_href() {
+			return `/bookmark_detail.php?illust_id=${this.detail.illust_id}`;
+		},
+		thumb_detail() {
+			return {
+				href: this.illust_page_href,
+				src: this.detail.thumb_src,
+			};
+		},
+		user_detail() {
+			return {
+				id: this.detail.user_id,
+				name: this.detail.user_name,
+				is_follow: this.detail.is_follow,
+			};
+		},
+		title_detail() {
+			return {
+				href: this.illust_page_href,
+				title: this.detail.illust_title,
+			};
+		},
+		count_detail() {
+			return {
+				bmkhref: this.bookmark_detail_href,
+				bmkcount: this.detail.bookmark_count,
+				rating: this.detail.rating_score,
+			};
+		},
+	},
+	template: `
+		<li class="image-item">
+			<image-item-thumb :detail="thumb_detail"></image-item-thumb>
+			<image-item-title :detail="title_detail"></image-item-title>
+			<image-item-user :user="user_detail" v-if="pagetype !== 'member-illust'"></image-item-user>
+			<image-item-count-list :detail="count_detail"></image-item-count-list>
+		</li>`,
+});
+
+const patchouli = new Vue({
+	data: {
+		books: globalStore.books,
+		filters: globalStore.filters,
+		pagetype: globalStore.page.type,
+	},
+	computed: {
+		orderedBooks() {
+			const _limit = this.filters.limit;
+			const _order = this.filters.orderBy;
+			const _books = this.books.filter(b => b.bookmark_count >= _limit);
+			return _books.sort((a, b) => a[_order] < b[_order]);
+		},
+	},
+	template:`
+	<ul id="パチュリー">
+		<image-item v-for="book in orderedBooks"
+			:detail="book"
+			:pagetype="pagetype"></image-item>
+	</ul>`,
+});
+
+let DEBUG = true;
+if(DEBUG) {
+	window.utils = utils;
+	window.Pixiv = Pixiv;
+	window.koakuma = koakuma;
+	window.patchouli = patchouli;
+	window.globalStore = globalStore;
+}
+
+console.log('Vue.version', Vue.version);
+if (globalStore.page.supported) {
+	koakuma.$mount(globalStore.koakumaToMount);
+	koakuma.start(1).then(() => {
+		patchouli.$mount(globalStore.patchouliToMount);
+	});
+}
+Pixiv.rmAnnoyance();
+utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
+utils.addStyle(`
+#wrapper.fullwidth,
+#wrapper.fullwidth .layout-a,
+#wrapper.fullwidth .layout-body {
+	width: initial;
+}
+#wrapper.fullwidth .layout-a {
+	display: flex;
+	flex-direction: row-reverse;
+}
+#wrapper.fullwidth .layout-column-2{
+	flex: 1;
+	margin-left: 20px;
+}
+#wrapper.fullwidth .layout-body,
+#wrapper.fullwidth .layout-a {
+	margin: 10px 20px;
+}
+
+
+.followed.followed.followed {
+	font-weight: bold;
+	color: red;
+}
+.rating_score {
+	background-color: #FFEE88;
+	color: #FF7700;
+	border-radius: 3px;
+	display: inline-block !important;
+	margin: 0 1px;
+	padding: 0 6px !important;
+	font: bold 10px/18px "lucida grande", sans-serif !important;
+	text-decoration: none;
+	cursor: default;
+}
+#パチュリー {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
+}
+
+
+#koakuma-bookmark {
+	display: flex;
+}
+#koakuma-bookmark label{
+	white-space: nowrap;
+	color: #0069b1 !important;
+	background-color: #cceeff;
+	border-radius: 3px;
+	padding: 0 6px;
+}
+#koakuma-bookmark-input::-webkit-inner-spin-button, 
+#koakuma-bookmark-input::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+#koakuma-bookmark-input {
+	-moz-appearance: textfield;
+	border: none;
+	background-color: transparent;
+	padding: 0px;
+	color: blue;
+	font-size: 16px;
+	display: inline-block;
+	cursor: ns-resize;
+	text-align: center;
+	min-width: 0;
+}
+#koakuma-bookmark-input:focus {
+	cursor: initial;
+}
+#koakuma-switch {
+	border: 0;
+	padding: 3px 20px;
+	border-radius: 3px;
+	font-size: 16px;
+}
+#koakuma-switch.toSearch {
+	background-color: lightgreen;
+}
+#koakuma-switch.toStop {
+	background-color: lightpink;
+}
+#koakuma-switch.ended {
+	background-color: lightgrey;
+}
+#こあくま {
+	position: fixed;
+	left: 10px;
+	bottom: 10px;
+	z-index: 1;
+	background-color: aliceblue;
+	border-radius: 10px;
+	padding: 5px;
+	font-size: 16px;
+	text-align: center;
+	width: 140px;
+}
+#こあくま > * {
+	margin: 2px 0;
+}`);
