@@ -50,15 +50,12 @@ Vue.component('image-item-count-list', {
 				<a class="bookmark-count _ui-tooltip"
 					:href="detail.bmkhref"
 					:data-tooltip="tooltip">
-					<i class="_icon sprites-bookmark-badge"></i>
-					{{detail.bmkcount}}
-				</a>
+					<i class="_icon sprites-bookmark-badge"></i>{{ detail.bmkcount }}</a>
 			</li>
 			<li v-if="detail.rating > 0">
 				<span class="rating_score">
-					<i class="fa fa-star" aria-hidden="true"></i>
-					{{shortRating}}
-				<span>
+					<i class="fa fa-star" aria-hidden="true"></i>{{ shortRating }}
+				</span>
 			</li>
 		</ul>`,
 });
@@ -119,7 +116,7 @@ const patchouli = new Vue({
 			const _limit = this.filters.limit;
 			const _order = this.filters.orderBy;
 			const _books = this.books.filter(b => b.bookmark_count >= _limit);
-			return _books.sort((a, b) => a[_order] < b[_order]);
+			return _books.sort((a, b) => b[_order] - a[_order]);
 		},
 	},
 	template:`
