@@ -7,7 +7,7 @@
 // @require		https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min.js
 // @require		https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.min.js
 // @updateURL	https://github.com/FlandreDaisuki/Patchouli/raw/master/Patchouli.user.js
-// @version		2017.02.28
+// @version		2017.03.01
 // @icon		http://i.imgur.com/VwoYc5w.png
 // @grant		none
 // @noframes
@@ -767,6 +767,12 @@ if (globalStore.page.supported) {
 		border-radius: 3px;
 		font-size: 16px;
 	}
+	#koakuma-switch:hover {
+		box-shadow: 1px 1px gray;
+	}
+	#koakuma-switch:active {
+		box-shadow: 1px 1px gray inset;
+	}
 	#koakuma-switch.toSearch {
 		background-color: lightgreen;
 	}
@@ -775,6 +781,10 @@ if (globalStore.page.supported) {
 	}
 	#koakuma-switch.ended {
 		background-color: lightgrey;
+	}
+	#koakuma-switch.ended:hover,
+	#koakuma-switch.ended:hover {
+		box-shadow: unset;
 	}
 	#こあくま {
 		position: fixed;
