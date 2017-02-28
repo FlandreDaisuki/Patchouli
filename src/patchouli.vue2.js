@@ -1,7 +1,16 @@
 Vue.component('image-item-thumb', {
 	props:['detail'],
+	computed: {
+		thumbStyle() {
+			return {
+				multiple: this.detail.multiple,
+				manga: this.detail.manga,
+				'ugoku-illust': this.detail.ugoira,
+			};
+		},
+	},
 	template:`
-		<a class="work" :href="detail.href">
+		<a class="work _work" :href="detail.href" :class="thumbStyle">
 			<div><img :src="detail.src"></div>
 		</a>`,
 });
@@ -73,6 +82,9 @@ Vue.component('image-item', {
 			return {
 				href: this.illust_page_href,
 				src: this.detail.thumb_src,
+				multiple: this.detail.is_multiple,
+				manga: this.detail.is_manga,
+				ugoira: this.detail.is_ugoira,
 			};
 		},
 		user_detail() {

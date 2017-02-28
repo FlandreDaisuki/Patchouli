@@ -465,7 +465,7 @@ const koakuma = new Vue({
 								is_follow: ud[illust.user_id].is_follow,
 								illust_title: ild[illust.illust_id].illust_title,
 								is_multiple: ild[illust.illust_id].is_multiple,
-								is_manga: ild[illust.illust_id].illust_type === 1,
+								is_manga: ild[illust.illust_id].illust_type === '1',
 								is_ugoira: !!ild[illust.illust_id].ugoira_meta,
 								bookmark_count: bd[illust.illust_id].bookmark_count,
 								rating_score: ipd[illust.illust_id].rating_score,
@@ -545,8 +545,17 @@ const koakuma = new Vue({
 
 Vue.component('image-item-thumb', {
 	props:['detail'],
+	computed: {
+		thumbStyle() {
+			return {
+				multiple: this.detail.multiple,
+				manga: this.detail.manga,
+				'ugoku-illust': this.detail.ugoira,
+			};
+		},
+	},
 	template:`
-		<a class="work" :href="detail.href">
+		<a class="work _work" :href="detail.href" :class="thumbStyle">
 			<div><img :src="detail.src"></div>
 		</a>`,
 });
@@ -618,6 +627,9 @@ Vue.component('image-item', {
 			return {
 				href: this.illust_page_href,
 				src: this.detail.thumb_src,
+				multiple: this.detail.is_multiple,
+				manga: this.detail.is_manga,
+				ugoira: this.detail.is_ugoira,
 			};
 		},
 		user_detail() {
@@ -795,4 +807,3 @@ if (globalStore.page.supported) {
 		margin: 2px 0;
 	}`);
 }
-
