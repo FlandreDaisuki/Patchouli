@@ -48,6 +48,7 @@ class Pixiv {
 			'.user-ad-container',
 			'.ads_area_no_margin',
 			//Premium
+			'.hover-item',
 			'.ad-printservice',
 			'.bookmark-ranges',
 			'.require-premium',
