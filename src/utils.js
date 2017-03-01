@@ -1,3 +1,97 @@
+class L10N {
+	constructor() {
+		this.lang = document.documentElement.lang;
+		this.following = this._following();
+		this.bookmark = this._bookmark();
+		this.koakumaGo = this._koakumaGo();
+		this.koakumaPause = this._koakumaPause();
+		this.koakumaEnd = this._koakumaEnd();
+		this.koakumaFullwidth = this._koakumaFullwidth();
+		this.koakumaSort = this._koakumaSort();
+	}
+
+	_following() {
+		switch(this.lang) {
+			case 'ja': return 'フォロー中';
+			case 'zh-tw': return '關注中';
+			case 'zh': return '关注中';
+			default: return 'following';
+		}
+	}
+
+	_bookmark() {
+		switch(this.lang) {
+			case 'ja': return 'ブックマーク';
+			case 'zh-tw':
+			case 'zh': return '收藏';
+			default: return 'Bookmark';
+		}
+	}
+
+	_koakumaGo() {
+		switch(this.lang) {
+			case 'ja': return '捜す';
+			case 'zh-tw':
+			case 'zh': return '找';
+			default: return 'Go';
+		}
+	}
+
+	_koakumaPause() {
+		switch(this.lang) {
+			case 'ja': return '中断';
+			case 'zh-tw':
+			case 'zh': return '停';
+			default: return 'Pause';
+		}
+	}
+
+	_koakumaEnd() {
+		switch(this.lang) {
+			case 'ja': return '終了';
+			case 'zh-tw':
+			case 'zh': return '完';
+			default: return 'End';
+		}
+	}
+
+	koakumaProcessed(n) {
+		switch(this.lang) {
+			case 'ja': return `${n} 件が処理された`;
+			case 'zh-tw': return `已處理 ${n} 張`
+			case 'zh': return `已处理 ${n} 张`;
+			default: return `${n} pics processed`;
+		}
+	}
+
+	_koakumaFullwidth() {
+		switch(this.lang) {
+			case 'ja': return '全幅';
+			case 'zh-tw': return '全寬';
+			case 'zh': return '全宽';
+			default: return 'fullwidth';
+		}
+	}
+
+	_koakumaSort() {
+		switch(this.lang) {
+			case 'ja': return 'ソート';
+			case 'zh-tw':
+			case 'zh': return '排序';
+			default: return 'sorted';
+		}
+	}
+
+	bookmarkTooltip(n) {
+		switch(this.lang) {
+			case 'ja': return `${n}件のブックマーク`;
+			case 'zh-tw': return `${n}個收藏`
+			case 'zh': return `${n}个收藏`;
+			default: return `${n} bookmarks`;
+		}
+	}
+}
+
 class Pixiv {
 	constructor() {
 		this.tt = document.querySelector('input[name="tt"]').value;
@@ -176,7 +270,37 @@ class Pixiv {
 		})
 		.catch(console.error);
 	}
+
+	postBookmarkadd(illust_id) {
+		const data = [
+			'mode=save_illust_bookmark',
+			`illust_id=${illust_id}`,
+			'restrict=0',
+			'comment=',
+			'tags=',
+			`tt=${this.tt}`,
+		].join('&');
+		const config = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'};
+
+		return axios.post('/rpc/index.php', data, config)
+			.then(res => {
+				return new Promise((resolve, reject) => {
+					(res.statusText === 'OK' && !res.data.error) ? resolve(true) : reject(res);
+				});
+			})
+			.catch(console.error);
+	}
 }
+
+(() => {
+	// version check
+	const s = Pixiv.storageGet();
+	if (!s.version || s.version < version) {
+		Pixiv.storageSet({
+			version,
+		});
+	}
+})();
 
 const utils = {
 	linkStyle: function(url) {
@@ -222,6 +346,7 @@ const utils = {
 
 const globalStore = {
 	api: new Pixiv(),
+	l10n: new L10N(),
 	books: [],
 	filters: {
 		limit: 0,
@@ -263,9 +388,10 @@ const globalStore = {
 				}
 				break;
 			case '/bookmark.php':
+				const t = search.get('type')
 				if(search.has('id')) {
 					type = 'default';
-				} else if(!search.has('type')) {
+				} else if(!t || t === 'illust_all') {
 					type = 'mybookmark';
 				} else {
 					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
@@ -286,14 +412,14 @@ const globalStore = {
 globalStore.favorite = (()=>{
 	const _f = Object.assign({
 		fullwidth: 1,
-		order: 0,
+		sort: 0,
 	}, Pixiv.storageGet());
 
 	if (_f.fullwidth) {
 		document.querySelector('#wrapper').classList.add('fullwidth');
 	}
 
-	if (_f.order) {
+	if (_f.sort) {
 		globalStore.filters.orderBy = 'bookmark_count';
 	}
 

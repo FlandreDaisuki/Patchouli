@@ -17,11 +17,22 @@
 }
 
 
-.followed.followed.followed {
-	font-weight: bold;
-	color: red;
+.fa-feed {
+	color: dodgerblue;
+	cursor: default;
 }
-.rating_score {
+.fa-feed:hover::after {
+	content:'${globalStore.l10n.following}';
+	position: absolute;
+	color: white;
+	white-space: nowrap;
+	background-color: dodgerblue;
+	padding: 2px;
+	border-radius: 3px;
+	margin-left: 8px;
+	font-family: "Helvetica Neue","arial","Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+.rating-score {
 	background-color: #FFEE88;
 	color: #FF7700;
 	border-radius: 3px;
@@ -31,6 +42,9 @@
 	font: bold 10px/18px "lucida grande", sans-serif !important;
 	text-decoration: none;
 	cursor: default;
+}
+.is-bookmarked {
+	cursor: pointer;
 }
 #パチュリー {
 	display: flex;
@@ -107,7 +121,7 @@
 	padding: 5px;
 	font-size: 16px;
 	text-align: center;
-	width: 140px;
+	width: 160px;
 }
 #こあくま > * {
 	margin: 2px 0;

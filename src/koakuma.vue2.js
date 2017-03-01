@@ -1,26 +1,26 @@
 Vue.component('koakuma-settings', {
-	props: ['favorite'],
+	props: ['favorite', 'l10n'],
 	methods: {
 		fullwidthClick(event) {
 			this.$emit('fullwidthUpdate', event.target.checked);
 		},
-		orderClick(event) {
-			this.$emit('orderUpdate', event.target.checked);
+		sortClick(event) {
+			this.$emit('sortUpdate', event.target.checked);
 		},
 	},
 	template: `
 	<div>
 		<input id="koakuma-settings-fullwidth" type="checkbox"
 			:checked="favorite.fullwidth"
-			@click="fullwidthClick"> 全寬
-		<input id="koakuma-settings-order" type="checkbox"
-			:checked="favorite.order"
-			@click="orderClick"> 排序
+			@click="fullwidthClick"> {{l10n.koakumaFullwidth}}
+		<input id="koakuma-settings-sort" type="checkbox"
+			:checked="favorite.sort"
+			@click="sortClick"> {{l10n.koakumaSort}}
 	</div>`,
 });
 
 Vue.component('koakuma-bookmark', {
-	props: ['limit'],
+	props: ['limit', 'l10n'],
 	methods: {
 		blur(event) {
 			const self = event.target;
@@ -31,7 +31,6 @@ Vue.component('koakuma-bookmark', {
 		input(event) {
 			let val = parseInt(event.target.value);
 			val = Math.max(0, val);
-			this.limit = val;
 			this.$emit('limitUpdate', val);
 		},
 		wheel(event) {
@@ -41,13 +40,12 @@ Vue.component('koakuma-bookmark', {
 			} else {
 				val = Math.max(0, this.limit - 20);
 			}
-			this.limit = val;
 			this.$emit('limitUpdate', val);
 		},
 	},
 	template:`
 	<div id="koakuma-bookmark">
-		<label for="koakuma-bookmark-input">★書籤</label>
+		<label for="koakuma-bookmark-input">★{{l10n.bookmark}}</label>
 		<input id="koakuma-bookmark-input"
 			type="number" min="0" step="1"
 			:value="limit"
@@ -64,6 +62,7 @@ Vue.component('koakuma-bookmark', {
 const koakuma = new Vue({
 	// make koakuma to left side
 	data: {
+		l10n: globalStore.l10n,
 		books: globalStore.books,
 		filters: globalStore.filters,
 		api: globalStore.api,
@@ -136,11 +135,12 @@ const koakuma = new Vue({
 								illust_id: illust.illust_id,
 								thumb_src: illust.thumb_src,
 								user_id: illust.user_id,
-								tags: illust.tags,
+								// tags: illust.tags,
 								user_name: ud[illust.user_id].user_name,
 								is_follow: ud[illust.user_id].is_follow,
 								illust_title: ild[illust.illust_id].illust_title,
 								is_multiple: ild[illust.illust_id].is_multiple,
+								is_bookmarked: ild[illust.illust_id].is_bookmarked,
 								is_manga: ild[illust.illust_id].illust_type === '1',
 								is_ugoira: !!ild[illust.illust_id].ugoira_meta,
 								bookmark_count: bd[illust.illust_id].bookmark_count,
@@ -182,20 +182,21 @@ const koakuma = new Vue({
 			}
 			Pixiv.storageSet(globalStore.favorite);
 		},
-		orderUpdate(todo) {
+		sortUpdate(todo) {
 			if(todo) {
 				globalStore.filters.orderBy = 'bookmark_count';
-				globalStore.favorite.order = 1;
+				globalStore.favorite.sort = 1;
 			} else {
 				globalStore.filters.orderBy = 'illust_id';
-				globalStore.favorite.order = 0;
+				globalStore.favorite.sort = 0;
 			}
 			Pixiv.storageSet(globalStore.favorite);
 		},
 	},
 	computed: {
 		switchText() {
-			return this.isEnded ? "完" : (this.isStoped ? "找" : "停");
+			return this.isEnded ? this.l10n.koakumaEnd :
+				(this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause);
 		},
 		switchStyle() {
 			return {
@@ -207,14 +208,17 @@ const koakuma = new Vue({
 	},
 	template: `
 		<div id="こあくま">
-			<div>已處理 {{books.length}} 張</div>
-			<koakuma-bookmark :limit="filters.limit" @limitUpdate="limitUpdate"></koakuma-bookmark>
+			<div>{{l10n.koakumaProcessed(books.length)}}</div>
+			<koakuma-bookmark :l10n="l10n"
+				:limit="filters.limit"
+				@limitUpdate="limitUpdate"></koakuma-bookmark>
 			<button id="koakuma-switch"
 				@click="switchSearching"
 				:disabled="isEnded"
 				:class="switchStyle">{{ switchText }}</button>
-			<koakuma-settings :favorite="favorite"
+			<koakuma-settings :l10n="l10n"
+				:favorite="favorite"
 				@fullwidthUpdate="fullwidthUpdate"
-				@orderUpdate="orderUpdate"></koakuma-settings>
+				@sortUpdate="sortUpdate"></koakuma-settings>
 		</div>`,
 });
