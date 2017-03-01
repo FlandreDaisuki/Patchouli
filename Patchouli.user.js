@@ -7,12 +7,12 @@
 // @require		https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min.js
 // @require		https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.min.js
 // @updateURL	https://github.com/FlandreDaisuki/Patchouli/raw/master/Patchouli.user.js
-// @version		2017.03.01.a
+// @version		2017.03.02
 // @icon		http://i.imgur.com/VwoYc5w.png
 // @grant		none
 // @noframes
 // ==/UserScript==
-const version = '2017.03.01.a';
+const version = '2017.03.02';
 
 class L10N {
 	constructor() {
@@ -82,7 +82,7 @@ class L10N {
 
 	_koakumaFullwidth() {
 		switch(this.lang) {
-			case 'ja': return '全寬';
+			case 'ja': return '全幅';
 			case 'zh-tw': return '全寬';
 			case 'zh': return '全宽';
 			default: return 'fullwidth';
@@ -91,7 +91,7 @@ class L10N {
 
 	_koakumaSort() {
 		switch(this.lang) {
-			case 'ja': return '排序';
+			case 'ja': return 'ソート';
 			case 'zh-tw':
 			case 'zh': return '排序';
 			default: return 'sorted';
@@ -107,8 +107,6 @@ class L10N {
 		}
 	}
 }
-
-const l10n = new L10N();
 
 class Pixiv {
 	constructor() {
@@ -365,6 +363,7 @@ const utils = {
 
 const globalStore = {
 	api: new Pixiv(),
+	l10n: new L10N(),
 	books: [],
 	filters: {
 		limit: 0,
@@ -406,9 +405,10 @@ const globalStore = {
 				}
 				break;
 			case '/bookmark.php':
+				const t = search.get('type')
 				if(search.has('id')) {
 					type = 'default';
-				} else if(!search.has('type')) {
+				} else if(!t || t === 'illust_all') {
 					type = 'mybookmark';
 				} else {
 					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
@@ -445,7 +445,7 @@ globalStore.favorite = (()=>{
 })();
 
 Vue.component('koakuma-settings', {
-	props: ['favorite'],
+	props: ['favorite', 'l10n'],
 	methods: {
 		fullwidthClick(event) {
 			this.$emit('fullwidthUpdate', event.target.checked);
@@ -458,15 +458,15 @@ Vue.component('koakuma-settings', {
 	<div>
 		<input id="koakuma-settings-fullwidth" type="checkbox"
 			:checked="favorite.fullwidth"
-			@click="fullwidthClick"> ${l10n.koakumaFullwidth}
+			@click="fullwidthClick"> {{l10n.koakumaFullwidth}}
 		<input id="koakuma-settings-sort" type="checkbox"
 			:checked="favorite.sort"
-			@click="sortClick"> ${l10n.koakumaSort}
+			@click="sortClick"> {{l10n.koakumaSort}}
 	</div>`,
 });
 
 Vue.component('koakuma-bookmark', {
-	props: ['limit'],
+	props: ['limit', 'l10n'],
 	methods: {
 		blur(event) {
 			const self = event.target;
@@ -477,7 +477,6 @@ Vue.component('koakuma-bookmark', {
 		input(event) {
 			let val = parseInt(event.target.value);
 			val = Math.max(0, val);
-			this.limit = val;
 			this.$emit('limitUpdate', val);
 		},
 		wheel(event) {
@@ -487,13 +486,12 @@ Vue.component('koakuma-bookmark', {
 			} else {
 				val = Math.max(0, this.limit - 20);
 			}
-			this.limit = val;
 			this.$emit('limitUpdate', val);
 		},
 	},
 	template:`
 	<div id="koakuma-bookmark">
-		<label for="koakuma-bookmark-input">★${l10n.bookmark}</label>
+		<label for="koakuma-bookmark-input">★{{l10n.bookmark}}</label>
 		<input id="koakuma-bookmark-input"
 			type="number" min="0" step="1"
 			:value="limit"
@@ -510,6 +508,7 @@ Vue.component('koakuma-bookmark', {
 const koakuma = new Vue({
 	// make koakuma to left side
 	data: {
+		l10n: globalStore.l10n,
 		books: globalStore.books,
 		filters: globalStore.filters,
 		api: globalStore.api,
@@ -642,8 +641,8 @@ const koakuma = new Vue({
 	},
 	computed: {
 		switchText() {
-			return this.isEnded ? l10n.koakumaEnd :
-				(this.isStoped ? l10n.koakumaGo : l10n.koakumaPause);
+			return this.isEnded ? this.l10n.koakumaEnd :
+				(this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause);
 		},
 		switchStyle() {
 			return {
@@ -656,12 +655,15 @@ const koakuma = new Vue({
 	template: `
 		<div id="こあくま">
 			<div>{{l10n.koakumaProcessed(books.length)}}</div>
-			<koakuma-bookmark :limit="filters.limit" @limitUpdate="limitUpdate"></koakuma-bookmark>
+			<koakuma-bookmark :l10n="l10n"
+				:limit="filters.limit"
+				@limitUpdate="limitUpdate"></koakuma-bookmark>
 			<button id="koakuma-switch"
 				@click="switchSearching"
 				:disabled="isEnded"
 				:class="switchStyle">{{ switchText }}</button>
-			<koakuma-settings :favorite="favorite"
+			<koakuma-settings :l10n="l10n"
+				:favorite="favorite"
 				@fullwidthUpdate="fullwidthUpdate"
 				@sortUpdate="sortUpdate"></koakuma-settings>
 		</div>`,
@@ -715,7 +717,7 @@ Vue.component('image-item-user', {
 });
 
 Vue.component('image-item-count-list', {
-	props:['api', 'detail'],
+	props:['api', 'detail', 'l10n'],
 	data() {
 		return {
 			bookmarked: this.detail.bookmarked,
@@ -723,17 +725,16 @@ Vue.component('image-item-count-list', {
 	},
 	computed: {
 		tooltip() {
-			return l10n.bookmarkTooltip(this.detail.bmkcount);
+			return this.l10n.bookmarkTooltip(this.detail.bmkcount);
 		},
 		shortRating() {
 			return (this.detail.rating > 10000) ? `${(this.detail.rating / 1e3).toFixed(1)}K` : this.detail.rating;
 		},
 		bookmarkStyle() {
-			return {
-				'fa-bookmark': this.bookmarked,
-				'fa-bookmark-o': !this.bookmarked,
-			};
+			return this.bookmarked ? 'fa-bookmark' : 'fa-bookmark-o';
 		},
+	},
+	methods: {
 		click(event) {
 			if(!this.bookmarked) {
 				this.api.postBookmarkadd(this.detail.illust_id);
@@ -764,7 +765,7 @@ Vue.component('image-item-count-list', {
 });
 
 Vue.component('image-item', {
-	props:['api', 'detail', 'pagetype'],
+	props:['api', 'l10n', 'detail', 'pagetype'],
 	computed: {
 		illust_page_href() {
 			return `/member_illust.php?mode=medium&illust_id=${this.detail.illust_id}`;
@@ -809,13 +810,14 @@ Vue.component('image-item', {
 			<image-item-thumb :detail="thumb_detail"></image-item-thumb>
 			<image-item-title :detail="title_detail"></image-item-title>
 			<image-item-user :user="user_detail" v-if="pagetype !== 'member-illust'"></image-item-user>
-			<image-item-count-list :detail="count_detail" :api="api"></image-item-count-list>
+			<image-item-count-list :detail="count_detail" :api="api" :l10n="l10n"></image-item-count-list>
 		</li>`,
 });
 
 const patchouli = new Vue({
 	data: {
 		api: globalStore.api,
+		l10n: globalStore.l10n,
 		books: globalStore.books,
 		filters: globalStore.filters,
 		pagetype: globalStore.page.type,
@@ -839,20 +841,17 @@ const patchouli = new Vue({
 	template:`
 	<ul id="パチュリー">
 		<image-item v-for="book in sortedBooks"
+			:key="book.illust_id"
 			:api="api"
+			:l10n="l10n"
 			:detail="book"
 			:pagetype="pagetype"></image-item>
 	</ul>`,
 });
 
-window.utils = utils;
-window.Pixiv = Pixiv;
-window.axios = axios;
-window.koakuma = koakuma;
-window.patchouli = patchouli;
-window.globalStore = globalStore;
+console.log('Vue.version:', Vue.version);
+console.log('Patchouli version:', version);
 
-console.log('Vue.version', Vue.version);
 if (globalStore.page.supported) {
 	koakuma.$mount(globalStore.koakumaToMount);
 	koakuma.start(1).then(() => {
@@ -888,7 +887,7 @@ if (globalStore.page.supported) {
 		cursor: default;
 	}
 	.fa-feed:hover::after {
-		content:'${l10n.following}';
+		content:'${globalStore.l10n.following}';
 		position: absolute;
 		color: white;
 		white-space: nowrap;
