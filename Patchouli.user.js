@@ -12,6 +12,104 @@
 // @grant		none
 // @noframes
 // ==/UserScript==
+const version = '2017.03.01.a';
+
+class L10N {
+	constructor() {
+		this.lang = document.documentElement.lang;
+		this.following = this._following();
+		this.bookmark = this._bookmark();
+		this.koakumaGo = this._koakumaGo();
+		this.koakumaPause = this._koakumaPause();
+		this.koakumaEnd = this._koakumaEnd();
+		this.koakumaFullwidth = this._koakumaFullwidth();
+		this.koakumaSort = this._koakumaSort();
+	}
+
+	_following() {
+		switch(this.lang) {
+			case 'ja': return 'フォロー中';
+			case 'zh-tw': return '關注中';
+			case 'zh': return '关注中';
+			default: return 'following';
+		}
+	}
+
+	_bookmark() {
+		switch(this.lang) {
+			case 'ja': return 'ブックマーク';
+			case 'zh-tw':
+			case 'zh': return '收藏';
+			default: return 'Bookmark';
+		}
+	}
+
+	_koakumaGo() {
+		switch(this.lang) {
+			case 'ja': return '捜す';
+			case 'zh-tw':
+			case 'zh': return '找';
+			default: return 'Go';
+		}
+	}
+
+	_koakumaPause() {
+		switch(this.lang) {
+			case 'ja': return '中断';
+			case 'zh-tw':
+			case 'zh': return '停';
+			default: return 'Pause';
+		}
+	}
+
+	_koakumaEnd() {
+		switch(this.lang) {
+			case 'ja': return '終了';
+			case 'zh-tw':
+			case 'zh': return '完';
+			default: return 'End';
+		}
+	}
+
+	koakumaProcessed(n) {
+		switch(this.lang) {
+			case 'ja': return `已處理 ${n} 張`;
+			case 'zh-tw': return `已處理 ${n} 張`
+			case 'zh': return `已处理 ${n} 张`;
+			default: return `${n} pics processed`;
+		}
+	}
+
+	_koakumaFullwidth() {
+		switch(this.lang) {
+			case 'ja': return '全寬';
+			case 'zh-tw': return '全寬';
+			case 'zh': return '全宽';
+			default: return 'fullwidth';
+		}
+	}
+
+	_koakumaSort() {
+		switch(this.lang) {
+			case 'ja': return '排序';
+			case 'zh-tw':
+			case 'zh': return '排序';
+			default: return 'sorted';
+		}
+	}
+
+	bookmarkTooltip(n) {
+		switch(this.lang) {
+			case 'ja': return `${n}件のブックマーク`;
+			case 'zh-tw': return `${n}個收藏`
+			case 'zh': return `${n}个收藏`;
+			default: return `${n} bookmarks`;
+		}
+	}
+}
+
+const l10n = new L10N();
+
 class Pixiv {
 	constructor() {
 		this.tt = document.querySelector('input[name="tt"]').value;
@@ -212,6 +310,17 @@ class Pixiv {
 	}
 }
 
+(() => {
+	const s = Pixiv.storageGet();
+	if (!s.version || s.version < version) {
+		Pixiv.storageSet({
+			version,
+		});
+	}
+})();
+
+
+
 const utils = {
 	linkStyle: function(url) {
 		const link = document.createElement('link');
@@ -320,14 +429,14 @@ const globalStore = {
 globalStore.favorite = (()=>{
 	const _f = Object.assign({
 		fullwidth: 1,
-		order: 0,
+		sort: 0,
 	}, Pixiv.storageGet());
 
 	if (_f.fullwidth) {
 		document.querySelector('#wrapper').classList.add('fullwidth');
 	}
 
-	if (_f.order) {
+	if (_f.sort) {
 		globalStore.filters.orderBy = 'bookmark_count';
 	}
 
@@ -341,18 +450,18 @@ Vue.component('koakuma-settings', {
 		fullwidthClick(event) {
 			this.$emit('fullwidthUpdate', event.target.checked);
 		},
-		orderClick(event) {
-			this.$emit('orderUpdate', event.target.checked);
+		sortClick(event) {
+			this.$emit('sortUpdate', event.target.checked);
 		},
 	},
 	template: `
 	<div>
 		<input id="koakuma-settings-fullwidth" type="checkbox"
 			:checked="favorite.fullwidth"
-			@click="fullwidthClick"> 全寬
-		<input id="koakuma-settings-order" type="checkbox"
-			:checked="favorite.order"
-			@click="orderClick"> 排序
+			@click="fullwidthClick"> ${l10n.koakumaFullwidth}
+		<input id="koakuma-settings-sort" type="checkbox"
+			:checked="favorite.sort"
+			@click="sortClick"> ${l10n.koakumaSort}
 	</div>`,
 });
 
@@ -384,7 +493,7 @@ Vue.component('koakuma-bookmark', {
 	},
 	template:`
 	<div id="koakuma-bookmark">
-		<label for="koakuma-bookmark-input">★書籤</label>
+		<label for="koakuma-bookmark-input">★${l10n.bookmark}</label>
 		<input id="koakuma-bookmark-input"
 			type="number" min="0" step="1"
 			:value="limit"
@@ -520,20 +629,21 @@ const koakuma = new Vue({
 			}
 			Pixiv.storageSet(globalStore.favorite);
 		},
-		orderUpdate(todo) {
+		sortUpdate(todo) {
 			if(todo) {
 				globalStore.filters.orderBy = 'bookmark_count';
-				globalStore.favorite.order = 1;
+				globalStore.favorite.sort = 1;
 			} else {
 				globalStore.filters.orderBy = 'illust_id';
-				globalStore.favorite.order = 0;
+				globalStore.favorite.sort = 0;
 			}
 			Pixiv.storageSet(globalStore.favorite);
 		},
 	},
 	computed: {
 		switchText() {
-			return this.isEnded ? "完" : (this.isStoped ? "找" : "停");
+			return this.isEnded ? l10n.koakumaEnd :
+				(this.isStoped ? l10n.koakumaGo : l10n.koakumaPause);
 		},
 		switchStyle() {
 			return {
@@ -545,7 +655,7 @@ const koakuma = new Vue({
 	},
 	template: `
 		<div id="こあくま">
-			<div>已處理 {{books.length}} 張</div>
+			<div>{{l10n.koakumaProcessed(books.length)}}</div>
 			<koakuma-bookmark :limit="filters.limit" @limitUpdate="limitUpdate"></koakuma-bookmark>
 			<button id="koakuma-switch"
 				@click="switchSearching"
@@ -553,7 +663,7 @@ const koakuma = new Vue({
 				:class="switchStyle">{{ switchText }}</button>
 			<koakuma-settings :favorite="favorite"
 				@fullwidthUpdate="fullwidthUpdate"
-				@orderUpdate="orderUpdate"></koakuma-settings>
+				@sortUpdate="sortUpdate"></koakuma-settings>
 		</div>`,
 });
 
@@ -590,18 +700,17 @@ Vue.component('image-item-user', {
 		},
 		userStyle() {
 			return {
-				followed: this.user.is_follow,
+				following: this.user.is_follow,
 			};
 		},
 	},
 	template:`
 		<span>
 			<a class="user ui-profile-popup"
-				:class="userStyle"
 				:href="href"
 				:title="user.name"
 				:data-user_id="user.id">{{ user.name }}</a>
-			<i class="fa fa-feed" aria-hidden="true"></i>
+			<i class="fa fa-feed" aria-hidden="true" v-show="user.is_follow"></i>
 		</span>`,
 });
 
@@ -614,7 +723,7 @@ Vue.component('image-item-count-list', {
 	},
 	computed: {
 		tooltip() {
-			return `${this.detail.bmkcount}件のブックマーク`;
+			return l10n.bookmarkTooltip(this.detail.bmkcount);
 		},
 		shortRating() {
 			return (this.detail.rating > 10000) ? `${(this.detail.rating / 1e3).toFixed(1)}K` : this.detail.rating;
@@ -712,7 +821,7 @@ const patchouli = new Vue({
 		pagetype: globalStore.page.type,
 	},
 	computed: {
-		orderedBooks() {
+		sortedBooks() {
 			const _limit = this.filters.limit;
 			const _order = this.filters.orderBy;
 			const _books = this.books.filter(b => b.bookmark_count >= _limit);
@@ -729,7 +838,7 @@ const patchouli = new Vue({
 	},
 	template:`
 	<ul id="パチュリー">
-		<image-item v-for="book in orderedBooks"
+		<image-item v-for="book in sortedBooks"
 			:api="api"
 			:detail="book"
 			:pagetype="pagetype"></image-item>
@@ -776,10 +885,10 @@ if (globalStore.page.supported) {
 
 	.fa-feed {
 		color: dodgerblue;
-		cursor: pointer;
+		cursor: default;
 	}
 	.fa-feed:hover::after {
-		content:'フォロー中';
+		content:'${l10n.following}';
 		position: absolute;
 		color: white;
 		white-space: nowrap;
@@ -787,6 +896,7 @@ if (globalStore.page.supported) {
 		padding: 2px;
 		border-radius: 3px;
 		margin-left: 8px;
+		font-family: "Helvetica Neue","arial","Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 	}
 	.rating-score {
 		background-color: #FFEE88;
@@ -877,7 +987,7 @@ if (globalStore.page.supported) {
 		padding: 5px;
 		font-size: 16px;
 		text-align: center;
-		width: 140px;
+		width: 160px;
 	}
 	#こあくま > * {
 		margin: 2px 0;
