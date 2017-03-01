@@ -473,7 +473,7 @@ const koakuma = new Vue({
 								illust_id: illust.illust_id,
 								thumb_src: illust.thumb_src,
 								user_id: illust.user_id,
-								tags: illust.tags,
+								// tags: illust.tags,
 								user_name: ud[illust.user_id].user_name,
 								is_follow: ud[illust.user_id].is_follow,
 								illust_title: ild[illust.illust_id].illust_title,
@@ -588,18 +588,21 @@ Vue.component('image-item-user', {
 		href() {
 			return `/member_illust.php?id=${this.user.id}`;
 		},
-		vClass() {
+		userStyle() {
 			return {
 				followed: this.user.is_follow,
 			};
 		},
 	},
 	template:`
-		<a class="user ui-profile-popup"
-			:class="vClass"
-			:href="href"
-			:title="user.name"
-			:data-user_id="user.id">{{ user.name }}</a>`,
+		<span>
+			<a class="user ui-profile-popup"
+				:class="userStyle"
+				:href="href"
+				:title="user.name"
+				:data-user_id="user.id">{{ user.name }}</a>
+			<i class="fa fa-feed" aria-hidden="true"></i>
+		</span>`,
 });
 
 Vue.component('image-item-count-list', {
@@ -771,9 +774,19 @@ if (globalStore.page.supported) {
 	}
 
 
-	.followed.followed.followed {
-		font-weight: bold;
-		color: red;
+	.fa-feed {
+		color: dodgerblue;
+		cursor: pointer;
+	}
+	.fa-feed:hover::after {
+		content:'フォロー中';
+		position: absolute;
+		color: white;
+		white-space: nowrap;
+		background-color: dodgerblue;
+		padding: 2px;
+		border-radius: 3px;
+		margin-left: 8px;
 	}
 	.rating-score {
 		background-color: #FFEE88;
