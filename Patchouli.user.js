@@ -73,7 +73,7 @@ class L10N {
 
 	koakumaProcessed(n) {
 		switch(this.lang) {
-			case 'ja': return `已處理 ${n} 張`;
+			case 'ja': return `${n} 件が処理された`;
 			case 'zh-tw': return `已處理 ${n} 張`
 			case 'zh': return `已处理 ${n} 张`;
 			default: return `${n} pics processed`;
@@ -309,6 +309,7 @@ class Pixiv {
 }
 
 (() => {
+	// version check
 	const s = Pixiv.storageGet();
 	if (!s.version || s.version < version) {
 		Pixiv.storageSet({
@@ -316,8 +317,6 @@ class Pixiv {
 		});
 	}
 })();
-
-
 
 const utils = {
 	linkStyle: function(url) {
