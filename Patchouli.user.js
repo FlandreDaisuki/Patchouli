@@ -7,7 +7,7 @@
 // @require		https://cdnjs.cloudflare.com/ajax/libs/vue/2.2.1/vue.min.js
 // @require		https://cdnjs.cloudflare.com/ajax/libs/axios/0.15.3/axios.min.js
 // @updateURL	https://github.com/FlandreDaisuki/Patchouli/raw/master/Patchouli.user.js
-// @version		2017.03.01
+// @version		2017.03.01.a
 // @icon		http://i.imgur.com/VwoYc5w.png
 // @grant		none
 // @noframes
@@ -189,6 +189,26 @@ class Pixiv {
 			};
 		})
 		.catch(console.error);
+	}
+
+	postBookmarkadd(illust_id) {
+		const data = [
+			'mode=save_illust_bookmark',
+			`illust_id=${illust_id}`,
+			'restrict=0',
+			'comment=',
+			'tags=',
+			`tt=${this.tt}`,
+		].join('&');
+		const config = {'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'};
+
+		return axios.post('/rpc/index.php', data, config)
+			.then(res => {
+				return new Promise((resolve, reject) => {
+					(res.statusText === 'OK' && !res.data.error) ? resolve(true) : reject(res);
+				});
+			})
+			.catch(console.error);
 	}
 }
 
@@ -458,6 +478,7 @@ const koakuma = new Vue({
 								is_follow: ud[illust.user_id].is_follow,
 								illust_title: ild[illust.illust_id].illust_title,
 								is_multiple: ild[illust.illust_id].is_multiple,
+								is_bookmarked: ild[illust.illust_id].is_bookmarked,
 								is_manga: ild[illust.illust_id].illust_type === '1',
 								is_ugoira: !!ild[illust.illust_id].ugoira_meta,
 								bookmark_count: bd[illust.illust_id].bookmark_count,
@@ -582,13 +603,31 @@ Vue.component('image-item-user', {
 });
 
 Vue.component('image-item-count-list', {
-	props:['detail'],
+	props:['api', 'detail'],
+	data() {
+		return {
+			bookmarked: this.detail.bookmarked,
+		};
+	},
 	computed: {
 		tooltip() {
 			return `${this.detail.bmkcount}件のブックマーク`;
 		},
 		shortRating() {
 			return (this.detail.rating > 10000) ? `${(this.detail.rating / 1e3).toFixed(1)}K` : this.detail.rating;
+		},
+		bookmarkStyle() {
+			return {
+				'fa-bookmark': this.bookmarked,
+				'fa-bookmark-o': !this.bookmarked,
+			};
+		},
+		click(event) {
+			if(!this.bookmarked) {
+				this.api.postBookmarkadd(this.detail.illust_id);
+				this.$emit('bookmarkUpdate', this.detail.illust_id);
+				this.bookmarked = true;
+			}
 		},
 	},
 	template:`
@@ -600,15 +639,20 @@ Vue.component('image-item-count-list', {
 					<i class="_icon sprites-bookmark-badge"></i>{{ detail.bmkcount }}</a>
 			</li>
 			<li v-if="detail.rating > 0">
-				<span class="rating_score">
+				<span class="rating-score">
 					<i class="fa fa-star" aria-hidden="true"></i>{{ shortRating }}
 				</span>
+			</li>
+			<li>
+				<a class="is-bookmarked" @click.prevent="click">
+					<i class="fa" :class="bookmarkStyle" aria-hidden="true"></i>
+				</a>
 			</li>
 		</ul>`,
 });
 
 Vue.component('image-item', {
-	props:['detail', 'pagetype'],
+	props:['api', 'detail', 'pagetype'],
 	computed: {
 		illust_page_href() {
 			return `/member_illust.php?mode=medium&illust_id=${this.detail.illust_id}`;
@@ -643,6 +687,8 @@ Vue.component('image-item', {
 				bmkhref: this.bookmark_detail_href,
 				bmkcount: this.detail.bookmark_count,
 				rating: this.detail.rating_score,
+				bookmarked: this.detail.is_bookmarked,
+				illust_id: this.detail.illust_id,
 			};
 		},
 	},
@@ -651,12 +697,13 @@ Vue.component('image-item', {
 			<image-item-thumb :detail="thumb_detail"></image-item-thumb>
 			<image-item-title :detail="title_detail"></image-item-title>
 			<image-item-user :user="user_detail" v-if="pagetype !== 'member-illust'"></image-item-user>
-			<image-item-count-list :detail="count_detail"></image-item-count-list>
+			<image-item-count-list :detail="count_detail" :api="api"></image-item-count-list>
 		</li>`,
 });
 
 const patchouli = new Vue({
 	data: {
+		api: globalStore.api,
 		books: globalStore.books,
 		filters: globalStore.filters,
 		pagetype: globalStore.page.type,
@@ -669,22 +716,29 @@ const patchouli = new Vue({
 			return _books.sort((a, b) => b[_order] - a[_order]);
 		},
 	},
+	methods: {
+		bookmarkUpdate(illust_id) {
+			const _a = this.books.filter(b => b.illust_id === illust_id);
+			if (_a.length) {
+				_a[0].is_bookmarked = true;
+			}
+		},
+	},
 	template:`
 	<ul id="パチュリー">
 		<image-item v-for="book in orderedBooks"
+			:api="api"
 			:detail="book"
 			:pagetype="pagetype"></image-item>
 	</ul>`,
 });
 
-let DEBUG = true;
-if(DEBUG) {
-	window.utils = utils;
-	window.Pixiv = Pixiv;
-	window.koakuma = koakuma;
-	window.patchouli = patchouli;
-	window.globalStore = globalStore;
-}
+window.utils = utils;
+window.Pixiv = Pixiv;
+window.axios = axios;
+window.koakuma = koakuma;
+window.patchouli = patchouli;
+window.globalStore = globalStore;
 
 console.log('Vue.version', Vue.version);
 if (globalStore.page.supported) {
@@ -721,7 +775,7 @@ if (globalStore.page.supported) {
 		font-weight: bold;
 		color: red;
 	}
-	.rating_score {
+	.rating-score {
 		background-color: #FFEE88;
 		color: #FF7700;
 		border-radius: 3px;
@@ -731,6 +785,9 @@ if (globalStore.page.supported) {
 		font: bold 10px/18px "lucida grande", sans-serif !important;
 		text-decoration: none;
 		cursor: default;
+	}
+	.is-bookmarked {
+		cursor: pointer;
 	}
 	#パチュリー {
 		display: flex;
