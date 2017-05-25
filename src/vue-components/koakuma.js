@@ -239,7 +239,7 @@ if (global.pageType !== 'not support') {
 	}
 	#こあくま {
 		position: fixed;
-		left: 10px;
+		left: 22px;
 		bottom: 10px;
 		z-index: 1;
 		background-color: aliceblue;
@@ -247,7 +247,7 @@ if (global.pageType !== 'not support') {
 		padding: 5px;
 		font-size: 16px;
 		text-align: center;
-		width: 160px;
+		width: 162px;
 	}
 	#こあくま > * {
 		margin: 2px 0;
