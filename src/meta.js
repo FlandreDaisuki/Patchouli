@@ -18,4 +18,4 @@
 // @noframes
 // ==/UserScript==
 'use strict';
-console.log(`[${GM_info.script.name}] version:${GM_info.script.version}`);
+console.log(`[${GM_info.script.name}] version: ${GM_info.script.version}`);

@@ -100,9 +100,16 @@ class Pixiv {
 		}
 	}
 
+	/**
+	 * Returns detail object that illust_id: detail object by DOM
+	 *
+	 * { '12345': {}, '12346': {}, ... }
+	 * @param {String[]} illust_ids
+	 * @return {{String: Object}}
+	 */
 	async getBookmarksDetail(illust_ids) {
 		const _f = this.getBookmarkCount.bind(this);
-		return await getDetail(illust_ids, _f);
+		return await this.getDetail(illust_ids, _f);
 	}
 
 	async getIllustPageDetail(illust_id) {
@@ -122,13 +129,29 @@ class Pixiv {
 		}
 	}
 
+	/**
+	 * Returns detail object that illust_id: detail object by DOM
+	 *
+	 * { '12345': {}, '12346': {}, ... }
+	 * @param {String[]} illust_ids
+	 * @return {{String: Object}}
+	 */
 	async getIllustPagesDetail(illust_ids) {
 		const _f = this.getIllustPageDetail.bind(this);
-		return await getDetail(illust_ids, _f);
+		return await this.getDetail(illust_ids, _f);
 	}
 
+	/**
+	 * Returns detail object that illust_id: detail object by Pixiv API
+	 *
+	 * { '12345': {}, '12346': {}, ... }
+	 * @param {String[]} illust_ids
+	 * @return {{String: Object}}
+	 */
 	getIllustsDetail(illust_ids) {
 		const iids = illust_ids.join(',');
+		if(iids.indexOf(',,')>=0) {
+		}
 		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
 
 		return this.fetch(url)
@@ -136,6 +159,13 @@ class Pixiv {
 			.catch(console.error);
 	}
 
+	/**
+	 * Returns detail object that user_id: detail object by Pixiv API
+	 *
+	 * { '12345': {}, '12346': {}, ... }
+	 * @param {String[]} user_ids
+	 * @return {{String: Object}}
+	 */
 	getUsersDetail(user_ids) {
 		const uids = user_ids.join(',');
 		const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
@@ -148,28 +178,6 @@ class Pixiv {
 				return a;
 			}, {}))
 			.catch(console.error);
-	}
-
-	async getPageInformationAndNext(url) {
-		try {
-			const doc = await this.fetch(url).then(Pixiv.toDOM);
-			Pixiv.rmAnnoyance(doc);
-			const next_url = Pixiv.hrefAttr(doc.querySelector('.next a'));
-			const imgs = [...doc.querySelectorAll('.image-item img')];
-			const illusts = imgs.map(x => ({
-				illust_id: x.dataset.id,
-				thumb_src: x.dataset.src,
-				user_id: x.dataset.userId,
-				tags: x.dataset.tags.split(' '),
-			})).filter(x => x.illust_id !== '0');
-
-			return {
-				next_url,
-				illusts,
-			};
-		} catch (e) {
-			console.error(e);
-		}
 	}
 
 	postBookmarkadd(illust_id) {
@@ -196,9 +204,9 @@ class Pixiv {
 
 	/**
 	 * Returns array of recommend illust_id
-	 * @return {Number[]}
+	 * @return {String[]}
 	 */
-	async getRecommendIllustids(illust_id='auto') {
+	async getRecommendIllustids(illust_id = 'auto') {
 		const param = [
 			'type=illust',
 			`sample_illusts=${illust_id}`,
@@ -207,19 +215,24 @@ class Pixiv {
 		].join('&');
 		const url = `/rpc/recommender.php?${param}`;
 		try {
-			return await this.fetch(url).then(data => data.recommendations);
+			return await this.fetch(url).then(data => data.recommendations.map(x => `${x}`));
 		} catch (e) {
 			console.error(e);
 		}
 	}
 
+	/**
+	 * Returns array of recommend illust_id
+	 * @param {String} url
+	 * @return {{next_url: String, illust_ids: String[]}}
+	 */
 	async getPageIllustids(url) {
 		try {
 			const doc = await this.fetch(url).then(Pixiv.toDOM);
 			Pixiv.rmAnnoyance(doc);
 			const next_url = Pixiv.hrefAttr(doc.querySelector('.next a'));
 			const imgs = [...doc.querySelectorAll('.image-item img')];
-			const illust_ids = imgs.map(x => parseInt(x.dataset.id)).filter(x => x);
+			const illust_ids = imgs.map(x => x.dataset.id).filter(x => x !== '0');
 
 			return {
 				next_url,

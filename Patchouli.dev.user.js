@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name	Patchouli
+// @name	Patchouli.dev
 // @name:ja	パチュリー
 // @name:zh-TW	帕秋莉
 // @name:zh-CN	帕秋莉
@@ -10,15 +10,15 @@
 // @namespace	https://github.com/FlandreDaisuki
 // @author		FlandreDaisuki
 // @include		*://www.pixiv.net/*
-// @require		https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
-// @require		https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
+// @require		https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.js
+// @require		https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.js
 // @version		2017.05.25
 // @icon		http://i.imgur.com/VwoYc5w.png
 // @grant		none
 // @noframes
 // ==/UserScript==
 'use strict';
-console.log(`[${GM_info.script.name}] version: ${GM_info.script.version}`);
+console.log(`[${GM_info.script.name}] version:${GM_info.script.version}`);
 class L10N {
 	constructor() {
 		this.lang = document.documentElement.lang;
@@ -216,6 +216,8 @@ class Pixiv {
 				return res.data;
 			}
 		} catch (e) {
+			console.trace();
+			debugger;
 			console.error(e);
 		}
 	}
@@ -296,6 +298,8 @@ class Pixiv {
 	getIllustsDetail(illust_ids) {
 		const iids = illust_ids.join(',');
 		if(iids.indexOf(',,')>=0) {
+			console.trace();
+			debugger;
 		}
 		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
 
@@ -1012,7 +1016,6 @@ if (global.pageType !== 'not support') {
 		background-color: dodgerblue;
 		padding: 2px;
 		border-radius: 3px;
-		margin-top: -2px;
 		margin-left: 8px;
 		font-family: "Helvetica Neue","arial","Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 	}
@@ -1044,3 +1047,10 @@ if (global.pageType !== 'not support') {
 	});
 }
 Pixiv.rmAnnoyance();
+window.Vue = Vue;
+window.axios = axios;
+window.L10N = L10N;
+window.Pixiv = Pixiv;
+window.utils = utils;
+window.global = global;
+window.koakuma = koakuma;

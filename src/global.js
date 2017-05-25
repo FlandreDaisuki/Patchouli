@@ -12,7 +12,8 @@ const global = {
 	},
 	patchouliToMount: (() => {
 		const _a = document.querySelector('li.image-item');
-		return _a ? _a.parentElement : null;
+		const _b = document.querySelector('ul._image-items');
+		return _a ? _a.parentElement : _b;
 	})(),
 	koakumaToMount: (() => {
 		return document.querySelector('#toolbar-items');
