@@ -77,6 +77,7 @@ if (global.pageType !== 'not support') {
 	#パチュリー {
 		display: flex;
 		flex-wrap: wrap;
+		align-items: flex-end;
 		justify-content: space-around;
 	}`);
 }
