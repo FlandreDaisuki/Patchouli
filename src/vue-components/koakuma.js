@@ -31,7 +31,7 @@ const koakuma = new Vue({
 			this.isStoped = false;
 			const toContinue = () => {
 				return !this.isEnded && !this.isStoped && times > 0 &&
-					(this.next_url !== '' || this.local_ids.length);
+					(this.next_url || this.local_ids.length);
 			};
 			while (toContinue()) {
 				// get illust_ids and next_url
@@ -39,6 +39,7 @@ const koakuma = new Vue({
 					const res = await this.api.getPageIllustids(this.next_url);
 					if (res.next_url === this.next_url) {
 						// debounce
+						this.stop();
 						break;
 					}
 					this.next_url = res.next_url;
@@ -49,10 +50,11 @@ const koakuma = new Vue({
 						this.next_url = '';
 						this.local_ids.push(...res);
 					}
-				} else if (this.pageType === 'mybookmark') {
+				} else if (this.pageType === 'my-bookmark') {
 					const res = await this.api.getPageIllustids(this.next_url);
 					if (res.next_url === this.next_url) {
 						// debounce
+						this.stop();
 						break;
 					}
 					this.next_url = res.next_url;
@@ -66,24 +68,26 @@ const koakuma = new Vue({
 					.filter(id => !this.books.includes(id));
 				this.local_ids = this.local_ids.slice(20);
 				const ild = await this.api.getIllustsDetail(process_ids);
-				for(let k in ild) {
-					if(ild[k].error) {
+				for (let k in ild) {
+					if (ild[k].error) {
 						delete ild[k];
 					}
 				}
 				const iids = Object.values(ild).map(x => x.illust_id);
 				const ipd = await this.api.getIllustPagesDetail(iids);
 				const bd = await this.api.getBookmarksDetail(iids);
-				const uids = Object.values(ild).map(x => x.user_id).filter((item, pos, self) => {
-					// make user_ids unique
-					return self.indexOf(item) == pos;
-				});
+				const uids = Object.values(ild)
+					.map(x => x.user_id)
+					.filter((e, i, a) => {
+						// make user_ids unique
+						return a.indexOf(e) == i;
+					});
 				const ud = await this.api.getUsersDetail(uids);
 
-				for (let i of iids) {
-					const illust = ild[i];
+				for (let iid of iids) {
+					const illust = ild[iid];
 					const book = {
-						illust_id: illust.illust_id,
+						illust_id: iid,
 						thumb_src: illust.url['240mw'].replace('240x480', '150x150'),
 						user_id: illust.user_id,
 						user_name: illust.user_name,
@@ -93,12 +97,13 @@ const koakuma = new Vue({
 						is_manga: illust.illust_type === '1',
 						is_ugoira: !!illust.ugoira_meta,
 						is_follow: ud[illust.user_id].is_follow,
-						bookmark_count: bd[illust.illust_id].bookmark_count,
-						// tags: bd[illust.illust_id].somehow,
-						rating_score: ipd[illust.illust_id].rating_score,
+						bookmark_count: bd[iid].bookmark_count,
+						// tags: bd[iid].somehow,
+						rating_score: ipd[iid].rating_score,
 					}
 					this.books.push(book);
 				}
+
 				times--;
 			}
 			// End of while

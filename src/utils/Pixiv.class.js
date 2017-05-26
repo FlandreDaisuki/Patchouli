@@ -17,10 +17,6 @@ class Pixiv {
 		localStorage.setItem('むきゅー', JSON.stringify(obj));
 	}
 
-	static toDOM(html) {
-		return (new DOMParser()).parseFromString(html, 'text/html');
-	}
-
 	static rmAnnoyance(doc = document) {
 		[
 			'iframe',
@@ -44,31 +40,17 @@ class Pixiv {
 		].forEach(cl => [...doc.querySelectorAll(cl)].forEach(el => el.remove()));
 	}
 
-	static hrefAttr(elem) {
-		const a = elem;
-		if (!a) {
-			return '';
-		} else if (a.href) {
-			// Firefox
-			return a.href;
-		} else {
-			// Chrome
-			const m = a.outerHTML.match(/href="([^"]+)"/);
-			if (!m) {
-				return '';
-			}
-			const query = m[1].replace(/&amp;/g, '&');
-			return `${location.pathname}${query}`;
-		}
-	}
-
 	async fetch(url) {
 		try {
-			const res = await axios.get(url);
-			if (res.statusText !== 'OK') {
-				throw res;
+			if (url) {
+				const res = await axios.get(url);
+				if (res.statusText !== 'OK') {
+					throw res;
+				} else {
+					return res.data;
+				}
 			} else {
-				return res.data;
+				console.trace('Fetch has no url');
 			}
 		} catch (e) {
 			console.error(e);
@@ -87,9 +69,9 @@ class Pixiv {
 		const url = `/bookmark_detail.php?illust_id=${illust_id}`;
 
 		try {
-			const doc = await this.fetch(url).then(Pixiv.toDOM);
-			const _a = doc.querySelector('a.bookmark-count');
-			const bookmark_count = _a ? parseInt(_a.innerText) : 0;
+			const html = await this.fetch(url);
+			const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
+			const bookmark_count = _a ? parseInt(_a[1]) : 0;
 
 			return {
 				bookmark_count,
@@ -116,10 +98,9 @@ class Pixiv {
 		const url = `/member_illust.php?mode=medium&illust_id=${illust_id}`;
 
 		try {
-			const doc = await this.fetch(url).then(Pixiv.toDOM);
-			const _a = doc.querySelector('.score-count');
-			const rating_score = _a ? parseInt(_a.innerText) : 0;
-
+			const html = await this.fetch(url);
+			const _a = html.match(/rated-count[^\d]+(\d+)/);
+			const rating_score = _a ? parseInt(_a[1]) : 0;
 			return {
 				illust_id,
 				rating_score,
@@ -150,8 +131,6 @@ class Pixiv {
 	 */
 	getIllustsDetail(illust_ids) {
 		const iids = illust_ids.join(',');
-		if(iids.indexOf(',,')>=0) {
-		}
 		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
 
 		return this.fetch(url)
@@ -228,11 +207,22 @@ class Pixiv {
 	 */
 	async getPageIllustids(url) {
 		try {
-			const doc = await this.fetch(url).then(Pixiv.toDOM);
-			Pixiv.rmAnnoyance(doc);
-			const next_url = Pixiv.hrefAttr(doc.querySelector('.next a'));
-			const imgs = [...doc.querySelectorAll('.image-item img')];
-			const illust_ids = imgs.map(x => x.dataset.id).filter(x => x !== '0');
+			const html = await this.fetch(url);
+			const next_tag = html.match(/class="next".+(?=<\/span>)/);
+
+			let next_url = '';
+			if (next_tag) {
+				const next_href = next_tag[0].match(/href="([^"]+)"/);
+				if (next_href) {
+					const query = next_href[1].replace(/&amp;/g, '&');
+					if (query) {
+						next_url = `${location.pathname}${query}`;
+					}
+				}
+			}
+			const illust_ids = html.match(/data-id="\d+"/g)
+				.map(x => x.replace(/\D+(\d+).*/, '$1'))
+				.filter((e, i, a) => a.indexOf(e) === i && e !== '0');
 
 			return {
 				next_url,

@@ -26,7 +26,7 @@ const global = {
 		 *
 		 *	default: thumb + title + user + count-list , need next page
 		 *	member-illust: default w/o user, need next page
-		 *	mybookmark:  default with bookmark-edit, need next page
+		 *	my-bookmark:  default with bookmark-edit, need next page
 		 *	recommend: default , need not next page
 		 *	ranking: ranking , need not next page
 		 */
@@ -48,7 +48,7 @@ const global = {
 				if (search.has('id')) {
 					return 'default';
 				} else if (!t || t === 'illust_all') {
-					return 'mybookmark';
+					return 'my-bookmark';
 				} else {
 					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
 					return 'not support';

@@ -4,7 +4,8 @@ DEVNAME = Patchouli.dev.user.js
 
 all: release
 release: base
-	sed -i s/Patchouli\.dev/Patchouli/g $(TARGET)
+	sed -i s/\.dev//g $(TARGET)
+	sed -i '/console.debug/d' $(TARGET)
 
 debug: before-debug base
 	cat $(SRC)debug.js >> $(TARGET)
