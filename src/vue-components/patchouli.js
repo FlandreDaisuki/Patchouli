@@ -68,8 +68,11 @@ if (global.pageType !== 'not support') {
 	.image-item .count-list {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-around;
+		justify-content: center;
 		padding: 0 8px;
+	}
+	.image-item .count-list li {
+		margin: 0 2px !important;
 	}
 	#パチュリー {
 		display: flex;

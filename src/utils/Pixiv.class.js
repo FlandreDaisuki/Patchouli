@@ -222,7 +222,7 @@ class Pixiv {
 					}
 				}
 			}
-			const illust_ids = html.match(/data-id="\d+"/g)
+			const illust_ids = (html.match(/data-id="\d+"/g) || [])
 				.map(x => x.replace(/\D+(\d+).*/, '$1'))
 				.filter((e, i, a) => a.indexOf(e) === i && e !== '0');
 
@@ -232,7 +232,7 @@ class Pixiv {
 			};
 
 			if (needBookId) {
-				ret.bookmark_ids = html.match(/name="book_id[^;]+;illust_id=\d+/g)
+				ret.bookmark_ids = (html.match(/name="book_id[^;]+;illust_id=\d+/g) || [])
 					.map(s => s.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' '))
 					.filter(a => illust_ids.includes(a[0]))
 					.reduce((acc, val) => {

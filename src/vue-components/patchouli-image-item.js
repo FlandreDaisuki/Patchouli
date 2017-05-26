@@ -20,11 +20,6 @@ const patchouliImageItemTemplate = `
 				:data-tooltip="tooltip">
 				<i class="_icon sprites-bookmark-badge"></i>{{ detail.bookmark_count }}</a>
 		</li>
-		<li v-if="detail.rating_score > 0">
-			<span class="rating-score">
-				<i class="fa fa-star" aria-hidden="true"></i>{{ shortRating }}
-			</span>
-		</li>
 		<li>
 			<input v-if="pagetype === 'my-bookmark'" name="book_id[]" :value="detail.bookmark_id" type="checkbox">
 			<a v-else class="is-bookmarked" @click.prevent="bookmarkClick">
@@ -63,11 +58,6 @@ Vue.component('image-item', {
 		},
 		tooltip() {
 			return this.l10n.bookmarkTooltip(this.detail.bookmark_count);
-		},
-		shortRating() {
-			return (this.detail.rating_score > 10000) ?
-				`${(this.detail.rating_score / 1e3).toFixed(1)}K` :
-				this.detail.rating_score;
 		},
 	},
 	methods: {

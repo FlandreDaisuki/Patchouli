@@ -10,7 +10,7 @@ A simple Pixiv crawler. Naming is inspired from **Touhou Project**. Using Vue 2.
 - Sort by bookmarks or submit time
 - Switch full width or default width
 - Indicating whether user has been following
-- L10n for some language
+- L10n for some languages
 - :beginner: **[Demo](https://youtu.be/lF5OMB7RP_Y)** :beginner:
 
 ## Installation
@@ -24,9 +24,7 @@ A simple Pixiv crawler. Naming is inspired from **Touhou Project**. Using Vue 2.
 
 ## Todo
 - [ ] tag filter
-- [ ] refactor koakuma.start
 - [ ] support raking page
-- [ ] support recommend page
 
 ## Contribution
 Questions or suggestions, post [issue](https://github.com/FlandreDaisuki/Patchouli/issues) :coffee:

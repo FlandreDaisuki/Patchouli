@@ -84,11 +84,11 @@ const koakuma = new Vue({
 					}
 				}
 
-
 				//get illust_ids from local_ids_q
 				const process_ids = this.local_ids_q.slice(0, 20)
 					.filter(id => !this.library_iids.includes(id));
 				this.local_ids_q.splice(0, 20);
+
 				if (process_ids.length) {
 					const ild = await this.api.getIllustsDetail(process_ids);
 					for (let k in ild) {
@@ -97,7 +97,7 @@ const koakuma = new Vue({
 						}
 					}
 					const iids = Object.values(ild).map(x => x.illust_id);
-					const ipd = await this.api.getIllustPagesDetail(iids);
+					// const ipd = await this.api.getIllustPagesDetail(iids);
 					const bd = await this.api.getBookmarksDetail(iids);
 					const uids = Object.values(ild)
 						.map(x => x.user_id)
@@ -122,7 +122,7 @@ const koakuma = new Vue({
 							is_follow: ud[illust.user_id].is_follow,
 							bookmark_count: bd[iid].bookmark_count,
 							// tags: bd[iid].somehow,
-							rating_score: ipd[iid].rating_score,
+							// rating_score: ipd[iid].rating_score,
 						}
 						if (this.pageType === 'my-bookmark') {
 							book.bookmark_id = this.bookmark_ids[iid];
@@ -131,13 +131,16 @@ const koakuma = new Vue({
 						this.library.push(book);
 					}
 				}
-
 				times--;
 			}
 			// End of while
 			if (this.next_url === '') {
 				this.stop();
 				this.isEnded = this.local_ids_q.length <= 0;
+				if (this.isEnded) {
+					delete this.bookmark_ids;
+					delete this.local_ids_q;
+				}
 			}
 			if (times <= 0) {
 				this.stop();

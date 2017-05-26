@@ -24,9 +24,7 @@
 
 ## Todo 坑
 - [ ] tag filter
-- [ ] refactor koakuma.start
 - [ ] support raking page
-- [ ] support recommend page
 
 ## Contribution 貢獻
 有問題或建議發 [issue](https://github.com/FlandreDaisuki/Patchouli/issues) :coffee:
