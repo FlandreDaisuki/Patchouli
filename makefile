@@ -2,7 +2,10 @@ SRC = src/
 TARGET = Patchouli.user.js
 DEVNAME = Patchouli.dev.user.js
 
-all: release
+all:
+	make release
+	make debug
+
 release: base
 	sed -i s/\.dev//g $(TARGET)
 	sed -i '/console.debug/d' $(TARGET)

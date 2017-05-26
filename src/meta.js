@@ -5,8 +5,8 @@
 // @name:zh-CN  帕秋莉.dev
 // @description         An image searching/browsing tool on Pixiv
 // @description:ja      An image searching/browsing tool on Pixiv
-// @description:zh-TW   輕量版Pixiv++
-// @description:zh-CN   輕量版Pixiv++
+// @description:zh-TW   輕量版 Pixiv++
+// @description:zh-CN   輕量版 Pixiv++
 // @namespace   https://github.com/FlandreDaisuki
 // @author      FlandreDaisuki
 // @include     *://www.pixiv.net/*

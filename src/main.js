@@ -16,5 +16,4 @@ if (global.pageType === 'my-bookmark') {
 			}
 		});
 	})
-
 }

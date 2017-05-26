@@ -1,0 +1,1011 @@
+// ==UserScript==
+// @name        Patchouli
+// @name:ja     パチュリー
+// @name:zh-TW  帕秋莉
+// @name:zh-CN  帕秋莉
+// @description         An image searching/browsing tool on Pixiv
+// @description:ja      An image searching/browsing tool on Pixiv
+// @description:zh-TW   輕量版 Pixiv++
+// @description:zh-CN   輕量版 Pixiv++
+// @namespace   https://github.com/FlandreDaisuki
+// @author      FlandreDaisuki
+// @include     *://www.pixiv.net/*
+// @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
+// @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
+// @version     2017.05.27
+// @icon        http://i.imgur.com/VwoYc5w.png
+// @grant       none
+// @noframes
+// ==/UserScript==
+'use strict';
+console.log(`[${GM_info.script.name}] version: ${GM_info.script.version}`);
+class L10N {
+	constructor() {
+		this.lang = document.documentElement.lang;
+		this.following = this._following();
+		this.bookmark = this._bookmark();
+		this.koakumaGo = this._koakumaGo();
+		this.koakumaPause = this._koakumaPause();
+		this.koakumaEnd = this._koakumaEnd();
+		this.koakumaFullwidth = this._koakumaFullwidth();
+		this.koakumaSort = this._koakumaSort();
+	}
+
+	_following() {
+		switch (this.lang) {
+			case 'ja':
+				return 'フォロー中';
+			case 'zh-tw':
+				return '關注中';
+			case 'zh':
+				return '关注中';
+			default:
+				return 'following';
+		}
+	}
+
+	_bookmark() {
+		switch (this.lang) {
+			case 'ja':
+				return 'ブックマーク';
+			case 'zh-tw':
+			case 'zh':
+				return '收藏';
+			default:
+				return 'Bookmark';
+		}
+	}
+
+	_koakumaGo() {
+		switch (this.lang) {
+			case 'ja':
+				return '捜す';
+			case 'zh-tw':
+			case 'zh':
+				return '找';
+			default:
+				return 'Go';
+		}
+	}
+
+	_koakumaPause() {
+		switch (this.lang) {
+			case 'ja':
+				return '中断';
+			case 'zh-tw':
+			case 'zh':
+				return '停';
+			default:
+				return 'Pause';
+		}
+	}
+
+	_koakumaEnd() {
+		switch (this.lang) {
+			case 'ja':
+				return '終了';
+			case 'zh-tw':
+			case 'zh':
+				return '完';
+			default:
+				return 'End';
+		}
+	}
+
+	koakumaProcessed(n) {
+		switch (this.lang) {
+			case 'ja':
+				return `${n} 件が処理された`;
+			case 'zh-tw':
+				return `已處理 ${n} 張`;
+			case 'zh':
+				return `已处理 ${n} 张`;
+			default:
+				return `${n} pics processed`;
+		}
+	}
+
+	_koakumaFullwidth() {
+		switch (this.lang) {
+			case 'ja':
+				return '全幅';
+			case 'zh-tw':
+				return '全寬';
+			case 'zh':
+				return '全宽';
+			default:
+				return 'fullwidth';
+		}
+	}
+
+	_koakumaSort() {
+		switch (this.lang) {
+			case 'ja':
+				return 'ソート';
+			case 'zh-tw':
+			case 'zh':
+				return '排序';
+			default:
+				return 'sorted';
+		}
+	}
+
+	bookmarkTooltip(n) {
+		switch (this.lang) {
+			case 'ja':
+				return `${n}件のブックマーク`;
+			case 'zh-tw':
+				return `${n}個收藏`;
+			case 'zh':
+				return `${n}个收藏`;
+			default:
+				return `${n} bookmarks`;
+		}
+	}
+}
+class Pixiv {
+	constructor() {
+		this.tt = document.querySelector('input[name="tt"]').value;
+	}
+
+	static storageGet() {
+		const storage = localStorage.getItem('むきゅー');
+		if (!storage || storage.version < GM_info.script.version) {
+			Pixiv.storageSet({
+				version: GM_info.script.version
+			});
+		}
+		return JSON.parse(localStorage.getItem('むきゅー'));
+	}
+
+	static storageSet(obj) {
+		localStorage.setItem('むきゅー', JSON.stringify(obj));
+	}
+
+	static rmAnnoyance(doc = document) {
+		[
+			'iframe',
+			//Ad
+			'.ad',
+			'.ads_area',
+			'.ad-footer',
+			'.ads_anchor',
+			'.ads-top-info',
+			'.comic-hot-works',
+			'.user-ad-container',
+			'.ads_area_no_margin',
+			//Premium
+			'.hover-item',
+			'.ad-printservice',
+			'.bookmark-ranges',
+			'.require-premium',
+			'.showcase-reminder',
+			'.sample-user-search',
+			'.popular-introduction',
+		].forEach(cl => [...doc.querySelectorAll(cl)].forEach(el => el.remove()));
+	}
+
+	async fetch(url) {
+		try {
+			if (url) {
+				const res = await axios.get(url);
+				if (res.statusText !== 'OK') {
+					throw res;
+				} else {
+					return res.data;
+				}
+			} else {
+				console.trace('Fetch has no url');
+			}
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	async getDetail(illust_ids, f) {
+		const _a = await Promise.all(illust_ids.map(f));
+		return _a.reduce((acc, val) => {
+			acc[val.illust_id] = val;
+			return acc;
+		}, {});
+	}
+
+	async getBookmarkCount(illust_id) {
+		const url = `/bookmark_detail.php?illust_id=${illust_id}`;
+
+		try {
+			const html = await this.fetch(url);
+			const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
+			const bookmark_count = _a ? parseInt(_a[1]) : 0;
+
+			return {
+				bookmark_count,
+				illust_id,
+			};
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	/**
+	 * Returns detail object that illust_id: detail object by DOM
+	 *
+	 * { '12345': {}, '12346': {}, ... }
+	 * @param {String[]} illust_ids
+	 * @return {{String: Object}}
+	 */
+	async getBookmarksDetail(illust_ids) {
+		const _f = this.getBookmarkCount.bind(this);
+		return await this.getDetail(illust_ids, _f);
+	}
+
+	async getIllustPageDetail(illust_id) {
+		const url = `/member_illust.php?mode=medium&illust_id=${illust_id}`;
+
+		try {
+			const html = await this.fetch(url);
+			const _a = html.match(/rated-count[^\d]+(\d+)/);
+			const rating_score = _a ? parseInt(_a[1]) : 0;
+			return {
+				illust_id,
+				rating_score,
+			};
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	/**
+	 * Returns detail object that illust_id: detail object by DOM
+	 *
+	 * { '12345': {}, '12346': {}, ... }
+	 * @param {String[]} illust_ids
+	 * @return {{String: Object}}
+	 */
+	async getIllustPagesDetail(illust_ids) {
+		const _f = this.getIllustPageDetail.bind(this);
+		return await this.getDetail(illust_ids, _f);
+	}
+
+	/**
+	 * Returns detail object that illust_id: detail object by Pixiv API
+	 *
+	 * { '12345': {}, '12346': {}, ... }
+	 * @param {String[]} illust_ids
+	 * @return {{String: Object}}
+	 */
+	getIllustsDetail(illust_ids) {
+		const iids = illust_ids.join(',');
+		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
+
+		return this.fetch(url)
+			.then(json => json.body)
+			.catch(console.error);
+	}
+
+	/**
+	 * Returns detail object that user_id: detail object by Pixiv API
+	 *
+	 * { '12345': {}, '12346': {}, ... }
+	 * @param {String[]} user_ids
+	 * @return {{String: Object}}
+	 */
+	getUsersDetail(user_ids) {
+		const uids = user_ids.join(',');
+		const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
+
+		return this.fetch(url)
+			.then(json => json.body)
+			.then(arr => arr.reduce((a, b) => {
+				// make the same output of getIllustsDetail
+				a[b.user_id] = b;
+				return a;
+			}, {}))
+			.catch(console.error);
+	}
+
+	postBookmarkadd(illust_id) {
+		const data = [
+			'mode=save_illust_bookmark',
+			`illust_id=${illust_id}`,
+			'restrict=0',
+			'comment=',
+			'tags=',
+			`tt=${this.tt}`,
+		].join('&');
+		const config = {
+			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+		};
+
+		return axios.post('/rpc/index.php', data, config)
+			.then(res => {
+				return new Promise((resolve, reject) => {
+					(res.statusText === 'OK' && !res.data.error) ? resolve(true): reject(res);
+				});
+			})
+			.catch(console.error);
+	}
+
+	/**
+	 * Returns array of recommend illust_id
+	 * @return {String[]}
+	 */
+	async getRecommendIllustids(illust_id = 'auto') {
+		const param = [
+			'type=illust',
+			`sample_illusts=${illust_id}`,
+			'num_recommendations=500',
+			`tt=${this.tt}`,
+		].join('&');
+		const url = `/rpc/recommender.php?${param}`;
+		try {
+			return await this.fetch(url).then(data => data.recommendations.map(x => `${x}`));
+		} catch (e) {
+			console.error(e);
+		}
+	}
+
+	/**
+	 * Returns array of recommend illust_id
+	 * @param {String} url
+	 * @return {{next_url: String, illust_ids: String[]}}
+	 */
+	async getPageIllustids(url, needBookId) {
+		try {
+			const html = await this.fetch(url);
+			const next_tag = html.match(/class="next".+(?=<\/span>)/);
+
+			let next_url = '';
+			if (next_tag) {
+				const next_href = next_tag[0].match(/href="([^"]+)"/);
+				if (next_href) {
+					const query = next_href[1].replace(/&amp;/g, '&');
+					if (query) {
+						next_url = `${location.pathname}${query}`;
+					}
+				}
+			}
+			const illust_ids = (html.match(/data-id="\d+"/g) || [])
+				.map(x => x.replace(/\D+(\d+).*/, '$1'))
+				.filter((e, i, a) => a.indexOf(e) === i && e !== '0');
+
+			const ret = {
+				next_url,
+				illust_ids,
+			};
+
+			if (needBookId) {
+				ret.bookmark_ids = (html.match(/name="book_id[^;]+;illust_id=\d+/g) || [])
+					.map(s => s.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' '))
+					.filter(a => illust_ids.includes(a[0]))
+					.reduce((acc, val) => {
+						acc[val[0]] = val[1];
+						return acc;
+					}, {});
+			}
+			return ret;
+		} catch (e) {
+			console.error(e);
+		}
+	}
+}
+const utils = {
+	linkStyle(url) {
+		const link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = url;
+		document.head.appendChild(link);
+	},
+	linkScript(url) {
+		const script = document.createElement('script');
+		script.src = url;
+		document.head.appendChild(script);
+	},
+	createIcon(name, options = {}) {
+		const el = document.createElement('i');
+		el.classList.add('fa');
+		el.classList.add(`fa-${name}`);
+		el.setAttribute('aria-hidden', 'true');
+		return el;
+	},
+	addStyle(text, id = '') {
+		const style = document.createElement('style');
+		style.innerHTML = text;
+		if (id) {
+			style.id = id;
+		}
+		document.head.appendChild(style);
+	},
+	asyncWhile(condition, action, options = {}) {
+		options = Object.assign({
+			first: undefined,
+			ctx: this,
+		}, options);
+		const ctx = options.ctx;
+		const first = options.first;
+		const whilst = function(data) {
+			return condition.call(ctx, data) ?
+				Promise.resolve(action.call(ctx, data)).then(whilst) :
+				data;
+		};
+
+		return whilst(first);
+	}
+};
+const global = {
+	api: new Pixiv(),
+	l10n: new L10N(),
+	library: [],
+	filters: {
+		limit: 0,
+		orderBy: 'illust_id',
+	},
+	favorite: {
+		fullwidth: 1,
+		sort: 0,
+	},
+	patchouliToMount: (() => {
+		const _a = document.querySelector('li.image-item');
+		const _b = document.querySelector('ul._image-items');
+		return _a ? _a.parentElement : _b;
+	})(),
+	koakumaToMount: (() => {
+		return document.querySelector('#toolbar-items');
+	})(),
+	pageType: (() => {
+		const path = location.pathname;
+		const search = new URLSearchParams(location.search);
+
+		/** type - for patchouli <image-item>, need (not) next page
+		 *
+		 *	default: thumb + title + user + count-list , need next page
+		 *	member-illust: default w/o user, need next page
+		 *	my-bookmark:  default with bookmark-edit, need next page
+		 *	recommend: default , need not next page
+		 *	ranking: ranking , need not next page
+		 */
+
+		switch (path) {
+			case '/search.php':
+			case '/bookmark_new_illust.php':
+			case '/new_illust.php':
+			case '/mypixiv_new_illust.php':
+			case '/new_illust_r18.php':
+			case '/bookmark_new_illust_r18.php':
+				return 'default';
+			case '/recommended.php':
+				return 'recommend';
+			case '/member_illust.php':
+				return search.has('id') ? 'member-illust' : 'not support';
+			case '/bookmark.php':
+				const t = search.get('type');
+				if (search.has('id')) {
+					return 'default';
+				} else if (!t || t === 'illust_all') {
+					return 'my-bookmark';
+				} else {
+					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
+					return 'not support';
+				}
+			default:
+				return 'not support';
+		}
+	})(),
+};
+global.favorite = (() => {
+	const _s = Object.assign(global.favorite, Pixiv.storageGet());
+	if (_s.fullwidth) {
+		document.querySelector('#wrapper').classList.add('fullwidth');
+	}
+	if (_s.sort) {
+		global.filters.orderBy = 'bookmark_count';
+	}
+	Pixiv.storageSet(_s);
+	return _s;
+})();
+Vue.component('koakuma-bookmark', {
+	props: ['limit', 'l10n'],
+	methods: {
+		blur(event) {
+			const self = event.target;
+			if (!self.validity.valid) {
+				console.error('koakuma-bookmark', self.validationMessage);
+			}
+		},
+		input(event) {
+			let val = parseInt(event.target.value);
+			val = Math.max(0, val);
+			this.$emit('limitUpdate', val);
+		},
+		wheel(event) {
+			let val;
+			if (event.deltaY < 0) {
+				val = this.limit + 20;
+			} else {
+				val = Math.max(0, this.limit - 20);
+			}
+			this.$emit('limitUpdate', val);
+		},
+	},
+	template: `
+	<div id="koakuma-bookmark">
+		<label for="koakuma-bookmark-input">★{{ l10n.bookmark }}</label>
+		<input id="koakuma-bookmark-input"
+			type="number" min="0" step="1"
+			:value="limit"
+			@wheel.stop.prevent="wheel"
+			@blur="blur"
+			@input="input"/>
+	</div>`,
+});
+Vue.component('koakuma-settings', {
+	props: ['favorite', 'l10n'],
+	methods: {
+		fullwidthClick(event) {
+			this.$emit('fullwidthUpdate', event.target.checked);
+		},
+		sortClick(event) {
+			this.$emit('sortUpdate', event.target.checked);
+		},
+	},
+	template: `
+	<div>
+		<input id="koakuma-settings-fullwidth" type="checkbox"
+			:checked="favorite.fullwidth"
+			@click="fullwidthClick"> {{ l10n.koakumaFullwidth }}
+		<input id="koakuma-settings-sort" type="checkbox"
+			:checked="favorite.sort"
+			@click="sortClick"> {{ l10n.koakumaSort }}
+	</div>`,
+});
+const koakumaTemplate = `
+<div id="こあくま">
+	<div>{{ l10n.koakumaProcessed(library.length) }}</div>
+	<koakuma-bookmark :l10n="l10n"
+		:limit="filters.limit"
+		@limitUpdate="limitUpdate"></koakuma-bookmark>
+	<button id="koakuma-switch"
+		@click="switchSearching"
+		:disabled="isEnded"
+		:class="switchStyle">{{ switchText }}</button>
+	<koakuma-settings :l10n="l10n"
+		:favorite="favorite"
+		@fullwidthUpdate="fullwidthUpdate"
+		@sortUpdate="sortUpdate"></koakuma-settings>
+</div>`;
+const koakuma = new Vue({
+	data: {
+		l10n: global.l10n,
+		library: global.library,
+		filters: global.filters,
+		api: global.api,
+		favorite: global.favorite,
+		pageType: global.pageType,
+		next_url: location.href,
+		isStoped: true,
+		isEnded: false,
+		local_ids_q: [],
+		bookmark_ids: {},
+	},
+	computed: {
+		library_iids() {
+			return this.library.map(x => x.illust_id);
+		},
+		switchText() {
+			return this.isEnded ? this.l10n.koakumaEnd :
+				(this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause);
+		},
+		switchStyle() {
+			return {
+				ended: this.isEnded,
+				toSearch: !this.isEnded && this.isStoped,
+				toStop: !this.isEnded && !this.isStoped,
+			};
+		},
+	},
+	methods: {
+		async start(times = Infinity) {
+			this.isStoped = false;
+			const toContinue = () => {
+				return !this.isEnded && !this.isStoped && times > 0 &&
+					(this.next_url || this.local_ids_q.length);
+			};
+			while (toContinue()) {
+				// get illust_ids and next_url
+				if (this.next_url) {
+					if (this.pageType === 'default' || this.pageType === 'member-illust') {
+						const res = await this.api.getPageIllustids(this.next_url);
+						if (res.next_url === this.next_url) {
+							// debounce
+							this.stop();
+							break;
+						}
+						this.next_url = res.next_url;
+						this.local_ids_q.push(...res.illust_ids);
+					} else if (this.pageType === 'recommend') {
+						if (this.next_url !== '') {
+							const res = await this.api.getRecommendIllustids();
+							this.next_url = '';
+							this.local_ids_q.push(...res);
+						}
+					} else if (this.pageType === 'my-bookmark') {
+						const res = await this.api.getPageIllustids(this.next_url, true);
+						if (res.next_url === this.next_url) {
+							// debounce
+							this.stop();
+							break;
+						}
+						this.next_url = res.next_url;
+						this.local_ids_q.push(...res.illust_ids);
+						Object.assign(this.bookmark_ids, res.bookmark_ids);
+					} else {
+						console.error('Unknown pageType:', this.pageType);
+					}
+				}
+
+				//get illust_ids from local_ids_q
+				const process_ids = this.local_ids_q.slice(0, 20)
+					.filter(id => !this.library_iids.includes(id));
+				this.local_ids_q.splice(0, 20);
+
+				if (process_ids.length) {
+					const ild = await this.api.getIllustsDetail(process_ids);
+					for (let k in ild) {
+						if (ild[k].error) {
+							delete ild[k];
+						}
+					}
+					const iids = Object.values(ild).map(x => x.illust_id);
+					// const ipd = await this.api.getIllustPagesDetail(iids);
+					const bd = await this.api.getBookmarksDetail(iids);
+					const uids = Object.values(ild)
+						.map(x => x.user_id)
+						.filter((e, i, a) => {
+							// make user_ids unique
+							return a.indexOf(e) == i;
+						});
+					const ud = await this.api.getUsersDetail(uids);
+
+					for (let iid of iids) {
+						const illust = ild[iid];
+						const book = {
+							illust_id: iid,
+							thumb_src: illust.url['240mw'].replace('240x480', '150x150'),
+							user_id: illust.user_id,
+							user_name: illust.user_name,
+							illust_title: illust.illust_title,
+							is_multiple: illust.is_multiple,
+							is_bookmarked: illust.is_bookmarked,
+							is_manga: illust.illust_type === '1',
+							is_ugoira: !!illust.ugoira_meta,
+							is_follow: ud[illust.user_id].is_follow,
+							bookmark_count: bd[iid].bookmark_count,
+							// tags: bd[iid].somehow,
+							// rating_score: ipd[iid].rating_score,
+						}
+						if (this.pageType === 'my-bookmark') {
+							book.bookmark_id = this.bookmark_ids[iid];
+							delete this.bookmark_ids[iid];
+						}
+						this.library.push(book);
+					}
+				}
+				times--;
+			}
+			// End of while
+			if (this.next_url === '') {
+				this.stop();
+				this.isEnded = this.local_ids_q.length <= 0;
+				if (this.isEnded) {
+					delete this.bookmark_ids;
+					delete this.local_ids_q;
+				}
+			}
+			if (times <= 0) {
+				this.stop();
+			}
+		},
+		stop() {
+			this.isStoped = true;
+		},
+		switchSearching() {
+			if (this.isStoped) {
+				this.start();
+			} else {
+				this.stop();
+			}
+		},
+		limitUpdate(value) {
+			global.filters.limit = isNaN(value) ? 0 : value;
+		},
+		fullwidthUpdate(todo) {
+			if (todo) {
+				document.querySelector('#wrapper').classList.add('fullwidth');
+				global.favorite.fullwidth = 1;
+			} else {
+				document.querySelector('#wrapper').classList.remove('fullwidth');
+				global.favorite.fullwidth = 0;
+			}
+			Pixiv.storageSet(global.favorite);
+		},
+		sortUpdate(todo) {
+			if (todo) {
+				global.filters.orderBy = 'bookmark_count';
+				global.favorite.sort = 1;
+			} else {
+				global.filters.orderBy = 'illust_id';
+				global.favorite.sort = 0;
+			}
+			Pixiv.storageSet(global.favorite);
+		},
+	},
+	template: koakumaTemplate,
+});
+if (global.pageType !== 'not support') {
+	utils.addStyle(`
+	#wrapper.fullwidth,
+	#wrapper.fullwidth .layout-a,
+	#wrapper.fullwidth .layout-body {
+		width: initial;
+	}
+	#wrapper.fullwidth .layout-a {
+		display: flex;
+		flex-direction: row-reverse;
+	}
+	#wrapper.fullwidth .layout-column-2{
+		flex: 1;
+		margin-left: 20px;
+	}
+	#wrapper.fullwidth .layout-body,
+	#wrapper.fullwidth .layout-a {
+		margin: 10px 20px;
+	}
+
+	#koakuma-bookmark {
+		display: flex;
+	}
+	#koakuma-bookmark label{
+		white-space: nowrap;
+		color: #0069b1 !important;
+		background-color: #cceeff;
+		border-radius: 3px;
+		padding: 0 6px;
+	}
+	#koakuma-bookmark-input::-webkit-inner-spin-button,
+	#koakuma-bookmark-input::-webkit-outer-spin-button {
+		-webkit-appearance: none;
+		margin: 0;
+	}
+	#koakuma-bookmark-input {
+		-moz-appearance: textfield;
+		border: none;
+		background-color: transparent;
+		padding: 0px;
+		color: blue;
+		font-size: 16px;
+		display: inline-block;
+		cursor: ns-resize;
+		text-align: center;
+		min-width: 0;
+	}
+	#koakuma-bookmark-input:focus {
+		cursor: initial;
+	}
+	#koakuma-switch {
+		border: 0;
+		padding: 3px 20px;
+		border-radius: 3px;
+		font-size: 16px;
+	}
+	#koakuma-switch:hover {
+		box-shadow: 1px 1px gray;
+	}
+	#koakuma-switch:active {
+		box-shadow: 1px 1px gray inset;
+	}
+	#koakuma-switch:focus {
+		outline: 0;
+	}
+	#koakuma-switch.toSearch {
+		background-color: lightgreen;
+	}
+	#koakuma-switch.toStop {
+		background-color: lightpink;
+	}
+	#koakuma-switch.ended {
+		background-color: lightgrey;
+	}
+	#koakuma-switch.ended:hover,
+	#koakuma-switch.ended:hover {
+		box-shadow: unset;
+	}
+	#こあくま {
+		position: fixed;
+		left: 22px;
+		bottom: 10px;
+		z-index: 1;
+		background-color: aliceblue;
+		border-radius: 10px;
+		padding: 5px;
+		font-size: 16px;
+		text-align: center;
+		width: 162px;
+	}
+	#こあくま > * {
+		margin: 2px 0;
+	}`);
+}
+const patchouliImageItemTemplate = `
+<li class="image-item">
+	<a class="work _work" :href="illust_page_href" :class="thumbStyle">
+		<div><img :src="detail.thumb_src"></div>
+	</a>
+	<a :href="illust_page_href">
+		<h1 class="title" :title="detail.illust_title">{{ detail.illust_title }}</h1>
+	</a>
+	<span v-if="pagetype !== 'member-illust'">
+		<a class="user ui-profile-popup"
+			:href="user_page_href"
+			:title="detail.user_name"
+			:data-user_id="detail.user_id">{{ detail.user_name }}</a>
+		<i class="fa fa-feed" aria-hidden="true" v-show="detail.is_follow"></i>
+	</span>
+	<ul class="count-list">
+		<li v-if="detail.bookmark_count > 0">
+			<a class="bookmark-count _ui-tooltip"
+				:href="bookmark_detail_href"
+				:data-tooltip="tooltip">
+				<i class="_icon sprites-bookmark-badge"></i>{{ detail.bookmark_count }}</a>
+		</li>
+		<li>
+			<input v-if="pagetype === 'my-bookmark'" name="book_id[]" :value="detail.bookmark_id" type="checkbox">
+			<a v-else class="is-bookmarked" @click.prevent="bookmarkClick">
+				<i class="fa" :class="bookmarkStyle" aria-hidden="true"></i>
+			</a>
+
+		</li>
+	</ul>
+</li>`;
+Vue.component('image-item', {
+	props: ['api', 'l10n', 'detail', 'pagetype'],
+	data() {
+		return {
+			bookmarked: this.detail.bookmarked,
+		};
+	},
+	computed: {
+		illust_page_href() {
+			return `/member_illust.php?mode=medium&illust_id=${this.detail.illust_id}`;
+		},
+		bookmark_detail_href() {
+			return `/bookmark_detail.php?illust_id=${this.detail.illust_id}`;
+		},
+		user_page_href() {
+			return `/member_illust.php?id=${this.detail.user_id}`;
+		},
+		thumbStyle() {
+			return {
+				multiple: this.detail.is_multiple,
+				manga: this.detail.is_manga,
+				'ugoku-illust': this.detail.is_ugoira,
+			};
+		},
+		bookmarkStyle() {
+			return this.detail.is_bookmarked ? 'fa-bookmark' : 'fa-bookmark-o';
+		},
+		tooltip() {
+			return this.l10n.bookmarkTooltip(this.detail.bookmark_count);
+		},
+	},
+	methods: {
+		bookmarkClick(event) {
+			if (!this.bookmarked) {
+				this.api.postBookmarkadd(this.detail.illust_id);
+				this.$emit('bookmarkUpdate', this.detail.illust_id);
+				this.bookmarked = true;
+			}
+		},
+	},
+	template: patchouliImageItemTemplate,
+});
+const patchouli = new Vue({
+	data: {
+		api: global.api,
+		l10n: global.l10n,
+		library: global.library,
+		filters: global.filters,
+		pagetype: global.pageType,
+	},
+	computed: {
+		sortedBooks() {
+			const _limit = this.filters.limit;
+			const _order = this.filters.orderBy;
+			const _books = this.library.filter(b => b.bookmark_count >= _limit);
+			return _books.sort((a, b) => b[_order] - a[_order]);
+		},
+	},
+	methods: {
+		bookmarkUpdate(illust_id) {
+			const _a = this.library.filter(b => b.illust_id === illust_id);
+			if (_a.length) {
+				_a[0].is_bookmarked = true;
+			}
+		},
+	},
+	template: `
+	<ul id="パチュリー">
+		<image-item v-for="book in sortedBooks"
+			:key="book.illust_id"
+			:api="api"
+			:l10n="l10n"
+			:detail="book"
+			:pagetype="pagetype"></image-item>
+	</ul>`,
+});
+if (global.pageType !== 'not support') {
+	utils.addStyle(`
+	.fa-feed {
+		color: dodgerblue;
+		cursor: default;
+	}
+	.fa-feed:hover::after {
+		content:'${global.l10n.following}';
+		position: absolute;
+		color: white;
+		white-space: nowrap;
+		background-color: dodgerblue;
+		padding: 2px;
+		border-radius: 3px;
+		margin-top: -2px;
+		margin-left: 8px;
+		font-family: "Helvetica Neue","arial","Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+	}
+	.rating-score {
+		background-color: #FFEE88;
+		color: #FF7700;
+		border-radius: 3px;
+		display: inline-block !important;
+		margin: 0 1px;
+		padding: 0 6px !important;
+		font: bold 10px/18px "lucida grande", sans-serif !important;
+		text-decoration: none;
+		cursor: default;
+	}
+	.is-bookmarked {
+		cursor: pointer;
+		font-size: 1rem;
+	}
+	.image-item .count-list {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		padding: 0 8px;
+	}
+	.image-item .count-list li {
+		margin: 0 2px !important;
+	}
+	#パチュリー {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
+	}`);
+}
+if (global.pageType !== 'not support') {
+	utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+	koakuma.$mount(global.koakumaToMount);
+	koakuma.start(1).then(() => {
+		patchouli.$mount(global.patchouliToMount);
+	});
+}
+Pixiv.rmAnnoyance();
+if (global.pageType === 'my-bookmark') {
+	// bind select-all and select-none event
+	document.querySelectorAll('.select-none, .select-all').forEach(sel => {
+		sel.addEventListener('click', (e) => {
+			for (let checkbox of [...document.querySelectorAll('input[name="book_id[]"]')]) {
+				checkbox.checked = e.target.classList.contains('select-all');
+			}
+		});
+	})
+}
