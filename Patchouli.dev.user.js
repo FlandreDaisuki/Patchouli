@@ -18,7 +18,7 @@
 // @noframes
 // ==/UserScript==
 'use strict';
-console.log(`[${GM_info.script.name}] version:${GM_info.script.version}`);
+console.log(`[${GM_info.script.name}] version: ${GM_info.script.version}`);
 class L10N {
 	constructor() {
 		this.lang = document.documentElement.lang;
@@ -216,8 +216,6 @@ class Pixiv {
 				return res.data;
 			}
 		} catch (e) {
-			console.trace();
-			debugger;
 			console.error(e);
 		}
 	}
@@ -298,8 +296,6 @@ class Pixiv {
 	getIllustsDetail(illust_ids) {
 		const iids = illust_ids.join(',');
 		if(iids.indexOf(',,')>=0) {
-			console.trace();
-			debugger;
 		}
 		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
 
@@ -810,7 +806,7 @@ if (global.pageType !== 'not support') {
 	}
 	#こあくま {
 		position: fixed;
-		left: 10px;
+		left: 22px;
 		bottom: 10px;
 		z-index: 1;
 		background-color: aliceblue;
@@ -818,7 +814,7 @@ if (global.pageType !== 'not support') {
 		padding: 5px;
 		font-size: 16px;
 		text-align: center;
-		width: 160px;
+		width: 162px;
 	}
 	#こあくま > * {
 		margin: 2px 0;
@@ -1016,6 +1012,7 @@ if (global.pageType !== 'not support') {
 		background-color: dodgerblue;
 		padding: 2px;
 		border-radius: 3px;
+		margin-top: -2px;
 		margin-left: 8px;
 		font-family: "Helvetica Neue","arial","Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
 	}
