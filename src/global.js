@@ -1,7 +1,7 @@
 const global = {
 	api: new Pixiv(),
 	l10n: new L10N(),
-	books: [],
+	library: [],
 	filters: {
 		limit: 0,
 		orderBy: 'illust_id',
@@ -44,7 +44,7 @@ const global = {
 			case '/member_illust.php':
 				return search.has('id') ? 'member-illust' : 'not support';
 			case '/bookmark.php':
-				const t = search.get('type')
+				const t = search.get('type');
 				if (search.has('id')) {
 					return 'default';
 				} else if (!t || t === 'illust_all') {

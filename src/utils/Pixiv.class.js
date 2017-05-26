@@ -42,6 +42,7 @@ class Pixiv {
 
 	async fetch(url) {
 		try {
+			console.debug('fetch url:', url);
 			if (url) {
 				const res = await axios.get(url);
 				if (res.statusText !== 'OK') {
@@ -205,9 +206,10 @@ class Pixiv {
 	 * @param {String} url
 	 * @return {{next_url: String, illust_ids: String[]}}
 	 */
-	async getPageIllustids(url) {
+	async getPageIllustids(url, needBookId) {
 		try {
 			const html = await this.fetch(url);
+			console.debug('getPageIllustids', url);
 			const next_tag = html.match(/class="next".+(?=<\/span>)/);
 
 			let next_url = '';
@@ -224,10 +226,21 @@ class Pixiv {
 				.map(x => x.replace(/\D+(\d+).*/, '$1'))
 				.filter((e, i, a) => a.indexOf(e) === i && e !== '0');
 
-			return {
+			const ret = {
 				next_url,
 				illust_ids,
 			};
+
+			if (needBookId) {
+				ret.bookmark_ids = html.match(/name="book_id[^;]+;illust_id=\d+/g)
+					.map(s => s.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' '))
+					.filter(a => illust_ids.includes(a[0]))
+					.reduce((acc, val) => {
+						acc[val[0]] = val[1];
+						return acc;
+					}, {});
+			}
+			return ret;
 		} catch (e) {
 			console.error(e);
 		}

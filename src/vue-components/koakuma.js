@@ -1,6 +1,6 @@
 const koakumaTemplate = `
 <div id="こあくま">
-	<div>{{ l10n.koakumaProcessed(books.length) }}</div>
+	<div>{{ l10n.koakumaProcessed(library.length) }}</div>
 	<koakuma-bookmark :l10n="l10n"
 		:limit="filters.limit"
 		@limitUpdate="limitUpdate"></koakuma-bookmark>
@@ -16,7 +16,7 @@ const koakumaTemplate = `
 const koakuma = new Vue({
 	data: {
 		l10n: global.l10n,
-		books: global.books,
+		library: global.library,
 		filters: global.filters,
 		api: global.api,
 		favorite: global.favorite,
@@ -24,84 +24,112 @@ const koakuma = new Vue({
 		next_url: location.href,
 		isStoped: true,
 		isEnded: false,
-		local_ids: [],
+		local_ids_q: [],
+		bookmark_ids: {},
+	},
+	computed: {
+		library_iids() {
+			return this.library.map(x => x.illust_id);
+		},
+		switchText() {
+			return this.isEnded ? this.l10n.koakumaEnd :
+				(this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause);
+		},
+		switchStyle() {
+			return {
+				ended: this.isEnded,
+				toSearch: !this.isEnded && this.isStoped,
+				toStop: !this.isEnded && !this.isStoped,
+			};
+		},
 	},
 	methods: {
 		async start(times = Infinity) {
 			this.isStoped = false;
 			const toContinue = () => {
 				return !this.isEnded && !this.isStoped && times > 0 &&
-					(this.next_url || this.local_ids.length);
+					(this.next_url || this.local_ids_q.length);
 			};
 			while (toContinue()) {
 				// get illust_ids and next_url
-				if (this.pageType === 'default' || this.pageType === 'member-illust') {
-					const res = await this.api.getPageIllustids(this.next_url);
-					if (res.next_url === this.next_url) {
-						// debounce
-						this.stop();
-						break;
-					}
-					this.next_url = res.next_url;
-					this.local_ids.push(...res.illust_ids);
-				} else if (this.pageType === 'recommend') {
-					if (this.next_url !== '') {
-						const res = await this.api.getRecommendIllustids();
-						this.next_url = '';
-						this.local_ids.push(...res);
-					}
-				} else if (this.pageType === 'my-bookmark') {
-					const res = await this.api.getPageIllustids(this.next_url);
-					if (res.next_url === this.next_url) {
-						// debounce
-						this.stop();
-						break;
-					}
-					this.next_url = res.next_url;
-					this.local_ids.push(...res.illust_ids);
-				} else {
-					console.error('Unknown pageType:', this.pageType);
-				}
-
-				//get illust_ids from local_ids
-				const process_ids = this.local_ids.slice(0, 20)
-					.filter(id => !this.books.includes(id));
-				this.local_ids = this.local_ids.slice(20);
-				const ild = await this.api.getIllustsDetail(process_ids);
-				for (let k in ild) {
-					if (ild[k].error) {
-						delete ild[k];
+				if (this.next_url) {
+					if (this.pageType === 'default' || this.pageType === 'member-illust') {
+						const res = await this.api.getPageIllustids(this.next_url);
+						console.debug('res', res);
+						if (res.next_url === this.next_url) {
+							// debounce
+							this.stop();
+							break;
+						}
+						this.next_url = res.next_url;
+						this.local_ids_q.push(...res.illust_ids);
+					} else if (this.pageType === 'recommend') {
+						if (this.next_url !== '') {
+							const res = await this.api.getRecommendIllustids();
+							this.next_url = '';
+							this.local_ids_q.push(...res);
+						}
+					} else if (this.pageType === 'my-bookmark') {
+						const res = await this.api.getPageIllustids(this.next_url, true);
+						if (res.next_url === this.next_url) {
+							// debounce
+							this.stop();
+							break;
+						}
+						this.next_url = res.next_url;
+						this.local_ids_q.push(...res.illust_ids);
+						Object.assign(this.bookmark_ids, res.bookmark_ids);
+					} else {
+						console.error('Unknown pageType:', this.pageType);
 					}
 				}
-				const iids = Object.values(ild).map(x => x.illust_id);
-				const ipd = await this.api.getIllustPagesDetail(iids);
-				const bd = await this.api.getBookmarksDetail(iids);
-				const uids = Object.values(ild)
-					.map(x => x.user_id)
-					.filter((e, i, a) => {
-						// make user_ids unique
-						return a.indexOf(e) == i;
-					});
-				const ud = await this.api.getUsersDetail(uids);
 
-				for (let iid of iids) {
-					const illust = ild[iid];
-					const book = {
-						illust_id: iid,
-						thumb_src: illust.url['240mw'].replace('240x480', '150x150'),
-						user_id: illust.user_id,
-						user_name: illust.user_name,
-						illust_title: illust.illust_title,
-						is_multiple: illust.is_multiple,
-						is_bookmarked: illust.is_bookmarked,
-						is_manga: illust.illust_type === '1',
-						is_ugoira: !!illust.ugoira_meta,
-						is_follow: ud[illust.user_id].is_follow,
-						bookmark_count: bd[iid].bookmark_count,
-						// tags: bd[iid].somehow,
-						rating_score: ipd[iid].rating_score,
+
+				//get illust_ids from local_ids_q
+				const process_ids = this.local_ids_q.slice(0, 20)
+					.filter(id => !this.library_iids.includes(id));
+				this.local_ids_q.splice(0, 20);
+				if (process_ids.length) {
+					const ild = await this.api.getIllustsDetail(process_ids);
+					for (let k in ild) {
+						if (ild[k].error) {
+							delete ild[k];
+						}
 					}
-					this.books.push(book);
+					const iids = Object.values(ild).map(x => x.illust_id);
+					const ipd = await this.api.getIllustPagesDetail(iids);
+					const bd = await this.api.getBookmarksDetail(iids);
+					const uids = Object.values(ild)
+						.map(x => x.user_id)
+						.filter((e, i, a) => {
+							// make user_ids unique
+							return a.indexOf(e) == i;
+						});
+					const ud = await this.api.getUsersDetail(uids);
+
+					for (let iid of iids) {
+						const illust = ild[iid];
+						const book = {
+							illust_id: iid,
+							thumb_src: illust.url['240mw'].replace('240x480', '150x150'),
+							user_id: illust.user_id,
+							user_name: illust.user_name,
+							illust_title: illust.illust_title,
+							is_multiple: illust.is_multiple,
+							is_bookmarked: illust.is_bookmarked,
+							is_manga: illust.illust_type === '1',
+							is_ugoira: !!illust.ugoira_meta,
+							is_follow: ud[illust.user_id].is_follow,
+							bookmark_count: bd[iid].bookmark_count,
+							// tags: bd[iid].somehow,
+							rating_score: ipd[iid].rating_score,
+						}
+						if (this.pageType === 'my-bookmark') {
+							book.bookmark_id = this.bookmark_ids[iid];
+							delete this.bookmark_ids[iid];
+						}
+						this.library.push(book);
+					}
 				}
 
 				times--;
@@ -109,7 +137,7 @@ const koakuma = new Vue({
 			// End of while
 			if (this.next_url === '') {
 				this.stop();
-				this.isEnded = this.local_ids.length <= 0;
+				this.isEnded = this.local_ids_q.length <= 0;
 			}
 			if (times <= 0) {
 				this.stop();
@@ -147,19 +175,6 @@ const koakuma = new Vue({
 				global.favorite.sort = 0;
 			}
 			Pixiv.storageSet(global.favorite);
-		},
-	},
-	computed: {
-		switchText() {
-			return this.isEnded ? this.l10n.koakumaEnd :
-				(this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause);
-		},
-		switchStyle() {
-			return {
-				ended: this.isEnded,
-				toSearch: !this.isEnded && this.isStoped,
-				toStop: !this.isEnded && !this.isStoped,
-			};
 		},
 	},
 	template: koakumaTemplate,

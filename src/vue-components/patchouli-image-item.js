@@ -25,10 +25,12 @@ const patchouliImageItemTemplate = `
 				<i class="fa fa-star" aria-hidden="true"></i>{{ shortRating }}
 			</span>
 		</li>
-		<li v-if="pagetype !== 'my-bookmark'">
-			<a class="is-bookmarked" @click.prevent="bookmarkClick">
+		<li>
+			<input v-if="pagetype === 'my-bookmark'" name="book_id[]" :value="detail.bookmark_id" type="checkbox">
+			<a v-else class="is-bookmarked" @click.prevent="bookmarkClick">
 				<i class="fa" :class="bookmarkStyle" aria-hidden="true"></i>
 			</a>
+
 		</li>
 	</ul>
 </li>`;

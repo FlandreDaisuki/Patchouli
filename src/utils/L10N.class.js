@@ -76,7 +76,7 @@ class L10N {
 			case 'ja':
 				return `${n} 件が処理された`;
 			case 'zh-tw':
-				return `已處理 ${n} 張`
+				return `已處理 ${n} 張`;
 			case 'zh':
 				return `已处理 ${n} 张`;
 			default:
@@ -114,7 +114,7 @@ class L10N {
 			case 'ja':
 				return `${n}件のブックマーク`;
 			case 'zh-tw':
-				return `${n}個收藏`
+				return `${n}個收藏`;
 			case 'zh':
 				return `${n}个收藏`;
 			default:
