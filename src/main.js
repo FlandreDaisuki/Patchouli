@@ -1,11 +1,19 @@
-console.log('Vue.version:', Vue.version);
-console.log('Patchouli version:', version);
-
-if (globalStore.page.supported) {
-	koakuma.$mount(globalStore.koakumaToMount);
+if (global.pageType !== 'not support') {
+	utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+	koakuma.$mount(global.koakumaToMount);
 	koakuma.start(1).then(() => {
-		patchouli.$mount(globalStore.patchouliToMount);
+		patchouli.$mount(global.patchouliToMount);
 	});
 }
 Pixiv.rmAnnoyance();
-utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+if (global.pageType === 'my-bookmark') {
+	// bind select-all and select-none event
+	document.querySelectorAll('.select-none, .select-all').forEach(sel => {
+		sel.addEventListener('click', (e) => {
+			console.debug(e);
+			for (let checkbox of [...document.querySelectorAll('input[name="book_id[]"]')]) {
+				checkbox.checked = e.target.classList.contains('select-all');
+			}
+		});
+	})
+}
