@@ -203,11 +203,16 @@ class Pixiv {
 	}
 
 	async getDetail(illust_ids, f) {
-		const _a = await Promise.all(illust_ids.map(f));
-		return _a.reduce((acc, val) => {
-			acc[val.illust_id] = val;
-			return acc;
-		}, {});
+		const iids = [];
+		for (let iid of illust_ids) {
+			iids.push(f(iid));
+		}
+		const processed = await Promise.all(iids);
+		const ret = {};
+		for (let p of processed) {
+			ret[p.illust_id] = p;
+		}
+		return ret;
 	}
 
 	async getBookmarkCount(illust_id) {
@@ -217,7 +222,6 @@ class Pixiv {
 			const html = await this.fetch(url);
 			const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
 			const bookmark_count = _a ? parseInt(_a[1]) : 0;
-
 			return {
 				bookmark_count,
 				illust_id,
@@ -293,14 +297,14 @@ class Pixiv {
 	getUsersDetail(user_ids) {
 		const uids = user_ids.join(',');
 		const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
-
 		return this.fetch(url)
-			.then(json => json.body)
-			.then(arr => arr.reduce((a, b) => {
-				// make the same output of getIllustsDetail
-				a[b.user_id] = b;
-				return a;
-			}, {}))
+			.then(json => {
+				let ret = {};
+				for (let u of json.body) {
+					ret[u.user_id] = u;
+				}
+				return ret;
+			})
 			.catch(console.error);
 	}
 
@@ -365,9 +369,14 @@ class Pixiv {
 					}
 				}
 			}
-			const illust_ids = (html.match(/data-id="\d+"/g) || [])
-				.map(x => x.replace(/\D+(\d+).*/, '$1'))
-				.filter((e, i, a) => a.indexOf(e) === i && e !== '0');
+			const iidHTMLs = html.match(/data-id="\d+"/g) || [];
+			const illust_ids = [];
+			for (let dataid of iidHTMLs) {
+				const iid = dataid.replace(/\D+(\d+).*/, '$1');
+				if (!illust_ids.includes(iid) && iid !== '0') {
+					illust_ids.push(iid);
+				}
+			}
 
 			const ret = {
 				next_url,
@@ -375,13 +384,15 @@ class Pixiv {
 			};
 
 			if (needBookId) {
-				ret.bookmark_ids = (html.match(/name="book_id[^;]+;illust_id=\d+/g) || [])
-					.map(s => s.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' '))
-					.filter(a => illust_ids.includes(a[0]))
-					.reduce((acc, val) => {
-						acc[val[0]] = val[1];
-						return acc;
-					}, {});
+				const bookId = {};
+				const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
+				for (let bim of bimHTMLs) {
+					const [iid, bid] = bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
+					if (illust_ids.includes(iid)) {
+						bookId[iid] = bid;
+					}
+				}
+				ret.bookmark_ids = bookId;
 			}
 			return ret;
 		} catch (e) {
@@ -988,6 +999,7 @@ if (global.pageType !== 'not support') {
 	#パチュリー {
 		display: flex;
 		flex-wrap: wrap;
+		align-items: flex-end;
 		justify-content: space-around;
 	}`);
 }
