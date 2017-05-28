@@ -99,12 +99,13 @@ const koakuma = new Vue({
 					const iids = Object.values(ild).map(x => x.illust_id);
 					// const ipd = await this.api.getIllustPagesDetail(iids);
 					const bd = await this.api.getBookmarksDetail(iids);
-					const uids = Object.values(ild)
-						.map(x => x.user_id)
-						.filter((e, i, a) => {
-							// make user_ids unique
-							return a.indexOf(e) == i;
-						});
+
+					const uids = [];
+					for(let d of Object.values(ild)) {
+						if (!uids.includes(d.user_id)) {
+							uids.push(d.user_id);
+						}
+					}
 					const ud = await this.api.getUsersDetail(uids);
 
 					for (let iid of iids) {

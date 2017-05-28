@@ -8,17 +8,27 @@ const patchouli = new Vue({
 	},
 	computed: {
 		sortedBooks() {
-			const _limit = this.filters.limit;
-			const _order = this.filters.orderBy;
-			const _books = this.library.filter(b => b.bookmark_count >= _limit);
-			return _books.sort((a, b) => b[_order] - a[_order]);
+			const limit = this.filters.limit;
+			const order = this.filters.orderBy;
+			const books = this.library.filter(b => b.bookmark_count >= limit);
+			// https://jsperf.com/javascript-sort/
+			for (let i = 1; i < books.length; i++) {
+				const tmp = books[i];
+				let j = i;
+				while (j > 0 && parseInt(books[j - 1][order]) < parseInt(tmp[order])) {
+					books[j] = books[j - 1];
+					--j;
+				}
+				books[j] = tmp;
+			}
+			return books;
 		},
 	},
 	methods: {
 		bookmarkUpdate(illust_id) {
-			const _a = this.library.filter(b => b.illust_id === illust_id);
-			if (_a.length) {
-				_a[0].is_bookmarked = true;
+			const books = this.library.filter(b => b.illust_id === illust_id);
+			if (books.length) {
+				books[0].is_bookmarked = true;
 			}
 		},
 	},

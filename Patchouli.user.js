@@ -4,15 +4,15 @@
 // @name:zh-TW  帕秋莉
 // @name:zh-CN  帕秋莉
 // @description         An image searching/browsing tool on Pixiv
-// @description:ja      An image searching/browsing tool on Pixiv
-// @description:zh-TW   輕量版 Pixiv++
-// @description:zh-CN   輕量版 Pixiv++
+// @description:ja      Pixiv 検索機能強化
+// @description:zh-TW   Pixiv 搜尋/瀏覽 工具
+// @description:zh-CN   Pixiv 搜尋/瀏覽 工具
 // @namespace   https://github.com/FlandreDaisuki
 // @author      FlandreDaisuki
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.05.27
+// @version     2017.05.28
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
@@ -670,12 +670,13 @@ const koakuma = new Vue({
 					const iids = Object.values(ild).map(x => x.illust_id);
 					// const ipd = await this.api.getIllustPagesDetail(iids);
 					const bd = await this.api.getBookmarksDetail(iids);
-					const uids = Object.values(ild)
-						.map(x => x.user_id)
-						.filter((e, i, a) => {
-							// make user_ids unique
-							return a.indexOf(e) == i;
-						});
+
+					const uids = [];
+					for(let d of Object.values(ild)) {
+						if (!uids.includes(d.user_id)) {
+							uids.push(d.user_id);
+						}
+					}
 					const ud = await this.api.getUsersDetail(uids);
 
 					for (let iid of iids) {
@@ -930,17 +931,27 @@ const patchouli = new Vue({
 	},
 	computed: {
 		sortedBooks() {
-			const _limit = this.filters.limit;
-			const _order = this.filters.orderBy;
-			const _books = this.library.filter(b => b.bookmark_count >= _limit);
-			return _books.sort((a, b) => b[_order] - a[_order]);
+			const limit = this.filters.limit;
+			const order = this.filters.orderBy;
+			const books = this.library.filter(b => b.bookmark_count >= limit);
+			// https://jsperf.com/javascript-sort/
+			for (let i = 1; i < books.length; i++) {
+				const tmp = books[i];
+				let j = i;
+				while (j > 0 && parseInt(books[j - 1][order]) < parseInt(tmp[order])) {
+					books[j] = books[j - 1];
+					--j;
+				}
+				books[j] = tmp;
+			}
+			return books;
 		},
 	},
 	methods: {
 		bookmarkUpdate(illust_id) {
-			const _a = this.library.filter(b => b.illust_id === illust_id);
-			if (_a.length) {
-				_a[0].is_bookmarked = true;
+			const books = this.library.filter(b => b.illust_id === illust_id);
+			if (books.length) {
+				books[0].is_bookmarked = true;
 			}
 		},
 	},
