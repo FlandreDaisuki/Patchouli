@@ -4,7 +4,7 @@ const patchouli = new Vue({
 		l10n: global.l10n,
 		library: global.library,
 		filters: global.filters,
-		pagetype: global.pageType,
+		pagetype: global.pagetype,
 	},
 	computed: {
 		sortedBooks() {
@@ -42,7 +42,7 @@ const patchouli = new Vue({
 			:pagetype="pagetype"></image-item>
 	</ul>`,
 });
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.addStyle(`
 	.fa-feed {
 		color: dodgerblue;

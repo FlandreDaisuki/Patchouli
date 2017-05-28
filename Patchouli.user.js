@@ -143,6 +143,48 @@ class L10N {
 		}
 	}
 }
+class PageType {
+	constructor() {
+		const path = location.pathname;
+		const search = new URLSearchParams(location.search);
+		const hasid = search.has('id');
+		this.DEFAULT = false;
+		this.RECOMMEND = false;
+		this.MEMBERILLIST = false;
+		this.MYBOOKMARK = false;
+		this.NOSUP = false;
+		switch (path) {
+			case '/search.php':
+			case '/bookmark_new_illust.php':
+			case '/new_illust.php':
+			case '/mypixiv_new_illust.php':
+			case '/new_illust_r18.php':
+			case '/bookmark_new_illust_r18.php':
+				this.DEFAULT = true;
+				break;
+			case '/recommended.php':
+				this.RECOMMEND = true;
+				break;
+			case '/member_illust.php':
+				this.MEMBERILLIST = hasid;
+				this.NOSUP = !hasid;
+				break;
+			case '/bookmark.php':
+				const t = search.get('type');
+				if (hasid) {
+					this.DEFAULT = true;
+				} else if (!t || t === 'illust_all') {
+					this.MYBOOKMARK = true;
+				} else {
+					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
+					this.NOSUP = true;
+				}
+				break;
+			default:
+				this.NOSUP = true;
+		}
+	}
+}
 class Pixiv {
 	constructor() {
 		this.tt = document.querySelector('input[name="tt"]').value;
@@ -428,25 +470,11 @@ const utils = {
 		}
 		document.head.appendChild(style);
 	},
-	asyncWhile(condition, action, options = {}) {
-		options = Object.assign({
-			first: undefined,
-			ctx: this,
-		}, options);
-		const ctx = options.ctx;
-		const first = options.first;
-		const whilst = function(data) {
-			return condition.call(ctx, data) ?
-				Promise.resolve(action.call(ctx, data)).then(whilst) :
-				data;
-		};
-
-		return whilst(first);
-	}
 };
 const global = {
 	api: new Pixiv(),
 	l10n: new L10N(),
+	pagetype: new PageType(),
 	library: [],
 	filters: {
 		limit: 0,
@@ -463,45 +491,6 @@ const global = {
 	})(),
 	koakumaToMount: (() => {
 		return document.querySelector('#toolbar-items');
-	})(),
-	pageType: (() => {
-		const path = location.pathname;
-		const search = new URLSearchParams(location.search);
-
-		/** type - for patchouli <image-item>, need (not) next page
-		 *
-		 *	default: thumb + title + user + count-list , need next page
-		 *	member-illust: default w/o user, need next page
-		 *	my-bookmark:  default with bookmark-edit, need next page
-		 *	recommend: default , need not next page
-		 *	ranking: ranking , need not next page
-		 */
-
-		switch (path) {
-			case '/search.php':
-			case '/bookmark_new_illust.php':
-			case '/new_illust.php':
-			case '/mypixiv_new_illust.php':
-			case '/new_illust_r18.php':
-			case '/bookmark_new_illust_r18.php':
-				return 'default';
-			case '/recommended.php':
-				return 'recommend';
-			case '/member_illust.php':
-				return search.has('id') ? 'member-illust' : 'not support';
-			case '/bookmark.php':
-				const t = search.get('type');
-				if (search.has('id')) {
-					return 'default';
-				} else if (!t || t === 'illust_all') {
-					return 'my-bookmark';
-				} else {
-					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
-					return 'not support';
-				}
-			default:
-				return 'not support';
-		}
 	})(),
 };
 global.favorite = (() => {
@@ -592,7 +581,7 @@ const koakuma = new Vue({
 		filters: global.filters,
 		api: global.api,
 		favorite: global.favorite,
-		pageType: global.pageType,
+		pagetype: global.pagetype,
 		next_url: location.href,
 		isStoped: true,
 		isEnded: false,
@@ -625,23 +614,14 @@ const koakuma = new Vue({
 			while (toContinue()) {
 				// get illust_ids and next_url
 				if (this.next_url) {
-					if (this.pageType === 'default' || this.pageType === 'member-illust') {
-						const res = await this.api.getPageIllustids(this.next_url);
-						if (res.next_url === this.next_url) {
-							// debounce
-							this.stop();
-							break;
-						}
-						this.next_url = res.next_url;
-						this.local_ids_q.push(...res.illust_ids);
-					} else if (this.pageType === 'recommend') {
+					if (this.pagetype.RECOMMEND) {
 						if (this.next_url !== '') {
 							const res = await this.api.getRecommendIllustids();
 							this.next_url = '';
 							this.local_ids_q.push(...res);
 						}
-					} else if (this.pageType === 'my-bookmark') {
-						const res = await this.api.getPageIllustids(this.next_url, true);
+					} else {
+						const res = await this.api.getPageIllustids(this.next_url, this.pagetype.MYBOOKMARK);
 						if (res.next_url === this.next_url) {
 							// debounce
 							this.stop();
@@ -649,9 +629,9 @@ const koakuma = new Vue({
 						}
 						this.next_url = res.next_url;
 						this.local_ids_q.push(...res.illust_ids);
-						Object.assign(this.bookmark_ids, res.bookmark_ids);
-					} else {
-						console.error('Unknown pageType:', this.pageType);
+						if (this.pagetype.MYBOOKMARK) {
+							Object.assign(this.bookmark_ids, res.bookmark_ids);
+						}
 					}
 				}
 
@@ -696,7 +676,7 @@ const koakuma = new Vue({
 							// tags: bd[iid].somehow,
 							// rating_score: ipd[iid].rating_score,
 						}
-						if (this.pageType === 'my-bookmark') {
+						if (this.pagetype.MYBOOKMARK) {
 							book.bookmark_id = this.bookmark_ids[iid];
 							delete this.bookmark_ids[iid];
 						}
@@ -754,7 +734,7 @@ const koakuma = new Vue({
 	},
 	template: koakumaTemplate,
 });
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.addStyle(`
 	#wrapper.fullwidth,
 	#wrapper.fullwidth .layout-a,
@@ -927,7 +907,7 @@ const patchouli = new Vue({
 		l10n: global.l10n,
 		library: global.library,
 		filters: global.filters,
-		pagetype: global.pageType,
+		pagetype: global.pagetype,
 	},
 	computed: {
 		sortedBooks() {
@@ -965,7 +945,7 @@ const patchouli = new Vue({
 			:pagetype="pagetype"></image-item>
 	</ul>`,
 });
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.addStyle(`
 	.fa-feed {
 		color: dodgerblue;
@@ -1014,7 +994,7 @@ if (global.pageType !== 'not support') {
 		justify-content: space-around;
 	}`);
 }
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 	koakuma.$mount(global.koakumaToMount);
 	koakuma.start(1).then(() => {
@@ -1022,7 +1002,7 @@ if (global.pageType !== 'not support') {
 	});
 }
 Pixiv.rmAnnoyance();
-if (global.pageType === 'my-bookmark') {
+if (global.pagetype.MYBOOKMARK) {
 	// bind select-all and select-none event
 	document.querySelectorAll('.select-none, .select-all').forEach(sel => {
 		sel.addEventListener('click', (e) => {

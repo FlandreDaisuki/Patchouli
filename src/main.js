@@ -1,4 +1,4 @@
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 	koakuma.$mount(global.koakumaToMount);
 	koakuma.start(1).then(() => {
@@ -6,7 +6,7 @@ if (global.pageType !== 'not support') {
 	});
 }
 Pixiv.rmAnnoyance();
-if (global.pageType === 'my-bookmark') {
+if (global.pagetype.MYBOOKMARK) {
 	// bind select-all and select-none event
 	document.querySelectorAll('.select-none, .select-all').forEach(sel => {
 		sel.addEventListener('click', (e) => {
