@@ -652,7 +652,7 @@ const koakuma = new Vue({
 					const bd = await this.api.getBookmarksDetail(iids);
 
 					const uids = [];
-					for(let d of Object.values(ild)) {
+					for (let d of Object.values(ild)) {
 						if (!uids.includes(d.user_id)) {
 							uids.push(d.user_id);
 						}

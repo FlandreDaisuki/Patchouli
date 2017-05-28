@@ -17,7 +17,7 @@ debug: before-debug base
 before-debug:
 	$(eval TARGET=$(DEVNAME))
 
-base:
+base: js-beautify
 	cp $(SRC)meta.js $(TARGET)
 	cat $(SRC)utils/*.js >> $(TARGET)
 
@@ -29,3 +29,6 @@ base:
 
 	# main.js depend on all above
 	cat $(SRC)main.js >> $(TARGET)
+
+js-beautify:
+	js-beautify -r src/*.js src/*/*.js
