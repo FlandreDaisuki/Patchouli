@@ -24,7 +24,6 @@ A simple Pixiv crawler. Naming is inspired from **Touhou Project**. Using Vue 2.
 
 ## Todo
 - [ ] tag filter
-- [ ] support raking page
 
 ## Contribution
 Questions or suggestions, post [issue](https://github.com/FlandreDaisuki/Patchouli/issues) :coffee:
