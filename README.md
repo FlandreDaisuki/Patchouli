@@ -24,7 +24,6 @@
 
 ## Todo 坑
 - [ ] tag filter
-- [ ] support raking page
 
 ## Contribution 貢獻
 有問題或建議發 [issue](https://github.com/FlandreDaisuki/Patchouli/issues) :coffee:

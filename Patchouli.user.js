@@ -4,15 +4,15 @@
 // @name:zh-TW  帕秋莉
 // @name:zh-CN  帕秋莉
 // @description         An image searching/browsing tool on Pixiv
-// @description:ja      An image searching/browsing tool on Pixiv
-// @description:zh-TW   輕量版 Pixiv++
-// @description:zh-CN   輕量版 Pixiv++
+// @description:ja      Pixiv 検索機能強化
+// @description:zh-TW   Pixiv 搜尋/瀏覽 工具
+// @description:zh-CN   Pixiv 搜尋/瀏覽 工具
 // @namespace   https://github.com/FlandreDaisuki
 // @author      FlandreDaisuki
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.05.27
+// @version     2017.05.28
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
@@ -143,6 +143,48 @@ class L10N {
 		}
 	}
 }
+class PageType {
+	constructor() {
+		const path = location.pathname;
+		const search = new URLSearchParams(location.search);
+		const hasid = search.has('id');
+		this.DEFAULT = false;
+		this.RECOMMEND = false;
+		this.MEMBERILLIST = false;
+		this.MYBOOKMARK = false;
+		this.NOSUP = false;
+		switch (path) {
+			case '/search.php':
+			case '/bookmark_new_illust.php':
+			case '/new_illust.php':
+			case '/mypixiv_new_illust.php':
+			case '/new_illust_r18.php':
+			case '/bookmark_new_illust_r18.php':
+				this.DEFAULT = true;
+				break;
+			case '/recommended.php':
+				this.RECOMMEND = true;
+				break;
+			case '/member_illust.php':
+				this.MEMBERILLIST = hasid;
+				this.NOSUP = !hasid;
+				break;
+			case '/bookmark.php':
+				const t = search.get('type');
+				if (hasid) {
+					this.DEFAULT = true;
+				} else if (!t || t === 'illust_all') {
+					this.MYBOOKMARK = true;
+				} else {
+					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
+					this.NOSUP = true;
+				}
+				break;
+			default:
+				this.NOSUP = true;
+		}
+	}
+}
 class Pixiv {
 	constructor() {
 		this.tt = document.querySelector('input[name="tt"]').value;
@@ -203,11 +245,16 @@ class Pixiv {
 	}
 
 	async getDetail(illust_ids, f) {
-		const _a = await Promise.all(illust_ids.map(f));
-		return _a.reduce((acc, val) => {
-			acc[val.illust_id] = val;
-			return acc;
-		}, {});
+		const iids = [];
+		for (let iid of illust_ids) {
+			iids.push(f(iid));
+		}
+		const processed = await Promise.all(iids);
+		const ret = {};
+		for (let p of processed) {
+			ret[p.illust_id] = p;
+		}
+		return ret;
 	}
 
 	async getBookmarkCount(illust_id) {
@@ -217,7 +264,6 @@ class Pixiv {
 			const html = await this.fetch(url);
 			const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
 			const bookmark_count = _a ? parseInt(_a[1]) : 0;
-
 			return {
 				bookmark_count,
 				illust_id,
@@ -293,14 +339,14 @@ class Pixiv {
 	getUsersDetail(user_ids) {
 		const uids = user_ids.join(',');
 		const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
-
 		return this.fetch(url)
-			.then(json => json.body)
-			.then(arr => arr.reduce((a, b) => {
-				// make the same output of getIllustsDetail
-				a[b.user_id] = b;
-				return a;
-			}, {}))
+			.then(json => {
+				let ret = {};
+				for (let u of json.body) {
+					ret[u.user_id] = u;
+				}
+				return ret;
+			})
 			.catch(console.error);
 	}
 
@@ -365,9 +411,14 @@ class Pixiv {
 					}
 				}
 			}
-			const illust_ids = (html.match(/data-id="\d+"/g) || [])
-				.map(x => x.replace(/\D+(\d+).*/, '$1'))
-				.filter((e, i, a) => a.indexOf(e) === i && e !== '0');
+			const iidHTMLs = html.match(/data-id="\d+"/g) || [];
+			const illust_ids = [];
+			for (let dataid of iidHTMLs) {
+				const iid = dataid.replace(/\D+(\d+).*/, '$1');
+				if (!illust_ids.includes(iid) && iid !== '0') {
+					illust_ids.push(iid);
+				}
+			}
 
 			const ret = {
 				next_url,
@@ -375,13 +426,15 @@ class Pixiv {
 			};
 
 			if (needBookId) {
-				ret.bookmark_ids = (html.match(/name="book_id[^;]+;illust_id=\d+/g) || [])
-					.map(s => s.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' '))
-					.filter(a => illust_ids.includes(a[0]))
-					.reduce((acc, val) => {
-						acc[val[0]] = val[1];
-						return acc;
-					}, {});
+				const bookId = {};
+				const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
+				for (let bim of bimHTMLs) {
+					const [iid, bid] = bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
+					if (illust_ids.includes(iid)) {
+						bookId[iid] = bid;
+					}
+				}
+				ret.bookmark_ids = bookId;
 			}
 			return ret;
 		} catch (e) {
@@ -417,25 +470,11 @@ const utils = {
 		}
 		document.head.appendChild(style);
 	},
-	asyncWhile(condition, action, options = {}) {
-		options = Object.assign({
-			first: undefined,
-			ctx: this,
-		}, options);
-		const ctx = options.ctx;
-		const first = options.first;
-		const whilst = function(data) {
-			return condition.call(ctx, data) ?
-				Promise.resolve(action.call(ctx, data)).then(whilst) :
-				data;
-		};
-
-		return whilst(first);
-	}
 };
 const global = {
 	api: new Pixiv(),
 	l10n: new L10N(),
+	pagetype: new PageType(),
 	library: [],
 	filters: {
 		limit: 0,
@@ -452,45 +491,6 @@ const global = {
 	})(),
 	koakumaToMount: (() => {
 		return document.querySelector('#toolbar-items');
-	})(),
-	pageType: (() => {
-		const path = location.pathname;
-		const search = new URLSearchParams(location.search);
-
-		/** type - for patchouli <image-item>, need (not) next page
-		 *
-		 *	default: thumb + title + user + count-list , need next page
-		 *	member-illust: default w/o user, need next page
-		 *	my-bookmark:  default with bookmark-edit, need next page
-		 *	recommend: default , need not next page
-		 *	ranking: ranking , need not next page
-		 */
-
-		switch (path) {
-			case '/search.php':
-			case '/bookmark_new_illust.php':
-			case '/new_illust.php':
-			case '/mypixiv_new_illust.php':
-			case '/new_illust_r18.php':
-			case '/bookmark_new_illust_r18.php':
-				return 'default';
-			case '/recommended.php':
-				return 'recommend';
-			case '/member_illust.php':
-				return search.has('id') ? 'member-illust' : 'not support';
-			case '/bookmark.php':
-				const t = search.get('type');
-				if (search.has('id')) {
-					return 'default';
-				} else if (!t || t === 'illust_all') {
-					return 'my-bookmark';
-				} else {
-					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
-					return 'not support';
-				}
-			default:
-				return 'not support';
-		}
 	})(),
 };
 global.favorite = (() => {
@@ -581,7 +581,7 @@ const koakuma = new Vue({
 		filters: global.filters,
 		api: global.api,
 		favorite: global.favorite,
-		pageType: global.pageType,
+		pagetype: global.pagetype,
 		next_url: location.href,
 		isStoped: true,
 		isEnded: false,
@@ -614,23 +614,14 @@ const koakuma = new Vue({
 			while (toContinue()) {
 				// get illust_ids and next_url
 				if (this.next_url) {
-					if (this.pageType === 'default' || this.pageType === 'member-illust') {
-						const res = await this.api.getPageIllustids(this.next_url);
-						if (res.next_url === this.next_url) {
-							// debounce
-							this.stop();
-							break;
-						}
-						this.next_url = res.next_url;
-						this.local_ids_q.push(...res.illust_ids);
-					} else if (this.pageType === 'recommend') {
+					if (this.pagetype.RECOMMEND) {
 						if (this.next_url !== '') {
 							const res = await this.api.getRecommendIllustids();
 							this.next_url = '';
 							this.local_ids_q.push(...res);
 						}
-					} else if (this.pageType === 'my-bookmark') {
-						const res = await this.api.getPageIllustids(this.next_url, true);
+					} else {
+						const res = await this.api.getPageIllustids(this.next_url, this.pagetype.MYBOOKMARK);
 						if (res.next_url === this.next_url) {
 							// debounce
 							this.stop();
@@ -638,9 +629,9 @@ const koakuma = new Vue({
 						}
 						this.next_url = res.next_url;
 						this.local_ids_q.push(...res.illust_ids);
-						Object.assign(this.bookmark_ids, res.bookmark_ids);
-					} else {
-						console.error('Unknown pageType:', this.pageType);
+						if (this.pagetype.MYBOOKMARK) {
+							Object.assign(this.bookmark_ids, res.bookmark_ids);
+						}
 					}
 				}
 
@@ -659,12 +650,13 @@ const koakuma = new Vue({
 					const iids = Object.values(ild).map(x => x.illust_id);
 					// const ipd = await this.api.getIllustPagesDetail(iids);
 					const bd = await this.api.getBookmarksDetail(iids);
-					const uids = Object.values(ild)
-						.map(x => x.user_id)
-						.filter((e, i, a) => {
-							// make user_ids unique
-							return a.indexOf(e) == i;
-						});
+
+					const uids = [];
+					for(let d of Object.values(ild)) {
+						if (!uids.includes(d.user_id)) {
+							uids.push(d.user_id);
+						}
+					}
 					const ud = await this.api.getUsersDetail(uids);
 
 					for (let iid of iids) {
@@ -684,7 +676,7 @@ const koakuma = new Vue({
 							// tags: bd[iid].somehow,
 							// rating_score: ipd[iid].rating_score,
 						}
-						if (this.pageType === 'my-bookmark') {
+						if (this.pagetype.MYBOOKMARK) {
 							book.bookmark_id = this.bookmark_ids[iid];
 							delete this.bookmark_ids[iid];
 						}
@@ -742,7 +734,7 @@ const koakuma = new Vue({
 	},
 	template: koakumaTemplate,
 });
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.addStyle(`
 	#wrapper.fullwidth,
 	#wrapper.fullwidth .layout-a,
@@ -915,21 +907,31 @@ const patchouli = new Vue({
 		l10n: global.l10n,
 		library: global.library,
 		filters: global.filters,
-		pagetype: global.pageType,
+		pagetype: global.pagetype,
 	},
 	computed: {
 		sortedBooks() {
-			const _limit = this.filters.limit;
-			const _order = this.filters.orderBy;
-			const _books = this.library.filter(b => b.bookmark_count >= _limit);
-			return _books.sort((a, b) => b[_order] - a[_order]);
+			const limit = this.filters.limit;
+			const order = this.filters.orderBy;
+			const books = this.library.filter(b => b.bookmark_count >= limit);
+			// https://jsperf.com/javascript-sort/
+			for (let i = 1; i < books.length; i++) {
+				const tmp = books[i];
+				let j = i;
+				while (j > 0 && parseInt(books[j - 1][order]) < parseInt(tmp[order])) {
+					books[j] = books[j - 1];
+					--j;
+				}
+				books[j] = tmp;
+			}
+			return books;
 		},
 	},
 	methods: {
 		bookmarkUpdate(illust_id) {
-			const _a = this.library.filter(b => b.illust_id === illust_id);
-			if (_a.length) {
-				_a[0].is_bookmarked = true;
+			const books = this.library.filter(b => b.illust_id === illust_id);
+			if (books.length) {
+				books[0].is_bookmarked = true;
 			}
 		},
 	},
@@ -943,7 +945,7 @@ const patchouli = new Vue({
 			:pagetype="pagetype"></image-item>
 	</ul>`,
 });
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.addStyle(`
 	.fa-feed {
 		color: dodgerblue;
@@ -988,10 +990,11 @@ if (global.pageType !== 'not support') {
 	#パチュリー {
 		display: flex;
 		flex-wrap: wrap;
+		align-items: flex-end;
 		justify-content: space-around;
 	}`);
 }
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
 	koakuma.$mount(global.koakumaToMount);
 	koakuma.start(1).then(() => {
@@ -999,7 +1002,7 @@ if (global.pageType !== 'not support') {
 	});
 }
 Pixiv.rmAnnoyance();
-if (global.pageType === 'my-bookmark') {
+if (global.pagetype.MYBOOKMARK) {
 	// bind select-all and select-none event
 	document.querySelectorAll('.select-none, .select-all').forEach(sel => {
 		sel.addEventListener('click', (e) => {

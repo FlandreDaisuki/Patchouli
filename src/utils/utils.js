@@ -26,19 +26,4 @@ const utils = {
 		}
 		document.head.appendChild(style);
 	},
-	asyncWhile(condition, action, options = {}) {
-		options = Object.assign({
-			first: undefined,
-			ctx: this,
-		}, options);
-		const ctx = options.ctx;
-		const first = options.first;
-		const whilst = function(data) {
-			return condition.call(ctx, data) ?
-				Promise.resolve(action.call(ctx, data)).then(whilst) :
-				data;
-		};
-
-		return whilst(first);
-	}
 };

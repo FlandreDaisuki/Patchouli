@@ -20,7 +20,7 @@ const koakuma = new Vue({
 		filters: global.filters,
 		api: global.api,
 		favorite: global.favorite,
-		pageType: global.pageType,
+		pagetype: global.pagetype,
 		next_url: location.href,
 		isStoped: true,
 		isEnded: false,
@@ -53,8 +53,14 @@ const koakuma = new Vue({
 			while (toContinue()) {
 				// get illust_ids and next_url
 				if (this.next_url) {
-					if (this.pageType === 'default' || this.pageType === 'member-illust') {
-						const res = await this.api.getPageIllustids(this.next_url);
+					if (this.pagetype.RECOMMEND) {
+						if (this.next_url !== '') {
+							const res = await this.api.getRecommendIllustids();
+							this.next_url = '';
+							this.local_ids_q.push(...res);
+						}
+					} else {
+						const res = await this.api.getPageIllustids(this.next_url, this.pagetype.MYBOOKMARK);
 						console.debug('res', res);
 						if (res.next_url === this.next_url) {
 							// debounce
@@ -63,24 +69,9 @@ const koakuma = new Vue({
 						}
 						this.next_url = res.next_url;
 						this.local_ids_q.push(...res.illust_ids);
-					} else if (this.pageType === 'recommend') {
-						if (this.next_url !== '') {
-							const res = await this.api.getRecommendIllustids();
-							this.next_url = '';
-							this.local_ids_q.push(...res);
+						if (this.pagetype.MYBOOKMARK) {
+							Object.assign(this.bookmark_ids, res.bookmark_ids);
 						}
-					} else if (this.pageType === 'my-bookmark') {
-						const res = await this.api.getPageIllustids(this.next_url, true);
-						if (res.next_url === this.next_url) {
-							// debounce
-							this.stop();
-							break;
-						}
-						this.next_url = res.next_url;
-						this.local_ids_q.push(...res.illust_ids);
-						Object.assign(this.bookmark_ids, res.bookmark_ids);
-					} else {
-						console.error('Unknown pageType:', this.pageType);
 					}
 				}
 
@@ -99,12 +90,13 @@ const koakuma = new Vue({
 					const iids = Object.values(ild).map(x => x.illust_id);
 					// const ipd = await this.api.getIllustPagesDetail(iids);
 					const bd = await this.api.getBookmarksDetail(iids);
-					const uids = Object.values(ild)
-						.map(x => x.user_id)
-						.filter((e, i, a) => {
-							// make user_ids unique
-							return a.indexOf(e) == i;
-						});
+
+					const uids = [];
+					for(let d of Object.values(ild)) {
+						if (!uids.includes(d.user_id)) {
+							uids.push(d.user_id);
+						}
+					}
 					const ud = await this.api.getUsersDetail(uids);
 
 					for (let iid of iids) {
@@ -124,7 +116,7 @@ const koakuma = new Vue({
 							// tags: bd[iid].somehow,
 							// rating_score: ipd[iid].rating_score,
 						}
-						if (this.pageType === 'my-bookmark') {
+						if (this.pagetype.MYBOOKMARK) {
 							book.bookmark_id = this.bookmark_ids[iid];
 							delete this.bookmark_ids[iid];
 						}
@@ -182,7 +174,7 @@ const koakuma = new Vue({
 	},
 	template: koakumaTemplate,
 });
-if (global.pageType !== 'not support') {
+if (!global.pagetype.NOSUP) {
 	utils.addStyle(`
 	#wrapper.fullwidth,
 	#wrapper.fullwidth .layout-a,
