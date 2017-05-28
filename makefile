@@ -19,6 +19,8 @@ before-debug:
 
 base: js-beautify
 	cp $(SRC)meta.js $(TARGET)
+	sed -i "s/DATEVERSION/$$(date +%Y.%m.%d)/g" $(TARGET)
+
 	cat $(SRC)utils/*.js >> $(TARGET)
 
 	# global depend on utils

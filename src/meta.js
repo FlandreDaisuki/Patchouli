@@ -11,7 +11,7 @@
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.05.28
+// @version     DATEVERSION
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
