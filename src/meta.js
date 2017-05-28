@@ -8,7 +8,6 @@
 // @description:zh-TW   Pixiv 搜尋/瀏覽 工具
 // @description:zh-CN   Pixiv 搜尋/瀏覽 工具
 // @namespace   https://github.com/FlandreDaisuki
-// @author      FlandreDaisuki
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
@@ -16,6 +15,11 @@
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
+// meta keys for Greasy Fork
+// @author      FlandreDaisuki
+// @license     The MIT License (MIT) Copyright (c) 2016-2017 FlandreDaisuki
+// @compatible  firefox 52+
+// @compatible  chrome 55+
 // ==/UserScript==
 'use strict';
 console.log(`[${GM_info.script.name}] version: ${GM_info.script.version}`);
