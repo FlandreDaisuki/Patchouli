@@ -6,7 +6,7 @@ const patchouliImageItemTemplate = `
 	<a :href="illust_page_href">
 		<h1 class="title" :title="detail.illust_title">{{ detail.illust_title }}</h1>
 	</a>
-	<span v-if="pagetype !== 'member-illust'">
+	<span v-if="!pagetype.MEMBERILLIST">
 		<a class="user ui-profile-popup"
 			:href="user_page_href"
 			:title="detail.user_name"
@@ -21,7 +21,7 @@ const patchouliImageItemTemplate = `
 				<i class="_icon sprites-bookmark-badge"></i>{{ detail.bookmark_count }}</a>
 		</li>
 		<li>
-			<input v-if="pagetype === 'my-bookmark'" name="book_id[]" :value="detail.bookmark_id" type="checkbox">
+			<input v-if="pagetype.MYBOOKMARK" name="book_id[]" :value="detail.bookmark_id" type="checkbox">
 			<a v-else class="is-bookmarked" @click.prevent="bookmarkClick">
 				<i class="fa" :class="bookmarkStyle" aria-hidden="true"></i>
 			</a>

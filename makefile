@@ -17,8 +17,10 @@ debug: before-debug base
 before-debug:
 	$(eval TARGET=$(DEVNAME))
 
-base:
+base: js-beautify
 	cp $(SRC)meta.js $(TARGET)
+	sed -i "s/DATEVERSION/$$(date +%Y.%m.%d)/g" $(TARGET)
+
 	cat $(SRC)utils/*.js >> $(TARGET)
 
 	# global depend on utils
@@ -29,3 +31,6 @@ base:
 
 	# main.js depend on all above
 	cat $(SRC)main.js >> $(TARGET)
+
+js-beautify:
+	js-beautify -r src/*.js src/*/*.js
