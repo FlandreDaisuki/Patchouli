@@ -24,7 +24,7 @@ const koakuma = new Vue({
 		next_url: location.href,
 		isStoped: true,
 		isEnded: false,
-		local_ids_q: [],
+		localIdsQueue: [],
 		bookmark_ids: {},
 	},
 	computed: {
@@ -48,7 +48,7 @@ const koakuma = new Vue({
 			this.isStoped = false;
 			const toContinue = () => {
 				return !this.isEnded && !this.isStoped && times > 0 &&
-					(this.next_url || this.local_ids_q.length);
+					(this.next_url || this.localIdsQueue.length);
 			};
 			while (toContinue()) {
 				// get illust_ids and next_url
@@ -57,7 +57,7 @@ const koakuma = new Vue({
 						if (this.next_url !== '') {
 							const res = await this.api.getRecommendIllustids();
 							this.next_url = '';
-							this.local_ids_q.push(...res);
+							this.localIdsQueue.push(...res);
 						}
 					} else {
 						const res = await this.api.getPageIllustids(this.next_url, this.pagetype.MYBOOKMARK);
@@ -68,17 +68,21 @@ const koakuma = new Vue({
 							break;
 						}
 						this.next_url = res.next_url;
-						this.local_ids_q.push(...res.illust_ids);
+						this.localIdsQueue.push(...res.illust_ids);
 						if (this.pagetype.MYBOOKMARK) {
 							Object.assign(this.bookmark_ids, res.bookmark_ids);
 						}
 					}
 				}
 
-				//get illust_ids from local_ids_q
-				const process_ids = this.local_ids_q.slice(0, 20)
-					.filter(id => !this.library_iids.includes(id));
-				this.local_ids_q.splice(0, 20);
+				//get illust_ids from localIdsQueue
+				const process_ids = [];
+				while (this.localIdsQueue.length && process_ids < 20) {
+					const id = this.localIdsQueue.shift();
+					if (!this.library_iids.includes(id)) {
+						process_ids.push(id);
+					}
+				}
 
 				if (process_ids.length) {
 					const ild = await this.api.getIllustsDetail(process_ids);
@@ -128,10 +132,10 @@ const koakuma = new Vue({
 			// End of while
 			if (this.next_url === '') {
 				this.stop();
-				this.isEnded = this.local_ids_q.length <= 0;
+				this.isEnded = this.localIdsQueue.length <= 0;
 				if (this.isEnded) {
 					delete this.bookmark_ids;
-					delete this.local_ids_q;
+					delete this.localIdsQueue;
 				}
 			}
 			if (times <= 0) {
