@@ -5,3 +5,4 @@ window.Pixiv = Pixiv;
 window.utils = utils;
 window.global = global;
 window.koakuma = koakuma;
+window.patchouli = patchouli;
