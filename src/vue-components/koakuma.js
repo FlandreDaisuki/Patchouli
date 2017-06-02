@@ -77,7 +77,7 @@ const koakuma = new Vue({
 
 				//get illust_ids from localIdsQueue
 				const process_ids = [];
-				while (this.localIdsQueue.length && process_ids < 20) {
+				while (this.localIdsQueue.length && process_ids.length < 20) {
 					const id = this.localIdsQueue.shift();
 					if (!this.library_iids.includes(id)) {
 						process_ids.push(id);
