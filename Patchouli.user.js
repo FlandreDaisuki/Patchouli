@@ -11,7 +11,7 @@
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.06.02
+// @version     2017.06.03
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
@@ -641,7 +641,7 @@ const koakuma = new Vue({
 
 				//get illust_ids from localIdsQueue
 				const process_ids = [];
-				while (this.localIdsQueue.length && process_ids < 20) {
+				while (this.localIdsQueue.length && process_ids.length < 20) {
 					const id = this.localIdsQueue.shift();
 					if (!this.library_iids.includes(id)) {
 						process_ids.push(id);
@@ -917,24 +917,6 @@ const patchouli = new Vue({
 		filters: global.filters,
 		pagetype: global.pagetype,
 	},
-	computed: {
-		sortedBooks() {
-			const limit = this.filters.limit;
-			const order = this.filters.orderBy;
-			const books = this.library.filter(b => b.bookmark_count >= limit);
-			// https://jsperf.com/javascript-sort/
-			for (let i = 1; i < books.length; i++) {
-				const tmp = books[i];
-				let j = i;
-				while (j > 0 && parseInt(books[j - 1][order]) < parseInt(tmp[order])) {
-					books[j] = books[j - 1];
-					--j;
-				}
-				books[j] = tmp;
-			}
-			return books;
-		},
-	},
 	methods: {
 		bookmarkUpdate(illust_id) {
 			for (let book of this.library) {
@@ -943,10 +925,27 @@ const patchouli = new Vue({
 				}
 			}
 		},
+		sortedBooks(library) {
+			const books = Array.from(library);
+			const order = this.filters.orderBy;
+			const int = parseInt;
+			// https://jsperf.com/javascript-sort/
+			for (let i = 1; i < books.length; i++) {
+				const b = books[i];
+				let j = i;
+				while (j > 0 && int(books[j - 1][order]) < int(b[order])) {
+					books[j] = books[j - 1];
+					--j;
+				}
+				books[j] = b;
+			}
+			return books;
+		},
 	},
 	template: `
 	<ul id="パチュリー">
-		<image-item v-for="book in sortedBooks"
+		<image-item v-for="book in sortedBooks(library)"
+			v-show="book.bookmark_count >= filters.limit"
 			:key="book.illust_id"
 			:api="api"
 			:l10n="l10n"

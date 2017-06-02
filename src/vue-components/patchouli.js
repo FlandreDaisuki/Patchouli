@@ -6,24 +6,6 @@ const patchouli = new Vue({
 		filters: global.filters,
 		pagetype: global.pagetype,
 	},
-	computed: {
-		sortedBooks() {
-			const limit = this.filters.limit;
-			const order = this.filters.orderBy;
-			const books = this.library.filter(b => b.bookmark_count >= limit);
-			// https://jsperf.com/javascript-sort/
-			for (let i = 1; i < books.length; i++) {
-				const tmp = books[i];
-				let j = i;
-				while (j > 0 && parseInt(books[j - 1][order]) < parseInt(tmp[order])) {
-					books[j] = books[j - 1];
-					--j;
-				}
-				books[j] = tmp;
-			}
-			return books;
-		},
-	},
 	methods: {
 		bookmarkUpdate(illust_id) {
 			for (let book of this.library) {
@@ -32,10 +14,27 @@ const patchouli = new Vue({
 				}
 			}
 		},
+		sortedBooks(library) {
+			const books = Array.from(library);
+			const order = this.filters.orderBy;
+			const int = parseInt;
+			// https://jsperf.com/javascript-sort/
+			for (let i = 1; i < books.length; i++) {
+				const b = books[i];
+				let j = i;
+				while (j > 0 && int(books[j - 1][order]) < int(b[order])) {
+					books[j] = books[j - 1];
+					--j;
+				}
+				books[j] = b;
+			}
+			return books;
+		},
 	},
 	template: `
 	<ul id="パチュリー">
-		<image-item v-for="book in sortedBooks"
+		<image-item v-for="book in sortedBooks(library)"
+			v-show="book.bookmark_count >= filters.limit"
 			:key="book.illust_id"
 			:api="api"
 			:l10n="l10n"
