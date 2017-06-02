@@ -11,7 +11,7 @@
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.05.30
+// @version     2017.06.02
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
@@ -937,9 +937,10 @@ const patchouli = new Vue({
 	},
 	methods: {
 		bookmarkUpdate(illust_id) {
-			const books = this.library.filter(b => b.illust_id === illust_id);
-			if (books.length) {
-				books[0].is_bookmarked = true;
+			for (let book of this.library) {
+				if (book.illust_id === illust_id) {
+					book.is_bookmarked = true;
+				}
 			}
 		},
 	},

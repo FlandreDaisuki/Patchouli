@@ -26,9 +26,10 @@ const patchouli = new Vue({
 	},
 	methods: {
 		bookmarkUpdate(illust_id) {
-			const books = this.library.filter(b => b.illust_id === illust_id);
-			if (books.length) {
-				books[0].is_bookmarked = true;
+			for (let book of this.library) {
+				if (book.illust_id === illust_id) {
+					book.is_bookmarked = true;
+				}
 			}
 		},
 	},
