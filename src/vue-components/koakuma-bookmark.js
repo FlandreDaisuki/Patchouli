@@ -8,18 +8,17 @@ Vue.component('koakuma-bookmark', {
 			}
 		},
 		input(event) {
-			let val = parseInt(event.target.value);
-			val = Math.max(0, val);
-			this.$emit('limitUpdate', val);
+			let value = Math.max(0, parseInt(event.target.value));
+			global.filters.limit = isNaN(value) ? 0 : value;
 		},
 		wheel(event) {
-			let val;
+			let value;
 			if (event.deltaY < 0) {
-				val = this.limit + 20;
+				value = this.limit + 20;
 			} else {
-				val = Math.max(0, this.limit - 20);
+				value = Math.max(0, this.limit - 20);
 			}
-			this.$emit('limitUpdate', val);
+			global.filters.limit = isNaN(value) ? 0 : value;
 		},
 	},
 	template: `

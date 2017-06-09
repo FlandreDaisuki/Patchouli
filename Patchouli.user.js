@@ -11,7 +11,7 @@
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.06.03
+// @version     2017.06.10
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
@@ -28,6 +28,7 @@ class L10N {
 		this.lang = document.documentElement.lang;
 		this.following = this._following();
 		this.bookmark = this._bookmark();
+		this.tag = this._tag();
 		this.koakumaGo = this._koakumaGo();
 		this.koakumaPause = this._koakumaPause();
 		this.koakumaEnd = this._koakumaEnd();
@@ -57,6 +58,19 @@ class L10N {
 				return '收藏';
 			default:
 				return 'Bookmark';
+		}
+	}
+
+	_tag() {
+		switch (this.lang) {
+			case 'ja':
+				return 'タグフィルター';
+			case 'zh-tw':
+				return '標籤過濾器';
+			case 'zh':
+				return '标签过滤器';
+			default:
+				return 'Tag filter';
 		}
 	}
 
@@ -261,16 +275,20 @@ class Pixiv {
 		return ret;
 	}
 
-	async getBookmarkCount(illust_id) {
+	async getBookmarkCountAndTags(illust_id) {
 		const url = `/bookmark_detail.php?illust_id=${illust_id}`;
 
 		try {
 			const html = await this.fetch(url);
 			const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
 			const bookmark_count = _a ? parseInt(_a[1]) : 0;
+			const _b = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
+			const _c = _b ? _b[0].match(/>[^<]+?(?=<\/a>)/g) : [];
+			const tags = _c ? _c.map(x => x.slice(1)) : [];
 			return {
 				bookmark_count,
 				illust_id,
+				tags,
 			};
 		} catch (e) {
 			console.error(e);
@@ -285,7 +303,7 @@ class Pixiv {
 	 * @return {{String: Object}}
 	 */
 	async getBookmarksDetail(illust_ids) {
-		const _f = this.getBookmarkCount.bind(this);
+		const _f = this.getBookmarkCountAndTags.bind(this);
 		return await this.getDetail(illust_ids, _f);
 	}
 
@@ -483,6 +501,7 @@ const global = {
 	filters: {
 		limit: 0,
 		orderBy: 'illust_id',
+		tag: '',
 	},
 	favorite: {
 		fullwidth: 1,
@@ -518,18 +537,17 @@ Vue.component('koakuma-bookmark', {
 			}
 		},
 		input(event) {
-			let val = parseInt(event.target.value);
-			val = Math.max(0, val);
-			this.$emit('limitUpdate', val);
+			let value = Math.max(0, parseInt(event.target.value));
+			global.filters.limit = isNaN(value) ? 0 : value;
 		},
 		wheel(event) {
-			let val;
+			let value;
 			if (event.deltaY < 0) {
-				val = this.limit + 20;
+				value = this.limit + 20;
 			} else {
-				val = Math.max(0, this.limit - 20);
+				value = Math.max(0, this.limit - 20);
 			}
-			this.$emit('limitUpdate', val);
+			global.filters.limit = isNaN(value) ? 0 : value;
 		},
 	},
 	template: `
@@ -543,17 +561,18 @@ Vue.component('koakuma-bookmark', {
 			@input="input"/>
 	</div>`,
 });
-Vue.component('koakuma-settings', {
-	props: ['favorite', 'l10n'],
-	methods: {
-		fullwidthClick(event) {
-			this.$emit('fullwidthUpdate', event.target.checked);
-		},
-		sortClick(event) {
-			this.$emit('sortUpdate', event.target.checked);
-		},
-	},
-	template: `
+const koakumaTemplate = `
+<div id="こあくま">
+	<div>{{ l10n.koakumaProcessed(library.length) }}</div>
+	<koakuma-bookmark :l10n="l10n"
+		:limit="filters.limit"></koakuma-bookmark>
+	<input id="koakuma-tag-input"
+			:placeholder="l10n.tag"
+			@input="tagUpdate"/>
+	<button id="koakuma-switch"
+		@click="switchSearching"
+		:disabled="isEnded"
+		:class="switchStyle">{{ switchText }}</button>
 	<div>
 		<input id="koakuma-settings-fullwidth" type="checkbox"
 			:checked="favorite.fullwidth"
@@ -561,22 +580,7 @@ Vue.component('koakuma-settings', {
 		<input id="koakuma-settings-sort" type="checkbox"
 			:checked="favorite.sort"
 			@click="sortClick"> {{ l10n.koakumaSort }}
-	</div>`,
-});
-const koakumaTemplate = `
-<div id="こあくま">
-	<div>{{ l10n.koakumaProcessed(library.length) }}</div>
-	<koakuma-bookmark :l10n="l10n"
-		:limit="filters.limit"
-		@limitUpdate="limitUpdate"></koakuma-bookmark>
-	<button id="koakuma-switch"
-		@click="switchSearching"
-		:disabled="isEnded"
-		:class="switchStyle">{{ switchText }}</button>
-	<koakuma-settings :l10n="l10n"
-		:favorite="favorite"
-		@fullwidthUpdate="fullwidthUpdate"
-		@sortUpdate="sortUpdate"></koakuma-settings>
+	</div>
 </div>`;
 const koakuma = new Vue({
 	data: {
@@ -681,7 +685,7 @@ const koakuma = new Vue({
 							is_ugoira: !!illust.ugoira_meta,
 							is_follow: ud[illust.user_id].is_follow,
 							bookmark_count: bd[iid].bookmark_count,
-							// tags: bd[iid].somehow,
+							tags_str: bd[iid].tags.join(' '),
 							// rating_score: ipd[iid].rating_score,
 						}
 						if (this.pagetype.MYBOOKMARK) {
@@ -716,11 +720,11 @@ const koakuma = new Vue({
 				this.stop();
 			}
 		},
-		limitUpdate(value) {
-			global.filters.limit = isNaN(value) ? 0 : value;
+		tagUpdate(event) {
+			global.filters.tag = event.target.value;
 		},
-		fullwidthUpdate(todo) {
-			if (todo) {
+		fullwidthClick(event) {
+			if (event.target.checked) {
 				document.querySelector('#wrapper').classList.add('fullwidth');
 				global.favorite.fullwidth = 1;
 			} else {
@@ -729,8 +733,8 @@ const koakuma = new Vue({
 			}
 			Pixiv.storageSet(global.favorite);
 		},
-		sortUpdate(todo) {
-			if (todo) {
+		sortClick(event) {
+			if (event.target.checked) {
 				global.filters.orderBy = 'bookmark_count';
 				global.favorite.sort = 1;
 			} else {
@@ -863,7 +867,6 @@ const patchouliImageItemTemplate = `
 			<a v-else class="is-bookmarked" @click.prevent="bookmarkClick">
 				<i class="fa" :class="bookmarkStyle" aria-hidden="true"></i>
 			</a>
-
 		</li>
 	</ul>
 </li>`;
@@ -871,7 +874,7 @@ Vue.component('image-item', {
 	props: ['api', 'l10n', 'detail', 'pagetype'],
 	data() {
 		return {
-			bookmarked: this.detail.bookmarked,
+			bookmarked: this.detail.is_bookmarked,
 		};
 	},
 	computed: {
@@ -892,7 +895,7 @@ Vue.component('image-item', {
 			};
 		},
 		bookmarkStyle() {
-			return this.detail.is_bookmarked ? 'fa-bookmark' : 'fa-bookmark-o';
+			return this.bookmarked ? 'fa-bookmark' : 'fa-bookmark-o';
 		},
 		tooltip() {
 			return this.l10n.bookmarkTooltip(this.detail.bookmark_count);
@@ -945,7 +948,7 @@ const patchouli = new Vue({
 	template: `
 	<ul id="パチュリー">
 		<image-item v-for="book in sortedBooks(library)"
-			v-show="book.bookmark_count >= filters.limit"
+			v-show="book.bookmark_count >= filters.limit && book.tags_str.indexOf(filters.tag) >= 0"
 			:key="book.illust_id"
 			:api="api"
 			:l10n="l10n"

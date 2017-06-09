@@ -71,16 +71,20 @@ class Pixiv {
 		return ret;
 	}
 
-	async getBookmarkCount(illust_id) {
+	async getBookmarkCountAndTags(illust_id) {
 		const url = `/bookmark_detail.php?illust_id=${illust_id}`;
 
 		try {
 			const html = await this.fetch(url);
 			const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
 			const bookmark_count = _a ? parseInt(_a[1]) : 0;
+			const _b = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
+			const _c = _b ? _b[0].match(/>[^<]+?(?=<\/a>)/g) : [];
+			const tags = _c ? _c.map(x => x.slice(1)) : [];
 			return {
 				bookmark_count,
 				illust_id,
+				tags,
 			};
 		} catch (e) {
 			console.error(e);
@@ -95,7 +99,7 @@ class Pixiv {
 	 * @return {{String: Object}}
 	 */
 	async getBookmarksDetail(illust_ids) {
-		const _f = this.getBookmarkCount.bind(this);
+		const _f = this.getBookmarkCountAndTags.bind(this);
 		return await this.getDetail(illust_ids, _f);
 	}
 

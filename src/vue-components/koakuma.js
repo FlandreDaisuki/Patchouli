@@ -2,16 +2,22 @@ const koakumaTemplate = `
 <div id="こあくま">
 	<div>{{ l10n.koakumaProcessed(library.length) }}</div>
 	<koakuma-bookmark :l10n="l10n"
-		:limit="filters.limit"
-		@limitUpdate="limitUpdate"></koakuma-bookmark>
+		:limit="filters.limit"></koakuma-bookmark>
+	<input id="koakuma-tag-input"
+			:placeholder="l10n.tag"
+			@input="tagUpdate"/>
 	<button id="koakuma-switch"
 		@click="switchSearching"
 		:disabled="isEnded"
 		:class="switchStyle">{{ switchText }}</button>
-	<koakuma-settings :l10n="l10n"
-		:favorite="favorite"
-		@fullwidthUpdate="fullwidthUpdate"
-		@sortUpdate="sortUpdate"></koakuma-settings>
+	<div>
+		<input id="koakuma-settings-fullwidth" type="checkbox"
+			:checked="favorite.fullwidth"
+			@click="fullwidthClick"> {{ l10n.koakumaFullwidth }}
+		<input id="koakuma-settings-sort" type="checkbox"
+			:checked="favorite.sort"
+			@click="sortClick"> {{ l10n.koakumaSort }}
+	</div>
 </div>`;
 const koakuma = new Vue({
 	data: {
@@ -117,7 +123,7 @@ const koakuma = new Vue({
 							is_ugoira: !!illust.ugoira_meta,
 							is_follow: ud[illust.user_id].is_follow,
 							bookmark_count: bd[iid].bookmark_count,
-							// tags: bd[iid].somehow,
+							tags_str: bd[iid].tags.join(' '),
 							// rating_score: ipd[iid].rating_score,
 						}
 						if (this.pagetype.MYBOOKMARK) {
@@ -152,11 +158,11 @@ const koakuma = new Vue({
 				this.stop();
 			}
 		},
-		limitUpdate(value) {
-			global.filters.limit = isNaN(value) ? 0 : value;
+		tagUpdate(event) {
+			global.filters.tag = event.target.value;
 		},
-		fullwidthUpdate(todo) {
-			if (todo) {
+		fullwidthClick(event) {
+			if (event.target.checked) {
 				document.querySelector('#wrapper').classList.add('fullwidth');
 				global.favorite.fullwidth = 1;
 			} else {
@@ -165,8 +171,8 @@ const koakuma = new Vue({
 			}
 			Pixiv.storageSet(global.favorite);
 		},
-		sortUpdate(todo) {
-			if (todo) {
+		sortClick(event) {
+			if (event.target.checked) {
 				global.filters.orderBy = 'bookmark_count';
 				global.favorite.sort = 1;
 			} else {
