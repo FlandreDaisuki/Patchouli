@@ -3,6 +3,7 @@ class L10N {
 		this.lang = document.documentElement.lang;
 		this.following = this._following();
 		this.bookmark = this._bookmark();
+		this.tag = this._tag();
 		this.koakumaGo = this._koakumaGo();
 		this.koakumaPause = this._koakumaPause();
 		this.koakumaEnd = this._koakumaEnd();
@@ -32,6 +33,19 @@ class L10N {
 				return '收藏';
 			default:
 				return 'Bookmark';
+		}
+	}
+
+	_tag() {
+		switch (this.lang) {
+			case 'ja':
+				return 'タグフィルター';
+			case 'zh-tw':
+				return '標籤過濾器';
+			case 'zh':
+				return '标签过滤器';
+			default:
+				return 'Tag filter';
 		}
 	}
 

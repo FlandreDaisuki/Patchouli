@@ -6,6 +6,7 @@ const global = {
 	filters: {
 		limit: 0,
 		orderBy: 'illust_id',
+		tag: '',
 	},
 	favorite: {
 		fullwidth: 1,

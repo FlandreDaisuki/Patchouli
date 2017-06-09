@@ -34,7 +34,7 @@ const patchouli = new Vue({
 	template: `
 	<ul id="パチュリー">
 		<image-item v-for="book in sortedBooks(library)"
-			v-show="book.bookmark_count >= filters.limit"
+			v-show="book.bookmark_count >= filters.limit && book.tags_str.indexOf(filters.tag) >= 0"
 			:key="book.illust_id"
 			:api="api"
 			:l10n="l10n"

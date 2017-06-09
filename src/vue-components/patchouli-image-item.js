@@ -25,7 +25,6 @@ const patchouliImageItemTemplate = `
 			<a v-else class="is-bookmarked" @click.prevent="bookmarkClick">
 				<i class="fa" :class="bookmarkStyle" aria-hidden="true"></i>
 			</a>
-
 		</li>
 	</ul>
 </li>`;
@@ -33,7 +32,7 @@ Vue.component('image-item', {
 	props: ['api', 'l10n', 'detail', 'pagetype'],
 	data() {
 		return {
-			bookmarked: this.detail.bookmarked,
+			bookmarked: this.detail.is_bookmarked,
 		};
 	},
 	computed: {
@@ -54,7 +53,7 @@ Vue.component('image-item', {
 			};
 		},
 		bookmarkStyle() {
-			return this.detail.is_bookmarked ? 'fa-bookmark' : 'fa-bookmark-o';
+			return this.bookmarked ? 'fa-bookmark' : 'fa-bookmark-o';
 		},
 		tooltip() {
 			return this.l10n.bookmarkTooltip(this.detail.bookmark_count);
