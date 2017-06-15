@@ -11,7 +11,7 @@
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.06.10
+// @version     2017.06.15
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
@@ -421,7 +421,7 @@ class Pixiv {
 	async getPageIllustids(url, needBookId) {
 		try {
 			const html = await this.fetch(url);
-			const next_tag = html.match(/class="next".+(?=<\/span>)/);
+			const next_tag = html.match(/class="next"[^\/]*/);
 
 			let next_url = '';
 			if (next_tag) {
@@ -501,7 +501,7 @@ const global = {
 	filters: {
 		limit: 0,
 		orderBy: 'illust_id',
-		tag: '',
+		tag: new RegExp('', 'i'),
 	},
 	favorite: {
 		fullwidth: 1,
@@ -721,7 +721,7 @@ const koakuma = new Vue({
 			}
 		},
 		tagUpdate(event) {
-			global.filters.tag = event.target.value;
+			global.filters.tag = new RegExp(event.target.value, 'i');
 		},
 		fullwidthClick(event) {
 			if (event.target.checked) {
@@ -796,6 +796,12 @@ if (!global.pagetype.NOSUP) {
 	#koakuma-bookmark-input:focus {
 		cursor: initial;
 	}
+	#koakuma-tag-input {
+		width: 150px;
+	}
+	#koakuma-tag-input:focus {
+		box-shadow: 0 0 1px 1px cornflowerblue;
+	}
 	#koakuma-switch {
 		border: 0;
 		padding: 3px 20px;
@@ -834,10 +840,20 @@ if (!global.pagetype.NOSUP) {
 		padding: 5px;
 		font-size: 16px;
 		text-align: center;
-		width: 162px;
+		max-width: 162px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 	#こあくま > * {
 		margin: 2px 0;
+		max-width: 100%;
+	}
+	#こあくま input::-moz-placeholder {
+		color: initial;
+	}
+	#こあくま *::-moz-selection {
+		background-color: initial;
 	}`);
 }
 const patchouliImageItemTemplate = `
@@ -948,7 +964,7 @@ const patchouli = new Vue({
 	template: `
 	<ul id="パチュリー">
 		<image-item v-for="book in sortedBooks(library)"
-			v-show="book.bookmark_count >= filters.limit && book.tags_str.indexOf(filters.tag) >= 0"
+			v-show="book.bookmark_count >= filters.limit && filters.tag.test(book.tags_str)"
 			:key="book.illust_id"
 			:api="api"
 			:l10n="l10n"

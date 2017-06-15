@@ -218,7 +218,7 @@ class Pixiv {
 		try {
 			const html = await this.fetch(url);
 			console.debug('getPageIllustids', url);
-			const next_tag = html.match(/class="next".+(?=<\/span>)/);
+			const next_tag = html.match(/class="next"[^\/]*/);
 
 			let next_url = '';
 			if (next_tag) {
