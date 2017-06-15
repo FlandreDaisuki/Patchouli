@@ -21,6 +21,7 @@ A simple Pixiv crawler. Naming is inspired from **Touhou Project**. Using Vue 2.
 ## Usage
 - `Go` and `Pause` to switch searching
 - Using mouse wheel to change bookmark filter, or type number
+- You can use regexp or part of tags in tag filter (ex. `レミ|フラン`)
 - Click the icon of white bookmark can add bookmark instantly
 
 ## Contribution

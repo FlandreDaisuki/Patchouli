@@ -501,7 +501,7 @@ const global = {
 	filters: {
 		limit: 0,
 		orderBy: 'illust_id',
-		tag: '',
+		tag: new RegExp('', 'i'),
 	},
 	favorite: {
 		fullwidth: 1,
@@ -721,7 +721,7 @@ const koakuma = new Vue({
 			}
 		},
 		tagUpdate(event) {
-			global.filters.tag = event.target.value;
+			global.filters.tag = new RegExp(event.target.value, 'i');
 		},
 		fullwidthClick(event) {
 			if (event.target.checked) {
@@ -964,7 +964,7 @@ const patchouli = new Vue({
 	template: `
 	<ul id="パチュリー">
 		<image-item v-for="book in sortedBooks(library)"
-			v-show="book.bookmark_count >= filters.limit && book.tags_str.indexOf(filters.tag) >= 0"
+			v-show="book.bookmark_count >= filters.limit && filters.tag.test(book.tags_str)"
 			:key="book.illust_id"
 			:api="api"
 			:l10n="l10n"

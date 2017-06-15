@@ -159,7 +159,7 @@ const koakuma = new Vue({
 			}
 		},
 		tagUpdate(event) {
-			global.filters.tag = event.target.value;
+			global.filters.tag = new RegExp(event.target.value, 'i');
 		},
 		fullwidthClick(event) {
 			if (event.target.checked) {

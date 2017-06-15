@@ -6,7 +6,7 @@ const global = {
 	filters: {
 		limit: 0,
 		orderBy: 'illust_id',
-		tag: '',
+		tag: new RegExp('', 'i'),
 	},
 	favorite: {
 		fullwidth: 1,
