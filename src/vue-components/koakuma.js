@@ -234,6 +234,12 @@ if (!global.pagetype.NOSUP) {
 	#koakuma-bookmark-input:focus {
 		cursor: initial;
 	}
+	#koakuma-tag-input {
+		width: 150px;
+	}
+	#koakuma-tag-input:focus {
+		box-shadow: 0 0 1px 1px cornflowerblue;
+	}
 	#koakuma-switch {
 		border: 0;
 		padding: 3px 20px;
@@ -272,9 +278,19 @@ if (!global.pagetype.NOSUP) {
 		padding: 5px;
 		font-size: 16px;
 		text-align: center;
-		width: 162px;
+		max-width: 162px;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 	#こあくま > * {
 		margin: 2px 0;
+		max-width: 100%;
+	}
+	#こあくま input::-moz-placeholder {
+		color: initial;
+	}
+	#こあくま *::-moz-selection {
+		background-color: initial;
 	}`);
 }
