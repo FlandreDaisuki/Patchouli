@@ -11,7 +11,7 @@
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.06.10
+// @version     2017.06.15
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
@@ -421,7 +421,7 @@ class Pixiv {
 	async getPageIllustids(url, needBookId) {
 		try {
 			const html = await this.fetch(url);
-			const next_tag = html.match(/class="next".+(?=<\/span>)/);
+			const next_tag = html.match(/class="next"[^\/]*/);
 
 			let next_url = '';
 			if (next_tag) {
