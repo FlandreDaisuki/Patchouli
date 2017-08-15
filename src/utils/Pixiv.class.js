@@ -7,7 +7,7 @@ class Pixiv {
 		const storage = localStorage.getItem('むきゅー');
 		if (!storage || storage.version < GM_info.script.version) {
 			Pixiv.storageSet({
-				version: GM_info.script.version
+				version: GM_info.script.version,
 			});
 		}
 		return JSON.parse(localStorage.getItem('むきゅー'));
@@ -92,12 +92,12 @@ class Pixiv {
 	}
 
 	/**
-	 * Returns detail object that illust_id: detail object by DOM
-	 *
-	 * { '12345': {}, '12346': {}, ... }
-	 * @param {String[]} illust_ids
-	 * @return {{String: Object}}
-	 */
+     * Returns detail object that illust_id: detail object by DOM
+     *
+     * { '12345': {}, '12346': {}, ... }
+     * @param {String[]} illust_ids
+     * @return {{String: Object}}
+     */
 	async getBookmarksDetail(illust_ids) {
 		const _f = this.getBookmarkCountAndTags.bind(this);
 		return await this.getDetail(illust_ids, _f);
@@ -120,40 +120,38 @@ class Pixiv {
 	}
 
 	/**
-	 * Returns detail object that illust_id: detail object by DOM
-	 *
-	 * { '12345': {}, '12346': {}, ... }
-	 * @param {String[]} illust_ids
-	 * @return {{String: Object}}
-	 */
+     * Returns detail object that illust_id: detail object by DOM
+     *
+     * { '12345': {}, '12346': {}, ... }
+     * @param {String[]} illust_ids
+     * @return {{String: Object}}
+     */
 	async getIllustPagesDetail(illust_ids) {
 		const _f = this.getIllustPageDetail.bind(this);
 		return await this.getDetail(illust_ids, _f);
 	}
 
 	/**
-	 * Returns detail object that illust_id: detail object by Pixiv API
-	 *
-	 * { '12345': {}, '12346': {}, ... }
-	 * @param {String[]} illust_ids
-	 * @return {{String: Object}}
-	 */
+     * Returns detail object that illust_id: detail object by Pixiv API
+     *
+     * { '12345': {}, '12346': {}, ... }
+     * @param {String[]} illust_ids
+     * @return {{String: Object}}
+     */
 	getIllustsDetail(illust_ids) {
 		const iids = illust_ids.join(',');
 		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
 
-		return this.fetch(url)
-			.then(json => json.body)
-			.catch(console.error);
+		return this.fetch(url).then(json => json.body).catch(console.error);
 	}
 
 	/**
-	 * Returns detail object that user_id: detail object by Pixiv API
-	 *
-	 * { '12345': {}, '12346': {}, ... }
-	 * @param {String[]} user_ids
-	 * @return {{String: Object}}
-	 */
+     * Returns detail object that user_id: detail object by Pixiv API
+     *
+     * { '12345': {}, '12346': {}, ... }
+     * @param {String[]} user_ids
+     * @return {{String: Object}}
+     */
 	getUsersDetail(user_ids) {
 		const uids = user_ids.join(',');
 		const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
@@ -178,29 +176,27 @@ class Pixiv {
 			`tt=${this.tt}`,
 		].join('&');
 		const config = {
-			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
 		};
 
-		return axios.post('/rpc/index.php', data, config)
+		return axios
+			.post('/rpc/index.php', data, config)
 			.then(res => {
 				return new Promise((resolve, reject) => {
-					(res.statusText === 'OK' && !res.data.error) ? resolve(true): reject(res);
+					res.statusText === 'OK' && !res.data.error ? resolve(true) : reject(res);
 				});
 			})
 			.catch(console.error);
 	}
 
 	/**
-	 * Returns array of recommend illust_id
-	 * @return {String[]}
-	 */
+     * Returns array of recommend illust_id
+     * @return {String[]}
+     */
 	async getRecommendIllustids(illust_id = 'auto') {
-		const param = [
-			'type=illust',
-			`sample_illusts=${illust_id}`,
-			'num_recommendations=500',
-			`tt=${this.tt}`,
-		].join('&');
+		const param = ['type=illust', `sample_illusts=${illust_id}`, 'num_recommendations=500', `tt=${this.tt}`].join(
+			'&',
+		);
 		const url = `/rpc/recommender.php?${param}`;
 		try {
 			return await this.fetch(url).then(data => data.recommendations.map(x => `${x}`));
@@ -210,10 +206,10 @@ class Pixiv {
 	}
 
 	/**
-	 * Returns array of recommend illust_id
-	 * @param {String} url
-	 * @return {{next_url: String, illust_ids: String[]}}
-	 */
+     * Returns array of recommend illust_id
+     * @param {String} url
+     * @return {{next_url: String, illust_ids: String[]}}
+     */
 	async getPageIllustids(url, needBookId) {
 		try {
 			const html = await this.fetch(url);

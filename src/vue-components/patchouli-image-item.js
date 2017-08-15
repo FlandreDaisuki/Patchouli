@@ -2,6 +2,9 @@ const patchouliImageItemTemplate = `
 <li class="image-item">
 	<a class="work _work" :href="illust_page_href" :class="thumbStyle">
 		<div><img :src="detail.thumb_src"></div>
+		<div v-if="detail.is_multiple" class="page-count">
+			<div class="icon"></div><span>{{detail.illust_page_count}}</span>
+		</div>
 	</a>
 	<a :href="illust_page_href">
 		<h1 class="title" :title="detail.illust_title">{{ detail.illust_title }}</h1>

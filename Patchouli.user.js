@@ -11,7 +11,7 @@
 // @include     *://www.pixiv.net/*
 // @require     https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.3/vue.min.js
 // @require     https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.1/axios.min.js
-// @version     2017.06.15
+// @version     2017.08.15
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
@@ -22,535 +22,529 @@
 // @compatible  chrome 55+
 // ==/UserScript==
 'use strict';
-console.log(`[${GM_info.script.name}] version: ${GM_info.script.version}`);
-class L10N {
-	constructor() {
-		this.lang = document.documentElement.lang;
-		this.following = this._following();
-		this.bookmark = this._bookmark();
-		this.tag = this._tag();
-		this.koakumaGo = this._koakumaGo();
-		this.koakumaPause = this._koakumaPause();
-		this.koakumaEnd = this._koakumaEnd();
-		this.koakumaFullwidth = this._koakumaFullwidth();
-		this.koakumaSort = this._koakumaSort();
-	}
+console.log(`[${GM_info.script.name}] version: ${GM_info.script.version}`);class L10N {
+    constructor() {
+        this.lang = document.documentElement.lang;
+        this.following = this._following();
+        this.bookmark = this._bookmark();
+        this.tag = this._tag();
+        this.koakumaGo = this._koakumaGo();
+        this.koakumaPause = this._koakumaPause();
+        this.koakumaEnd = this._koakumaEnd();
+        this.koakumaFullwidth = this._koakumaFullwidth();
+        this.koakumaSort = this._koakumaSort();
+    }
 
-	_following() {
-		switch (this.lang) {
-			case 'ja':
-				return 'フォロー中';
-			case 'zh-tw':
-				return '關注中';
-			case 'zh':
-				return '关注中';
-			default:
-				return 'following';
-		}
-	}
+    _following() {
+        switch (this.lang) {
+            case 'ja':
+                return 'フォロー中';
+            case 'zh-tw':
+                return '關注中';
+            case 'zh':
+                return '关注中';
+            default:
+                return 'following';
+        }
+    }
 
-	_bookmark() {
-		switch (this.lang) {
-			case 'ja':
-				return 'ブックマーク';
-			case 'zh-tw':
-			case 'zh':
-				return '收藏';
-			default:
-				return 'Bookmark';
-		}
-	}
+    _bookmark() {
+        switch (this.lang) {
+            case 'ja':
+                return 'ブックマーク';
+            case 'zh-tw':
+            case 'zh':
+                return '收藏';
+            default:
+                return 'Bookmark';
+        }
+    }
 
-	_tag() {
-		switch (this.lang) {
-			case 'ja':
-				return 'タグフィルター';
-			case 'zh-tw':
-				return '標籤過濾器';
-			case 'zh':
-				return '标签过滤器';
-			default:
-				return 'Tag filter';
-		}
-	}
+    _tag() {
+        switch (this.lang) {
+            case 'ja':
+                return 'タグフィルター';
+            case 'zh-tw':
+                return '標籤過濾器';
+            case 'zh':
+                return '标签过滤器';
+            default:
+                return 'Tag filter';
+        }
+    }
 
-	_koakumaGo() {
-		switch (this.lang) {
-			case 'ja':
-				return '捜す';
-			case 'zh-tw':
-			case 'zh':
-				return '找';
-			default:
-				return 'Go';
-		}
-	}
+    _koakumaGo() {
+        switch (this.lang) {
+            case 'ja':
+                return '捜す';
+            case 'zh-tw':
+            case 'zh':
+                return '找';
+            default:
+                return 'Go';
+        }
+    }
 
-	_koakumaPause() {
-		switch (this.lang) {
-			case 'ja':
-				return '中断';
-			case 'zh-tw':
-			case 'zh':
-				return '停';
-			default:
-				return 'Pause';
-		}
-	}
+    _koakumaPause() {
+        switch (this.lang) {
+            case 'ja':
+                return '中断';
+            case 'zh-tw':
+            case 'zh':
+                return '停';
+            default:
+                return 'Pause';
+        }
+    }
 
-	_koakumaEnd() {
-		switch (this.lang) {
-			case 'ja':
-				return '終了';
-			case 'zh-tw':
-			case 'zh':
-				return '完';
-			default:
-				return 'End';
-		}
-	}
+    _koakumaEnd() {
+        switch (this.lang) {
+            case 'ja':
+                return '終了';
+            case 'zh-tw':
+            case 'zh':
+                return '完';
+            default:
+                return 'End';
+        }
+    }
 
-	koakumaProcessed(n) {
-		switch (this.lang) {
-			case 'ja':
-				return `${n} 件が処理された`;
-			case 'zh-tw':
-				return `已處理 ${n} 張`;
-			case 'zh':
-				return `已处理 ${n} 张`;
-			default:
-				return `${n} pics processed`;
-		}
-	}
+    koakumaProcessed(n) {
+        switch (this.lang) {
+            case 'ja':
+                return `${n} 件が処理された`;
+            case 'zh-tw':
+                return `已處理 ${n} 張`;
+            case 'zh':
+                return `已处理 ${n} 张`;
+            default:
+                return `${n} pics processed`;
+        }
+    }
 
-	_koakumaFullwidth() {
-		switch (this.lang) {
-			case 'ja':
-				return '全幅';
-			case 'zh-tw':
-				return '全寬';
-			case 'zh':
-				return '全宽';
-			default:
-				return 'fullwidth';
-		}
-	}
+    _koakumaFullwidth() {
+        switch (this.lang) {
+            case 'ja':
+                return '全幅';
+            case 'zh-tw':
+                return '全寬';
+            case 'zh':
+                return '全宽';
+            default:
+                return 'fullwidth';
+        }
+    }
 
-	_koakumaSort() {
-		switch (this.lang) {
-			case 'ja':
-				return 'ソート';
-			case 'zh-tw':
-			case 'zh':
-				return '排序';
-			default:
-				return 'sorted';
-		}
-	}
+    _koakumaSort() {
+        switch (this.lang) {
+            case 'ja':
+                return 'ソート';
+            case 'zh-tw':
+            case 'zh':
+                return '排序';
+            default:
+                return 'sorted';
+        }
+    }
 
-	bookmarkTooltip(n) {
-		switch (this.lang) {
-			case 'ja':
-				return `${n}件のブックマーク`;
-			case 'zh-tw':
-				return `${n}個收藏`;
-			case 'zh':
-				return `${n}个收藏`;
-			default:
-				return `${n} bookmarks`;
-		}
-	}
-}
-class PageType {
-	constructor() {
-		const path = location.pathname;
-		const search = new URLSearchParams(location.search);
-		const hasid = search.has('id');
-		this.DEFAULT = false;
-		this.RECOMMEND = false;
-		this.MEMBERILLIST = false;
-		this.MYBOOKMARK = false;
-		this.NOSUP = false;
-		switch (path) {
-			case '/search.php':
-			case '/bookmark_new_illust.php':
-			case '/new_illust.php':
-			case '/mypixiv_new_illust.php':
-			case '/new_illust_r18.php':
-			case '/bookmark_new_illust_r18.php':
-				this.DEFAULT = true;
-				break;
-			case '/recommended.php':
-				this.RECOMMEND = true;
-				break;
-			case '/member_illust.php':
-				this.MEMBERILLIST = hasid;
-				this.NOSUP = !hasid;
-				break;
-			case '/bookmark.php':
-				const t = search.get('type');
-				if (hasid) {
-					this.DEFAULT = true;
-				} else if (!t || t === 'illust_all') {
-					this.MYBOOKMARK = true;
-				} else {
-					// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
-					this.NOSUP = true;
-				}
-				break;
-			default:
-				this.NOSUP = true;
-		}
-	}
-}
-class Pixiv {
-	constructor() {
-		this.tt = document.querySelector('input[name="tt"]').value;
-	}
+    bookmarkTooltip(n) {
+        switch (this.lang) {
+            case 'ja':
+                return `${n}件のブックマーク`;
+            case 'zh-tw':
+                return `${n}個收藏`;
+            case 'zh':
+                return `${n}个收藏`;
+            default:
+                return `${n} bookmarks`;
+        }
+    }
+}class PageType {
+    constructor() {
+        const path = location.pathname;
+        const search = new URLSearchParams(location.search);
+        const hasid = search.has('id');
+        this.DEFAULT = false;
+        this.RECOMMEND = false;
+        this.MEMBERILLIST = false;
+        this.MYBOOKMARK = false;
+        this.NOSUP = false;
+        switch (path) {
+            case '/search.php':
+            case '/bookmark_new_illust.php':
+            case '/new_illust.php':
+            case '/mypixiv_new_illust.php':
+            case '/new_illust_r18.php':
+            case '/bookmark_new_illust_r18.php':
+                this.DEFAULT = true;
+                break;
+            case '/recommended.php':
+                this.RECOMMEND = true;
+                break;
+            case '/member_illust.php':
+                this.MEMBERILLIST = hasid;
+                this.NOSUP = !hasid;
+                break;
+            case '/bookmark.php':
+                const t = search.get('type');
+                if (hasid) {
+                    this.DEFAULT = true;
+                } else if (!t || t === 'illust_all') {
+                    this.MYBOOKMARK = true;
+                } else {
+                    // e.g. http://www.pixiv.net/bookmark.php?type=reg_user
+                    this.NOSUP = true;
+                }
+                break;
+            default:
+                this.NOSUP = true;
+        }
+    }
+}class Pixiv {
+    constructor() {
+        this.tt = document.querySelector('input[name="tt"]').value;
+    }
 
-	static storageGet() {
-		const storage = localStorage.getItem('むきゅー');
-		if (!storage || storage.version < GM_info.script.version) {
-			Pixiv.storageSet({
-				version: GM_info.script.version
-			});
-		}
-		return JSON.parse(localStorage.getItem('むきゅー'));
-	}
+    static storageGet() {
+        const storage = localStorage.getItem('むきゅー');
+        if (!storage || storage.version < GM_info.script.version) {
+            Pixiv.storageSet({
+                version: GM_info.script.version
+            });
+        }
+        return JSON.parse(localStorage.getItem('むきゅー'));
+    }
 
-	static storageSet(obj) {
-		localStorage.setItem('むきゅー', JSON.stringify(obj));
-	}
+    static storageSet(obj) {
+        localStorage.setItem('むきゅー', JSON.stringify(obj));
+    }
 
-	static rmAnnoyance(doc = document) {
-		[
-			'iframe',
-			//Ad
-			'.ad',
-			'.ads_area',
-			'.ad-footer',
-			'.ads_anchor',
-			'.ads-top-info',
-			'.comic-hot-works',
-			'.user-ad-container',
-			'.ads_area_no_margin',
-			//Premium
-			'.hover-item',
-			'.ad-printservice',
-			'.bookmark-ranges',
-			'.require-premium',
-			'.showcase-reminder',
-			'.sample-user-search',
-			'.popular-introduction',
-		].forEach(cl => [...doc.querySelectorAll(cl)].forEach(el => el.remove()));
-	}
+    static rmAnnoyance(doc = document) {
+        [
+            'iframe',
+            //Ad
+            '.ad',
+            '.ads_area',
+            '.ad-footer',
+            '.ads_anchor',
+            '.ads-top-info',
+            '.comic-hot-works',
+            '.user-ad-container',
+            '.ads_area_no_margin',
+            //Premium
+            '.hover-item',
+            '.ad-printservice',
+            '.bookmark-ranges',
+            '.require-premium',
+            '.showcase-reminder',
+            '.sample-user-search',
+            '.popular-introduction',
+        ].forEach(cl => [...doc.querySelectorAll(cl)].forEach(el => el.remove()));
+    }
 
-	async fetch(url) {
-		try {
-			if (url) {
-				const res = await axios.get(url);
-				if (res.statusText !== 'OK') {
-					throw res;
-				} else {
-					return res.data;
-				}
-			} else {
-				console.trace('Fetch has no url');
-			}
-		} catch (e) {
-			console.error(e);
-		}
-	}
+    async fetch(url) {
+        try {
+            if (url) {
+                const res = await axios.get(url);
+                if (res.statusText !== 'OK') {
+                    throw res;
+                } else {
+                    return res.data;
+                }
+            } else {
+                console.trace('Fetch has no url');
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
-	async getDetail(illust_ids, f) {
-		const iids = [];
-		for (let iid of illust_ids) {
-			iids.push(f(iid));
-		}
-		const processed = await Promise.all(iids);
-		const ret = {};
-		for (let p of processed) {
-			ret[p.illust_id] = p;
-		}
-		return ret;
-	}
+    async getDetail(illust_ids, f) {
+        const iids = [];
+        for (let iid of illust_ids) {
+            iids.push(f(iid));
+        }
+        const processed = await Promise.all(iids);
+        const ret = {};
+        for (let p of processed) {
+            ret[p.illust_id] = p;
+        }
+        return ret;
+    }
 
-	async getBookmarkCountAndTags(illust_id) {
-		const url = `/bookmark_detail.php?illust_id=${illust_id}`;
+    async getBookmarkCountAndTags(illust_id) {
+        const url = `/bookmark_detail.php?illust_id=${illust_id}`;
 
-		try {
-			const html = await this.fetch(url);
-			const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
-			const bookmark_count = _a ? parseInt(_a[1]) : 0;
-			const _b = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
-			const _c = _b ? _b[0].match(/>[^<]+?(?=<\/a>)/g) : [];
-			const tags = _c ? _c.map(x => x.slice(1)) : [];
-			return {
-				bookmark_count,
-				illust_id,
-				tags,
-			};
-		} catch (e) {
-			console.error(e);
-		}
-	}
+        try {
+            const html = await this.fetch(url);
+            const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
+            const bookmark_count = _a ? parseInt(_a[1]) : 0;
+            const _b = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
+            const _c = _b ? _b[0].match(/>[^<]+?(?=<\/a>)/g) : [];
+            const tags = _c ? _c.map(x => x.slice(1)) : [];
+            return {
+                bookmark_count,
+                illust_id,
+                tags,
+            };
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
-	/**
-	 * Returns detail object that illust_id: detail object by DOM
-	 *
-	 * { '12345': {}, '12346': {}, ... }
-	 * @param {String[]} illust_ids
-	 * @return {{String: Object}}
-	 */
-	async getBookmarksDetail(illust_ids) {
-		const _f = this.getBookmarkCountAndTags.bind(this);
-		return await this.getDetail(illust_ids, _f);
-	}
+    /**
+     * Returns detail object that illust_id: detail object by DOM
+     *
+     * { '12345': {}, '12346': {}, ... }
+     * @param {String[]} illust_ids
+     * @return {{String: Object}}
+     */
+    async getBookmarksDetail(illust_ids) {
+        const _f = this.getBookmarkCountAndTags.bind(this);
+        return await this.getDetail(illust_ids, _f);
+    }
 
-	async getIllustPageDetail(illust_id) {
-		const url = `/member_illust.php?mode=medium&illust_id=${illust_id}`;
+    async getIllustPageDetail(illust_id) {
+        const url = `/member_illust.php?mode=medium&illust_id=${illust_id}`;
 
-		try {
-			const html = await this.fetch(url);
-			const _a = html.match(/rated-count[^\d]+(\d+)/);
-			const rating_score = _a ? parseInt(_a[1]) : 0;
-			return {
-				illust_id,
-				rating_score,
-			};
-		} catch (e) {
-			console.error(e);
-		}
-	}
+        try {
+            const html = await this.fetch(url);
+            const _a = html.match(/rated-count[^\d]+(\d+)/);
+            const rating_score = _a ? parseInt(_a[1]) : 0;
+            return {
+                illust_id,
+                rating_score,
+            };
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
-	/**
-	 * Returns detail object that illust_id: detail object by DOM
-	 *
-	 * { '12345': {}, '12346': {}, ... }
-	 * @param {String[]} illust_ids
-	 * @return {{String: Object}}
-	 */
-	async getIllustPagesDetail(illust_ids) {
-		const _f = this.getIllustPageDetail.bind(this);
-		return await this.getDetail(illust_ids, _f);
-	}
+    /**
+     * Returns detail object that illust_id: detail object by DOM
+     *
+     * { '12345': {}, '12346': {}, ... }
+     * @param {String[]} illust_ids
+     * @return {{String: Object}}
+     */
+    async getIllustPagesDetail(illust_ids) {
+        const _f = this.getIllustPageDetail.bind(this);
+        return await this.getDetail(illust_ids, _f);
+    }
 
-	/**
-	 * Returns detail object that illust_id: detail object by Pixiv API
-	 *
-	 * { '12345': {}, '12346': {}, ... }
-	 * @param {String[]} illust_ids
-	 * @return {{String: Object}}
-	 */
-	getIllustsDetail(illust_ids) {
-		const iids = illust_ids.join(',');
-		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
+    /**
+     * Returns detail object that illust_id: detail object by Pixiv API
+     *
+     * { '12345': {}, '12346': {}, ... }
+     * @param {String[]} illust_ids
+     * @return {{String: Object}}
+     */
+    getIllustsDetail(illust_ids) {
+        const iids = illust_ids.join(',');
+        const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
 
-		return this.fetch(url)
-			.then(json => json.body)
-			.catch(console.error);
-	}
+        return this.fetch(url)
+            .then(json => json.body)
+            .catch(console.error);
+    }
 
-	/**
-	 * Returns detail object that user_id: detail object by Pixiv API
-	 *
-	 * { '12345': {}, '12346': {}, ... }
-	 * @param {String[]} user_ids
-	 * @return {{String: Object}}
-	 */
-	getUsersDetail(user_ids) {
-		const uids = user_ids.join(',');
-		const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
-		return this.fetch(url)
-			.then(json => {
-				let ret = {};
-				for (let u of json.body) {
-					ret[u.user_id] = u;
-				}
-				return ret;
-			})
-			.catch(console.error);
-	}
+    /**
+     * Returns detail object that user_id: detail object by Pixiv API
+     *
+     * { '12345': {}, '12346': {}, ... }
+     * @param {String[]} user_ids
+     * @return {{String: Object}}
+     */
+    getUsersDetail(user_ids) {
+        const uids = user_ids.join(',');
+        const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
+        return this.fetch(url)
+            .then(json => {
+                let ret = {};
+                for (let u of json.body) {
+                    ret[u.user_id] = u;
+                }
+                return ret;
+            })
+            .catch(console.error);
+    }
 
-	postBookmarkadd(illust_id) {
-		const data = [
-			'mode=save_illust_bookmark',
-			`illust_id=${illust_id}`,
-			'restrict=0',
-			'comment=',
-			'tags=',
-			`tt=${this.tt}`,
-		].join('&');
-		const config = {
-			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-		};
+    postBookmarkadd(illust_id) {
+        const data = [
+            'mode=save_illust_bookmark',
+            `illust_id=${illust_id}`,
+            'restrict=0',
+            'comment=',
+            'tags=',
+            `tt=${this.tt}`,
+        ].join('&');
+        const config = {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        };
 
-		return axios.post('/rpc/index.php', data, config)
-			.then(res => {
-				return new Promise((resolve, reject) => {
-					(res.statusText === 'OK' && !res.data.error) ? resolve(true): reject(res);
-				});
-			})
-			.catch(console.error);
-	}
+        return axios.post('/rpc/index.php', data, config)
+            .then(res => {
+                return new Promise((resolve, reject) => {
+                    (res.statusText === 'OK' && !res.data.error) ? resolve(true): reject(res);
+                });
+            })
+            .catch(console.error);
+    }
 
-	/**
-	 * Returns array of recommend illust_id
-	 * @return {String[]}
-	 */
-	async getRecommendIllustids(illust_id = 'auto') {
-		const param = [
-			'type=illust',
-			`sample_illusts=${illust_id}`,
-			'num_recommendations=500',
-			`tt=${this.tt}`,
-		].join('&');
-		const url = `/rpc/recommender.php?${param}`;
-		try {
-			return await this.fetch(url).then(data => data.recommendations.map(x => `${x}`));
-		} catch (e) {
-			console.error(e);
-		}
-	}
+    /**
+     * Returns array of recommend illust_id
+     * @return {String[]}
+     */
+    async getRecommendIllustids(illust_id = 'auto') {
+        const param = [
+            'type=illust',
+            `sample_illusts=${illust_id}`,
+            'num_recommendations=500',
+            `tt=${this.tt}`,
+        ].join('&');
+        const url = `/rpc/recommender.php?${param}`;
+        try {
+            return await this.fetch(url).then(data => data.recommendations.map(x => `${x}`));
+        } catch (e) {
+            console.error(e);
+        }
+    }
 
-	/**
-	 * Returns array of recommend illust_id
-	 * @param {String} url
-	 * @return {{next_url: String, illust_ids: String[]}}
-	 */
-	async getPageIllustids(url, needBookId) {
-		try {
-			const html = await this.fetch(url);
-			const next_tag = html.match(/class="next"[^\/]*/);
+    /**
+     * Returns array of recommend illust_id
+     * @param {String} url
+     * @return {{next_url: String, illust_ids: String[]}}
+     */
+    async getPageIllustids(url, needBookId) {
+        try {
+            const html = await this.fetch(url);
+            const next_tag = html.match(/class="next"[^\/]*/);
 
-			let next_url = '';
-			if (next_tag) {
-				const next_href = next_tag[0].match(/href="([^"]+)"/);
-				if (next_href) {
-					const query = next_href[1].replace(/&amp;/g, '&');
-					if (query) {
-						next_url = `${location.pathname}${query}`;
-					}
-				}
-			}
-			const iidHTMLs = html.match(/data-id="\d+"/g) || [];
-			const illust_ids = [];
-			for (let dataid of iidHTMLs) {
-				const iid = dataid.replace(/\D+(\d+).*/, '$1');
-				if (!illust_ids.includes(iid) && iid !== '0') {
-					illust_ids.push(iid);
-				}
-			}
+            let next_url = '';
+            if (next_tag) {
+                const next_href = next_tag[0].match(/href="([^"]+)"/);
+                if (next_href) {
+                    const query = next_href[1].replace(/&amp;/g, '&');
+                    if (query) {
+                        next_url = `${location.pathname}${query}`;
+                    }
+                }
+            }
+            const iidHTMLs = html.match(/data-id="\d+"/g) || [];
+            const illust_ids = [];
+            for (let dataid of iidHTMLs) {
+                const iid = dataid.replace(/\D+(\d+).*/, '$1');
+                if (!illust_ids.includes(iid) && iid !== '0') {
+                    illust_ids.push(iid);
+                }
+            }
 
-			const ret = {
-				next_url,
-				illust_ids,
-			};
+            const ret = {
+                next_url,
+                illust_ids,
+            };
 
-			if (needBookId) {
-				const bookId = {};
-				const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
-				for (let bim of bimHTMLs) {
-					const [iid, bid] = bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
-					if (illust_ids.includes(iid)) {
-						bookId[iid] = bid;
-					}
-				}
-				ret.bookmark_ids = bookId;
-			}
-			return ret;
-		} catch (e) {
-			console.error(e);
-		}
-	}
-}
-const utils = {
-	linkStyle(url) {
-		const link = document.createElement('link');
-		link.rel = 'stylesheet';
-		link.type = 'text/css';
-		link.href = url;
-		document.head.appendChild(link);
-	},
-	linkScript(url) {
-		const script = document.createElement('script');
-		script.src = url;
-		document.head.appendChild(script);
-	},
-	createIcon(name, options = {}) {
-		const el = document.createElement('i');
-		el.classList.add('fa');
-		el.classList.add(`fa-${name}`);
-		el.setAttribute('aria-hidden', 'true');
-		return el;
-	},
-	addStyle(text, id = '') {
-		const style = document.createElement('style');
-		style.innerHTML = text;
-		if (id) {
-			style.id = id;
-		}
-		document.head.appendChild(style);
-	},
-};
-const global = {
-	api: new Pixiv(),
-	l10n: new L10N(),
-	pagetype: new PageType(),
-	library: [],
-	filters: {
-		limit: 0,
-		orderBy: 'illust_id',
-		tag: new RegExp('', 'i'),
-	},
-	favorite: {
-		fullwidth: 1,
-		sort: 0,
-	},
-	patchouliToMount: (() => {
-		const _a = document.querySelector('li.image-item');
-		const _b = document.querySelector('ul._image-items');
-		return _a ? _a.parentElement : _b;
-	})(),
-	koakumaToMount: (() => {
-		return document.querySelector('#toolbar-items');
-	})(),
+            if (needBookId) {
+                const bookId = {};
+                const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
+                for (let bim of bimHTMLs) {
+                    const [iid, bid] = bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
+                    if (illust_ids.includes(iid)) {
+                        bookId[iid] = bid;
+                    }
+                }
+                ret.bookmark_ids = bookId;
+            }
+            return ret;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+}const utils = {
+    linkStyle(url) {
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.type = 'text/css';
+        link.href = url;
+        document.head.appendChild(link);
+    },
+    linkScript(url) {
+        const script = document.createElement('script');
+        script.src = url;
+        document.head.appendChild(script);
+    },
+    createIcon(name, options = {}) {
+        const el = document.createElement('i');
+        el.classList.add('fa');
+        el.classList.add(`fa-${name}`);
+        el.setAttribute('aria-hidden', 'true');
+        return el;
+    },
+    addStyle(text, id = '') {
+        const style = document.createElement('style');
+        style.innerHTML = text;
+        if (id) {
+            style.id = id;
+        }
+        document.head.appendChild(style);
+    },
+};const global = {
+    api: new Pixiv(),
+    l10n: new L10N(),
+    pagetype: new PageType(),
+    library: [],
+    filters: {
+        limit: 0,
+        orderBy: 'illust_id',
+        tag: new RegExp('', 'i'),
+    },
+    favorite: {
+        fullwidth: 1,
+        sort: 0,
+    },
+    patchouliToMount: (() => {
+        const _a = document.querySelector('li.image-item');
+        const _b = document.querySelector('ul._image-items');
+        return _a ? _a.parentElement : _b;
+    })(),
+    koakumaToMount: (() => {
+        return document.querySelector('#toolbar-items');
+    })(),
 };
 global.favorite = (() => {
-	const _s = Object.assign(global.favorite, Pixiv.storageGet());
-	if (_s.fullwidth) {
-		document.querySelector('#wrapper').classList.add('fullwidth');
-	}
-	if (_s.sort) {
-		global.filters.orderBy = 'bookmark_count';
-	}
-	Pixiv.storageSet(_s);
-	return _s;
-})();
-Vue.component('koakuma-bookmark', {
-	props: ['limit', 'l10n'],
-	methods: {
-		blur(event) {
-			const self = event.target;
-			if (!self.validity.valid) {
-				console.error('koakuma-bookmark', self.validationMessage);
-			}
-		},
-		input(event) {
-			let value = Math.max(0, parseInt(event.target.value));
-			global.filters.limit = isNaN(value) ? 0 : value;
-		},
-		wheel(event) {
-			let value;
-			if (event.deltaY < 0) {
-				value = this.limit + 20;
-			} else {
-				value = Math.max(0, this.limit - 20);
-			}
-			global.filters.limit = isNaN(value) ? 0 : value;
-		},
-	},
-	template: `
+    const _s = Object.assign(global.favorite, Pixiv.storageGet());
+    if (_s.fullwidth) {
+        document.querySelector('#wrapper').classList.add('fullwidth');
+    }
+    if (_s.sort) {
+        global.filters.orderBy = 'bookmark_count';
+    }
+    Pixiv.storageSet(_s);
+    return _s;
+})();Vue.component('koakuma-bookmark', {
+    props: ['limit', 'l10n'],
+    methods: {
+        blur(event) {
+            const self = event.target;
+            if (!self.validity.valid) {
+                console.error('koakuma-bookmark', self.validationMessage);
+            }
+        },
+        input(event) {
+            let value = Math.max(0, parseInt(event.target.value));
+            global.filters.limit = isNaN(value) ? 0 : value;
+        },
+        wheel(event) {
+            let value;
+            if (event.deltaY < 0) {
+                value = this.limit + 20;
+            } else {
+                value = Math.max(0, this.limit - 20);
+            }
+            global.filters.limit = isNaN(value) ? 0 : value;
+        },
+    },
+    template: `
 	<div id="koakuma-bookmark">
 		<label for="koakuma-bookmark-input">★{{ l10n.bookmark }}</label>
 		<input id="koakuma-bookmark-input"
@@ -560,8 +554,7 @@ Vue.component('koakuma-bookmark', {
 			@blur="blur"
 			@input="input"/>
 	</div>`,
-});
-const koakumaTemplate = `
+});const koakumaTemplate = `
 <div id="こあくま">
 	<div>{{ l10n.koakumaProcessed(library.length) }}</div>
 	<koakuma-bookmark :l10n="l10n"
@@ -583,171 +576,170 @@ const koakumaTemplate = `
 	</div>
 </div>`;
 const koakuma = new Vue({
-	data: {
-		l10n: global.l10n,
-		library: global.library,
-		filters: global.filters,
-		api: global.api,
-		favorite: global.favorite,
-		pagetype: global.pagetype,
-		next_url: location.href,
-		isStoped: true,
-		isEnded: false,
-		localIdsQueue: [],
-		bookmark_ids: {},
-	},
-	computed: {
-		library_iids() {
-			return this.library.map(x => x.illust_id);
-		},
-		switchText() {
-			return this.isEnded ? this.l10n.koakumaEnd :
-				(this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause);
-		},
-		switchStyle() {
-			return {
-				ended: this.isEnded,
-				toSearch: !this.isEnded && this.isStoped,
-				toStop: !this.isEnded && !this.isStoped,
-			};
-		},
-	},
-	methods: {
-		async start(times = Infinity) {
-			this.isStoped = false;
-			const toContinue = () => {
-				return !this.isEnded && !this.isStoped && times > 0 &&
-					(this.next_url || this.localIdsQueue.length);
-			};
-			while (toContinue()) {
-				// get illust_ids and next_url
-				if (this.next_url) {
-					if (this.pagetype.RECOMMEND) {
-						if (this.next_url !== '') {
-							const res = await this.api.getRecommendIllustids();
-							this.next_url = '';
-							this.localIdsQueue.push(...res);
-						}
-					} else {
-						const res = await this.api.getPageIllustids(this.next_url, this.pagetype.MYBOOKMARK);
-						if (res.next_url === this.next_url) {
-							// debounce
-							this.stop();
-							break;
-						}
-						this.next_url = res.next_url;
-						this.localIdsQueue.push(...res.illust_ids);
-						if (this.pagetype.MYBOOKMARK) {
-							Object.assign(this.bookmark_ids, res.bookmark_ids);
-						}
-					}
-				}
+    data: {
+        l10n: global.l10n,
+        library: global.library,
+        filters: global.filters,
+        api: global.api,
+        favorite: global.favorite,
+        pagetype: global.pagetype,
+        next_url: location.href,
+        isStoped: true,
+        isEnded: false,
+        localIdsQueue: [],
+        bookmark_ids: {},
+    },
+    computed: {
+        library_iids() {
+            return this.library.map(x => x.illust_id);
+        },
+        switchText() {
+            return this.isEnded ? this.l10n.koakumaEnd : this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause;
+        },
+        switchStyle() {
+            return {
+                ended: this.isEnded,
+                toSearch: !this.isEnded && this.isStoped,
+                toStop: !this.isEnded && !this.isStoped,
+            };
+        },
+    },
+    methods: {
+        async start(times = Infinity) {
+            this.isStoped = false;
+            const toContinue = () => {
+                return !this.isEnded && !this.isStoped && times > 0 && (this.next_url || this.localIdsQueue.length);
+            };
+            while (toContinue()) {
+                // get illust_ids and next_url
+                if (this.next_url) {
+                    if (this.pagetype.RECOMMEND) {
+                        if (this.next_url !== '') {
+                            const res = await this.api.getRecommendIllustids();
+                            this.next_url = '';
+                            this.localIdsQueue.push(...res);
+                        }
+                    } else {
+                        const res = await this.api.getPageIllustids(this.next_url, this.pagetype.MYBOOKMARK);
+                        if (res.next_url === this.next_url) {
+                            // debounce
+                            this.stop();
+                            break;
+                        }
+                        this.next_url = res.next_url;
+                        this.localIdsQueue.push(...res.illust_ids);
+                        if (this.pagetype.MYBOOKMARK) {
+                            Object.assign(this.bookmark_ids, res.bookmark_ids);
+                        }
+                    }
+                }
 
-				//get illust_ids from localIdsQueue
-				const process_ids = [];
-				while (this.localIdsQueue.length && process_ids.length < 20) {
-					const id = this.localIdsQueue.shift();
-					if (!this.library_iids.includes(id)) {
-						process_ids.push(id);
-					}
-				}
+                //get illust_ids from localIdsQueue
+                const process_ids = [];
+                while (this.localIdsQueue.length && process_ids.length < 20) {
+                    const id = this.localIdsQueue.shift();
+                    if (!this.library_iids.includes(id)) {
+                        process_ids.push(id);
+                    }
+                }
 
-				if (process_ids.length) {
-					const ild = await this.api.getIllustsDetail(process_ids);
-					for (let k in ild) {
-						if (ild[k].error) {
-							delete ild[k];
-						}
-					}
-					const iids = Object.values(ild).map(x => x.illust_id);
-					// const ipd = await this.api.getIllustPagesDetail(iids);
-					const bd = await this.api.getBookmarksDetail(iids);
+                if (process_ids.length) {
+                    const ild = await this.api.getIllustsDetail(process_ids);
+                    for (let k in ild) {
+                        if (ild[k].error) {
+                            delete ild[k];
+                        }
+                    }
+                    const iids = Object.values(ild).map(x => x.illust_id);
+                    // const ipd = await this.api.getIllustPagesDetail(iids);
+                    const bd = await this.api.getBookmarksDetail(iids);
 
-					const uids = [];
-					for (let d of Object.values(ild)) {
-						if (!uids.includes(d.user_id)) {
-							uids.push(d.user_id);
-						}
-					}
-					const ud = await this.api.getUsersDetail(uids);
+                    const uids = [];
+                    for (let d of Object.values(ild)) {
+                        if (!uids.includes(d.user_id)) {
+                            uids.push(d.user_id);
+                        }
+                    }
+                    const ud = await this.api.getUsersDetail(uids);
 
-					for (let iid of iids) {
-						const illust = ild[iid];
-						const book = {
-							illust_id: iid,
-							thumb_src: illust.url['240mw'].replace('240x480', '150x150'),
-							user_id: illust.user_id,
-							user_name: illust.user_name,
-							illust_title: illust.illust_title,
-							is_multiple: illust.is_multiple,
-							is_bookmarked: illust.is_bookmarked,
-							is_manga: illust.illust_type === '1',
-							is_ugoira: !!illust.ugoira_meta,
-							is_follow: ud[illust.user_id].is_follow,
-							bookmark_count: bd[iid].bookmark_count,
-							tags_str: bd[iid].tags.join(' '),
-							// rating_score: ipd[iid].rating_score,
-						}
-						if (this.pagetype.MYBOOKMARK) {
-							book.bookmark_id = this.bookmark_ids[iid];
-							delete this.bookmark_ids[iid];
-						}
-						this.library.push(book);
-					}
-				}
-				times--;
-			}
-			// End of while
-			if (this.next_url === '') {
-				this.stop();
-				this.isEnded = this.localIdsQueue.length <= 0;
-				if (this.isEnded) {
-					delete this.bookmark_ids;
-					delete this.localIdsQueue;
-				}
-			}
-			if (times <= 0) {
-				this.stop();
-			}
-		},
-		stop() {
-			this.isStoped = true;
-		},
-		switchSearching() {
-			if (this.isStoped) {
-				this.start();
-			} else {
-				this.stop();
-			}
-		},
-		tagUpdate(event) {
-			global.filters.tag = new RegExp(event.target.value, 'i');
-		},
-		fullwidthClick(event) {
-			if (event.target.checked) {
-				document.querySelector('#wrapper').classList.add('fullwidth');
-				global.favorite.fullwidth = 1;
-			} else {
-				document.querySelector('#wrapper').classList.remove('fullwidth');
-				global.favorite.fullwidth = 0;
-			}
-			Pixiv.storageSet(global.favorite);
-		},
-		sortClick(event) {
-			if (event.target.checked) {
-				global.filters.orderBy = 'bookmark_count';
-				global.favorite.sort = 1;
-			} else {
-				global.filters.orderBy = 'illust_id';
-				global.favorite.sort = 0;
-			}
-			Pixiv.storageSet(global.favorite);
-		},
-	},
-	template: koakumaTemplate,
+                    for (let iid of iids) {
+                        const illust = ild[iid];
+                        const book = {
+                            illust_id: iid,
+                            thumb_src: illust.url['240mw'].replace('240x480', '150x150'),
+                            user_id: illust.user_id,
+                            user_name: illust.user_name,
+                            illust_title: illust.illust_title,
+                            illust_page_count: parseInt(illust.illust_page_count),
+                            is_multiple: illust.is_multiple,
+                            is_bookmarked: illust.is_bookmarked,
+                            is_manga: illust.illust_type === '1',
+                            is_ugoira: !!illust.ugoira_meta,
+                            is_follow: ud[illust.user_id].is_follow,
+                            bookmark_count: bd[iid].bookmark_count,
+                            tags_str: bd[iid].tags.join(' '),
+                            // rating_score: ipd[iid].rating_score,
+                        };
+                        if (this.pagetype.MYBOOKMARK) {
+                            book.bookmark_id = this.bookmark_ids[iid];
+                            delete this.bookmark_ids[iid];
+                        }
+                        this.library.push(book);
+                    }
+                }
+                times--;
+            }
+            // End of while
+            if (this.next_url === '') {
+                this.stop();
+                this.isEnded = this.localIdsQueue.length <= 0;
+                if (this.isEnded) {
+                    delete this.bookmark_ids;
+                    delete this.localIdsQueue;
+                }
+            }
+            if (times <= 0) {
+                this.stop();
+            }
+        },
+        stop() {
+            this.isStoped = true;
+        },
+        switchSearching() {
+            if (this.isStoped) {
+                this.start();
+            } else {
+                this.stop();
+            }
+        },
+        tagUpdate(event) {
+            global.filters.tag = new RegExp(event.target.value, 'i');
+        },
+        fullwidthClick(event) {
+            if (event.target.checked) {
+                document.querySelector('#wrapper').classList.add('fullwidth');
+                global.favorite.fullwidth = 1;
+            } else {
+                document.querySelector('#wrapper').classList.remove('fullwidth');
+                global.favorite.fullwidth = 0;
+            }
+            Pixiv.storageSet(global.favorite);
+        },
+        sortClick(event) {
+            if (event.target.checked) {
+                global.filters.orderBy = 'bookmark_count';
+                global.favorite.sort = 1;
+            } else {
+                global.filters.orderBy = 'illust_id';
+                global.favorite.sort = 0;
+            }
+            Pixiv.storageSet(global.favorite);
+        },
+    },
+    template: koakumaTemplate,
 });
 if (!global.pagetype.NOSUP) {
-	utils.addStyle(`
+    utils.addStyle(`
 	#wrapper.fullwidth,
 	#wrapper.fullwidth .layout-a,
 	#wrapper.fullwidth .layout-body {
@@ -855,11 +847,13 @@ if (!global.pagetype.NOSUP) {
 	#こあくま *::-moz-selection {
 		background-color: initial;
 	}`);
-}
-const patchouliImageItemTemplate = `
+}const patchouliImageItemTemplate = `
 <li class="image-item">
 	<a class="work _work" :href="illust_page_href" :class="thumbStyle">
 		<div><img :src="detail.thumb_src"></div>
+		<div v-if="detail.is_multiple" class="page-count">
+			<div class="icon"></div><span>{{detail.illust_page_count}}</span>
+		</div>
 	</a>
 	<a :href="illust_page_href">
 		<h1 class="title" :title="detail.illust_title">{{ detail.illust_title }}</h1>
@@ -887,81 +881,80 @@ const patchouliImageItemTemplate = `
 	</ul>
 </li>`;
 Vue.component('image-item', {
-	props: ['api', 'l10n', 'detail', 'pagetype'],
-	data() {
-		return {
-			bookmarked: this.detail.is_bookmarked,
-		};
-	},
-	computed: {
-		illust_page_href() {
-			return `/member_illust.php?mode=medium&illust_id=${this.detail.illust_id}`;
-		},
-		bookmark_detail_href() {
-			return `/bookmark_detail.php?illust_id=${this.detail.illust_id}`;
-		},
-		user_page_href() {
-			return `/member_illust.php?id=${this.detail.user_id}`;
-		},
-		thumbStyle() {
-			return {
-				multiple: this.detail.is_multiple,
-				manga: this.detail.is_manga,
-				'ugoku-illust': this.detail.is_ugoira,
-			};
-		},
-		bookmarkStyle() {
-			return this.bookmarked ? 'fa-bookmark' : 'fa-bookmark-o';
-		},
-		tooltip() {
-			return this.l10n.bookmarkTooltip(this.detail.bookmark_count);
-		},
-	},
-	methods: {
-		bookmarkClick(event) {
-			if (!this.bookmarked) {
-				this.api.postBookmarkadd(this.detail.illust_id);
-				this.$emit('bookmarkUpdate', this.detail.illust_id);
-				this.bookmarked = true;
-			}
-		},
-	},
-	template: patchouliImageItemTemplate,
-});
-const patchouli = new Vue({
-	data: {
-		api: global.api,
-		l10n: global.l10n,
-		library: global.library,
-		filters: global.filters,
-		pagetype: global.pagetype,
-	},
-	methods: {
-		bookmarkUpdate(illust_id) {
-			for (let book of this.library) {
-				if (book.illust_id === illust_id) {
-					book.is_bookmarked = true;
-				}
-			}
-		},
-		sortedBooks(library) {
-			const books = Array.from(library);
-			const order = this.filters.orderBy;
-			const int = parseInt;
-			// https://jsperf.com/javascript-sort/
-			for (let i = 1; i < books.length; i++) {
-				const b = books[i];
-				let j = i;
-				while (j > 0 && int(books[j - 1][order]) < int(b[order])) {
-					books[j] = books[j - 1];
-					--j;
-				}
-				books[j] = b;
-			}
-			return books;
-		},
-	},
-	template: `
+    props: ['api', 'l10n', 'detail', 'pagetype'],
+    data() {
+        return {
+            bookmarked: this.detail.is_bookmarked,
+        };
+    },
+    computed: {
+        illust_page_href() {
+            return `/member_illust.php?mode=medium&illust_id=${this.detail.illust_id}`;
+        },
+        bookmark_detail_href() {
+            return `/bookmark_detail.php?illust_id=${this.detail.illust_id}`;
+        },
+        user_page_href() {
+            return `/member_illust.php?id=${this.detail.user_id}`;
+        },
+        thumbStyle() {
+            return {
+                multiple: this.detail.is_multiple,
+                manga: this.detail.is_manga,
+                'ugoku-illust': this.detail.is_ugoira,
+            };
+        },
+        bookmarkStyle() {
+            return this.bookmarked ? 'fa-bookmark' : 'fa-bookmark-o';
+        },
+        tooltip() {
+            return this.l10n.bookmarkTooltip(this.detail.bookmark_count);
+        },
+    },
+    methods: {
+        bookmarkClick(event) {
+            if (!this.bookmarked) {
+                this.api.postBookmarkadd(this.detail.illust_id);
+                this.$emit('bookmarkUpdate', this.detail.illust_id);
+                this.bookmarked = true;
+            }
+        },
+    },
+    template: patchouliImageItemTemplate,
+});const patchouli = new Vue({
+    data: {
+        api: global.api,
+        l10n: global.l10n,
+        library: global.library,
+        filters: global.filters,
+        pagetype: global.pagetype,
+    },
+    methods: {
+        bookmarkUpdate(illust_id) {
+            for (let book of this.library) {
+                if (book.illust_id === illust_id) {
+                    book.is_bookmarked = true;
+                }
+            }
+        },
+        sortedBooks(library) {
+            const books = Array.from(library);
+            const order = this.filters.orderBy;
+            const int = parseInt;
+            // https://jsperf.com/javascript-sort/
+            for (let i = 1; i < books.length; i++) {
+                const b = books[i];
+                let j = i;
+                while (j > 0 && int(books[j - 1][order]) < int(b[order])) {
+                    books[j] = books[j - 1];
+                    --j;
+                }
+                books[j] = b;
+            }
+            return books;
+        },
+    },
+    template: `
 	<ul id="パチュリー">
 		<image-item v-for="book in sortedBooks(library)"
 			v-show="book.bookmark_count >= filters.limit && filters.tag.test(book.tags_str)"
@@ -973,7 +966,7 @@ const patchouli = new Vue({
 	</ul>`,
 });
 if (!global.pagetype.NOSUP) {
-	utils.addStyle(`
+    utils.addStyle(`
 	.fa-feed {
 		color: dodgerblue;
 		cursor: default;
@@ -1020,22 +1013,21 @@ if (!global.pagetype.NOSUP) {
 		align-items: flex-end;
 		justify-content: space-around;
 	}`);
-}
-if (!global.pagetype.NOSUP) {
-	utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
-	koakuma.$mount(global.koakumaToMount);
-	koakuma.start(1).then(() => {
-		patchouli.$mount(global.patchouliToMount);
-	});
+}if (!global.pagetype.NOSUP) {
+    utils.linkStyle('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+    koakuma.$mount(global.koakumaToMount);
+    koakuma.start(1).then(() => {
+        patchouli.$mount(global.patchouliToMount);
+    });
 }
 Pixiv.rmAnnoyance();
 if (global.pagetype.MYBOOKMARK) {
-	// bind select-all and select-none event
-	document.querySelectorAll('.select-none, .select-all').forEach(sel => {
-		sel.addEventListener('click', (e) => {
-			for (let checkbox of [...document.querySelectorAll('input[name="book_id[]"]')]) {
-				checkbox.checked = e.target.classList.contains('select-all');
-			}
-		});
-	})
+    // bind select-all and select-none event
+    document.querySelectorAll('.select-none, .select-all').forEach(sel => {
+        sel.addEventListener('click', (e) => {
+            for (let checkbox of [...document.querySelectorAll('input[name="book_id[]"]')]) {
+                checkbox.checked = e.target.classList.contains('select-all');
+            }
+        });
+    })
 }

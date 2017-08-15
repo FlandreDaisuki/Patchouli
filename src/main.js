@@ -9,11 +9,11 @@ Pixiv.rmAnnoyance();
 if (global.pagetype.MYBOOKMARK) {
 	// bind select-all and select-none event
 	document.querySelectorAll('.select-none, .select-all').forEach(sel => {
-		sel.addEventListener('click', (e) => {
+		sel.addEventListener('click', e => {
 			console.debug(e);
 			for (let checkbox of [...document.querySelectorAll('input[name="book_id[]"]')]) {
 				checkbox.checked = e.target.classList.contains('select-all');
 			}
 		});
-	})
+	});
 }

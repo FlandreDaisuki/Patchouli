@@ -38,8 +38,7 @@ const koakuma = new Vue({
 			return this.library.map(x => x.illust_id);
 		},
 		switchText() {
-			return this.isEnded ? this.l10n.koakumaEnd :
-				(this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause);
+			return this.isEnded ? this.l10n.koakumaEnd : this.isStoped ? this.l10n.koakumaGo : this.l10n.koakumaPause;
 		},
 		switchStyle() {
 			return {
@@ -53,8 +52,7 @@ const koakuma = new Vue({
 		async start(times = Infinity) {
 			this.isStoped = false;
 			const toContinue = () => {
-				return !this.isEnded && !this.isStoped && times > 0 &&
-					(this.next_url || this.localIdsQueue.length);
+				return !this.isEnded && !this.isStoped && times > 0 && (this.next_url || this.localIdsQueue.length);
 			};
 			while (toContinue()) {
 				// get illust_ids and next_url
@@ -117,6 +115,7 @@ const koakuma = new Vue({
 							user_id: illust.user_id,
 							user_name: illust.user_name,
 							illust_title: illust.illust_title,
+							illust_page_count: parseInt(illust.illust_page_count),
 							is_multiple: illust.is_multiple,
 							is_bookmarked: illust.is_bookmarked,
 							is_manga: illust.illust_type === '1',
@@ -125,7 +124,7 @@ const koakuma = new Vue({
 							bookmark_count: bd[iid].bookmark_count,
 							tags_str: bd[iid].tags.join(' '),
 							// rating_score: ipd[iid].rating_score,
-						}
+						};
 						if (this.pagetype.MYBOOKMARK) {
 							book.bookmark_id = this.bookmark_ids[iid];
 							delete this.bookmark_ids[iid];
