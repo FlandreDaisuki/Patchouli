@@ -194,10 +194,8 @@ class Pixiv {
      * @return {String[]}
      */
 	async getRecommendIllustids(illust_id = 'auto') {
-		const param = ['type=illust', `sample_illusts=${illust_id}`, 'num_recommendations=500', `tt=${this.tt}`].join(
-			'&',
-		);
-		const url = `/rpc/recommender.php?${param}`;
+		const param = ['type=illust', `sample_illusts=${illust_id}`, 'num_recommendations=500', `tt=${this.tt}`];
+		const url = `/rpc/recommender.php?${param.join('&')}`;
 		try {
 			return await this.fetch(url).then(data => data.recommendations.map(x => `${x}`));
 		} catch (e) {

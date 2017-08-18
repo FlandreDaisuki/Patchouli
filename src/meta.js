@@ -15,7 +15,8 @@
 // @icon        http://i.imgur.com/VwoYc5w.png
 // @grant       none
 // @noframes
-// meta keys for Greasy Fork
+//
+// Meta keys for Greasy Fork
 // @author      FlandreDaisuki
 // @license     The MIT License (MIT) Copyright (c) 2016-2017 FlandreDaisuki
 // @compatible  firefox 52+
