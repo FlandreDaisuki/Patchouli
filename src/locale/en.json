@@ -1,0 +1,11 @@
+{
+  "_msg_following": "following",
+  "_msg_bookmark_tooltip": "$bookmark_count$ bookmarks",
+  "_msg_koakuma_processed": "$processed_count$ pics processed",
+  "_msg_koakuma_go": "Go",
+  "_msg_koakuma_pause": "Pause",
+  "_msg_koakuma_end": "End",
+  "_msg_fit_browser_width": "fit browser width",
+  "_msg_sort_by_bookmark_count": "sort by bookmark count",
+  "_msg_tag_filter_placeholder": "tag filter e.g.: flandre|sister"
+}

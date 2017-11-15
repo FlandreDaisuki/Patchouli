@@ -1,0 +1,11 @@
+{
+  "_msg_following": "關注中",
+  "_msg_bookmark_tooltip": "$bookmark_count$個收藏",
+  "_msg_koakuma_processed": "已處理 $processed_count$ 張",
+  "_msg_koakuma_go": "找",
+  "_msg_koakuma_pause": "停",
+  "_msg_koakuma_end": "完",
+  "_msg_fit_browser_width": "自適應瀏覽器寬度",
+  "_msg_sort_by_bookmark_count": "書籤數排序",
+  "_msg_tag_filter_placeholder": "標籤過濾 例: 芙蘭朵露|二小姐"
+}

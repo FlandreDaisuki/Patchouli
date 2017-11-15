@@ -1,0 +1,17 @@
+.ω.↔,
+.ω.↔ .layout-a,
+.ω.↔ .layout-body {
+    width: initial !important;
+}
+.ω.↔ .layout-a {
+    display: flex;
+    flex-direction: row-reverse;
+}
+.ω.↔ .layout-column-2{
+    flex: 1;
+    margin-left: 20px;
+}
+.ω.↔ .layout-body,
+.ω.↔ .layout-a {
+    margin: 10px 20px;
+}

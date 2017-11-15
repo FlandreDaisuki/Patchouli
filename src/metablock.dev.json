@@ -1,0 +1,29 @@
+{
+  "name": {
+    "default": "Patchouli.dev",
+    "ja": "パチュリー.dev",
+    "zh-TW": "帕秋莉.dev",
+    "zh-CN": "帕秋莉.dev"
+  },
+  "description": {
+    "default": "An image searching/browsing tool on Pixiv",
+    "ja": "Pixiv 検索機能強化",
+    "zh-TW": "Pixiv 搜尋/瀏覽 工具",
+    "zh-CN": "Pixiv 搜尋/瀏覽 工具"
+  },
+  "namespace": "https://github.com/FlandreDaisuki",
+  "include": ["*://www.pixiv.net/*"],
+  "require": [
+    "https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js"
+  ],
+  "icon": "http://i.imgur.com/VwoYc5w.png",
+  "grant": null,
+  "noframes": true,
+  "author": "FlandreDaisuki",
+  "license": "The MIT License (MIT) Copyright (c) 2016-2017 FlandreDaisuki",
+  "compatible": {
+    "firefox": ">=52",
+    "chrome": ">=55"
+  }
+}

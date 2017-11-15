@@ -1,9 +1,18 @@
 {
-	"editor.snippetSuggestions": "top",
-	"prettier.tabWidth": 4,
-	"prettier.singleQuote": true,
-	"prettier.semi": true,
-	"prettier.trailingComma": "all",
-	"prettier.printWidth": 120,
-	"prettier.useTabs": true
+  "[json]": {
+    "editor.quickSuggestions": {
+      "strings": true
+    },
+    "editor.formatOnSave": true
+  },
+
+  "eslint.autoFixOnSave": true,
+  "[vue]": {
+    "editor.formatOnSave": true
+  },
+  "vetur.format.defaultFormatter.html": "js-beautify-html",
+  "vetur.format.defaultFormatter.js": "prettier",
+  "vetur.format.scriptInitialIndent": true,
+  "vetur.format.defaultFormatter.css": "prettier",
+  "vetur.format.styleInitialIndent": true
 }

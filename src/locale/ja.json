@@ -1,0 +1,11 @@
+{
+  "_msg_following": "フォロー中",
+  "_msg_bookmark_tooltip": "$bookmark_count$件のブックマーク",
+  "_msg_koakuma_processed": "$processed_count$ 件が処理された",
+  "_msg_koakuma_go": "捜す",
+  "_msg_koakuma_pause": "中断",
+  "_msg_koakuma_end": "終了",
+  "_msg_fit_browser_width": "全幅",
+  "_msg_sort_by_bookmark_count": "ブックマーク数順",
+  "_msg_tag_filter_placeholder": "タグフィルター 例: フランドール|妹様"
+}

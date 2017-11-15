@@ -1,0 +1,148 @@
+#patchouli[data-v-186857e1] {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-around;
+}
+.image-item[data-v-7313ace1] {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 30px 0;
+  padding: 10px;
+  height: auto;
+  width: 200px;
+}
+.image-item-inner[data-v-7313ace1] {
+  display: flex;
+  flex-flow: column;
+  max-width: 100%;
+}
+.container[data-v-23ff0f22] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.multiple[data-v-23ff0f22] {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px;
+  color: #fff;
+  border-radius: 0 0 0 4px;
+  font-weight: 700;
+}
+.multiple-icon[data-v-23ff0f22] {
+  background: url(https://source.pixiv.net/www/js/bundle/0d96c2a49f75a8fa27d0424549169573.svg);
+  width: 10px;
+  height: 10px;
+  display: inline-block;
+}
+.img[data-v-23ff0f22] {
+  max-height: 200px;
+  max-width: 200px;
+  object-fit: cover;
+}
+.link[data-v-23ff0f22] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 200px;
+  max-height: 200px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+.ugoira[data-v-23ff0f22] {
+  background: url(https://source.pixiv.net/www/js/bundle/70ae15bac4e2e134bbf9d5727859f1fc.svg);
+  position: absolute;
+  width: 40px;
+  height: 40px;
+}
+.bookmark[data-v-23ff0f22] {
+  right: 0;
+}
+.bookmark-input-container[data-v-23ff0f22] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px;
+  border-radius: 0 0 4px 0;
+}
+.container[data-v-b9e9aa28] {
+  max-width: 100%;
+}
+.title[data-v-b9e9aa28] {
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.user[data-v-b9e9aa28] {
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+.user-img[data-v-b9e9aa28] {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-size: cover;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+#koakuma[data-v-40b353ca] {
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background-color: #e77;
+  color: #fff;
+  padding: 4px;
+  font-size: 16px;
+}
+#koakuma > div[data-v-40b353ca] {
+  margin: 0 10px;
+}
+.bookmark-count[data-v-40b353ca] {
+  display: inline-flex !important;
+  align-items: center;
+}
+#koakuma-bookmark-sort-input[data-v-40b353ca] {
+  -moz-appearance: textfield;
+  border: none;
+  background-color: transparent;
+  padding: 0px;
+  color: inherit;
+  font-size: 16px;
+  display: inline-block;
+  cursor: ns-resize;
+  text-align: center;
+  max-width: 50px;
+}
+.tag-filter[data-v-40b353ca] {
+  min-width: 300px;
+}
+.explosion[data-v-40b353ca] {
+  border: none;
+  padding: 2px 14px;
+  border-radius: 3px;
+  font-size: 16px;
+}
+.explosion[data-v-40b353ca]:enabled:hover {
+  box-shadow: 1px 1px;
+}
+.explosion[data-v-40b353ca]:enabled:active {
+  box-shadow: 1px 1px inset;
+}
+.go[data-v-40b353ca] {
+  background-color: #64ffda;
+}
+.paused[data-v-40b353ca] {
+  background-color: #ffd600;
+}
+.end[data-v-40b353ca] {
+  background-color: #455a64;
+  color: #fff;
+  opacity: 0.9;
+}
