@@ -8,7 +8,7 @@
 
 
 ## Installation 安裝
-1. 安裝 Chrome 的 [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) 或 Firefox 的 [GreaseMonkey](https://addons.mozilla.org/zh-tw/firefox/addon/greasemonkey/)
+1. 安裝 Chrome 的 [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) 或 Firefox 的 [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) 或[其他你喜歡的腳本管理器](https://greasyfork.org/help/installing-user-scripts)
 2. 安裝完成後按 [這裡](https://rawgit.com/FlandreDaisuki/Patchouli/master/dist/patchouli.user.js)
 
 ## Functions 功能
