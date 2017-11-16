@@ -15,7 +15,7 @@ Use npm + rollup to pack dependencies from 3.*.
 - Find pictures automatically
 - Filter by bookmarks or tags
 - Sort by bookmarks or submit time
-- Switch full width or default width
+- Switch self-adaptive width or default width
 - L10n for some languages
 
 ## Usage
