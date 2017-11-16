@@ -3,8 +3,7 @@
     "es6": true,
     "node": true,
     "browser": true,
-    "greasemonkey": true,
-    "mocha": true
+    "greasemonkey": true
   },
   "extends": "eslint:recommended",
   "parserOptions": {

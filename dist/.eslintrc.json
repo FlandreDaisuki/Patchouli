@@ -1,0 +1,15 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true,
+    "greasemonkey": true
+  },
+  "plugins": ["compat"],
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 8
+  },
+  "rules": {
+    "compat/compat": "warn"
+  }
+}

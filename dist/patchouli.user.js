@@ -6,18 +6,18 @@
 // @namespace         https://github.com/FlandreDaisuki
 // @description       An image searching/browsing tool on Pixiv
 // @description:ja    Pixiv 検索機能強化
-// @description:zh-CN Pixiv 搜尋/瀏覽 工具
+// @description:zh-CN Pixiv 搜寻/浏览 工具
 // @description:zh-TW Pixiv 搜尋/瀏覽 工具
 // @include           *://www.pixiv.net/*
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.3/vue.min.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js
-// @version           3.0.0
 // @icon              http://i.imgur.com/VwoYc5w.png
 // @noframes
 // @author            FlandreDaisuki
 // @license           The MIT License (MIT) Copyright (c) 2016-2017 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
+// @version           3.0.1
 // @grant             none
 // ==/UserScript==
 
@@ -85,7 +85,7 @@ const _msg_koakuma_pause$2 = "停";
 const _msg_koakuma_end$2 = "完";
 const _msg_fit_browser_width$2 = "自适应浏览器宽度";
 const _msg_sort_by_bookmark_count$2 = "书签数排序";
-const _msg_tag_filter_placeholder$2 = "標籤過濾 例: 芙兰朵露|二小姐";
+const _msg_tag_filter_placeholder$2 = "标签过滤 例: 芙兰朵露|二小姐";
 var zh = {
 	_msg_following: _msg_following$2,
 	_msg_bookmark_tooltip: _msg_bookmark_tooltip$2,
