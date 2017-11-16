@@ -8,7 +8,7 @@ Use npm + rollup to pack dependencies from 3.*.
 
 
 ## Installation
-1. First, install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome or [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) for Firefox or [other userscript manager]((https://greasyfork.org/help/installing-user-scripts)) you like.
+1. First, install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome or [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) for Firefox or [other userscript manager](https://greasyfork.org/help/installing-user-scripts) you like.
 2. Then, click [here](https://rawgit.com/FlandreDaisuki/Patchouli/master/dist/patchouli.user.js)
 
 ## Functions
