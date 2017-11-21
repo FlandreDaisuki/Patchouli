@@ -1,5 +1,9 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+
+[English](./README.en.md) - [中文](./README.md)
+
 ## Introduction 簡介
 
 一個簡單暴力的 Pixiv 搜尋引擎。命名以兩位**東方Project**角色為主，用 Vue 2.* 取代原本的 jQuery 版本。

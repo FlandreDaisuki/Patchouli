@@ -1,9 +1,10 @@
 {
   "name": "patchouli",
-  "version": "3.0.3",
+  "version": "3.0.4",
   "description": "An image searching and browsing tool on Pixiv",
   "main": "Patchouli.user.js",
   "scripts": {
+    "lint": "eslint --fix src/**/*.js",
     "build": "rollup -c && eslint dist/*.user.js",
     "install:dev":
       "npm run build && firefox http://0.0.0.0:8000/dist/patchouli.dev.user.js && python -m http.server"
@@ -25,7 +26,12 @@
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "eslint": "^4.11.0",
+    "eslint-config-standard": "^10.2.1",
     "eslint-plugin-compat": "^2.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "mocha": "^4.0.1",
     "puppeteer": "^0.13.0",
     "rollup": "^0.51.3",

@@ -17,7 +17,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2017 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           3.0.3
+// @version           3.0.4
 // @grant             none
 // ==/UserScript==
 
@@ -120,672 +120,671 @@ var tw = {
 };
 
 class L10N {
-	constructor() {
-		this.dict = {en, ja, zh, tw};
+  constructor () {
+    this.dict = {en, ja, zh, tw};
 
-		this.lang = document.documentElement.lang;
-		if (this.lang === 'zh-tw') {
-			this.lang = 'tw';
-		}
+    this.lang = document.documentElement.lang;
+    if (this.lang === 'zh-tw') {
+      this.lang = 'tw';
+    }
 
-		// fallback
-		if (!this.dict[this.lang]) {
-			this.lang = 'en';
-		}
-	}
-	get following() {
-		return this.dict[this.lang]['_msg_following'];
-	}
+    // fallback
+    if (!this.dict[this.lang]) {
+      this.lang = 'en';
+    }
+  }
+  get following () {
+    return this.dict[this.lang]['_msg_following']
+  }
 
-	bookmarkTooltip(n) {
-		return this.dict[this.lang]['_msg_bookmark_tooltip'].replace('$bookmark_count$', n);
-	}
+  bookmarkTooltip (n) {
+    return this.dict[this.lang]['_msg_bookmark_tooltip'].replace('$bookmark_count$', n)
+  }
 
-	koakumaProcessed(n) {
-		return this.dict[this.lang]['_msg_koakuma_processed'].replace('$processed_count$', n);
-	}
+  koakumaProcessed (n) {
+    return this.dict[this.lang]['_msg_koakuma_processed'].replace('$processed_count$', n)
+  }
 
-	get koakumaGo() {
-		return this.dict[this.lang]['_msg_koakuma_go'];
-	}
+  get koakumaGo () {
+    return this.dict[this.lang]['_msg_koakuma_go']
+  }
 
-	get koakumaPause() {
-		return this.dict[this.lang]['_msg_koakuma_pause'];
-	}
+  get koakumaPause () {
+    return this.dict[this.lang]['_msg_koakuma_pause']
+  }
 
-	get koakumaEnd() {
-		return this.dict[this.lang]['_msg_koakuma_end'];
-	}
+  get koakumaEnd () {
+    return this.dict[this.lang]['_msg_koakuma_end']
+  }
 
-	get fitBrowserWidth() {
-		return this.dict[this.lang]['_msg_fit_browser_width'];
-	}
+  get fitBrowserWidth () {
+    return this.dict[this.lang]['_msg_fit_browser_width']
+  }
 
-	get sortByBookmarkCount() {
-		return this.dict[this.lang]['_msg_sort_by_bookmark_count'];
-	}
-	get tagFilterPlaceholder() {
-		return this.dict[this.lang]['_msg_tag_filter_placeholder'];
-	}
+  get sortByBookmarkCount () {
+    return this.dict[this.lang]['_msg_sort_by_bookmark_count']
+  }
+  get tagFilterPlaceholder () {
+    return this.dict[this.lang]['_msg_tag_filter_placeholder']
+  }
 }
 
-function $(selector) {
-	return document.querySelector(selector);
+function $ (selector) {
+  return document.querySelector(selector)
 }
 
-function $$(selector) {
-	return [...document.querySelectorAll(selector)];
+function $$ (selector) {
+  return [...document.querySelectorAll(selector)]
 }
 
-function $$find(doc, selector) {
-	return [...doc.querySelectorAll(selector)];
+function $$find (doc, selector) {
+  return [...doc.querySelectorAll(selector)]
 }
 
-function $el(tag, attr = {}, cb = () => {}) {
-	const el = document.createElement(tag);
-	Object.assign(el, attr);
-	cb(el);
-	return el;
+function $el (tag, attr = {}, cb = () => {}) {
+  const el = document.createElement(tag);
+  Object.assign(el, attr);
+  cb(el);
+  return el
 }
 
-function $log(...args) {
-	console.log.apply(console, args);
+function $log (...args) {
+  console.log.apply(console, args);
 }
 
-function $error(...args) {
-	console.error.apply(console, args);
+function $error (...args) {
+  console.error.apply(console, args);
 }
 
 (() => {
-	Math.clamp = (val, min, max) => Math.min(Math.max(min, val), max);
-	Number.toInt = (s) => (isNaN(~~s) ? 0 : ~~s);
+  Math.clamp = (val, min, max) => Math.min(Math.max(min, val), max);
+  Number.toInt = (s) => (isNaN(~~s) ? 0 : ~~s);
 
-	//from: https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/after()/after().md
-	(function (arr) {
-		arr.forEach(function (item) {
-			if (item.hasOwnProperty('after')) {
-				return;
-			}
-			Object.defineProperty(item, 'after', {
-				configurable: true,
-				enumerable: true,
-				writable: true,
-				value: function after() {
-					var argArr = Array.prototype.slice.call(arguments),
-						docFrag = document.createDocumentFragment();
+  // from: https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/after()/after().md
+  (function (arr) {
+    arr.forEach(function (item) {
+      if (item.hasOwnProperty('after')) {
+        return
+      }
+      Object.defineProperty(item, 'after', {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: function after () {
+          const argArr = Array.prototype.slice.call(arguments);
+          const docFrag = document.createDocumentFragment();
 
-					argArr.forEach(function (argItem) {
-						var isNode = argItem instanceof Node;
-						docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
-					});
+          argArr.forEach(function (argItem) {
+            const isNode = argItem instanceof Node;
+            docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+          });
 
-					this.parentNode.insertBefore(docFrag, this.nextSibling);
-				}
-			});
-		});
-	})([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
+          this.parentNode.insertBefore(docFrag, this.nextSibling);
+        }
+      });
+    });
+  })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
 })();
 
-function $debug(...args) {
-	console.debug.apply(console, args);
+function $debug (...args) {
+  console.debug.apply(console, args);
 }
 
-function $expose(variables) {
-	for (const [key, value] of Object.entries(variables)) {
-		window[key] = value;
-	}
+function $expose (variables) {
+  for (const [key, value] of Object.entries(variables)) {
+    window[key] = value;
+  }
 }
 
 // (get|post) (dataname)s? (HTMLDetail|APIDetail)s?
 
 /* global axios */
 class Pixiv {
-	constructor() {
-		this.tt = $('input[name="tt"]').value;
-	}
+  constructor () {
+    this.tt = $('input[name="tt"]').value;
+  }
 
-	async fetch(url) {
-		try {
-			$debug('Pixiv#fetch: url:', url);
-			if (url) {
-				const res = await axios.get(url);
-				// $debug('Pixiv#fetch: res:', res);
-				if (res.statusText !== 'OK') {
-					throw new Error(res.statusText);
-				} else {
-					return res.data;
-				}
-			} else {
-				$error('Pixiv#fetch has no url');
-			}
-		} catch (error) {
-			$error(error);
-		}
-	}
+  async fetch (url) {
+    try {
+      $debug('Pixiv#fetch: url:', url);
+      if (url) {
+        const res = await axios.get(url);
+        // $debug('Pixiv#fetch: res:', res);
+        if (res.statusText !== 'OK') {
+          throw new Error(res.statusText)
+        } else {
+          return res.data
+        }
+      } else {
+        $error('Pixiv#fetch has no url');
+      }
+    } catch (error) {
+      $error(error);
+    }
+  }
 
-	async getLegacyPageHTMLIllustIds(url, options = {}) {
-		const opt = Object.assign({
-			needBookmarkId: false
-		}, options);
+  async getLegacyPageHTMLIllustIds (url, options = {}) {
+    const opt = Object.assign({
+      needBookmarkId: false
+    }, options);
 
-		try {
-			const html = await this.fetch(url);
-			$debug('getPageIllustids', url);
-			// eslint-disable-next-line no-useless-escape
-			const next_tag = html.match(/class="next"[^\/]*/);
+    try {
+      const html = await this.fetch(url);
+      $debug('getPageIllustids', url);
+      // eslint-disable-next-line no-useless-escape
+      const nextTag = html.match(/class="next"[^\/]*/);
 
-			let next_url = '';
-			if (next_tag) {
-				const next_href = next_tag[0].match(/href="([^"]+)"/);
-				if (next_href) {
-					const query = next_href[1].replace(/&amp;/g, '&');
-					if (query) {
-						next_url = `${location.pathname}${query}`;
-					}
-				}
-			}
-			const iidHTMLs = html.match(/;illust_id=\d+"\s*class="work/g) || [];
-			const illust_ids = [];
-			for (const dataid of iidHTMLs) {
-				const iid = dataid.replace(/\D+(\d+).*/, '$1');
-				if (!illust_ids.includes(iid) && iid !== '0') {
-					illust_ids.push(iid);
-				}
-			}
+      let nextUrl = '';
+      if (nextTag) {
+        const nextHref = nextTag[0].match(/href="([^"]+)"/);
+        if (nextHref) {
+          const query = nextHref[1].replace(/&amp;/g, '&');
+          if (query) {
+            nextUrl = `${location.pathname}${query}`;
+          }
+        }
+      }
+      const iidHTMLs = html.match(/;illust_id=\d+"\s*class="work/g) || [];
+      const illustIds = [];
+      for (const dataid of iidHTMLs) {
+        const iid = dataid.replace(/\D+(\d+).*/, '$1');
+        if (!illustIds.includes(iid) && iid !== '0') {
+          illustIds.push(iid);
+        }
+      }
 
-			const ret = {
-				next_url,
-				illust_ids
-			};
+      const ret = {
+        next_url: nextUrl,
+        illust_ids: illustIds
+      };
 
-			if (opt.needBookmarkId) {
-				ret.bookmark_ids = {};
+      if (opt.needBookmarkId) {
+        ret.bookmark_ids = {};
 
-				const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
-				for (const bim of bimHTMLs) {
-					const [illust_id, bookmark_id] = bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
-					if (illust_ids.includes(illust_id)) {
-						ret.bookmark_ids[illust_id] = {illust_id, bookmark_id};
-					}
-				}
-			}
-			return ret;
-		} catch (e) {
-			$error(e);
-		}
-	}
+        const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
+        for (const bim of bimHTMLs) {
+          const [illustId, bookmarkId] = bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
+          if (illustIds.includes(illustId)) {
+            ret.bookmark_ids[illustId] = {illust_id: illustId, bookmark_id: bookmarkId};
+          }
+        }
+      }
+      return ret
+    } catch (e) {
+      $error(e);
+    }
+  }
 
-	async getPageHTMLIllustIds(url) {
-		try {
-			const html = await this.fetch(url);
-			// eslint-disable-next-line no-useless-escape
-			const next_tag = html.match(/class="next"[^\/]*/);
+  async getPageHTMLIllustIds (url) {
+    try {
+      const html = await this.fetch(url);
+      // eslint-disable-next-line no-useless-escape
+      const nextTag = html.match(/class="next"[^\/]*/);
 
-			let next_url = '';
-			if (next_tag) {
-				const next_href = next_tag[0].match(/href="([^"]+)"/);
-				if (next_href) {
-					const query = next_href[1].replace(/&amp;/g, '&');
-					if (query) {
-						next_url = `${location.pathname}${query}`;
-					}
-				}
-			}
-			const iidHTMLs = html.match(/illustId&quot;:&quot;(\d+)&quot;/g) || [];
-			$debug('Pixiv#getPageHTMLIllustIds: iidHTMLs:', iidHTMLs);
-			const illust_ids = [];
-			for (const dataid of iidHTMLs) {
-				const iid = dataid.replace(/\D+(\d+).*/, '$1');
-				if (!illust_ids.includes(iid) && iid !== '0') {
-					illust_ids.push(iid);
-				}
-			}
+      let nextUrl = '';
+      if (nextTag) {
+        const nextHref = nextTag[0].match(/href="([^"]+)"/);
+        if (nextHref) {
+          const query = nextHref[1].replace(/&amp;/g, '&');
+          if (query) {
+            nextUrl = `${location.pathname}${query}`;
+          }
+        }
+      }
+      const iidHTMLs = html.match(/illustId&quot;:&quot;(\d+)&quot;/g) || [];
+      $debug('Pixiv#getPageHTMLIllustIds: iidHTMLs:', iidHTMLs);
+      const illustIds = [];
+      for (const dataid of iidHTMLs) {
+        const iid = dataid.replace(/\D+(\d+).*/, '$1');
+        if (!illustIds.includes(iid) && iid !== '0') {
+          illustIds.push(iid);
+        }
+      }
 
-			const ret = {
-				next_url,
-				illust_ids
-			};
+      const ret = {
+        next_url: nextUrl,
+        illust_ids: illustIds
+      };
 
-			return ret;
-		} catch (error) {
-			$error(error);
-		}
-	}
+      return ret
+    } catch (error) {
+      $error(error);
+    }
+  }
 
-	async getBookmarkHTMLDetail(illust_id) {
-		const url = `/bookmark_detail.php?illust_id=${illust_id}`;
+  async getBookmarkHTMLDetail (illustId) {
+    const url = `/bookmark_detail.php?illust_id=${illustId}`;
 
-		try {
-			const html = await this.fetch(url);
-			const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
-			const bookmark_count = _a ? parseInt(_a[1]) : 0;
-			const _b = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
-			const _c = _b ? _b[0].match(/>[^<]+?(?=<\/a>)/g) : [];
-			const tags = _c ? _c.map(x => x.slice(1)) : [];
-			return {
-				bookmark_count,
-				illust_id,
-				tags
-			};
-		} catch (error) {
-			$error(error);
-		}
-	}
+    try {
+      const html = await this.fetch(url);
+      const _a = html.match(/sprites-bookmark-badge[^\d]+(\d+)/);
+      const bookmarkCount = _a ? parseInt(_a[1]) : 0;
+      const _b = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
+      const _c = _b ? _b[0].match(/>[^<]+?(?=<\/a>)/g) : [];
+      const tags = _c ? _c.map(x => x.slice(1)) : [];
+      return {
+        bookmark_count: bookmarkCount,
+        illust_id: illustId,
+        tags
+      }
+    } catch (error) {
+      $error(error);
+    }
+  }
 
-	async getBookmarkHTMLDetails(illust_ids) {
-		const fn = this.getBookmarkHTMLDetail.bind(this);
-		const bookmark_details = await Promise.all(illust_ids.map(fn));
-		const details = {};
-		for (const detail of bookmark_details) {
-			details[detail.illust_id] = detail;
-		}
-		return details;
-	}
+  async getBookmarkHTMLDetails (illustIds) {
+    const fn = this.getBookmarkHTMLDetail.bind(this);
+    const bookmarkDetails = await Promise.all(illustIds.map(fn));
+    const details = {};
+    for (const detail of bookmarkDetails) {
+      details[detail.illust_id] = detail;
+    }
+    return details
+  }
 
-	async getIllustsAPIDetail(illust_ids) {
-		const iids = illust_ids.join(',');
-		const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
+  async getIllustsAPIDetail (illustIds) {
+    const iids = illustIds.join(',');
+    const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
 
-		try {
-			const json = await this.fetch(url);
-			$debug('Pixiv#getIllustsAPIDetail: json:', json);
+    try {
+      const json = await this.fetch(url);
+      $debug('Pixiv#getIllustsAPIDetail: json:', json);
 
-			if(json.error) {
-				throw new Error(json.message);
-			}
+      if (json.error) {
+        throw new Error(json.message)
+      }
 
-			const details = json.body;
+      const details = json.body;
 
-			for (const [key, detail] of Object.entries(details)) {
-				if (detail.error) {
-					delete details[key];
-				}
-			}
+      for (const [key, detail] of Object.entries(details)) {
+        if (detail.error) {
+          delete details[key];
+        }
+      }
 
-			return details;
-		} catch (error) {
-			$error(error);
-		}
-	}
+      return details
+    } catch (error) {
+      $error(error);
+    }
+  }
 
-	async getUsersAPIDetail(user_ids) {
-		const uids = user_ids.join(',');
-		const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
+  async getUsersAPIDetail (userIds) {
+    const uids = userIds.join(',');
+    const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
 
-		try {
-			const json = await this.fetch(url);
-			$debug('Pixiv#getUsersAPIDetail: json:', json);
+    try {
+      const json = await this.fetch(url);
+      $debug('Pixiv#getUsersAPIDetail: json:', json);
 
-			if(json.error) {
-				throw new Error(json.message);
-			}
+      if (json.error) {
+        throw new Error(json.message)
+      }
 
-			const details = {};
-			for (const u of json.body) {
-				details[u.user_id] = {
-					user_id: u.user_id,
-					is_follow: u.is_follow
-				};
-			}
-			return details;
-		} catch (error) {
-			$error(error);
-		}
-	}
+      const details = {};
+      for (const u of json.body) {
+        details[u.user_id] = {
+          user_id: u.user_id,
+          is_follow: u.is_follow
+        };
+      }
+      return details
+    } catch (error) {
+      $error(error);
+    }
+  }
 
-	async getRecommendationsAPIDetails(illust_ids = 'auto', num_recommendations = 500) {
-		const searchParams = {
-			type: 'illust',
-			sample_illusts: illust_ids,
-			num_recommendations,
-			tt: this.tt
-		};
-		const url = `/rpc/recommender.php?${searchParams.entries.map(p => p.join('=')).join('&')}`;
-		try {
-			const data = await this.fetch(url);
-			return data.recommendations.map(x => `${x}`);
-		} catch (error) {
-			$error(error);
-		}
-	}
+  async getRecommendationsAPIDetails (illustIds = 'auto', numRecommendations = 500) {
+    const searchParams = {
+      type: 'illust',
+      sample_illusts: illustIds,
+      num_recommendations: numRecommendations,
+      tt: this.tt
+    };
+    const url = `/rpc/recommender.php?${searchParams.entries.map(p => p.join('=')).join('&')}`;
+    try {
+      const data = await this.fetch(url);
+      return data.recommendations.map(x => `${x}`)
+    } catch (error) {
+      $error(error);
+    }
+  }
 
-	async postBookmarkAdd(illust_id) {
-		const searchParams = {
-			mode: 'save_illust_bookmark',
-			illust_id,
-			restrict: 0,
-			comment: '',
-			tags: '',
-			tt: this.tt
-		};
-		const data = searchParams.entries.map(p => p.join('=')).join('&');
-		const config = {
-			'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-		};
-		try {
-			const res = await axios.post('/rpc/index.php', data, config);
-			if(res.statusText === 'OK') {
-				$debug('Pixiv#postBookmarkAdd: res.data:', res.data);
-				return !res.data.error;
-			} else {
-				throw new Error(res.statusText);
-			}
-		} catch (error) {
-			$error(error);
-		}
-	}
+  async postBookmarkAdd (illustId) {
+    const searchParams = {
+      mode: 'save_illust_bookmark',
+      illust_id: illustId,
+      restrict: 0,
+      comment: '',
+      tags: '',
+      tt: this.tt
+    };
+    const data = searchParams.entries.map(p => p.join('=')).join('&');
+    const config = {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    };
+    try {
+      const res = await axios.post('/rpc/index.php', data, config);
+      if (res.statusText === 'OK') {
+        $debug('Pixiv#postBookmarkAdd: res.data:', res.data);
+        return !res.data.error
+      } else {
+        throw new Error(res.statusText)
+      }
+    } catch (error) {
+      $error(error);
+    }
+  }
 
-	static removeAnnoyings(doc = document) {
-		const annoyings = [
-			'iframe',
-			//Ad
-			'.ad',
-			'.ads_area',
-			'.ad-footer',
-			'.ads_anchor',
-			'.ads-top-info',
-			'.comic-hot-works',
-			'.user-ad-container',
-			'.ads_area_no_margin',
-			//Premium
-			'.hover-item',
-			'.ad-printservice',
-			'.bookmark-ranges',
-			'.require-premium',
-			'.showcase-reminder',
-			'.sample-user-search',
-			'.popular-introduction',
-			'._premium-lead-tag-search-bar',
-			'._premium-lead-popular-d-body'
-		];
+  static removeAnnoyings (doc = document) {
+    const annoyings = [
+      'iframe',
+      // Ad
+      '.ad',
+      '.ads_area',
+      '.ad-footer',
+      '.ads_anchor',
+      '.ads-top-info',
+      '.comic-hot-works',
+      '.user-ad-container',
+      '.ads_area_no_margin',
+      // Premium
+      '.hover-item',
+      '.ad-printservice',
+      '.bookmark-ranges',
+      '.require-premium',
+      '.showcase-reminder',
+      '.sample-user-search',
+      '.popular-introduction',
+      '._premium-lead-tag-search-bar',
+      '._premium-lead-popular-d-body'
+    ];
 
-		for (const selector of annoyings) {
-			for (const el of $$find(doc, selector)) {
-				el.remove();
-			}
-		}
-	}
+    for (const selector of annoyings) {
+      for (const el of $$find(doc, selector)) {
+        el.remove();
+      }
+    }
+  }
 }
 
 // class as enum
 const PageType = {
-	SEARCH: Symbol('SEARCH'), // React based
-	NEW_ILLUST: Symbol('NEW_ILLUST'), // Lagacy
-	NO_SUPPORT: Symbol('NO_SUPPORT'),
-	MY_BOOKMARK: Symbol('MY_BOOKMARK'),
-	MEMBER_ILLIST: Symbol('MEMBER_ILLIST')
+  SEARCH: Symbol('SEARCH'), // React based
+  NEW_ILLUST: Symbol('NEW_ILLUST'), // Lagacy
+  NO_SUPPORT: Symbol('NO_SUPPORT'),
+  MY_BOOKMARK: Symbol('MY_BOOKMARK'),
+  MEMBER_ILLIST: Symbol('MEMBER_ILLIST')
 };
 
 class Global {
-	constructor() {
-		this.l10n = new L10N();
-		this.api = new Pixiv();
-		this.library = [];
-		this.filters = {
-			limit: 0,
-			orderBy: 'illust_id',
-			tag: new RegExp('', 'i')
-		};
-		this.conf = {
-			fitwidth: 1,
-			sort: 0
-		};
+  constructor () {
+    this.l10n = new L10N();
+    this.api = new Pixiv();
+    this.library = [];
+    this.filters = {
+      limit: 0,
+      orderBy: 'illust_id',
+      tag: new RegExp('', 'i')
+    };
+    this.conf = {
+      fitwidth: 1,
+      sort: 0
+    };
 
-		const storeNamespace = this.constructor.NAME;
+    const storeNamespace = this.constructor.NAME;
 
-		this.store = {
-			get: (key = null) => {
-				$debug('Global#store.get: key:', key);
-				const obj = JSON.parse(localStorage.getItem(storeNamespace) || '{}');
-				$debug('Global#store.get: obj:', obj);
-				if (key) {
-					return obj[key];
-				}
-				return obj;
-			},
-			set: (obj) => {
-				$debug('Global#store.set', obj);
-				const storable = JSON.stringify(obj);
-				localStorage.setItem(storeNamespace, storable);
-			}
-		};
+    this.store = {
+      get: (key = null) => {
+        $debug('Global#store.get: key:', key);
+        const obj = JSON.parse(localStorage.getItem(storeNamespace) || '{}');
+        $debug('Global#store.get: obj:', obj);
+        if (key) {
+          return obj[key]
+        }
+        return obj
+      },
+      set: (obj) => {
+        $debug('Global#store.set', obj);
+        const storable = JSON.stringify(obj);
+        localStorage.setItem(storeNamespace, storable);
+      }
+    };
 
-		this.classifyPagetype();
-	}
+    this.classifyPagetype();
+  }
 
-	applyConf() {
-		if(this.pagetype !== PageType.NO_SUPPORT) {
-			if (this.conf.fitwidth) {
-				$('.ω').classList.add('↔');
-			} else {
-				$('.ω').classList.remove('↔');
-			}
-			if (this.conf.sort) {
-				this.filters.orderBy = 'bookmark_count';
-			} else {
-				this.filters.orderBy = 'illust_id';
-			}
-			if (this.pagetype === PageType.MY_BOOKMARK) {
-				for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
-					marker.addEventListener('click', () => {
-						$$('input[name="book_id[]"]').forEach(el => {
-							el.checked = marker.classList.contains('js-legacy-mark-all');
-						});
-					});
-				}
-			}
-		}
-	}
+  applyConf () {
+    if (this.pagetype !== PageType.NO_SUPPORT) {
+      if (this.conf.fitwidth) {
+        $('.ω').classList.add('↔');
+      } else {
+        $('.ω').classList.remove('↔');
+      }
+      if (this.conf.sort) {
+        this.filters.orderBy = 'bookmark_count';
+      } else {
+        this.filters.orderBy = 'illust_id';
+      }
+      if (this.pagetype === PageType.MY_BOOKMARK) {
+        for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
+          marker.addEventListener('click', () => {
+            $$('input[name="book_id[]"]').forEach(el => {
+              el.checked = marker.classList.contains('js-legacy-mark-all');
+            });
+          });
+        }
+      }
+    }
+  }
 
-	classifyPagetype() {
-		const path = location.pathname;
-		const searchParam = new URLSearchParams(location.search);
-		const spId = searchParam.get('id');
-		const spType = searchParam.get('type');
+  classifyPagetype () {
+    const path = location.pathname;
+    const searchParam = new URLSearchParams(location.search);
+    const spId = searchParam.get('id');
+    const spType = searchParam.get('type');
 
-		switch (path) {
-		case '/search.php':
-			this.pagetype = PageType.SEARCH;
-			break;
-		case '/bookmark_new_illust.php':
-		case '/new_illust.php':
-		case '/mypixiv_new_illust.php':
-		case '/new_illust_r18.php':
-		case '/bookmark_new_illust_r18.php':
-			this.pagetype = PageType.NEW_ILLUST;
-			break;
-		case '/member_illust.php':
-			this.pagetype = spId ? PageType.MEMBER_ILLIST : PageType.NO_SUPPORT;
-			break;
-		case '/bookmark.php': {
-			if (spId) {
-				this.pagetype = PageType.NEW_ILLUST;
-			} else if (!spType || spType === 'illust_all') {
-				this.pagetype = PageType.MY_BOOKMARK;
-			} else {
-				// e.g. http://www.pixiv.net/bookmark.php?type=reg_user
-				this.pagetype = PageType.NO_SUPPORT;
-			}
-			break;
-		}
-		default:
-			this.pagetype = PageType.NO_SUPPORT;
-			break;
-		}
-		$debug('Global#pagetype:', this.pagetype);
+    switch (path) {
+      case '/search.php':
+        this.pagetype = PageType.SEARCH;
+        break
+      case '/bookmark_new_illust.php':
+      case '/new_illust.php':
+      case '/mypixiv_new_illust.php':
+      case '/new_illust_r18.php':
+      case '/bookmark_new_illust_r18.php':
+        this.pagetype = PageType.NEW_ILLUST;
+        break
+      case '/member_illust.php':
+        this.pagetype = spId ? PageType.MEMBER_ILLIST : PageType.NO_SUPPORT;
+        break
+      case '/bookmark.php': {
+        if (spId) {
+          this.pagetype = PageType.NEW_ILLUST;
+        } else if (!spType || spType === 'illust_all') {
+          this.pagetype = PageType.MY_BOOKMARK;
+        } else {
+          // e.g. http://www.pixiv.net/bookmark.php?type=reg_user
+          this.pagetype = PageType.NO_SUPPORT;
+        }
+        break
+      }
+      default:
+        this.pagetype = PageType.NO_SUPPORT;
+        break
+    }
+    $debug('Global#pagetype:', this.pagetype);
 
-		if(this.pagetype !== PageType.NO_SUPPORT) {
-			$('#wrapper').classList.add('ω');
+    if (this.pagetype !== PageType.NO_SUPPORT) {
+      $('#wrapper').classList.add('ω');
 
-			this.koakumaMountPoint = $el('div', {className: 'koakumaMountPoint'}, (el) => {
-				$('header._global-header').after(el);
-			});
+      this.koakumaMountPoint = $el('div', {className: 'koakumaMountPoint'}, (el) => {
+        $('header._global-header').after(el);
+      });
 
-			if (this.pagetype === PageType.SEARCH) {
-				this.patchouliMountPoint = $('#js-react-search-mid');
-			} else {
-				const _a = $('li.image-item');
-				const _b = $('ul._image-items');
-				this.patchouliMountPoint = _a ? _a.parentElement : _b;
-			}
+      if (this.pagetype === PageType.SEARCH) {
+        this.patchouliMountPoint = $('#js-react-search-mid');
+      } else {
+        const _a = $('li.image-item');
+        const _b = $('ul._image-items');
+        this.patchouliMountPoint = _a ? _a.parentElement : _b;
+      }
 
-			$debug('Global#patchouliMountPoint:', this.patchouliMountPoint);
-		}
-	}
+      $debug('Global#patchouliMountPoint:', this.patchouliMountPoint);
+    }
+  }
 
-	static get VERSION() {
-		return GM_info.script.version;
-	}
+  static get VERSION () {
+    return GM_info.script.version
+  }
 
-	static get NAME() {
-		return GM_info.script.name;
-	}
+  static get NAME () {
+    return GM_info.script.name
+  }
 }
 
 class Crawler {
-	constructor(global){
-		this.library = global.library;
-		this.api = global.api;
-		this.pagetype = global.pagetype;
-		this.next_url = location.href;
-		this.isPaused = true;
-		this.isEnded = false;
-	}
+  constructor (global) {
+    this.library = global.library;
+    this.api = global.api;
+    this.pagetype = global.pagetype;
+    this.next_url = location.href;
+    this.isPaused = true;
+    this.isEnded = false;
+  }
 
-	async startNextUrlBased(opt) {
-		// next_url based
-		this.isPaused = false;
+  async startNextUrlBased (opt) {
+    // next_url based
+    this.isPaused = false;
 
-		while(this.canContinue() && opt.times) {
-			let page = null;
-			if (this.pagetype === PageType.SEARCH) {
-				page = await this.api.getPageHTMLIllustIds(this.next_url);
-			} else {
-				page = await this.api.getLegacyPageHTMLIllustIds(this.next_url, {
-					needBookmarkId: this.pagetype === PageType.MY_BOOKMARK
-				});
-			}
-			$debug('Crawler#startNextUrlBased: page:', page);
+    while (this.canContinue() && opt.times) {
+      let page = null;
+      if (this.pagetype === PageType.SEARCH) {
+        page = await this.api.getPageHTMLIllustIds(this.next_url);
+      } else {
+        page = await this.api.getLegacyPageHTMLIllustIds(this.next_url, {
+          needBookmarkId: this.pagetype === PageType.MY_BOOKMARK
+        });
+      }
+      $debug('Crawler#startNextUrlBased: page:', page);
 
-			this.next_url = page.next_url;
+      this.next_url = page.next_url;
 
-			// {[illust_id : IDString]: illust_detail}
-			const illust_api_details = await this.api.getIllustsAPIDetail(page.illust_ids);
-			$debug('Crawler#startNextUrlBased: illust_api_details:', illust_api_details);
+      // {[illust_id : IDString]: illust_detail}
+      const illustAPIDetails = await this.api.getIllustsAPIDetail(page.illust_ids);
+      $debug('Crawler#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
 
-			if (this.pagetype === PageType.MY_BOOKMARK) {
-				// {[illust_id : IDString]: {
-				//	illust_id,
-				//	bookmark_id
-				// }}
-				const my_bookmark_api_details = page.bookmark_ids;
-				for (const [illust_id, illust_detail] of Object.entries(illust_api_details)) {
-					const bookmark_id = page.bookmark_ids[illust_id].bookmark_id;
-					if (bookmark_id) {
-						illust_detail.bookmark_id = bookmark_id;
-					}
-				}
-				$debug('Crawler#startNextUrlBased: my_bookmark_api_details:', my_bookmark_api_details);
-			}
+      if (this.pagetype === PageType.MY_BOOKMARK) {
+        // {[illust_id : IDString]: {
+        //   illust_id,
+        //   bookmark_id
+        // }}
+        const myBookmarkAPIDetails = page.bookmark_ids;
+        for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
+          const bookmarkId = page.bookmark_ids[illustId].bookmark_id;
+          if (bookmarkId) {
+            illustDetail.bookmark_id = bookmarkId;
+          }
+        }
+        $debug('Crawler#startNextUrlBased: myBookmarkAPIDetails:', myBookmarkAPIDetails);
+      }
 
-			// {[illust_id : IDString]: {
-			//	illust_id,
-			//	bookmark_count,
-			//	tags: string[]
-			// }}
-			const bookmark_html_details = await this.api.getBookmarkHTMLDetails(Object.keys(illust_api_details));
-			$debug('Crawler#startNextUrlBased: bookmark_html_details:', bookmark_html_details);
+      // {[illust_id : IDString]: {
+      //   illust_id,
+      //   bookmark_count,
+      //   tags: string[]
+      // }}
+      const bookmarkHTMLDetails = await this.api.getBookmarkHTMLDetails(Object.keys(illustAPIDetails));
+      $debug('Crawler#startNextUrlBased: bookmarkHTMLDetails:', bookmarkHTMLDetails);
 
-			const user_ids = Object.values(illust_api_details).map(d => d.user_id);
-			// {[user_id : IDString]: {
-			//	user_id,
-			//	is_follow
-			// }}
-			const user_api_details = await this.api.getUsersAPIDetail(user_ids);
-			$debug('Crawler#startNextUrlBased: user_api_details:', user_api_details);
+      const userIds = Object.values(illustAPIDetails).map(d => d.user_id);
+      // {[user_id : IDString]: {
+      // user_id,
+      // is_follow
+      // }}
+      const userAPIDetails = await this.api.getUsersAPIDetail(userIds);
+      $debug('Crawler#startNextUrlBased: userAPIDetails:', userAPIDetails);
 
-			const libraryData = this.makeLibraryData({illust_api_details, bookmark_html_details, user_api_details});
-			this.library.push(...libraryData);
+      const libraryData = this.makeLibraryData({illustAPIDetails, bookmarkHTMLDetails, userAPIDetails});
+      this.library.push(...libraryData);
 
-			opt.times -= 1;
-			if (!opt.times) {
-				this.pause();
-			}
+      opt.times -= 1;
+      if (!opt.times) {
+        this.pause();
+      }
 
-			if (!this.next_url) {
-				this.stop();
-			}
-		}
-	}
+      if (!this.next_url) {
+        this.stop();
+      }
+    }
+  }
 
-	async start(options){
-		const opt = Object.assign({times: Infinity}, options);
-		$debug('Crawler#start: opt:', opt);
+  async start (options) {
+    const opt = Object.assign({times: Infinity}, options);
+    $debug('Crawler#start: opt:', opt);
 
-		if(this.isEnded || opt.times <= 0) {
-			return;
-		}
+    if (this.isEnded || opt.times <= 0) {
+      return
+    }
 
-		switch (this.pagetype) {
-		case PageType.SEARCH:
-		case PageType.NEW_ILLUST:
-		case PageType.MY_BOOKMARK:
-		case PageType.MEMBER_ILLIST:
-			await this.startNextUrlBased(opt);
-			break;
-		default:
-			break;
-		}
-	}
+    switch (this.pagetype) {
+      case PageType.SEARCH:
+      case PageType.NEW_ILLUST:
+      case PageType.MY_BOOKMARK:
+      case PageType.MEMBER_ILLIST:
+        await this.startNextUrlBased(opt);
+        break
+      default:
+        break
+    }
+  }
 
-	pause(){
-		this.isPaused = true;
-	}
+  pause () {
+    this.isPaused = true;
+  }
 
-	stop(){
-		this.pause();
-		this.isEnded = true;
-	}
+  stop () {
+    this.pause();
+    this.isEnded = true;
+  }
 
+  canContinue () {
+    return !(this.isEnded || this.isPaused)
+  }
 
-	canContinue() {
-		return !(this.isEnded || this.isPaused);
-	}
+  makeLibraryData ({illustAPIDetails, bookmarkHTMLDetails, userAPIDetails}) {
+    if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
+      throw new Error('Crawler#makeLibraryData: illustAPIDetails is falsy.')
+    }
 
-	makeLibraryData({illust_api_details, bookmark_html_details, user_api_details}) {
-		if(!illust_api_details || !Object.keys(illust_api_details).length) {
-			throw new Error('Crawler#makeLibraryData: illust_api_details is falsy.');
-		}
+    const vLibrary = [];
+    for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
+      const d = {
+        illust_id: illustId,
+        bookmark_count: bookmarkHTMLDetails[illustId].bookmark_count,
+        tags: bookmarkHTMLDetails[illustId].tags.join(', '),
+        illust_title: illustDetail.illust_title,
+        illust_page_count: Number.toInt(illustDetail.illust_page_count),
+        user_id: illustDetail.user_id,
+        user_name: illustDetail.user_name,
+        is_follow: userAPIDetails[illustDetail.user_id].is_follow,
+        is_bookmarked: illustDetail.is_bookmarked,
+        is_ugoira: !!illustDetail.ugoira_meta,
+        profile_img: illustDetail.profile_img,
+        url: {
+          big: illustDetail.url.big,
+          sq240: illustDetail.url['240mw'].replace('240x480', '240x240')
+        }
+      };
 
-		const vLibrary = [];
-		for (const [illust_id, illust_detail] of Object.entries(illust_api_details)) {
-			const d = {
-				illust_id,
-				bookmark_count: bookmark_html_details[illust_id].bookmark_count,
-				tags: bookmark_html_details[illust_id].tags.join(', '),
-				illust_title: illust_detail.illust_title,
-				illust_page_count: Number.toInt(illust_detail.illust_page_count),
-				user_id: illust_detail.user_id,
-				user_name: illust_detail.user_name,
-				is_follow: user_api_details[illust_detail.user_id].is_follow,
-				is_bookmarked: illust_detail.is_bookmarked,
-				is_ugoira: !!illust_detail.ugoira_meta,
-				profile_img: illust_detail.profile_img,
-				url: {
-					big: illust_detail.url.big,
-					sq240: illust_detail.url['240mw'].replace('240x480', '240x240')
-				}
-			};
+      if (this.pagetype === PageType.MY_BOOKMARK) {
+        d.bookmark_id = illustDetail.bookmark_id;
+      }
 
-			if (this.pagetype === PageType.MY_BOOKMARK) {
-				d.bookmark_id = illust_detail.bookmark_id;
-			}
+      vLibrary.push(d);
+    }
 
-			vLibrary.push(d);
-		}
-
-		return vLibrary;
-	}
+    return vLibrary
+  }
 }
 
 __$styleInject(".ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n    width: initial !important;\n}\n.ω.↔ .layout-a {\n    display: flex;\n    flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2{\n    flex: 1;\n    margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n    margin: 10px 20px;\n}\n");
@@ -991,54 +990,54 @@ $log(`[${Global.NAME}] version: ${Global.VERSION}`);
 
 // just string compare
 const storeVersion = global.store.get('version');
-if(!storeVersion || Global.VERSION > storeVersion) {
-	global.store.set(Object.assign({
-		version: Global.VERSION
-	}, global.conf));
+if (!storeVersion || Global.VERSION > storeVersion) {
+  global.store.set(Object.assign({
+    version: Global.VERSION
+  }, global.conf));
 } else {
-	Object.assign(global.conf, global.store.get());
+  Object.assign(global.conf, global.store.get());
 }
 $debug('global:', global);
 global.applyConf();
 
 Pixiv.removeAnnoyings();
 
-if(global.pagetype !== PageType.NO_SUPPORT) {
-	const crawler = new Crawler(global);
+if (global.pagetype !== PageType.NO_SUPPORT) {
+  const crawler = new Crawler(global);
 
-	const patchouli = new Vue({
-		components: {Default: _default},
-		data: {
-			l10n: global.l10n,
-			library: global.library,
-			pagetype: global.pagetype,
-			filters: global.filters
-		},
-		template: '<Default :l10n="l10n" :library="library" :pagetype="pagetype" :filters="filters" />'
-	});
+  const patchouli = new Vue({
+    components: {Default: _default},
+    data: {
+      l10n: global.l10n,
+      library: global.library,
+      pagetype: global.pagetype,
+      filters: global.filters
+    },
+    template: '<Default :l10n="l10n" :library="library" :pagetype="pagetype" :filters="filters" />'
+  });
 
-	const koakuma$$1 = new Vue({
-		components: {Koakuma: koakuma},
-		data: {
-			l10n: global.l10n,
-			filters: global.filters,
-			store: global.store,
-			conf: global.conf,
-			applyConf: global.applyConf.bind(global),
-			crawler
-		},
-		template: '<Koakuma :l10n="l10n" :crawler="crawler" :filters="filters" :store="store" :conf="conf" :applyConf="applyConf"/>'
-	});
+  const koakuma$$1 = new Vue({
+    components: {Koakuma: koakuma},
+    data: {
+      l10n: global.l10n,
+      filters: global.filters,
+      store: global.store,
+      conf: global.conf,
+      applyConf: global.applyConf.bind(global),
+      crawler
+    },
+    template: '<Koakuma :l10n="l10n" :crawler="crawler" :filters="filters" :store="store" :conf="conf" :applyConf="applyConf"/>'
+  });
 
-	crawler.start({times: 1}).then(() => {
-		patchouli.$mount(global.patchouliMountPoint);
-		koakuma$$1.$mount(global.koakumaMountPoint);
-	}).catch(error => {
-		$error(error);
-	});
+  crawler.start({times: 1}).then(() => {
+    patchouli.$mount(global.patchouliMountPoint);
+    koakuma$$1.$mount(global.koakumaMountPoint);
+  }).catch(error => {
+    $error(error);
+  });
 
-	$debug('crawler:', crawler);
-	$expose({crawler, patchouli, koakuma: koakuma$$1});
+  $debug('crawler:', crawler);
+  $expose({crawler, patchouli, koakuma: koakuma$$1});
 }
 
 $expose({global, Vue, axios});

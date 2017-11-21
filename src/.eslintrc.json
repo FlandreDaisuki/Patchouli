@@ -5,27 +5,9 @@
     "browser": true,
     "greasemonkey": true
   },
-  "extends": "eslint:recommended",
+  "extends": "standard",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 8
-  },
-  "rules": {
-    "arrow-spacing": "error",
-    "comma-dangle": "error",
-    "comma-spacing": "error",
-    "indent": ["error", "tab"],
-    "key-spacing": "error",
-    "linebreak-style": ["error", "unix"],
-    "no-console": "warn",
-    "object-curly-spacing": "error",
-    "operator-linebreak": "error",
-    "prefer-const": "error",
-    "quotes": ["error", "single"],
-    "semi": ["error", "always"],
-    "space-in-parens": "error",
-    "space-infix-ops": "error",
-    "curly": "error",
-    "brace-style": "error"
   }
 }
