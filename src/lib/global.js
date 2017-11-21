@@ -82,9 +82,6 @@ export default class Global {
 		case '/bookmark_new_illust_r18.php':
 			this.pagetype = PageType.NEW_ILLUST;
 			break;
-		case '/discovery':
-			this.pagetype = PageType.DISCOVERY;
-			break;
 		case '/member_illust.php':
 			this.pagetype = spId ? PageType.MEMBER_ILLIST : PageType.NO_SUPPORT;
 			break;

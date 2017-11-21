@@ -17,7 +17,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2017 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           3.0.1
+// @version           3.0.2
 // @grant             none
 // ==/UserScript==
 
@@ -593,9 +593,6 @@ class Global {
 		case '/new_illust_r18.php':
 		case '/bookmark_new_illust_r18.php':
 			this.pagetype = PageType.NEW_ILLUST;
-			break;
-		case '/discovery':
-			this.pagetype = PageType.DISCOVERY;
 			break;
 		case '/member_illust.php':
 			this.pagetype = spId ? PageType.MEMBER_ILLIST : PageType.NO_SUPPORT;
