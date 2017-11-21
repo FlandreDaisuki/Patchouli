@@ -1,18 +1,17 @@
 <template>
-  <div id="koakuma">
+  <div id="koakuma" :class="statusClass">
     <div class="processed">{{processedMsg}}</div>
     <div>
       <label for="koakuma-bookmark-sort-input" class="bookmark-count">
         <i class="_icon sprites-bookmark-badge"></i>
         <input id="koakuma-bookmark-sort-input" type="number" min="0" step="1" :value="filters.limit" @wheel.stop.prevent="sortInputWheel" @input="sortInputInput">↑
       </label>
-
     </div>
     <div>
       <input type="text" class="tag-filter" :placeholder="l10n.tagFilterPlaceholder" @input="tagFilterInput">
     </div>
     <div>
-      <button class="explosion" :class="buttonClass" :disabled="crawler.isEnded" @click="clickExplosion">{{buttonMsg}}</button>
+      <button class="explosion" :disabled="crawler.isEnded" @click="clickExplosion">{{buttonMsg}}</button>
     </div>
     <div>
       <input type="checkbox" id="koakuma-options-fit-browser-width" :checked="conf.fitwidth" @change="optionsChange">
@@ -34,7 +33,7 @@
           this.crawler.library.length
         );
       },
-      buttonClass() {
+      statusClass() {
         return {
           end: this.crawler.isEnded,
           paused: !this.crawler.isPaused && !this.crawler.isEnded,
@@ -112,8 +111,9 @@
     top: 0;
     z-index: 3;
     background-color: #e77;
-    color: #fff;
+    box-shadow: 0 1px 3px #000000;
     padding: 4px;
+    color: #fff;
     font-size: 16px;
   }
   #koakuma > div {
@@ -150,13 +150,13 @@
   .explosion:enabled:active {
     box-shadow: 1px 1px inset;
   }
-  .go {
+  .go .explosion {
     background-color: #64ffda;
   }
-  .paused {
+  .paused .explosion {
     background-color: #ffd600;
   }
-  .end {
+  .end .explosion {
     background-color: #455a64;
     color: #fff;
     opacity: 0.9;

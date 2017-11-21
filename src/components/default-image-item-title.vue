@@ -1,11 +1,11 @@
 <template>
-  <figcaption class="container">
+  <figcaption class="image-item-title">
     <ul>
-      <li class="title">
+      <li class="title-text">
         <a :href="illustPageUrl" :title="illustTitle">{{illustTitle}}</a>
       </li>
       <li v-if="!isMemberIllistPage">
-        <a class="user ui-profile-popup" :href="userPageUrl" target="_blank" :title="userName" :data-user_id="userId" :data-user_name="userName">
+        <a class="user-link ui-profile-popup" :href="userPageUrl" target="_blank" :title="userName" :data-user_id="userId" :data-user_name="userName">
           <span class="user-img" :style="profileImgStyle"></span>
           <span>{{userName}}</span>
         </a>
@@ -62,16 +62,16 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .container {
+  .image-item-title {
     max-width: 100%;
   }
-  .title {
+  .title-text {
     font-weight: 700;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .user {
+  .user-link {
     font-size: 12px;
     display: inline-flex;
     align-items: center;

@@ -16,11 +16,24 @@
   flex-flow: column;
   max-width: 100%;
 }
-.container[data-v-23ff0f22] {
+.image-item-image[data-v-23ff0f22] {
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
+}
+.image-item-image > a[data-v-23ff0f22] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 200px;
+  max-height: 200px;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+.image-item-image > a > img[data-v-23ff0f22] {
+  max-height: 200px;
+  max-width: 200px;
+  object-fit: cover;
 }
 .multiple[data-v-23ff0f22] {
   position: absolute;
@@ -32,24 +45,11 @@
   border-radius: 0 0 0 4px;
   font-weight: 700;
 }
-.multiple-icon[data-v-23ff0f22] {
+.multiple > span[data-v-23ff0f22] {
   background: url(https://source.pixiv.net/www/js/bundle/0d96c2a49f75a8fa27d0424549169573.svg);
   width: 10px;
   height: 10px;
   display: inline-block;
-}
-.img[data-v-23ff0f22] {
-  max-height: 200px;
-  max-width: 200px;
-  object-fit: cover;
-}
-.link[data-v-23ff0f22] {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  max-width: 200px;
-  max-height: 200px;
-  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 .ugoira[data-v-23ff0f22] {
   background: url(https://source.pixiv.net/www/js/bundle/70ae15bac4e2e134bbf9d5727859f1fc.svg);
@@ -68,16 +68,16 @@
   padding: 6px;
   border-radius: 0 0 4px 0;
 }
-.container[data-v-b9e9aa28] {
+.image-item-title[data-v-b9e9aa28] {
   max-width: 100%;
 }
-.title[data-v-b9e9aa28] {
+.title-text[data-v-b9e9aa28] {
   font-weight: 700;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.user[data-v-b9e9aa28] {
+.user-link[data-v-b9e9aa28] {
   font-size: 12px;
   display: inline-flex;
   align-items: center;
@@ -97,8 +97,9 @@
   top: 0;
   z-index: 3;
   background-color: #e77;
-  color: #fff;
+  box-shadow: 0 1px 3px #000000;
   padding: 4px;
+  color: #fff;
   font-size: 16px;
 }
 #koakuma > div[data-v-40b353ca] {
@@ -135,13 +136,13 @@
 .explosion[data-v-40b353ca]:enabled:active {
   box-shadow: 1px 1px inset;
 }
-.go[data-v-40b353ca] {
+.go .explosion[data-v-40b353ca] {
   background-color: #64ffda;
 }
-.paused[data-v-40b353ca] {
+.paused .explosion[data-v-40b353ca] {
   background-color: #ffd600;
 }
-.end[data-v-40b353ca] {
+.end .explosion[data-v-40b353ca] {
   background-color: #455a64;
   color: #fff;
   opacity: 0.9;

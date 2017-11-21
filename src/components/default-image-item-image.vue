@@ -1,13 +1,11 @@
 <template>
-  <div class="container">
-    <a :href="illustPageUrl" rel="noopener" class="link">
+  <div class="image-item-image">
+    <a :href="illustPageUrl" rel="noopener">
       <div class="multiple" v-if="illustPageCount > 1">
-        <span>
-          <span class="multiple-icon"></span>
-          {{illustPageCount}}
-        </span>
+        <span></span>
+        {{illustPageCount}}
       </div>
-      <img class="img" :data-src="imgUrl" :src="imgUrl">
+      <img :data-src="imgUrl" :src="imgUrl">
       <div class="ugoira" v-if="isUgoira"></div>
     </a>
     <div class="bookmark _one-click-bookmark" :class="{on:selfIsBookmarked}" @click="oneClickBookmarkAdd" data-click-action="illust" :data-click-label="illustId" data-type="illust" :data-id="illustId" :title="selfIsBookmarked"></div>
@@ -50,11 +48,24 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .container {
+  .image-item-image {
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+  }
+  .image-item-image > a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 200px;
+    max-height: 200px;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+  }
+  .image-item-image > a > img {
+    max-height: 200px;
+    max-width: 200px;
+    object-fit: cover;
   }
   .multiple {
     position: absolute;
@@ -66,25 +77,13 @@
     border-radius: 0 0 0 4px;
     font-weight: 700;
   }
-  .multiple-icon {
+  .multiple > span {
     background: url(https://source.pixiv.net/www/js/bundle/0d96c2a49f75a8fa27d0424549169573.svg);
     width: 10px;
     height: 10px;
     display: inline-block;
   }
-  .img {
-    max-height: 200px;
-    max-width: 200px;
-    object-fit: cover;
-  }
-  .link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    max-width: 200px;
-    max-height: 200px;
-    border: 1px solid rgba(0, 0, 0, 0.04);
-  }
+
   .ugoira {
     background: url(https://source.pixiv.net/www/js/bundle/70ae15bac4e2e134bbf9d5727859f1fc.svg);
     position: absolute;
