@@ -345,7 +345,7 @@ function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, user
     };
 
     if (pageType === 'MY_BOOKMARK') {
-      d.bookmarkId = illustDetail.bookmark_id;
+      d.bookmarkId = illustDetail.bookmarkId;
     }
 
     vLibrary.push(d);
@@ -405,27 +405,27 @@ var pixiv = {
 
         state.nextURL = page.next_url;
 
-        // {[illust_id : IDString]: illust_detail}
+        // {[illustId : IDString]: illust_detail}
         const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
         $debug('PixivModule#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
 
         if (rootState.pageType === 'MY_BOOKMARK') {
-          // {[illust_id : IDString]: {
-          //   illust_id,
-          //   bookmark_id
+          // {[illustId : IDString]: {
+          //   illustId,
+          //   bookmarkId
           // }}
           const myBookmarkAPIDetails = page.bookmarkIds;
           for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
             const bookmarkId = myBookmarkAPIDetails[illustId].bookmarkId;
             if (bookmarkId) {
-              illustDetail.bookmark_id = bookmarkId;
+              illustDetail.bookmarkId = bookmarkId;
             }
           }
           $debug('PixivModule#startNextUrlBased: myBookmarkAPIDetails:', myBookmarkAPIDetails);
         }
 
-        // {[illust_id : IDString]: {
-        //   illust_id,
+        // {[illustId : IDString]: {
+        //   illustId,
         //   bookmarkCount,
         //   tags: string[]
         // }}
@@ -434,7 +434,7 @@ var pixiv = {
 
         const userIds = Object.values(illustAPIDetails).map(d => d.user_id);
         // {[user_id : IDString]: {
-        // user_id,
+        // userId,
         // isFollow
         // }}
         const userAPIDetails = await PixivAPI.getUsersAPIDetail(userIds);
