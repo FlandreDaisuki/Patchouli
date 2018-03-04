@@ -1,0 +1,40 @@
+{
+  "name": "patchouli",
+  "version": "4.0.0",
+  "description": "An image searching and browsing tool on Pixiv.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FlandreDaisuki/Patchouli.git"
+  },
+  "author": "FlandreDaisuki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FlandreDaisuki/Patchouli/issues"
+  },
+  "homepage": "https://github.com/FlandreDaisuki/Patchouli#readme",
+  "devDependencies": {
+    "eslint": "^4.18.2",
+    "eslint-plugin-compat": "^2.2.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-vue": "^4.3.0",
+    "parse5": "^2.2.3",
+    "rollup": "^0.56.3",
+    "rollup-plugin-vue": "^3.0.0",
+    "vue-template-compiler": "^2.5.13"
+  },
+  "dependencies": {
+    "vue": "^2.5.13",
+    "vuex": "^3.0.1"
+  },
+  "browserslist": [
+    "last 4 Chrome versions",
+    "last 4 Firefox versions",
+    "last 4 Edge versions"
+  ]
+}

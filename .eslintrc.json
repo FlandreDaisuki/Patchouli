@@ -1,0 +1,25 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "browser": true,
+    "greasemonkey": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 8
+  },
+  "extends": ["eslint:recommended", "plugin:vue/essential"],
+  "rules": {
+    "no-console": "off",
+    "key-spacing": "error",
+    "indent": ["error", 2],
+    "comma-spacing": "error",
+    "arrow-spacing": "error",
+    "semi": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
+    "keyword-spacing": "error",
+    "space-before-function-paren": ["error", "never"],
+    "space-before-blocks": "error"
+  }
+}
