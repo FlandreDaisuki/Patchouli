@@ -29,6 +29,7 @@
     "vue-template-compiler": "^2.5.13"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "vue": "^2.5.13",
     "vuex": "^3.0.1"
   },

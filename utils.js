@@ -29,6 +29,10 @@ function $error(...args) {
   console.error.apply(console, args);
 }
 
+function $debug(...args) {
+  console.debug.apply(console, args);
+}
+
 (() => {
   Math.clamp = (val, min, max) => Math.min(Math.max(min, val), max);
   Number.toInt = (s) => (isNaN(~~s) ? 0 : ~~s);
@@ -66,5 +70,6 @@ export {
   $$find,
   $el,
   $log,
-  $error
+  $error,
+  $debug
 };

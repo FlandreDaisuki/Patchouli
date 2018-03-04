@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { $, $el } from '../utils';
+import pixiv from './modules/pixiv';
 
 Vue.use(Vuex);
 
@@ -36,9 +37,8 @@ const pageType = (() => {
   }
 })();
 
-
-
 export default new Vuex.Store({
+  modules: { pixiv },
   state: {
     pageType,
     koakumaMountPoint: null,

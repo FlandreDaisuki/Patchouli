@@ -5,6 +5,9 @@
     "browser": true,
     "greasemonkey": true
   },
+  "globals": {
+    "axios": true
+  },
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 8
@@ -16,10 +19,11 @@
     "indent": ["error", 2],
     "comma-spacing": "error",
     "arrow-spacing": "error",
-    "semi": ["error", "always"],
-    "object-curly-spacing": ["error", "always"],
     "keyword-spacing": "error",
-    "space-before-function-paren": ["error", "never"],
-    "space-before-blocks": "error"
+    "space-infix-ops": "error",
+    "semi": ["error", "always"],
+    "space-before-blocks": "error",
+    "object-curly-spacing": ["error", "always"],
+    "space-before-function-paren": ["error", "never"]
   }
 }
