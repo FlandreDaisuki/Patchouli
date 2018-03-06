@@ -1,5 +1,5 @@
-import PixivAPI from '../../pixiv';
-import { $debug } from '../../utils';
+import PixivAPI from '../../lib/pixiv';
+import { $debug } from '../../lib/utils';
 
 function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
   if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
@@ -136,5 +136,17 @@ export default {
       }
     }
   },
-  getters: {}
+  getters: {
+    filteredLibrary(state, getters, rootState) {
+      const cloneLibrary = state.imgLibrary.slice();
+      return cloneLibrary
+        .filter(el => el.bookmarkCount >= rootState.filters.limit)
+        .filter(el => el.tags.match(rootState.filters.tag))
+        .sort(
+          (a, b) =>
+            Number.toInt(b[rootState.filters.orderBy]) -
+            Number.toInt(a[rootState.filters.orderBy])
+        );
+    }
+  }
 };

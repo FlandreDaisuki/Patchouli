@@ -4,7 +4,8 @@
   "description": "An image searching and browsing tool on Pixiv.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node build.js"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,10 @@
     "eslint-plugin-vue": "^4.3.0",
     "parse5": "^2.2.3",
     "rollup": "^0.56.3",
+    "rollup-plugin-userscript-css": "^1.2.0",
+    "rollup-plugin-userscript-metablock": "^0.1.0",
     "rollup-plugin-vue": "^3.0.0",
+    "vue-eslint-parser": "^2.0.3",
     "vue-template-compiler": "^2.5.13"
   },
   "dependencies": {

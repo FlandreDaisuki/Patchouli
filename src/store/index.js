@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { $, $el } from '../utils';
+import { $, $el } from '../lib/utils';
 import pixiv from './modules/pixiv';
 
 Vue.use(Vuex);
@@ -44,7 +44,16 @@ export default new Vuex.Store({
     koakumaMountPoint: null,
     patchouliMountPoint: null,
     VERSION: GM_info.script.version,
-    NAME: GM_info.script.name
+    NAME: GM_info.script.name,
+    filters: {
+      limit: 0,
+      tag: new RegExp('', 'i'),
+      orderBy: 'illustId'
+    },
+    config: {
+      fitwidth: 1,
+      sort: 0
+    }
   },
   mutations: {
     prepareMountPoint(state) {

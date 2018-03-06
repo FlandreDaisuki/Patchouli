@@ -1,5 +1,45 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
+// ==UserScript==
+// @name              Patchouli.dev
+// @name:ja           パチュリー.dev
+// @name:zh-CN        帕秋莉.dev
+// @name:zh-TW        帕秋莉.dev
+// @namespace         https://github.com/FlandreDaisuki
+// @description       An image searching/browsing tool on Pixiv
+// @description:ja    Pixiv 検索機能強化
+// @description:zh-CN Pixiv 搜寻/浏览 工具
+// @description:zh-TW Pixiv 搜尋/瀏覽 工具
+// @include           *://www.pixiv.net/*
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js
+// @icon              http://i.imgur.com/VwoYc5w.png
+// @noframes
+// @author            FlandreDaisuki
+// @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
+// @compatible        firefox >=52
+// @compatible        chrome >=55
+// @version           4.0.0
+// @grant             none
+// ==/UserScript==
+
+(function (Vue,Vuex) {
+'use strict';
+
+function __$styleInject( css ) {
+    if(!css) return ;
+
+    if(typeof(window) == 'undefined') return ;
+    let style = document.createElement('style');
+
+    style.innerHTML = css;
+    document.head.appendChild(style);
+    return css;
+}
+
+Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
+Vuex = Vuex && Vuex.hasOwnProperty('default') ? Vuex['default'] : Vuex;
+
+__$styleInject("/*# sourceMappingURL=Koakuma.vue.map */\n/*# sourceMappingURL=Patchouli.vue.map */\n/*# sourceMappingURL=DefaultImageItem.vue.map */\n.image-flexbox[data-v-3c187ee4] {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid #000;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  min-width: 88px;\n  min-height: 88px;\n  position: relative;\n}\n.top-right-slot[data-v-3c187ee4] {\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3c187ee4] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3c187ee4] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\n/*# sourceMappingURL=DefaultImageItemTitle.vue.map */");
 
 function $(selector) {
   return document.querySelector(selector);
@@ -541,7 +581,7 @@ var store = new Vuex.Store({
 
 var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._v(" Hello, world ")])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
 
-}
+};
 
 var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageURL}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
   props: {
@@ -717,4 +757,5 @@ store.dispatch('start', { times: 1 }).then(() => {
 window.store = store;
 window.Patchouli = Patchouli;
 window.Koakuma = Koakuma;
-import './index.css';
+
+}(Vue,Vuex));

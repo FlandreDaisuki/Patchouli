@@ -12,7 +12,7 @@
     "sourceType": "module",
     "ecmaVersion": 8
   },
-  "extends": ["eslint:recommended", "plugin:vue/essential"],
+  "extends": ["eslint:recommended", "plugin:vue/recommended"],
   "rules": {
     "no-console": "off",
     "key-spacing": "error",
@@ -24,6 +24,13 @@
     "semi": ["error", "always"],
     "space-before-blocks": "error",
     "object-curly-spacing": ["error", "always"],
-    "space-before-function-paren": ["error", "never"]
+    "space-before-function-paren": ["error", "never"],
+    "vue/max-attributes-per-line": [2, {
+      "singleline": 2,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": false
+      }
+    }]
   }
 }
