@@ -13,6 +13,7 @@
       :profile-img-url="d.profileImg"
       :bookmark-count="d.bookmarkCount"
       :is-bookmarked="d.isBookmarked"
+      :is-follow="d.isFollow"
       :bookmark-id="d.bookmarkId" />
   </div>
 </template>

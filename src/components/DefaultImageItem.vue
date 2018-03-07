@@ -13,6 +13,7 @@
         :illust-title="illustTitle"
         :user-name="userName"
         :user-id="userId"
+        :is-follow="isFollow"
         :profile-img-url="profileImgUrl"
         :bookmark-count="bookmarkCount"
         :page-type="pageType"/>
@@ -60,6 +61,10 @@ export default {
       default: false
     },
     isBookmarked: {
+      type: Boolean,
+      default: false
+    },
+    isFollow: {
       type: Boolean,
       default: false
     },

@@ -4,7 +4,7 @@
       <li class="title-text">
         <a :href="illustPageUrl" :title="illustTitle">{{ illustTitle }}</a>
       </li>
-      <li v-if="!isMemberIllistPage">
+      <li class="user-info" v-if="!isMemberIllistPage">
         <a
           class="user-link ui-profile-popup"
           target="_blank"
@@ -15,6 +15,7 @@
           <span class="user-img" :style="profileImgStyle"/>
           <span>{{ userName }}</span>
         </a>
+        <i class="follow-icon" v-if="isFollow"/>
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
@@ -59,6 +60,10 @@ export default {
     bookmarkCount: {
       type: Number,
       default: 0
+    },
+    isFollow: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -104,6 +109,10 @@ export default {
   white-space: nowrap;
   font-weight: 700;
 }
+.user-info {
+  display: inline-flex;
+  align-items: center;
+}
 .user-link {
   font-size: 12px;
   display: inline-flex;
@@ -116,6 +125,14 @@ export default {
   background-size: cover;
   border-radius: 50%;
   margin-right: 4px;
+}
+.follow-icon {
+  display: inline-block;
+  margin-left: 4px;
+  width: 14px;
+  height: 14px;
+  background-color: dodgerblue;
+  mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
 }
 </style>
 

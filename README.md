@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![](https://img.shields.io/badge/latest-v4.0.0-blue.svg)](#)
+[![latest-v4.0.0](https://img.shields.io/badge/latest-v4.0.0-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -20,6 +20,7 @@
 - 以 (投稿時間／收藏數) 排序結果
 - 切換 (自適應螢幕／預設) 寬度
 - 部份 i18n 界面 (en, ja, zh, zh-tw)
+- 以圖示 <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg" width="12"> 標注 (已關注／未關注) 畫師
 
 ## Usage 使用說明
 

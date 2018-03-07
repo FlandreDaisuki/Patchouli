@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![](https://img.shields.io/badge/latest-v4.0.0-blue.svg)](#)
+[![latest-v4.0.0](https://img.shields.io/badge/latest-v4.0.0-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -20,6 +20,7 @@ A simple Pixiv crawler. Naming is inspired from **Touhou Project**.
 - Sort by bookmarks or upload time
 - Switch self-adaptive width or default width
 - The UI with i18n (en, ja, zh, zh-tw)
+- Use icon <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg" width="12"> to indicate following illustrator
 
 ## Usage
 

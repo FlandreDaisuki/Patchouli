@@ -52,7 +52,6 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     $error('Fail to first mount', error);
   });
 
-  window.store = store;
   window.Patchouli = Patchouli;
   window.Koakuma = Koakuma;
 }
