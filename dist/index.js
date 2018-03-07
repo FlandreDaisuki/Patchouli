@@ -835,6 +835,7 @@ Vue.use(VueI18n);
 
 var i18n = new VueI18n({
   locale: document.documentElement.lang,
+  fallbackLocale: 'ja',
   messages: {
     'en': {
       patchouli: {

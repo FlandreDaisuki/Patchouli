@@ -19,7 +19,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.0.0
+// @version           4.0.1
 // @grant             none
 // ==/UserScript==
 
@@ -878,6 +878,7 @@ Vue.use(VueI18n);
 
 var i18n = new VueI18n({
   locale: document.documentElement.lang,
+  fallbackLocale: 'ja',
   messages: {
     'en': {
       patchouli: {
