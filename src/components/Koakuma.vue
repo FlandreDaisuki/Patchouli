@@ -17,15 +17,15 @@
     <div>
       <input
         type="text"
-        class="tag-filter"
+        class="tags-filter"
         :placeholder="$t('koakuma.tagsPlaceholder')"
-        @input="tagFilterInput">
+        @input="tagsFilterInput">
     </div>
     <div>
       <button
-        class="explosion"
+        class="main-button"
         :disabled="status.isEnded"
-        @click="clickExplosion">
+        @click="clickMainButton">
         {{ buttonMsg }}
       </button>
     </div>
@@ -82,7 +82,7 @@ export default {
     }
   },
   methods: {
-    clickExplosion() {
+    clickMainButton() {
       if (this.status.isPaused) {
         this.$store.dispatch("start");
       } else {
@@ -114,7 +114,7 @@ export default {
       this.$store.commit("saveConfig");
       this.$store.commit("applyConfig");
     },
-    tagFilterInput(event) {
+    tagsFilterInput(event) {
       if (this.debounceId1) {
         clearTimeout(this.debounceId1);
       }
@@ -159,28 +159,28 @@ export default {
   text-align: center;
   max-width: 50px;
 }
-.tag-filter {
+.tags-filter {
   min-width: 300px;
 }
-.explosion {
+.main-button {
   border: none;
   padding: 2px 14px;
   border-radius: 3px;
   font-size: 16px;
 }
-.explosion:enabled:hover {
+.main-button:enabled:hover {
   box-shadow: 1px 1px;
 }
-.explosion:enabled:active {
+.main-button:enabled:active {
   box-shadow: 1px 1px inset;
 }
-.go .explosion {
+.go .main-button {
   background-color: #64ffda;
 }
-.paused .explosion {
+.paused .main-button {
   background-color: #ffd600;
 }
-.end .explosion {
+.end .main-button {
   background-color: #455a64;
   color: #fff;
   opacity: 0.9;
