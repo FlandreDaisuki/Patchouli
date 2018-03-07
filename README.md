@@ -25,8 +25,8 @@
 ## Usage 使用說明
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=SbguITWTW0Y" target="_blank">
-    <img src="https://img.youtube.com/vi/SbguITWTW0Y/0.jpg" alt="示範影片"/>
+  <a href="https://www.youtube.com/watch?v=E1yWWO9e--k" target="_blank">
+    <img src="https://img.youtube.com/vi/E1yWWO9e--k/0.jpg" alt="示範影片"/>
   </a>
 </p>
 

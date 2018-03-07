@@ -25,8 +25,8 @@ A simple Pixiv crawler. Naming is inspired from **Touhou Project**.
 ## Usage
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=SbguITWTW0Y" target="_blank">
-    <img src="https://img.youtube.com/vi/SbguITWTW0Y/0.jpg" alt="Demo video"/>
+  <a href="https://www.youtube.com/watch?v=E1yWWO9e--k" target="_blank">
+    <img src="https://img.youtube.com/vi/E1yWWO9e--k/0.jpg" alt="Demo video"/>
   </a>
 </p>
 
