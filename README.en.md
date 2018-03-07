@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.0.1](https://img.shields.io/badge/latest-v4.0.1-blue.svg)](#)
+[![latest-v4.0.2](https://img.shields.io/badge/latest-v4.0.2-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -45,6 +45,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog
+
+2018-03-08 v4.0.2
+
+- Fixed supported page type
 
 2018-03-07 v4.0.1
 

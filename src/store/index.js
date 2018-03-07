@@ -12,14 +12,15 @@ const pageType = (() => {
   const spType = searchParam.get('type');
 
   switch (path) {
-  case '/search.php':
+  case '/search.php': //getPageHTMLIllustIds
     return 'SEARCH';
-  case '/bookmark_new_illust.php':
-  case '/new_illust.php':
-  case '/mypixiv_new_illust.php':
-  case '/new_illust_r18.php':
-  case '/bookmark_new_illust_r18.php':
+  case '/bookmark_new_illust_r18.php': //getPageHTMLIllustIds
+  case '/bookmark_new_illust.php': //getPageHTMLIllustIds
     return 'NEW_ILLUST';
+  case '/new_illust.php':          //Lagacy
+  case '/mypixiv_new_illust.php':  //Lagacy
+  case '/new_illust_r18.php':      //Lagacy
+    return 'ANCIENT_NEW_ILLUST';
   case '/member_illust.php':
     return spId ? 'MEMBER_ILLIST' : 'NO_SUPPORT';
   case '/bookmark.php': {

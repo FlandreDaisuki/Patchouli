@@ -66,6 +66,7 @@ export default {
       case 'MY_BOOKMARK':
       case 'MEMBER_ILLIST':
       case 'MEMBER_BOOKMARK':
+      case 'ANCIENT_NEW_ILLUST':
         await dispatch('startNextUrlBased', { times });
         break;
       default:
@@ -77,7 +78,7 @@ export default {
 
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
-        if (['SEARCH', 'NEW_ILLUST'].includes( rootState.pageType)) {
+        if (['SEARCH', 'NEW_ILLUST'].includes(rootState.pageType)) {
           page = await PixivAPI.getPageHTMLIllustIds(state.nextUrl);
         } else {
           page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextUrl, {

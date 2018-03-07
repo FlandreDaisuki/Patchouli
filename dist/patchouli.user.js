@@ -19,7 +19,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.0.1
+// @version           4.0.2
 // @grant             none
 // ==/UserScript==
 
@@ -372,6 +372,7 @@ var pixiv = {
       case 'MY_BOOKMARK':
       case 'MEMBER_ILLIST':
       case 'MEMBER_BOOKMARK':
+      case 'ANCIENT_NEW_ILLUST':
         await dispatch('startNextUrlBased', { times });
         break;
       default:
@@ -382,7 +383,7 @@ var pixiv = {
       state.isPaused = false;
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
-        if (['SEARCH', 'NEW_ILLUST'].includes( rootState.pageType)) {
+        if (['SEARCH', 'NEW_ILLUST'].includes(rootState.pageType)) {
           page = await PixivAPI.getPageHTMLIllustIds(state.nextUrl);
         } else {
           page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextUrl, {
@@ -438,12 +439,13 @@ const pageType = (() => {
   switch (path) {
   case '/search.php':
     return 'SEARCH';
+  case '/bookmark_new_illust_r18.php':
   case '/bookmark_new_illust.php':
+    return 'NEW_ILLUST';
   case '/new_illust.php':
   case '/mypixiv_new_illust.php':
   case '/new_illust_r18.php':
-  case '/bookmark_new_illust_r18.php':
-    return 'NEW_ILLUST';
+    return 'ANCIENT_NEW_ILLUST';
   case '/member_illust.php':
     return spId ? 'MEMBER_ILLIST' : 'NO_SUPPORT';
   case '/bookmark.php': {
