@@ -1,4 +1,4 @@
-import PixivAPI from '../../lib/pixiv';
+import { PixivAPI } from '../../lib/pixiv';
 import { $debug } from '../../lib/utils';
 
 function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
@@ -65,6 +65,7 @@ export default {
       case 'NEW_ILLUST':
       case 'MY_BOOKMARK':
       case 'MEMBER_ILLIST':
+      case 'MEMBER_BOOKMARK':
         await dispatch('startNextUrlBased', { times });
         break;
       default:
@@ -76,7 +77,7 @@ export default {
 
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
-        if (rootState.pageType === 'SEARCH') {
+        if (['SEARCH', 'NEW_ILLUST'].includes( rootState.pageType)) {
           page = await PixivAPI.getPageHTMLIllustIds(state.nextURL);
         } else {
           page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextURL, {

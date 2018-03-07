@@ -227,37 +227,42 @@ class Pixiv {
       $error('Pixiv#postBookmarkAdd: error:', error);
     }
   }
+}
 
-  static removeAnnoyings(doc = document) {
-    const annoyings = [
-      'iframe',
-      // Ad
-      '.ad',
-      '.ads_area',
-      '.ad-footer',
-      '.ads_anchor',
-      '.ads-top-info',
-      '.comic-hot-works',
-      '.user-ad-container',
-      '.ads_area_no_margin',
-      // Premium
-      '.hover-item',
-      '.ad-printservice',
-      '.bookmark-ranges',
-      '.require-premium',
-      '.showcase-reminder',
-      '.sample-user-search',
-      '.popular-introduction',
-      '._premium-lead-tag-search-bar',
-      '._premium-lead-popular-d-body'
-    ];
+function removeAnnoyings(doc = document) {
+  const annoyings = [
+    'iframe',
+    // Ad
+    '.ad',
+    '.ads_area',
+    '.ad-footer',
+    '.ads_anchor',
+    '.ads-top-info',
+    '.comic-hot-works',
+    '.user-ad-container',
+    '.ads_area_no_margin',
+    // Premium
+    '.hover-item',
+    '.ad-printservice',
+    '.bookmark-ranges',
+    '.require-premium',
+    '.showcase-reminder',
+    '.sample-user-search',
+    '.popular-introduction',
+    '._premium-lead-tag-search-bar',
+    '._premium-lead-popular-d-body'
+  ];
 
-    for (const selector of annoyings) {
-      for (const el of $$find(doc, selector)) {
-        el.remove();
-      }
+  for (const selector of annoyings) {
+    for (const el of $$find(doc, selector)) {
+      el.remove();
     }
   }
 }
 
-export default new Pixiv;
+const PixivAPI = new Pixiv();
+
+export {
+  PixivAPI,
+  removeAnnoyings
+};

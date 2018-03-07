@@ -1,6 +1,29 @@
 /*# sourceMappingURL=Koakuma.vue.map */
-/*# sourceMappingURL=Patchouli.vue.map */
-/*# sourceMappingURL=DefaultImageItem.vue.map */
+#patchouli[data-v-39c8e0ab] {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-around;
+}
+.image-item[data-v-f6c8e106] {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 30px 0;
+  padding: 10px;
+  height: auto;
+  width: 200px;
+}
+.image-item-inner[data-v-f6c8e106] {
+  display: flex;
+  flex-flow: column;
+  max-width: 100%;
+  max-height: 300px;
+}
+.image-item-image[data-v-3c187ee4] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
 .image-flexbox[data-v-3c187ee4] {
   display: -webkit-box;
   display: -webkit-flex;
@@ -65,4 +88,54 @@
   left: 50%;
   margin: -20px 0 0 -20px;
 }
-/*# sourceMappingURL=DefaultImageItemTitle.vue.map */
+img[data-v-3c187ee4] {
+  max-height: 100%;
+  max-width: 100%;
+}
+._one-click-bookmark[data-v-3c187ee4] {
+  right: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  z-index: 2;
+  text-align: center;
+  cursor: pointer;
+  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)
+    center transparent;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  transition: opacity 0.2s ease-in-out;
+}
+._one-click-bookmark.on[data-v-3c187ee4] {
+  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);
+}
+.image-item-title[data-v-d20319ea] {
+  max-width: 100%;
+  margin: 8px auto;
+  text-align: center;
+  color: #333;
+  font-size: 12px;
+  line-height: 1;
+}
+.title-text[data-v-d20319ea] {
+  margin: 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+.user-link[data-v-d20319ea] {
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+.user-img[data-v-d20319ea] {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-size: cover;
+  border-radius: 50%;
+  margin-right: 4px;
+}

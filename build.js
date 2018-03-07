@@ -34,7 +34,7 @@ async function preBuild() {
     globals,
   });
 
-  const codeAppendCSS = code + `import './index.css';`;
+  const codeAppendCSS = code + `import './index.css';` + `import '../src/pixiv.override.css';`;
 
   writeFileSync('dist/index.js', codeAppendCSS);
 

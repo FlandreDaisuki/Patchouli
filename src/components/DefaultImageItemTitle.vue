@@ -38,23 +38,23 @@ export default {
   props: {
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustTitle: {
       type: String,
-      default: ''
+      default: ""
     },
     userName: {
       type: String,
-      default: ''
+      default: ""
     },
     userId: {
       type: String,
-      default: ''
+      default: ""
     },
     profileImgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     bookmarkCount: {
       type: Number,
@@ -80,14 +80,41 @@ export default {
       };
     },
     isMemberIllistPage() {
-      return this.$store.state.pageType === 'MEMBER_ILLIST';
+      return this.$store.state.pageType === "MEMBER_ILLIST";
     }
   }
 };
 </script>
 
 <style scoped>
-
+.image-item-title {
+  max-width: 100%;
+  margin: 8px auto;
+  text-align: center;
+  color: #333;
+  font-size: 12px;
+  line-height: 1;
+}
+.title-text {
+  margin: 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 700;
+}
+.user-link {
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+.user-img {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  background-size: cover;
+  border-radius: 50%;
+  margin-right: 4px;
+}
 </style>
 
 

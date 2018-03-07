@@ -39,7 +39,9 @@ function __$styleInject( css ) {
 Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
 Vuex = Vuex && Vuex.hasOwnProperty('default') ? Vuex['default'] : Vuex;
 
-__$styleInject("/*# sourceMappingURL=Koakuma.vue.map */\n/*# sourceMappingURL=Patchouli.vue.map */\n/*# sourceMappingURL=DefaultImageItem.vue.map */\n.image-flexbox[data-v-3c187ee4] {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid #000;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  min-width: 88px;\n  min-height: 88px;\n  position: relative;\n}\n.top-right-slot[data-v-3c187ee4] {\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3c187ee4] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3c187ee4] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\n/*# sourceMappingURL=DefaultImageItemTitle.vue.map */");
+__$styleInject("/*# sourceMappingURL=Koakuma.vue.map */\n#patchouli[data-v-39c8e0ab] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n.image-item[data-v-f6c8e106] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-f6c8e106] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n.image-item-image[data-v-3c187ee4] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-3c187ee4] {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid #000;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  min-width: 88px;\n  min-height: 88px;\n  position: relative;\n}\n.top-right-slot[data-v-3c187ee4] {\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3c187ee4] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3c187ee4] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-3c187ee4] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-3c187ee4] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-3c187ee4] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.image-item-title[data-v-d20319ea] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-d20319ea] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-link[data-v-d20319ea] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-d20319ea] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}");
+
+__$styleInject(".ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n    width: initial !important;\n}\n.ω.↔ .layout-a {\n    display: flex;\n    flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2{\n    flex: 1;\n    margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n    margin: 10px 20px;\n}\n");
 
 function $(selector) {
   return document.querySelector(selector);
@@ -321,40 +323,40 @@ class Pixiv {
       $error('Pixiv#postBookmarkAdd: error:', error);
     }
   }
+}
 
-  static removeAnnoyings(doc = document) {
-    const annoyings = [
-      'iframe',
-      // Ad
-      '.ad',
-      '.ads_area',
-      '.ad-footer',
-      '.ads_anchor',
-      '.ads-top-info',
-      '.comic-hot-works',
-      '.user-ad-container',
-      '.ads_area_no_margin',
-      // Premium
-      '.hover-item',
-      '.ad-printservice',
-      '.bookmark-ranges',
-      '.require-premium',
-      '.showcase-reminder',
-      '.sample-user-search',
-      '.popular-introduction',
-      '._premium-lead-tag-search-bar',
-      '._premium-lead-popular-d-body'
-    ];
+function removeAnnoyings(doc = document) {
+  const annoyings = [
+    'iframe',
+    // Ad
+    '.ad',
+    '.ads_area',
+    '.ad-footer',
+    '.ads_anchor',
+    '.ads-top-info',
+    '.comic-hot-works',
+    '.user-ad-container',
+    '.ads_area_no_margin',
+    // Premium
+    '.hover-item',
+    '.ad-printservice',
+    '.bookmark-ranges',
+    '.require-premium',
+    '.showcase-reminder',
+    '.sample-user-search',
+    '.popular-introduction',
+    '._premium-lead-tag-search-bar',
+    '._premium-lead-popular-d-body'
+  ];
 
-    for (const selector of annoyings) {
-      for (const el of $$find(doc, selector)) {
-        el.remove();
-      }
+  for (const selector of annoyings) {
+    for (const el of $$find(doc, selector)) {
+      el.remove();
     }
   }
 }
 
-var PixivAPI = new Pixiv;
+const PixivAPI = new Pixiv();
 
 function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
   if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
@@ -420,6 +422,7 @@ var pixiv = {
       case 'NEW_ILLUST':
       case 'MY_BOOKMARK':
       case 'MEMBER_ILLIST':
+      case 'MEMBER_BOOKMARK':
         await dispatch('startNextUrlBased', { times });
         break;
       default:
@@ -431,7 +434,7 @@ var pixiv = {
 
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
-        if (rootState.pageType === 'SEARCH') {
+        if (['SEARCH', 'NEW_ILLUST'].includes( rootState.pageType)) {
           page = await PixivAPI.getPageHTMLIllustIds(state.nextURL);
         } else {
           page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextURL, {
@@ -527,7 +530,7 @@ const pageType = (() => {
     return spId ? 'MEMBER_ILLIST' : 'NO_SUPPORT';
   case '/bookmark.php': {
     if (spId) {
-      return 'NEW_ILLUST';
+      return 'MEMBER_BOOKMARK';
     } else if (!spType || spType === 'illust_all') {
       return 'MY_BOOKMARK';
     } else {
@@ -569,6 +572,8 @@ var store = new Vuex.Store({
 
         if (pageType === 'SEARCH') {
           state.patchouliMountPoint = $('#js-react-search-mid');
+        } else if (pageType === 'NEW_ILLUST') {
+          state.patchouliMountPoint = $('#js-mount-point-latest-following');
         } else {
           const li = $('li.image-item');
           const ul = $('ul._image-items');
@@ -579,19 +584,17 @@ var store = new Vuex.Store({
   }
 });
 
-var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._v(" Hello, world ")])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
+var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._v(" Hello, world ")])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',};
 
-};
-
-var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageURL}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
+var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageUrl}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"_one-click-bookmark",class:{on:_vm.selfIsBookmarked},attrs:{"data-type":"illust","data-click-action":"illust","data-click-label":_vm.illustId,"data-id":_vm.illustId,"title":_vm.selfIsBookmarked},on:{"click":_vm.oneClickBookmarkAdd}})])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
   props: {
     imgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustPageCount: {
       type: Number,
@@ -601,10 +604,27 @@ var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createE
       type: Boolean,
       default: false
     },
+    isBookmarked: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      selfIsBookmarked: this.isBookmarked
+    };
   },
   computed: {
     illustPageUrl() {
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
+    }
+  },
+
+  methods: {
+    oneClickBookmarkAdd() {
+      if (!this.selfIsBookmarked) {
+        this.selfIsBookmarked = true;
+      }
     }
   }
 };
@@ -613,23 +633,23 @@ var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createE
   props: {
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustTitle: {
       type: String,
-      default: ''
+      default: ""
     },
     userName: {
       type: String,
-      default: ''
+      default: ""
     },
     userId: {
       type: String,
-      default: ''
+      default: ""
     },
     profileImgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     bookmarkCount: {
       type: Number,
@@ -655,34 +675,25 @@ var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createE
       };
     },
     isMemberIllistPage() {
-      return this.$store.state.pageType === 'MEMBER_ILLIST';
+      return this.$store.state.pageType === "MEMBER_ILLIST";
     }
   }
 };
-
-// const baseStringPropType = {
-//   type: String,
-//   default: ''
-// };
-// x = {
-//   type: Number,
-//   default: 1
-// };
 
 var DefaultImageItem = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item"},[_c('figure',{staticClass:"image-item-inner"},[_c('DefaultImageItemImage',{attrs:{"img-url":_vm.imgUrl,"illust-id":_vm.illustId,"illust-page-count":_vm.illustPageCount,"is-ugoira":_vm.isUgoira,"is-bookmarked":_vm.isBookmarked,"bookmark-id":_vm.bookmarkId}}),_vm._v(" "),_c('DefaultImageItemTitle',{attrs:{"illust-id":_vm.illustId,"illust-title":_vm.illustTitle,"user-name":_vm.userName,"user-id":_vm.userId,"profile-img-url":_vm.profileImgUrl,"bookmark-count":_vm.bookmarkCount,"page-type":_vm.pageType}})],1)])},staticRenderFns: [],_scopeId: 'data-v-f6c8e106',
   components: { DefaultImageItemImage, DefaultImageItemTitle },
   props: {
     imgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustTitle: {
       type: String,
-      default: ''
+      default: ""
     },
     illustPageCount: {
       type: Number,
@@ -690,15 +701,15 @@ var DefaultImageItem = {render: function(){var _vm=this;var _h=_vm.$createElemen
     },
     userName: {
       type: String,
-      default: ''
+      default: ""
     },
     userId: {
       type: String,
-      default: ''
+      default: ""
     },
     profileImgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     isUgoira: {
       type: Boolean,
@@ -710,7 +721,7 @@ var DefaultImageItem = {render: function(){var _vm=this;var _h=_vm.$createElemen
     },
     bookmarkId: {
       type: String,
-      default: ''
+      default: ""
     },
     bookmarkCount: {
       type: Number,
@@ -729,33 +740,35 @@ var patchouli = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   computed: {
     filteredLibrary() {
       return this.$store.getters.filteredLibrary;
-    },
-    // ...mapGetters(['filteredLibrary']),
-    // ...mapState(['pageType'])
+    }
   }
 };
 
 store.commit('prepareMountPoint');
 
-const Patchouli = new Vue({
-  store,
-  render: h => h(patchouli)
-});
+if (store.state.pageType !== 'NO_SUPPORT') {
+  removeAnnoyings();
 
-const Koakuma = new Vue({
-  store,
-  render: h => h(koakuma)
-});
+  const Patchouli = new Vue({
+    store,
+    render: h => h(patchouli)
+  });
 
-store.dispatch('start', { times: 1 }).then(() => {
-  Patchouli.$mount(store.state.patchouliMountPoint);
-  Koakuma.$mount(store.state.koakumaMountPoint);
-}).catch(error => {
-  $error('Fail to first mount', error);
-});
+  const Koakuma = new Vue({
+    store,
+    render: h => h(koakuma)
+  });
 
-window.store = store;
-window.Patchouli = Patchouli;
-window.Koakuma = Koakuma;
+  store.dispatch('start', { times: 1 }).then(() => {
+    Patchouli.$mount(store.state.patchouliMountPoint);
+    Koakuma.$mount(store.state.koakumaMountPoint);
+  }).catch(error => {
+    $error('Fail to first mount', error);
+  });
+
+  window.store = store;
+  window.Patchouli = Patchouli;
+  window.Koakuma = Koakuma;
+}
 
 }(Vue,Vuex));

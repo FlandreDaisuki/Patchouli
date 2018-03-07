@@ -32,7 +32,11 @@ export default {
 </script>
 
 <style scoped>
-
+#patchouli {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-around;
+}
 </style>
 
 

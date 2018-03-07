@@ -3,7 +3,7 @@
     <a
       class="image-flexbox"
       rel="noopener"
-      :href="illustPageURL" >
+      :href="illustPageUrl" >
 
       <div class="top-right-slot" v-if="illustPageCount > 1">
         <span><span class="multiple-icon"/>
@@ -13,8 +13,16 @@
       <img :data-src="imgUrl" :src="imgUrl">
       <div class="ugoira-icon" v-if="isUgoira"/>
     </a>
-    <!-- <div class="bookmark _one-click-bookmark" :class="{on:selfIsBookmarked}" @click="oneClickBookmarkAdd" data-click-action="illust" :data-click-label="illustId" data-type="illust" :data-id="illustId" :title="selfIsBookmarked"/>
-    <div class="bookmark-input-container" v-if="bookmarkId">
+    <div
+      class="_one-click-bookmark"
+      data-type="illust"
+      data-click-action="illust"
+      :class="{on:selfIsBookmarked}"
+      :data-click-label="illustId"
+      :data-id="illustId"
+      :title="selfIsBookmarked"
+      @click="oneClickBookmarkAdd"/>
+      <!-- <div class="bookmark-input-container" v-if="bookmarkId">
       <input name="book_id[]" :value="bookmarkId" type="checkbox">
     </div> -->
   </div>
@@ -25,11 +33,11 @@ export default {
   props: {
     imgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustPageCount: {
       type: Number,
@@ -39,16 +47,39 @@ export default {
       type: Boolean,
       default: false
     },
+    isBookmarked: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      selfIsBookmarked: this.isBookmarked
+    };
   },
   computed: {
     illustPageUrl() {
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
+    }
+  },
+
+  methods: {
+    oneClickBookmarkAdd() {
+      if (!this.selfIsBookmarked) {
+        this.selfIsBookmarked = true;
+      }
     }
   }
 };
 </script>
 
 <style scoped>
+.image-item-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
 .image-flexbox {
   display: -webkit-box;
   display: -webkit-flex;
@@ -70,7 +101,6 @@ export default {
   min-height: 88px;
   position: relative;
 }
-
 .top-right-slot {
   -webkit-box-flex: 0;
   -webkit-flex: none;
@@ -113,6 +143,29 @@ export default {
   top: 50%;
   left: 50%;
   margin: -20px 0 0 -20px;
+}
+img {
+  max-height: 100%;
+  max-width: 100%;
+}
+._one-click-bookmark {
+  right: 0;
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
+  z-index: 2;
+  text-align: center;
+  cursor: pointer;
+  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)
+    center transparent;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 0.8;
+  filter: alpha(opacity=80);
+  transition: opacity 0.2s ease-in-out;
+}
+._one-click-bookmark.on {
+  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);
 }
 </style>
 

@@ -22,31 +22,23 @@
 </template>
 
 <script>
-import DefaultImageItemImage from './DefaultImageItemImage.vue';
-import DefaultImageItemTitle from './DefaultImageItemTitle.vue';
-// const baseStringPropType = {
-//   type: String,
-//   default: ''
-// };
-// x = {
-//   type: Number,
-//   default: 1
-// };
+import DefaultImageItemImage from "./DefaultImageItemImage.vue";
+import DefaultImageItemTitle from "./DefaultImageItemTitle.vue";
 
 export default {
   components: { DefaultImageItemImage, DefaultImageItemTitle },
   props: {
     imgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustTitle: {
       type: String,
-      default: ''
+      default: ""
     },
     illustPageCount: {
       type: Number,
@@ -54,15 +46,15 @@ export default {
     },
     userName: {
       type: String,
-      default: ''
+      default: ""
     },
     userId: {
       type: String,
-      default: ''
+      default: ""
     },
     profileImgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     isUgoira: {
       type: Boolean,
@@ -74,7 +66,7 @@ export default {
     },
     bookmarkId: {
       type: String,
-      default: ''
+      default: ""
     },
     bookmarkCount: {
       type: Number,
@@ -90,7 +82,20 @@ export default {
 </script>
 
 <style scoped>
-
+.image-item {
+  display: flex;
+  justify-content: center;
+  margin: 0 0 30px 0;
+  padding: 10px;
+  height: auto;
+  width: 200px;
+}
+.image-item-inner {
+  display: flex;
+  flex-flow: column;
+  max-width: 100%;
+  max-height: 300px;
+}
 </style>
 
 

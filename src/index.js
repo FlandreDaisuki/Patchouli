@@ -3,27 +3,34 @@ import store from './store/index';
 import koakuma from './components/Koakuma.vue';
 import patchouli from './components/Patchouli.vue';
 import { $error } from './lib/utils';
+import { removeAnnoyings } from './lib/pixiv';
 
 store.commit('prepareMountPoint');
 
-const Patchouli = new Vue({
-  store,
-  render: h => h(patchouli)
-});
+if (store.state.pageType !== 'NO_SUPPORT') {
+  removeAnnoyings();
 
-const Koakuma = new Vue({
-  store,
-  render: h => h(koakuma)
-});
+  const Patchouli = new Vue({
+    store,
+    render: h => h(patchouli)
+  });
 
-store.dispatch('start', { times: 1 }).then(() => {
-  Patchouli.$mount(store.state.patchouliMountPoint);
-  Koakuma.$mount(store.state.koakumaMountPoint);
-}).catch(error => {
-  $error('Fail to first mount', error);
-});
+  const Koakuma = new Vue({
+    store,
+    render: h => h(koakuma)
+  });
 
-window.store = store;
-window.Patchouli = Patchouli;
-window.Koakuma = Koakuma;
+  store.dispatch('start', { times: 1 }).then(() => {
+    Patchouli.$mount(store.state.patchouliMountPoint);
+    Koakuma.$mount(store.state.koakumaMountPoint);
+  }).catch(error => {
+    $error('Fail to first mount', error);
+  });
+
+  window.store = store;
+  window.Patchouli = Patchouli;
+  window.Koakuma = Koakuma;
+}
+
+
 

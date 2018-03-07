@@ -281,40 +281,40 @@ class Pixiv {
       $error('Pixiv#postBookmarkAdd: error:', error);
     }
   }
+}
 
-  static removeAnnoyings(doc = document) {
-    const annoyings = [
-      'iframe',
-      // Ad
-      '.ad',
-      '.ads_area',
-      '.ad-footer',
-      '.ads_anchor',
-      '.ads-top-info',
-      '.comic-hot-works',
-      '.user-ad-container',
-      '.ads_area_no_margin',
-      // Premium
-      '.hover-item',
-      '.ad-printservice',
-      '.bookmark-ranges',
-      '.require-premium',
-      '.showcase-reminder',
-      '.sample-user-search',
-      '.popular-introduction',
-      '._premium-lead-tag-search-bar',
-      '._premium-lead-popular-d-body'
-    ];
+function removeAnnoyings(doc = document) {
+  const annoyings = [
+    'iframe',
+    // Ad
+    '.ad',
+    '.ads_area',
+    '.ad-footer',
+    '.ads_anchor',
+    '.ads-top-info',
+    '.comic-hot-works',
+    '.user-ad-container',
+    '.ads_area_no_margin',
+    // Premium
+    '.hover-item',
+    '.ad-printservice',
+    '.bookmark-ranges',
+    '.require-premium',
+    '.showcase-reminder',
+    '.sample-user-search',
+    '.popular-introduction',
+    '._premium-lead-tag-search-bar',
+    '._premium-lead-popular-d-body'
+  ];
 
-    for (const selector of annoyings) {
-      for (const el of $$find(doc, selector)) {
-        el.remove();
-      }
+  for (const selector of annoyings) {
+    for (const el of $$find(doc, selector)) {
+      el.remove();
     }
   }
 }
 
-var PixivAPI = new Pixiv;
+const PixivAPI = new Pixiv();
 
 function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
   if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
@@ -380,6 +380,7 @@ var pixiv = {
       case 'NEW_ILLUST':
       case 'MY_BOOKMARK':
       case 'MEMBER_ILLIST':
+      case 'MEMBER_BOOKMARK':
         await dispatch('startNextUrlBased', { times });
         break;
       default:
@@ -391,7 +392,7 @@ var pixiv = {
 
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
-        if (rootState.pageType === 'SEARCH') {
+        if (['SEARCH', 'NEW_ILLUST'].includes( rootState.pageType)) {
           page = await PixivAPI.getPageHTMLIllustIds(state.nextURL);
         } else {
           page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextURL, {
@@ -487,7 +488,7 @@ const pageType = (() => {
     return spId ? 'MEMBER_ILLIST' : 'NO_SUPPORT';
   case '/bookmark.php': {
     if (spId) {
-      return 'NEW_ILLUST';
+      return 'MEMBER_BOOKMARK';
     } else if (!spType || spType === 'illust_all') {
       return 'MY_BOOKMARK';
     } else {
@@ -529,6 +530,8 @@ var store = new Vuex.Store({
 
         if (pageType === 'SEARCH') {
           state.patchouliMountPoint = $('#js-react-search-mid');
+        } else if (pageType === 'NEW_ILLUST') {
+          state.patchouliMountPoint = $('#js-mount-point-latest-following');
         } else {
           const li = $('li.image-item');
           const ul = $('ul._image-items');
@@ -539,19 +542,17 @@ var store = new Vuex.Store({
   }
 });
 
-var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._v(" Hello, world ")])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
+var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._v(" Hello, world ")])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',};
 
-}
-
-var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageURL}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
+var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageUrl}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"_one-click-bookmark",class:{on:_vm.selfIsBookmarked},attrs:{"data-type":"illust","data-click-action":"illust","data-click-label":_vm.illustId,"data-id":_vm.illustId,"title":_vm.selfIsBookmarked},on:{"click":_vm.oneClickBookmarkAdd}})])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
   props: {
     imgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustPageCount: {
       type: Number,
@@ -561,10 +562,27 @@ var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createE
       type: Boolean,
       default: false
     },
+    isBookmarked: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data() {
+    return {
+      selfIsBookmarked: this.isBookmarked
+    };
   },
   computed: {
     illustPageUrl() {
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
+    }
+  },
+
+  methods: {
+    oneClickBookmarkAdd() {
+      if (!this.selfIsBookmarked) {
+        this.selfIsBookmarked = true;
+      }
     }
   }
 };
@@ -573,23 +591,23 @@ var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createE
   props: {
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustTitle: {
       type: String,
-      default: ''
+      default: ""
     },
     userName: {
       type: String,
-      default: ''
+      default: ""
     },
     userId: {
       type: String,
-      default: ''
+      default: ""
     },
     profileImgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     bookmarkCount: {
       type: Number,
@@ -615,34 +633,25 @@ var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createE
       };
     },
     isMemberIllistPage() {
-      return this.$store.state.pageType === 'MEMBER_ILLIST';
+      return this.$store.state.pageType === "MEMBER_ILLIST";
     }
   }
 };
-
-// const baseStringPropType = {
-//   type: String,
-//   default: ''
-// };
-// x = {
-//   type: Number,
-//   default: 1
-// };
 
 var DefaultImageItem = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item"},[_c('figure',{staticClass:"image-item-inner"},[_c('DefaultImageItemImage',{attrs:{"img-url":_vm.imgUrl,"illust-id":_vm.illustId,"illust-page-count":_vm.illustPageCount,"is-ugoira":_vm.isUgoira,"is-bookmarked":_vm.isBookmarked,"bookmark-id":_vm.bookmarkId}}),_vm._v(" "),_c('DefaultImageItemTitle',{attrs:{"illust-id":_vm.illustId,"illust-title":_vm.illustTitle,"user-name":_vm.userName,"user-id":_vm.userId,"profile-img-url":_vm.profileImgUrl,"bookmark-count":_vm.bookmarkCount,"page-type":_vm.pageType}})],1)])},staticRenderFns: [],_scopeId: 'data-v-f6c8e106',
   components: { DefaultImageItemImage, DefaultImageItemTitle },
   props: {
     imgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     illustId: {
       type: String,
-      default: ''
+      default: ""
     },
     illustTitle: {
       type: String,
-      default: ''
+      default: ""
     },
     illustPageCount: {
       type: Number,
@@ -650,15 +659,15 @@ var DefaultImageItem = {render: function(){var _vm=this;var _h=_vm.$createElemen
     },
     userName: {
       type: String,
-      default: ''
+      default: ""
     },
     userId: {
       type: String,
-      default: ''
+      default: ""
     },
     profileImgUrl: {
       type: String,
-      default: ''
+      default: ""
     },
     isUgoira: {
       type: Boolean,
@@ -670,7 +679,7 @@ var DefaultImageItem = {render: function(){var _vm=this;var _h=_vm.$createElemen
     },
     bookmarkId: {
       type: String,
-      default: ''
+      default: ""
     },
     bookmarkCount: {
       type: Number,
@@ -689,32 +698,34 @@ var patchouli = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   computed: {
     filteredLibrary() {
       return this.$store.getters.filteredLibrary;
-    },
-    // ...mapGetters(['filteredLibrary']),
-    // ...mapState(['pageType'])
+    }
   }
 };
 
 store.commit('prepareMountPoint');
 
-const Patchouli = new Vue({
-  store,
-  render: h => h(patchouli)
-});
+if (store.state.pageType !== 'NO_SUPPORT') {
+  removeAnnoyings();
 
-const Koakuma = new Vue({
-  store,
-  render: h => h(koakuma)
-});
+  const Patchouli = new Vue({
+    store,
+    render: h => h(patchouli)
+  });
 
-store.dispatch('start', { times: 1 }).then(() => {
-  Patchouli.$mount(store.state.patchouliMountPoint);
-  Koakuma.$mount(store.state.koakumaMountPoint);
-}).catch(error => {
-  $error('Fail to first mount', error);
-});
+  const Koakuma = new Vue({
+    store,
+    render: h => h(koakuma)
+  });
 
-window.store = store;
-window.Patchouli = Patchouli;
-window.Koakuma = Koakuma;
-import './index.css';
+  store.dispatch('start', { times: 1 }).then(() => {
+    Patchouli.$mount(store.state.patchouliMountPoint);
+    Koakuma.$mount(store.state.koakumaMountPoint);
+  }).catch(error => {
+    $error('Fail to first mount', error);
+  });
+
+  window.store = store;
+  window.Patchouli = Patchouli;
+  window.Koakuma = Koakuma;
+}
+import './index.css';import '../src/pixiv.override.css';

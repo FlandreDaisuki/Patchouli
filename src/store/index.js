@@ -24,7 +24,7 @@ const pageType = (() => {
     return spId ? 'MEMBER_ILLIST' : 'NO_SUPPORT';
   case '/bookmark.php': {
     if (spId) {
-      return 'NEW_ILLUST';
+      return 'MEMBER_BOOKMARK';
     } else if (!spType || spType === 'illust_all') {
       return 'MY_BOOKMARK';
     } else {
@@ -66,6 +66,8 @@ export default new Vuex.Store({
 
         if (pageType === 'SEARCH') {
           state.patchouliMountPoint = $('#js-react-search-mid');
+        } else if (pageType === 'NEW_ILLUST') {
+          state.patchouliMountPoint = $('#js-mount-point-latest-following');
         } else {
           const li = $('li.image-item');
           const ul = $('ul._image-items');
