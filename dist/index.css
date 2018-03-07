@@ -167,6 +167,14 @@ img[data-v-3c187ee4] {
 ._one-click-bookmark.on[data-v-3c187ee4] {
   background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);
 }
+.bookmark-input-container[data-v-3c187ee4] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px;
+  border-radius: 0 0 4px 0;
+}
 .image-item-title[data-v-d20319ea] {
   max-width: 100%;
   margin: 8px auto;

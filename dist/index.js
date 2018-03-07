@@ -659,7 +659,7 @@ var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
   }
 };
 
-var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageUrl}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"_one-click-bookmark",class:{on:_vm.selfIsBookmarked},attrs:{"data-type":"illust","data-click-action":"illust","data-click-label":_vm.illustId,"data-id":_vm.illustId,"title":_vm.selfIsBookmarked},on:{"click":_vm.oneClickBookmarkAdd}})])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
+var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageUrl}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"_one-click-bookmark",class:{on:_vm.selfIsBookmarked},attrs:{"data-type":"illust","data-click-action":"illust","data-click-label":_vm.illustId,"data-id":_vm.illustId,"title":_vm.selfIsBookmarked},on:{"click":_vm.oneClickBookmarkAdd}}),_vm._v(" "),(_vm.bookmarkId)?_c('div',{staticClass:"bookmark-input-container"},[_c('input',{attrs:{"type":"checkbox","name":"book_id[]"},domProps:{"value":_vm.bookmarkId}})]):_vm._e()])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
   props: {
     imgUrl: {
       type: String,
@@ -680,6 +680,10 @@ var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createE
     isBookmarked: {
       type: Boolean,
       default: false
+    },
+    bookmarkId: {
+      type: String,
+      default: ""
     }
   },
   data() {

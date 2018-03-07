@@ -22,9 +22,12 @@
       :data-id="illustId"
       :title="selfIsBookmarked"
       @click="oneClickBookmarkAdd"/>
-      <!-- <div class="bookmark-input-container" v-if="bookmarkId">
-      <input name="book_id[]" :value="bookmarkId" type="checkbox">
-    </div> -->
+    <div class="bookmark-input-container" v-if="bookmarkId">
+      <input
+        type="checkbox"
+        name="book_id[]"
+        :value="bookmarkId" >
+    </div>
   </div>
 </template>
 
@@ -50,6 +53,10 @@ export default {
     isBookmarked: {
       type: Boolean,
       default: false
+    },
+    bookmarkId: {
+      type: String,
+      default: ""
     }
   },
   data() {
@@ -166,6 +173,14 @@ img {
 }
 ._one-click-bookmark.on {
   background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);
+}
+.bookmark-input-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 6px;
+  border-radius: 0 0 4px 0;
 }
 </style>
 
