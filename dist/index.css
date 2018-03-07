@@ -1,4 +1,60 @@
-/*# sourceMappingURL=Koakuma.vue.map */
+#koakuma[data-v-430ffdfb] {
+  display: flex;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background-color: #e77;
+  box-shadow: 0 1px 3px #000000;
+  padding: 4px;
+  color: #fff;
+  font-size: 16px;
+}
+#koakuma > div[data-v-430ffdfb] {
+  margin: 0 10px;
+}
+.bookmark-count[data-v-430ffdfb] {
+  display: inline-flex !important;
+  align-items: center;
+}
+#koakuma-bookmark-sort-input[data-v-430ffdfb] {
+  -moz-appearance: textfield;
+  border: none;
+  background-color: transparent;
+  padding: 0px;
+  color: inherit;
+  font-size: 16px;
+  display: inline-block;
+  cursor: ns-resize;
+  text-align: center;
+  max-width: 50px;
+}
+.tag-filter[data-v-430ffdfb] {
+  min-width: 300px;
+}
+.explosion[data-v-430ffdfb] {
+  border: none;
+  padding: 2px 14px;
+  border-radius: 3px;
+  font-size: 16px;
+}
+.explosion[data-v-430ffdfb]:enabled:hover {
+  box-shadow: 1px 1px;
+}
+.explosion[data-v-430ffdfb]:enabled:active {
+  box-shadow: 1px 1px inset;
+}
+.go .explosion[data-v-430ffdfb] {
+  background-color: #64ffda;
+}
+.paused .explosion[data-v-430ffdfb] {
+  background-color: #ffd600;
+}
+.end .explosion[data-v-430ffdfb] {
+  background-color: #455a64;
+  color: #fff;
+  opacity: 0.9;
+}
 #patchouli[data-v-39c8e0ab] {
   display: flex;
   flex-flow: wrap;

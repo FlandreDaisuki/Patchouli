@@ -1,39 +1,71 @@
-import Vue from 'vue';
-import Vuex from 'vuex';
-import VueI18n from 'vue-i18n';
+// ==UserScript==
+// @name              Patchouli
+// @name:ja           パチュリー
+// @name:zh-CN        帕秋莉
+// @name:zh-TW        帕秋莉
+// @namespace         https://github.com/FlandreDaisuki
+// @description       An image searching/browsing tool on Pixiv
+// @description:ja    Pixiv 検索機能強化
+// @description:zh-CN Pixiv 搜寻/浏览 工具
+// @description:zh-TW Pixiv 搜尋/瀏覽 工具
+// @include           *://www.pixiv.net/*
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.min.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/7.4.2/vue-i18n.min.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js
+// @icon              http://i.imgur.com/VwoYc5w.png
+// @noframes
+// @author            FlandreDaisuki
+// @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
+// @compatible        firefox >=52
+// @compatible        chrome >=55
+// @version           4.0.0
+// @grant             none
+// ==/UserScript==
+
+(function (Vue,Vuex,VueI18n) {
+'use strict';
+
+function __$styleInject( css ) {
+    if(!css) return ;
+
+    if(typeof(window) == 'undefined') return ;
+    let style = document.createElement('style');
+
+    style.innerHTML = css;
+    document.head.appendChild(style);
+    return css;
+}
+
+Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
+Vuex = Vuex && Vuex.hasOwnProperty('default') ? Vuex['default'] : Vuex;
+VueI18n = VueI18n && VueI18n.hasOwnProperty('default') ? VueI18n['default'] : VueI18n;
+
+__$styleInject("#koakuma[data-v-430ffdfb] {\n  display: flex;\n  justify-content: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e77;\n  box-shadow: 0 1px 3px #000000;\n  padding: 4px;\n  color: #fff;\n  font-size: 16px;\n}\n#koakuma > div[data-v-430ffdfb] {\n  margin: 0 10px;\n}\n.bookmark-count[data-v-430ffdfb] {\n  display: inline-flex !important;\n  align-items: center;\n}\n#koakuma-bookmark-sort-input[data-v-430ffdfb] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0px;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n.tag-filter[data-v-430ffdfb] {\n  min-width: 300px;\n}\n.explosion[data-v-430ffdfb] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.explosion[data-v-430ffdfb]:enabled:hover {\n  box-shadow: 1px 1px;\n}\n.explosion[data-v-430ffdfb]:enabled:active {\n  box-shadow: 1px 1px inset;\n}\n.go .explosion[data-v-430ffdfb] {\n  background-color: #64ffda;\n}\n.paused .explosion[data-v-430ffdfb] {\n  background-color: #ffd600;\n}\n.end .explosion[data-v-430ffdfb] {\n  background-color: #455a64;\n  color: #fff;\n  opacity: 0.9;\n}\n#patchouli[data-v-39c8e0ab] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n.image-item[data-v-f6c8e106] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-f6c8e106] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n.image-item-image[data-v-3c187ee4] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-3c187ee4] {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid #000;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  min-width: 88px;\n  min-height: 88px;\n  position: relative;\n}\n.top-right-slot[data-v-3c187ee4] {\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3c187ee4] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3c187ee4] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-3c187ee4] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-3c187ee4] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-3c187ee4] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.image-item-title[data-v-d20319ea] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-d20319ea] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-link[data-v-d20319ea] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-d20319ea] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}");
+
+__$styleInject(".ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n    width: initial !important;\n}\n.ω.↔ .layout-a {\n    display: flex;\n    flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2{\n    flex: 1;\n    margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n    margin: 10px 20px;\n}\n");
 
 function $(selector) {
   return document.querySelector(selector);
 }
-
 function $$(selector) {
   return [...document.querySelectorAll(selector)];
 }
-
 function $$find(doc, selector) {
   return [...doc.querySelectorAll(selector)];
 }
-
 function $el(tag, attr = {}, cb = () => {}) {
   const el = document.createElement(tag);
   Object.assign(el, attr);
   cb(el);
   return el;
 }
-
 function $error(...args) {
   console.error.apply(console, args);
 }
-
-function $debug(...args) {
-  console.debug.apply(console, args);
-}
-
 (() => {
   Math.clamp = (val, min, max) => Math.min(Math.max(min, val), max);
   Number.toInt = (s) => (isNaN(~~s) ? 0 : ~~s);
-
-  // from: https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/after()/after().md
   (function(arr) {
     arr.forEach(function(item) {
       if (item.hasOwnProperty('after')) {
@@ -46,29 +78,22 @@ function $debug(...args) {
         value: function after() {
           const argArr = Array.prototype.slice.call(arguments);
           const docFrag = document.createDocumentFragment();
-
           argArr.forEach(function(argItem) {
             const isNode = argItem instanceof Node;
             docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
           });
-
           this.parentNode.insertBefore(docFrag, this.nextSibling);
         }
       });
     });
   })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
 })();
-
-// (get|post)Name(HTMLDetail|APIDetail)s?
-
 class Pixiv {
   constructor() {
     this.tt = $('input[name="tt"]').value;
   }
-
   async fetch(url) {
     try {
-      $debug('Pixiv#fetch: url:', url);
       if (url) {
         const res = await axios.get(url);
         if (res.statusText !== 'OK') {
@@ -83,12 +108,10 @@ class Pixiv {
       $error('Pixiv#fetch: error:', error);
     }
   }
-
   async getLegacyPageHTMLIllustIds(url, { needBookmarkId } = { needBookmarkId: false }) {
     try {
       const html = await this.fetch(url);
       const nextTag = html.match(/class="next"[^/]*/);
-
       let nextUrl = '';
       if (nextTag) {
         const nextHref = nextTag[0].match(/href="([^"]+)"/);
@@ -99,7 +122,6 @@ class Pixiv {
           }
         }
       }
-
       const iidHTMLs = html.match(/;illust_id=\d+"\s*class="work/g) || [];
       const illustIds = [];
       for (const dataid of iidHTMLs) {
@@ -108,14 +130,12 @@ class Pixiv {
           illustIds.push(iid);
         }
       }
-
       const ret = {
         nextUrl,
         illustIds
       };
       if (needBookmarkId) {
         ret.bookmarkIds = {};
-
         const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
         for (const bim of bimHTMLs) {
           const [illustId, bookmarkId] = bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
@@ -129,12 +149,10 @@ class Pixiv {
       $error('Pixiv#getLegacyPageHTMLIllustIds: error:', error);
     }
   }
-
   async getPageHTMLIllustIds(url) {
     try {
       const html = await this.fetch(url);
       const nextTag = html.match(/class="next"[^/]*/);
-
       let nextUrl = '';
       if (nextTag) {
         const nextHref = nextTag[0].match(/href="([^"]+)"/);
@@ -145,10 +163,7 @@ class Pixiv {
           }
         }
       }
-
       const iidHTMLs = html.match(/illustId&quot;:&quot;(\d+)&quot;/g) || [];
-      $debug('Pixiv#getPageHTMLIllustIds: iidHTMLs:', iidHTMLs);
-
       const illustIds = [];
       for (const dataid of iidHTMLs) {
         const iid = dataid.replace(/\D+(\d+).*/, '$1');
@@ -156,7 +171,6 @@ class Pixiv {
           illustIds.push(iid);
         }
       }
-
       const ret = {
         nextUrl,
         illustIds
@@ -166,7 +180,6 @@ class Pixiv {
       $error('Pixiv#getPageHTMLIllustIds: error:', error);
     }
   }
-
   async getBookmarkHTMLDetails(illustIds) {
     const bookmarkHTMLDetails = illustIds.map(id => this.getBookmarkHTMLDetail(id));
     const bookmarkDetails = await Promise.all(bookmarkHTMLDetails);
@@ -176,10 +189,8 @@ class Pixiv {
     }
     return detail;
   }
-
   async getBookmarkHTMLDetail(illustId) {
     const url = `/bookmark_detail.php?illust_id=${illustId}`;
-
     try {
       const html = await this.fetch(url);
       const bkMatches = html.match(/<i class="_icon _bookmark-icon-inline"><\/i>(\d+)/);
@@ -196,18 +207,14 @@ class Pixiv {
       $error('Pixiv#getBookmarkHTMLDetail: error:', error);
     }
   }
-
   async getIllustsAPIDetail(illustIds) {
     const iids = illustIds.join(',');
     const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
-
     try {
       const json = await this.fetch(url);
-      $debug('Pixiv#getIllustsAPIDetail: json:', json);
       if (json.error) {
         throw new Error(json.message);
       }
-
       const details = json.body;
       for (const [key, detail] of Object.entries(details)) {
         if (detail.error) {
@@ -219,18 +226,14 @@ class Pixiv {
       $error('Pixiv#getIllustsAPIDetail: error:', error);
     }
   }
-
   async getUsersAPIDetail(userIds) {
     const uids = [...new Set(userIds)].join(',');
     const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
-
     try {
       const json = await this.fetch(url);
-      $debug('Pixiv#getUsersAPIDetail: json:', json);
       if (json.error) {
         throw new Error(json.message);
       }
-
       const details = {};
       for (const u of json.body) {
         details[u.user_id] = {
@@ -243,7 +246,6 @@ class Pixiv {
       $error('Pixiv#getUsersAPIDetail: error:', error);
     }
   }
-
   async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {
     const searchParams = {
       type: 'illust',
@@ -259,7 +261,6 @@ class Pixiv {
       $error('Pixiv#getRecommendationsAPIDetails: error:', error);
     }
   }
-
   async postBookmarkAdd(illustId) {
     const searchParams = {
       mode: 'save_illust_bookmark',
@@ -273,11 +274,9 @@ class Pixiv {
     const config = {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     };
-
     try {
       const res = await axios.post('/rpc/index.php', data, config);
       if (res.statusText === 'OK') {
-        $debug('Pixiv#postBookmarkAdd: res.data:', res.data);
         return !res.data.error;
       } else {
         throw new Error(res.statusText);
@@ -287,11 +286,9 @@ class Pixiv {
     }
   }
 }
-
 function removeAnnoyings(doc = document) {
   const annoyings = [
     'iframe',
-    // Ad
     '.ad',
     '.ads_area',
     '.ad-footer',
@@ -300,7 +297,6 @@ function removeAnnoyings(doc = document) {
     '.comic-hot-works',
     '.user-ad-container',
     '.ads_area_no_margin',
-    // Premium
     '.hover-item',
     '.ad-printservice',
     '.bookmark-ranges',
@@ -311,21 +307,17 @@ function removeAnnoyings(doc = document) {
     '._premium-lead-tag-search-bar',
     '._premium-lead-popular-d-body'
   ];
-
   for (const selector of annoyings) {
     for (const el of $$find(doc, selector)) {
       el.remove();
     }
   }
 }
-
 const PixivAPI = new Pixiv();
-
 function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
   if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
     throw new Error('makeLibraryData: illustAPIDetails is falsy.');
   }
-
   const vLibrary = [];
   for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
     const d = {
@@ -345,17 +337,13 @@ function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, user
         sq240: illustDetail.url['240mw'].replace('240x480', '240x240')
       }
     };
-
     if (pageType === 'MY_BOOKMARK') {
       d.bookmarkId = illustDetail.bookmarkId;
     }
-
     vLibrary.push(d);
   }
-
   return vLibrary;
 }
-
 var pixiv = {
   state: {
     imgLibrary: [],
@@ -375,11 +363,9 @@ var pixiv = {
   actions: {
     async start({ state, dispatch, rootState }, { times } = {}) {
       times = times || Infinity;
-
       if (state.isEnded || times <= 0) {
         return;
       }
-
       switch (rootState.pageType) {
       case 'SEARCH':
       case 'NEW_ILLUST':
@@ -394,7 +380,6 @@ var pixiv = {
     },
     async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
       state.isPaused = false;
-
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
         if (['SEARCH', 'NEW_ILLUST'].includes( rootState.pageType)) {
@@ -404,19 +389,9 @@ var pixiv = {
             needBookmarkId: rootState.pageType === 'MY_BOOKMARK'
           });
         }
-        $debug('PixivModule#startNextUrlBased: page:', page);
-
         state.nextUrl = page.nextUrl;
-
-        // {[illustId : IDString]: illust_detail}
         const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
-        $debug('PixivModule#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
-
         if (rootState.pageType === 'MY_BOOKMARK') {
-          // {[illustId : IDString]: {
-          //   illustId,
-          //   bookmarkId
-          // }}
           const myBookmarkAPIDetails = page.bookmarkIds;
           for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
             const bookmarkId = myBookmarkAPIDetails[illustId].bookmarkId;
@@ -424,34 +399,16 @@ var pixiv = {
               illustDetail.bookmarkId = bookmarkId;
             }
           }
-          $debug('PixivModule#startNextUrlBased: myBookmarkAPIDetails:', myBookmarkAPIDetails);
         }
-
-        // {[illustId : IDString]: {
-        //   illustId,
-        //   bookmarkCount,
-        //   tags: string[]
-        // }}
         const bookmarkHTMLDetails = await PixivAPI.getBookmarkHTMLDetails(Object.keys(illustAPIDetails));
-        $debug('PixivModule#startNextUrlBased: bookmarkHTMLDetails:', bookmarkHTMLDetails);
-
         const userIds = Object.values(illustAPIDetails).map(d => d.user_id);
-        // {[user_id : IDString]: {
-        // userId,
-        // isFollow
-        // }}
         const userAPIDetails = await PixivAPI.getUsersAPIDetail(userIds);
-        $debug('PixivModule#startNextUrlBased: userAPIDetails:', userAPIDetails);
-
         const libraryData = makeLibraryData({ pageType: rootState.pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails });
         state.imgLibrary.push(...libraryData);
-
         times -= 1;
-
         if (!times) {
           commit('pause');
         }
-
         if (!state.nextUrl) {
           commit('stop');
         }
@@ -472,15 +429,12 @@ var pixiv = {
     }
   }
 };
-
 Vue.use(Vuex);
-
 const pageType = (() => {
   const path = location.pathname;
   const searchParam = new URLSearchParams(location.search);
   const spId = searchParam.get('id');
   const spType = searchParam.get('type');
-
   switch (path) {
   case '/search.php':
     return 'SEARCH';
@@ -498,7 +452,6 @@ const pageType = (() => {
     } else if (!spType || spType === 'illust_all') {
       return 'MY_BOOKMARK';
     } else {
-      // e.g. http://www.pixiv.net/bookmark.php?type=reg_user
       return 'NO_SUPPORT';
     }
   }
@@ -506,7 +459,6 @@ const pageType = (() => {
     return 'NO_SUPPORT';
   }
 })();
-
 var store = new Vuex.Store({
   modules: { pixiv },
   state: {
@@ -530,11 +482,9 @@ var store = new Vuex.Store({
     prepareMountPoint(state) {
       if (pageType !== 'NO_SUPPORT') {
         $('#wrapper').classList.add('ω');
-
         state.koakumaMountPoint = $el('div', { className: 'koakumaMountPoint' }, (el) => {
           $('header._global-header').after(el);
         });
-
         if (pageType === 'SEARCH') {
           state.patchouliMountPoint = $('#js-react-search-mid');
         } else if (pageType === 'NEW_ILLUST') {
@@ -579,7 +529,6 @@ var store = new Vuex.Store({
     }
   }
 });
-
 var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.statusClass,attrs:{"id":"koakuma"}},[_c('div',{staticClass:"processed"},[_vm._v(_vm._s(_vm.$t('koakuma.processed', { count: _vm.$store.state.pixiv.imgLibrary.length })))]),_vm._v(" "),_c('div',[_c('label',{staticClass:"bookmark-count",attrs:{"for":"koakuma-bookmark-sort-input"}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "),_c('input',{attrs:{"id":"koakuma-bookmark-sort-input","type":"number","min":"0","step":"1"},domProps:{"value":_vm.filters.limit},on:{"wheel":function($event){$event.stopPropagation();$event.preventDefault();_vm.sortInputWheel($event);},"input":_vm.sortInputInput}})])]),_vm._v(" "),_c('div',[_c('input',{staticClass:"tag-filter",attrs:{"type":"text","placeholder":_vm.$t('koakuma.tagsPlaceholder')},on:{"input":_vm.tagFilterInput}})]),_vm._v(" "),_c('div',[_c('button',{staticClass:"explosion",attrs:{"disabled":_vm.status.isEnded},on:{"click":_vm.clickExplosion}},[_vm._v(" "+_vm._s(_vm.buttonMsg)+" ")])]),_vm._v(" "),_c('div',[_c('input',{attrs:{"id":"koakuma-options-fit-browser-width","type":"checkbox"},domProps:{"checked":_vm.config.fitwidth},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-fit-browser-width"}},[_vm._v(_vm._s(_vm.$t('koakuma.fitWidth')))]),_vm._v(" "),_c('input',{attrs:{"type":"checkbox","id":"koakuma-options-sort-by-bookmark-count"},domProps:{"checked":_vm.config.sort},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-sort-by-bookmark-count"}},[_vm._v(_vm._s(_vm.$t('koakuma.sortByBookmarkCount')))])])])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
   data() {
     return {
@@ -658,7 +607,6 @@ var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
     }
   }
 };
-
 var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageUrl}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"_one-click-bookmark",class:{on:_vm.selfIsBookmarked},attrs:{"data-type":"illust","data-click-action":"illust","data-click-label":_vm.illustId,"data-id":_vm.illustId,"title":_vm.selfIsBookmarked},on:{"click":_vm.oneClickBookmarkAdd}})])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
   props: {
     imgUrl: {
@@ -692,7 +640,6 @@ var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createE
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
     }
   },
-
   methods: {
     oneClickBookmarkAdd() {
       if (!this.selfIsBookmarked) {
@@ -701,7 +648,6 @@ var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createE
     }
   }
 };
-
 var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('figcaption',{staticClass:"image-item-title"},[_c('ul',[_c('li',{staticClass:"title-text"},[_c('a',{attrs:{"href":_vm.illustPageUrl,"title":_vm.illustTitle}},[_vm._v(_vm._s(_vm.illustTitle))])]),_vm._v(" "),(!_vm.isMemberIllistPage)?_c('li',[_c('a',{staticClass:"user-link ui-profile-popup",attrs:{"target":"_blank","href":_vm.userPageUrl,"title":_vm.userName,"data-user_id":_vm.userId,"data-user_name":_vm.userName}},[_c('span',{staticClass:"user-img",style:(_vm.profileImgStyle)}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.userName))])])]):_vm._e(),_vm._v(" "),(_vm.bookmarkCount > 0)?_c('li',[_c('ul',{staticClass:"count-list"},[_c('li',[_c('a',{staticClass:"_ui-tooltip bookmark-count",attrs:{"href":_vm.bookmarkDetailUrl,"data-tooltip":_vm.$t('patchouli.bookmarkTooltip', { count: _vm.bookmarkCount })}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "+_vm._s(_vm.bookmarkCount)+" ")])])])]):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-d20319ea',
   props: {
     illustId: {
@@ -754,7 +700,6 @@ var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createE
     }
   }
 };
-
 var DefaultImageItem = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item"},[_c('figure',{staticClass:"image-item-inner"},[_c('DefaultImageItemImage',{attrs:{"img-url":_vm.imgUrl,"illust-id":_vm.illustId,"illust-page-count":_vm.illustPageCount,"is-ugoira":_vm.isUgoira,"is-bookmarked":_vm.isBookmarked,"bookmark-id":_vm.bookmarkId}}),_vm._v(" "),_c('DefaultImageItemTitle',{attrs:{"illust-id":_vm.illustId,"illust-title":_vm.illustTitle,"user-name":_vm.userName,"user-id":_vm.userId,"profile-img-url":_vm.profileImgUrl,"bookmark-count":_vm.bookmarkCount,"page-type":_vm.pageType}})],1)])},staticRenderFns: [],_scopeId: 'data-v-f6c8e106',
   components: { DefaultImageItemImage, DefaultImageItemTitle },
   props: {
@@ -809,7 +754,6 @@ var DefaultImageItem = {render: function(){var _vm=this;var _h=_vm.$createElemen
     }
   }
 };
-
 var patchouli = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"patchouli"}},_vm._l((_vm.filteredLibrary),function(d){return _c('DefaultImageItem',{key:d.illustId,attrs:{"img-url":d.url.sq240,"illust-id":d.illustId,"illust-title":d.illustTitle,"illust-page-count":d.illustPageCount,"is-ugoira":d.isUgoira,"user-name":d.userName,"user-id":d.userId,"profile-img-url":d.profileImg,"bookmark-count":d.bookmarkCount,"is-bookmarked":d.isBookmarked,"bookmark-id":d.bookmarkId}})}))},staticRenderFns: [],_scopeId: 'data-v-39c8e0ab',
   components: { DefaultImageItem },
   computed: {
@@ -818,9 +762,7 @@ var patchouli = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
     }
   }
 };
-
 Vue.use(VueI18n);
-
 var i18n = new VueI18n({
   locale: document.documentElement.lang,
   messages: {
@@ -882,14 +824,11 @@ var i18n = new VueI18n({
     }
   }
 });
-
 store.commit('prepareMountPoint');
 store.commit('loadConfig');
 store.commit('applyConfig');
-
 if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();
-
   const Patchouli = new Vue({
     i18n,
     store,
@@ -905,7 +844,6 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     },
     render: h => h(patchouli)
   });
-
   const Koakuma = new Vue({
     i18n,
     store,
@@ -921,16 +859,15 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     },
     render: h => h(koakuma)
   });
-
   store.dispatch('start', { times: 1 }).then(() => {
     Patchouli.$mount(store.state.patchouliMountPoint);
     Koakuma.$mount(store.state.koakumaMountPoint);
   }).catch(error => {
     $error('Fail to first mount', error);
   });
-
   window.store = store;
   window.Patchouli = Patchouli;
   window.Koakuma = Koakuma;
 }
-import './index.css';import '../src/pixiv.override.css';
+
+}(Vue,Vuex,VueI18n));

@@ -7,6 +7,8 @@ import { removeAnnoyings } from './lib/pixiv';
 import i18n from './lib/i18n';
 
 store.commit('prepareMountPoint');
+store.commit('loadConfig');
+store.commit('applyConfig');
 
 if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();

@@ -30,13 +30,13 @@ class Pixiv {
       const html = await this.fetch(url);
       const nextTag = html.match(/class="next"[^/]*/);
 
-      let nextURL = '';
+      let nextUrl = '';
       if (nextTag) {
         const nextHref = nextTag[0].match(/href="([^"]+)"/);
         if (nextHref) {
           const query = nextHref[1].replace(/&amp;/g, '&');
           if (query) {
-            nextURL = `${location.pathname}${query}`;
+            nextUrl = `${location.pathname}${query}`;
           }
         }
       }
@@ -51,7 +51,7 @@ class Pixiv {
       }
 
       const ret = {
-        nextURL,
+        nextUrl,
         illustIds
       };
       if (needBookmarkId) {
@@ -76,13 +76,13 @@ class Pixiv {
       const html = await this.fetch(url);
       const nextTag = html.match(/class="next"[^/]*/);
 
-      let nextURL = '';
+      let nextUrl = '';
       if (nextTag) {
         const nextHref = nextTag[0].match(/href="([^"]+)"/);
         if (nextHref) {
           const query = nextHref[1].replace(/&amp;/g, '&');
           if (query) {
-            nextURL = `${location.pathname}${query}`;
+            nextUrl = `${location.pathname}${query}`;
           }
         }
       }
@@ -99,7 +99,7 @@ class Pixiv {
       }
 
       const ret = {
-        nextURL,
+        nextUrl,
         illustIds
       };
       return ret;

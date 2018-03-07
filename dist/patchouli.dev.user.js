@@ -41,12 +41,16 @@ Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
 Vuex = Vuex && Vuex.hasOwnProperty('default') ? Vuex['default'] : Vuex;
 VueI18n = VueI18n && VueI18n.hasOwnProperty('default') ? VueI18n['default'] : VueI18n;
 
-__$styleInject("/*# sourceMappingURL=Koakuma.vue.map */\n#patchouli[data-v-39c8e0ab] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n.image-item[data-v-f6c8e106] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-f6c8e106] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n.image-item-image[data-v-3c187ee4] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-3c187ee4] {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid #000;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  min-width: 88px;\n  min-height: 88px;\n  position: relative;\n}\n.top-right-slot[data-v-3c187ee4] {\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3c187ee4] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3c187ee4] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-3c187ee4] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-3c187ee4] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-3c187ee4] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.image-item-title[data-v-d20319ea] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-d20319ea] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-link[data-v-d20319ea] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-d20319ea] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}");
+__$styleInject("#koakuma[data-v-430ffdfb] {\n  display: flex;\n  justify-content: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e77;\n  box-shadow: 0 1px 3px #000000;\n  padding: 4px;\n  color: #fff;\n  font-size: 16px;\n}\n#koakuma > div[data-v-430ffdfb] {\n  margin: 0 10px;\n}\n.bookmark-count[data-v-430ffdfb] {\n  display: inline-flex !important;\n  align-items: center;\n}\n#koakuma-bookmark-sort-input[data-v-430ffdfb] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0px;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n.tag-filter[data-v-430ffdfb] {\n  min-width: 300px;\n}\n.explosion[data-v-430ffdfb] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.explosion[data-v-430ffdfb]:enabled:hover {\n  box-shadow: 1px 1px;\n}\n.explosion[data-v-430ffdfb]:enabled:active {\n  box-shadow: 1px 1px inset;\n}\n.go .explosion[data-v-430ffdfb] {\n  background-color: #64ffda;\n}\n.paused .explosion[data-v-430ffdfb] {\n  background-color: #ffd600;\n}\n.end .explosion[data-v-430ffdfb] {\n  background-color: #455a64;\n  color: #fff;\n  opacity: 0.9;\n}\n#patchouli[data-v-39c8e0ab] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n.image-item[data-v-f6c8e106] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-f6c8e106] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n.image-item-image[data-v-3c187ee4] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-3c187ee4] {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid #000;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  min-width: 88px;\n  min-height: 88px;\n  position: relative;\n}\n.top-right-slot[data-v-3c187ee4] {\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3c187ee4] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3c187ee4] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-3c187ee4] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-3c187ee4] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-3c187ee4] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.image-item-title[data-v-d20319ea] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-d20319ea] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-link[data-v-d20319ea] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-d20319ea] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}");
 
 __$styleInject(".ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n    width: initial !important;\n}\n.ω.↔ .layout-a {\n    display: flex;\n    flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2{\n    flex: 1;\n    margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n    margin: 10px 20px;\n}\n");
 
 function $(selector) {
   return document.querySelector(selector);
+}
+
+function $$(selector) {
+  return [...document.querySelectorAll(selector)];
 }
 
 function $$find(doc, selector) {
@@ -128,13 +132,13 @@ class Pixiv {
       const html = await this.fetch(url);
       const nextTag = html.match(/class="next"[^/]*/);
 
-      let nextURL = '';
+      let nextUrl = '';
       if (nextTag) {
         const nextHref = nextTag[0].match(/href="([^"]+)"/);
         if (nextHref) {
           const query = nextHref[1].replace(/&amp;/g, '&');
           if (query) {
-            nextURL = `${location.pathname}${query}`;
+            nextUrl = `${location.pathname}${query}`;
           }
         }
       }
@@ -149,7 +153,7 @@ class Pixiv {
       }
 
       const ret = {
-        nextURL,
+        nextUrl,
         illustIds
       };
       if (needBookmarkId) {
@@ -174,13 +178,13 @@ class Pixiv {
       const html = await this.fetch(url);
       const nextTag = html.match(/class="next"[^/]*/);
 
-      let nextURL = '';
+      let nextUrl = '';
       if (nextTag) {
         const nextHref = nextTag[0].match(/href="([^"]+)"/);
         if (nextHref) {
           const query = nextHref[1].replace(/&amp;/g, '&');
           if (query) {
-            nextURL = `${location.pathname}${query}`;
+            nextUrl = `${location.pathname}${query}`;
           }
         }
       }
@@ -197,7 +201,7 @@ class Pixiv {
       }
 
       const ret = {
-        nextURL,
+        nextUrl,
         illustIds
       };
       return ret;
@@ -400,7 +404,7 @@ var pixiv = {
     imgLibrary: [],
     isPaused: true,
     isEnded: false,
-    nextURL: location.href
+    nextUrl: location.href
   },
   mutations: {
     pause(state) {
@@ -412,7 +416,7 @@ var pixiv = {
     },
   },
   actions: {
-    async start({ state, dispatch, rootState }, { times }) {
+    async start({ state, dispatch, rootState }, { times } = {}) {
       times = times || Infinity;
 
       if (state.isEnded || times <= 0) {
@@ -431,21 +435,21 @@ var pixiv = {
         break;
       }
     },
-    async startNextUrlBased({ state, commit, rootState }, { times }) {
+    async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
       state.isPaused = false;
 
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
         if (['SEARCH', 'NEW_ILLUST'].includes( rootState.pageType)) {
-          page = await PixivAPI.getPageHTMLIllustIds(state.nextURL);
+          page = await PixivAPI.getPageHTMLIllustIds(state.nextUrl);
         } else {
-          page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextURL, {
+          page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextUrl, {
             needBookmarkId: rootState.pageType === 'MY_BOOKMARK'
           });
         }
         $debug('PixivModule#startNextUrlBased: page:', page);
 
-        state.nextURL = page.next_url;
+        state.nextUrl = page.nextUrl;
 
         // {[illustId : IDString]: illust_detail}
         const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
@@ -486,11 +490,12 @@ var pixiv = {
         state.imgLibrary.push(...libraryData);
 
         times -= 1;
+
         if (!times) {
           commit('pause');
         }
 
-        if (!state.nextURL) {
+        if (!state.nextUrl) {
           commit('stop');
         }
       }
@@ -584,16 +589,118 @@ var store = new Vuex.Store({
         }
       }
     },
-    // changeLocale(state, locale) {
-    //   if (locale) {
-    //     state.locale = locale;
-    //     this.$i18n.locale = locale;
-    //   }
-    // }
+    applyConfig(state) {
+      if (state.pageType !== 'NO_SUPPORT') {
+        if (state.config.fitwidth) {
+          $('.ω').classList.add('↔');
+        } else {
+          $('.ω').classList.remove('↔');
+        }
+        if (state.config.sort) {
+          state.filters.orderBy = 'bookmarkCount';
+        } else {
+          state.filters.orderBy = 'illustId';
+        }
+        if (state.pageType === 'MY_BOOKMARK') {
+          for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
+            marker.addEventListener('click', () => {
+              $$('input[name="book_id[]"]').forEach(el => {
+                el.checked = marker.classList.contains('js-legacy-mark-all');
+              });
+            });
+          }
+        }
+      }
+    },
+    saveConfig(state) {
+      const storable = JSON.stringify(state.config);
+      localStorage.setItem(state.NAME, storable);
+    },
+    loadConfig(state) {
+      const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
+      Object.assign(state.config, config);
+    }
   }
 });
 
-var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',[_vm._v(" Hello, world ")])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',};
+var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.statusClass,attrs:{"id":"koakuma"}},[_c('div',{staticClass:"processed"},[_vm._v(_vm._s(_vm.$t('koakuma.processed', { count: _vm.$store.state.pixiv.imgLibrary.length })))]),_vm._v(" "),_c('div',[_c('label',{staticClass:"bookmark-count",attrs:{"for":"koakuma-bookmark-sort-input"}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "),_c('input',{attrs:{"id":"koakuma-bookmark-sort-input","type":"number","min":"0","step":"1"},domProps:{"value":_vm.filters.limit},on:{"wheel":function($event){$event.stopPropagation();$event.preventDefault();_vm.sortInputWheel($event);},"input":_vm.sortInputInput}})])]),_vm._v(" "),_c('div',[_c('input',{staticClass:"tag-filter",attrs:{"type":"text","placeholder":_vm.$t('koakuma.tagsPlaceholder')},on:{"input":_vm.tagFilterInput}})]),_vm._v(" "),_c('div',[_c('button',{staticClass:"explosion",attrs:{"disabled":_vm.status.isEnded},on:{"click":_vm.clickExplosion}},[_vm._v(" "+_vm._s(_vm.buttonMsg)+" ")])]),_vm._v(" "),_c('div',[_c('input',{attrs:{"id":"koakuma-options-fit-browser-width","type":"checkbox"},domProps:{"checked":_vm.config.fitwidth},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-fit-browser-width"}},[_vm._v(_vm._s(_vm.$t('koakuma.fitWidth')))]),_vm._v(" "),_c('input',{attrs:{"type":"checkbox","id":"koakuma-options-sort-by-bookmark-count"},domProps:{"checked":_vm.config.sort},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-sort-by-bookmark-count"}},[_vm._v(_vm._s(_vm.$t('koakuma.sortByBookmarkCount')))])])])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
+  data() {
+    return {
+      debounceId0: null,
+      debounceId1: null
+    };
+  },
+  computed: {
+    status() {
+      return this.$store.state.pixiv;
+    },
+    config() {
+      return this.$store.state.config;
+    },
+    statusClass() {
+      return {
+        end: this.status.isEnded,
+        paused: !this.status.isPaused && !this.status.isEnded,
+        go: this.status.isPaused && !this.status.isEnded
+      };
+    },
+    filters() {
+      return this.$store.state.filters;
+    },
+    buttonMsg() {
+      if (this.status.isEnded) {
+        return this.$t("koakuma.buttonEnd");
+      } else if (this.status.isPaused) {
+        return this.$t("koakuma.buttonGo");
+      } else {
+        return this.$t("koakuma.buttonPause");
+      }
+    }
+  },
+  methods: {
+    clickExplosion() {
+      if (this.status.isPaused) {
+        this.$store.dispatch("start");
+      } else {
+        this.$store.commit("pause");
+      }
+    },
+    sortInputWheel(event) {
+      if (event.deltaY < 0) {
+        this.filters.limit = Number.toInt(event.target.value) + 20;
+      } else {
+        this.filters.limit = Math.max(0, Number.toInt(event.target.value) - 20);
+      }
+    },
+    sortInputInput(event) {
+      if (this.debounceId0) {
+        clearTimeout(this.debounceId0);
+      }
+      this.debounceId0 = setTimeout(() => {
+        this.debounceId0 = null;
+        this.filters.limit = Math.max(0, Number.toInt(event.target.value));
+      }, 500);
+    },
+    optionsChange(event) {
+      if (event.target.id === "koakuma-options-fit-browser-width") {
+        this.config.fitwidth = event.target.checked;
+      } else if (event.target.id === "koakuma-options-sort-by-bookmark-count") {
+        this.config.sort = Number.toInt(event.target.checked);
+      }
+      this.$store.commit("saveConfig");
+      this.$store.commit("applyConfig");
+    },
+    tagFilterInput(event) {
+      if (this.debounceId1) {
+        clearTimeout(this.debounceId1);
+      }
+      this.debounceId1 = setTimeout(() => {
+        this.debounceId1 = null;
+        this.filters.tag = new RegExp(event.target.value, "ig");
+      }, 1500);
+    }
+  }
+};
 
 var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"rel":"noopener","href":_vm.illustPageUrl}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('span',{staticClass:"multiple-icon"}),_vm._v(" "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('div',{staticClass:"ugoira-icon"}):_vm._e()]),_vm._v(" "),_c('div',{staticClass:"_one-click-bookmark",class:{on:_vm.selfIsBookmarked},attrs:{"data-type":"illust","data-click-action":"illust","data-click-label":_vm.illustId,"data-id":_vm.illustId,"title":_vm.selfIsBookmarked},on:{"click":_vm.oneClickBookmarkAdd}})])},staticRenderFns: [],_scopeId: 'data-v-3c187ee4',
   props: {
@@ -638,7 +745,7 @@ var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createE
   }
 };
 
-var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('figcaption',{staticClass:"image-item-title"},[_c('ul',[_c('li',{staticClass:"title-text"},[_c('a',{attrs:{"href":_vm.illustPageUrl,"title":_vm.illustTitle}},[_vm._v(_vm._s(_vm.illustTitle))])]),_vm._v(" "),(!_vm.isMemberIllistPage)?_c('li',[_c('a',{staticClass:"user-link ui-profile-popup",attrs:{"target":"_blank","href":_vm.userPageUrl,"title":_vm.userName,"data-user_id":_vm.userId,"data-user_name":_vm.userName}},[_c('span',{staticClass:"user-img",style:(_vm.profileImgStyle)}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.userName))])])]):_vm._e(),_vm._v(" "),(_vm.bookmarkCount > 0)?_c('li',[_c('ul',{staticClass:"count-list"},[_c('li',[_c('a',{staticClass:"_ui-tooltip bookmark-count",attrs:{"href":_vm.bookmarkDetailUrl,"data-tooltip":_vm.bookmarkTooltipMsg}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "+_vm._s(_vm.bookmarkCount)+" ")])])])]):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-d20319ea',
+var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('figcaption',{staticClass:"image-item-title"},[_c('ul',[_c('li',{staticClass:"title-text"},[_c('a',{attrs:{"href":_vm.illustPageUrl,"title":_vm.illustTitle}},[_vm._v(_vm._s(_vm.illustTitle))])]),_vm._v(" "),(!_vm.isMemberIllistPage)?_c('li',[_c('a',{staticClass:"user-link ui-profile-popup",attrs:{"target":"_blank","href":_vm.userPageUrl,"title":_vm.userName,"data-user_id":_vm.userId,"data-user_name":_vm.userName}},[_c('span',{staticClass:"user-img",style:(_vm.profileImgStyle)}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.userName))])])]):_vm._e(),_vm._v(" "),(_vm.bookmarkCount > 0)?_c('li',[_c('ul',{staticClass:"count-list"},[_c('li',[_c('a',{staticClass:"_ui-tooltip bookmark-count",attrs:{"href":_vm.bookmarkDetailUrl,"data-tooltip":_vm.$t('patchouli.bookmarkTooltip', { count: _vm.bookmarkCount })}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "+_vm._s(_vm.bookmarkCount)+" ")])])])]):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-d20319ea',
   props: {
     illustId: {
       type: String,
@@ -676,8 +783,8 @@ var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createE
       return `/bookmark_detail.php?illust_id=${this.illustId}`;
     },
     bookmarkTooltipMsg() {
-      return this.$t("bookmarkTooltip", {
-        bookmarkCount: this.bookmarkCount
+      return this.$t("patchouli.bookmarkTooltip", {
+        count: this.bookmarkCount
       });
     },
     profileImgStyle() {
@@ -761,15 +868,67 @@ var i18n = new VueI18n({
   locale: document.documentElement.lang,
   messages: {
     'en': {
-      bookmarkTooltip: '{bookmarkCount} bookmarks'
+      patchouli: {
+        bookmarkTooltip: '{count} bookmarks'
+      },
+      koakuma: {
+        processed: '{count} imgs processed',
+        tagsPlaceholder: 'tags filter example: flandre|sister',
+        buttonGo: 'Go',
+        buttonPause: 'Pause',
+        buttonEnd: 'End',
+        fitWidth: 'fit browser width',
+        sortByBookmarkCount: 'sort by bookmark count'
+      }
     },
     'ja': {
-      bookmarkTooltip: '{bookmarkCount}件のブックマーク'
+      patchouli: {
+        bookmarkTooltip: '{count} 件のブックマーク'
+      },
+      koakuma: {
+        processed: '{count} 件が処理された',
+        tagsPlaceholder: 'タグフィルター 例: フランドール|妹様',
+        buttonGo: '捜す',
+        buttonPause: '中断',
+        buttonEnd: '終了',
+        fitWidth: '全幅',
+        sortByBookmarkCount: 'ブックマーク数順'
+      }
+    },
+    'zh': {
+      patchouli: {
+        bookmarkTooltip: '{count} 个收藏'
+      },
+      koakuma: {
+        processed: '已处理 {count} 张',
+        tagsPlaceholder: '标签过滤 例: 芙兰朵露|二小姐',
+        buttonGo: '找',
+        buttonPause: '停',
+        buttonEnd: '完',
+        fitWidth: '自适应浏览器宽度',
+        sortByBookmarkCount: '书签数排序'
+      }
+    },
+    'zh-tw': {
+      patchouli: {
+        bookmarkTooltip: '{count} 個收藏'
+      },
+      koakuma: {
+        processed: '已處理 {count} 張',
+        tagsPlaceholder: '標籤過濾 例: 芙蘭朵露|二小姐',
+        buttonGo: '找',
+        buttonPause: '停',
+        buttonEnd: '完',
+        fitWidth: '自適應瀏覽器寬度',
+        sortByBookmarkCount: '書籤數排序'
+      }
     }
   }
 });
 
 store.commit('prepareMountPoint');
+store.commit('loadConfig');
+store.commit('applyConfig');
 
 if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();

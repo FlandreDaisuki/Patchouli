@@ -22,7 +22,7 @@
             <a
               class="_ui-tooltip bookmark-count"
               :href="bookmarkDetailUrl"
-              :data-tooltip="bookmarkTooltipMsg">
+              :data-tooltip="$t('patchouli.bookmarkTooltip', { count: bookmarkCount })">
               <i class="_icon _bookmark-icon-inline"/>
               {{ bookmarkCount }}
             </a>
@@ -72,8 +72,8 @@ export default {
       return `/bookmark_detail.php?illust_id=${this.illustId}`;
     },
     bookmarkTooltipMsg() {
-      return this.$t("bookmarkTooltip", {
-        bookmarkCount: this.bookmarkCount
+      return this.$t("patchouli.bookmarkTooltip", {
+        count: this.bookmarkCount
       });
     },
     profileImgStyle() {

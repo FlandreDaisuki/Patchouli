@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { $, $el } from '../lib/utils';
+import { $, $el, $$ } from '../lib/utils';
 import pixiv from './modules/pixiv';
 
 Vue.use(Vuex);
@@ -76,5 +76,36 @@ export default new Vuex.Store({
         }
       }
     },
+    applyConfig(state) {
+      if (state.pageType !== 'NO_SUPPORT') {
+        if (state.config.fitwidth) {
+          $('.ω').classList.add('↔');
+        } else {
+          $('.ω').classList.remove('↔');
+        }
+        if (state.config.sort) {
+          state.filters.orderBy = 'bookmarkCount';
+        } else {
+          state.filters.orderBy = 'illustId';
+        }
+        if (state.pageType === 'MY_BOOKMARK') {
+          for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
+            marker.addEventListener('click', () => {
+              $$('input[name="book_id[]"]').forEach(el => {
+                el.checked = marker.classList.contains('js-legacy-mark-all');
+              });
+            });
+          }
+        }
+      }
+    },
+    saveConfig(state) {
+      const storable = JSON.stringify(state.config);
+      localStorage.setItem(state.NAME, storable);
+    },
+    loadConfig(state) {
+      const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
+      Object.assign(state.config, config);
+    }
   }
 });

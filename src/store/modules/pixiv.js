@@ -41,7 +41,7 @@ export default {
     imgLibrary: [],
     isPaused: true,
     isEnded: false,
-    nextURL: location.href
+    nextUrl: location.href
   },
   mutations: {
     pause(state) {
@@ -53,7 +53,7 @@ export default {
     },
   },
   actions: {
-    async start({ state, dispatch, rootState }, { times }) {
+    async start({ state, dispatch, rootState }, { times } = {}) {
       times = times || Infinity;
 
       if (state.isEnded || times <= 0) {
@@ -72,21 +72,21 @@ export default {
         break;
       }
     },
-    async startNextUrlBased({ state, commit, rootState }, { times }) {
+    async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
       state.isPaused = false;
 
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
         if (['SEARCH', 'NEW_ILLUST'].includes( rootState.pageType)) {
-          page = await PixivAPI.getPageHTMLIllustIds(state.nextURL);
+          page = await PixivAPI.getPageHTMLIllustIds(state.nextUrl);
         } else {
-          page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextURL, {
+          page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextUrl, {
             needBookmarkId: rootState.pageType === 'MY_BOOKMARK'
           });
         }
         $debug('PixivModule#startNextUrlBased: page:', page);
 
-        state.nextURL = page.next_url;
+        state.nextUrl = page.nextUrl;
 
         // {[illustId : IDString]: illust_detail}
         const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
@@ -127,11 +127,12 @@ export default {
         state.imgLibrary.push(...libraryData);
 
         times -= 1;
+
         if (!times) {
           commit('pause');
         }
 
-        if (!state.nextURL) {
+        if (!state.nextUrl) {
           commit('stop');
         }
       }
