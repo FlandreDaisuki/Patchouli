@@ -14,7 +14,6 @@
       :bookmark-count="d.bookmarkCount"
       :is-bookmarked="d.isBookmarked"
       :bookmark-id="d.bookmarkId" />
-      <!-- :bookmark-tooltip-msg-func="bookmarkTooltipMsgFunc" -->
   </div>
 </template>
 

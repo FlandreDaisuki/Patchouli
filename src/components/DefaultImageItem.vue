@@ -16,7 +16,6 @@
         :profile-img-url="profileImgUrl"
         :bookmark-count="bookmarkCount"
         :page-type="pageType"/>
-        <!-- :bookmark-tooltip-msg-func="bookmarkTooltipMsgFunc" -->
     </figure>
   </div>
 </template>

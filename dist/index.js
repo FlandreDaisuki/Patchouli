@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import VueI18n from 'vue-i18n';
 
 function $(selector) {
   return document.querySelector(selector);
@@ -504,6 +505,7 @@ const pageType = (() => {
 var store = new Vuex.Store({
   modules: { pixiv },
   state: {
+    locale: document.documentElement.lang,
     pageType,
     koakumaMountPoint: null,
     patchouliMountPoint: null,
@@ -538,7 +540,13 @@ var store = new Vuex.Store({
           state.patchouliMountPoint = li ? li.parentElement : ul;
         }
       }
-    }
+    },
+    // changeLocale(state, locale) {
+    //   if (locale) {
+    //     state.locale = locale;
+    //     this.$i18n.locale = locale;
+    //   }
+    // }
   }
 });
 
@@ -587,7 +595,7 @@ var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createE
   }
 };
 
-var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('figcaption',{staticClass:"image-item-title"},[_c('ul',[_c('li',{staticClass:"title-text"},[_c('a',{attrs:{"href":_vm.illustPageUrl,"title":_vm.illustTitle}},[_vm._v(_vm._s(_vm.illustTitle))])]),_vm._v(" "),(!_vm.isMemberIllistPage)?_c('li',[_c('a',{staticClass:"user-link ui-profile-popup",attrs:{"target":"_blank","href":_vm.userPageUrl,"title":_vm.userName,"data-user_id":_vm.userId,"data-user_name":_vm.userName}},[_c('span',{staticClass:"user-img",style:(_vm.profileImgStyle)}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.userName))])])]):_vm._e(),_vm._v(" "),(_vm.bookmarkCount > 0)?_c('li',[_c('ul',{staticClass:"count-list"},[_c('li',[_c('a',{staticClass:"_ui-tooltip bookmark-count",attrs:{"href":_vm.bookmarkDetailUrl}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "+_vm._s(_vm.bookmarkCount)+" ")])])])]):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-d20319ea',
+var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('figcaption',{staticClass:"image-item-title"},[_c('ul',[_c('li',{staticClass:"title-text"},[_c('a',{attrs:{"href":_vm.illustPageUrl,"title":_vm.illustTitle}},[_vm._v(_vm._s(_vm.illustTitle))])]),_vm._v(" "),(!_vm.isMemberIllistPage)?_c('li',[_c('a',{staticClass:"user-link ui-profile-popup",attrs:{"target":"_blank","href":_vm.userPageUrl,"title":_vm.userName,"data-user_id":_vm.userId,"data-user_name":_vm.userName}},[_c('span',{staticClass:"user-img",style:(_vm.profileImgStyle)}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.userName))])])]):_vm._e(),_vm._v(" "),(_vm.bookmarkCount > 0)?_c('li',[_c('ul',{staticClass:"count-list"},[_c('li',[_c('a',{staticClass:"_ui-tooltip bookmark-count",attrs:{"href":_vm.bookmarkDetailUrl,"data-tooltip":_vm.bookmarkTooltipMsg}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "+_vm._s(_vm.bookmarkCount)+" ")])])])]):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-d20319ea',
   props: {
     illustId: {
       type: String,
@@ -624,9 +632,11 @@ var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createE
     bookmarkDetailUrl() {
       return `/bookmark_detail.php?illust_id=${this.illustId}`;
     },
-    // bookmarkTooltipMsg() {
-    //   return this.bookmarkTooltipMsgFunc(this.bookmarkCount);
-    // },
+    bookmarkTooltipMsg() {
+      return this.$t("bookmarkTooltip", {
+        bookmarkCount: this.bookmarkCount
+      });
+    },
     profileImgStyle() {
       return {
         backgroundImage: `url(${this.profileImgUrl})`
@@ -702,18 +712,54 @@ var patchouli = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   }
 };
 
+Vue.use(VueI18n);
+
+var i18n = new VueI18n({
+  locale: document.documentElement.lang,
+  messages: {
+    'en': {
+      bookmarkTooltip: '{bookmarkCount} bookmarks'
+    },
+    'ja': {
+      bookmarkTooltip: '{bookmarkCount}件のブックマーク'
+    }
+  }
+});
+
 store.commit('prepareMountPoint');
 
 if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();
 
   const Patchouli = new Vue({
+    i18n,
     store,
+    computed: {
+      currentLocale() {
+        return this.$store.state.locale;
+      }
+    },
+    watch: {
+      currentLocale(newValue) {
+        this.$i18n.locale = newValue;
+      }
+    },
     render: h => h(patchouli)
   });
 
   const Koakuma = new Vue({
+    i18n,
     store,
+    computed: {
+      currentLocale() {
+        return this.$store.state.locale;
+      }
+    },
+    watch: {
+      currentLocale(newValue) {
+        this.$i18n.locale = newValue;
+      }
+    },
     render: h => h(koakuma)
   });
 

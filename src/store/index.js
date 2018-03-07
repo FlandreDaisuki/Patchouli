@@ -40,6 +40,7 @@ const pageType = (() => {
 export default new Vuex.Store({
   modules: { pixiv },
   state: {
+    locale: document.documentElement.lang,
     pageType,
     koakumaMountPoint: null,
     patchouliMountPoint: null,
@@ -74,6 +75,6 @@ export default new Vuex.Store({
           state.patchouliMountPoint = li ? li.parentElement : ul;
         }
       }
-    }
+    },
   }
 });

@@ -11,6 +11,7 @@
 // @include           *://www.pixiv.net/*
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/7.4.2/vue-i18n.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.js
 // @icon              http://i.imgur.com/VwoYc5w.png
 // @noframes
@@ -22,7 +23,7 @@
 // @grant             none
 // ==/UserScript==
 
-(function (Vue,Vuex) {
+(function (Vue,Vuex,VueI18n) {
 'use strict';
 
 function __$styleInject( css ) {
@@ -38,6 +39,7 @@ function __$styleInject( css ) {
 
 Vue = Vue && Vue.hasOwnProperty('default') ? Vue['default'] : Vue;
 Vuex = Vuex && Vuex.hasOwnProperty('default') ? Vuex['default'] : Vuex;
+VueI18n = VueI18n && VueI18n.hasOwnProperty('default') ? VueI18n['default'] : VueI18n;
 
 __$styleInject("/*# sourceMappingURL=Koakuma.vue.map */\n#patchouli[data-v-39c8e0ab] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n.image-item[data-v-f6c8e106] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-f6c8e106] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n.image-item-image[data-v-3c187ee4] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-3c187ee4] {\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -webkit-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -webkit-justify-content: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid #000;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  min-width: 88px;\n  min-height: 88px;\n  position: relative;\n}\n.top-right-slot[data-v-3c187ee4] {\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -webkit-flex;\n  display: flex;\n  -webkit-box-align: center;\n  -webkit-align-items: center;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3c187ee4] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3c187ee4] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -webkit-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-3c187ee4] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-3c187ee4] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-3c187ee4] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.image-item-title[data-v-d20319ea] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-d20319ea] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-link[data-v-d20319ea] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-d20319ea] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}");
 
@@ -546,6 +548,7 @@ const pageType = (() => {
 var store = new Vuex.Store({
   modules: { pixiv },
   state: {
+    locale: document.documentElement.lang,
     pageType,
     koakumaMountPoint: null,
     patchouliMountPoint: null,
@@ -580,7 +583,13 @@ var store = new Vuex.Store({
           state.patchouliMountPoint = li ? li.parentElement : ul;
         }
       }
-    }
+    },
+    // changeLocale(state, locale) {
+    //   if (locale) {
+    //     state.locale = locale;
+    //     this.$i18n.locale = locale;
+    //   }
+    // }
   }
 });
 
@@ -629,7 +638,7 @@ var DefaultImageItemImage = {render: function(){var _vm=this;var _h=_vm.$createE
   }
 };
 
-var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('figcaption',{staticClass:"image-item-title"},[_c('ul',[_c('li',{staticClass:"title-text"},[_c('a',{attrs:{"href":_vm.illustPageUrl,"title":_vm.illustTitle}},[_vm._v(_vm._s(_vm.illustTitle))])]),_vm._v(" "),(!_vm.isMemberIllistPage)?_c('li',[_c('a',{staticClass:"user-link ui-profile-popup",attrs:{"target":"_blank","href":_vm.userPageUrl,"title":_vm.userName,"data-user_id":_vm.userId,"data-user_name":_vm.userName}},[_c('span',{staticClass:"user-img",style:(_vm.profileImgStyle)}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.userName))])])]):_vm._e(),_vm._v(" "),(_vm.bookmarkCount > 0)?_c('li',[_c('ul',{staticClass:"count-list"},[_c('li',[_c('a',{staticClass:"_ui-tooltip bookmark-count",attrs:{"href":_vm.bookmarkDetailUrl}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "+_vm._s(_vm.bookmarkCount)+" ")])])])]):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-d20319ea',
+var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('figcaption',{staticClass:"image-item-title"},[_c('ul',[_c('li',{staticClass:"title-text"},[_c('a',{attrs:{"href":_vm.illustPageUrl,"title":_vm.illustTitle}},[_vm._v(_vm._s(_vm.illustTitle))])]),_vm._v(" "),(!_vm.isMemberIllistPage)?_c('li',[_c('a',{staticClass:"user-link ui-profile-popup",attrs:{"target":"_blank","href":_vm.userPageUrl,"title":_vm.userName,"data-user_id":_vm.userId,"data-user_name":_vm.userName}},[_c('span',{staticClass:"user-img",style:(_vm.profileImgStyle)}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.userName))])])]):_vm._e(),_vm._v(" "),(_vm.bookmarkCount > 0)?_c('li',[_c('ul',{staticClass:"count-list"},[_c('li',[_c('a',{staticClass:"_ui-tooltip bookmark-count",attrs:{"href":_vm.bookmarkDetailUrl,"data-tooltip":_vm.bookmarkTooltipMsg}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "+_vm._s(_vm.bookmarkCount)+" ")])])])]):_vm._e()])])},staticRenderFns: [],_scopeId: 'data-v-d20319ea',
   props: {
     illustId: {
       type: String,
@@ -666,9 +675,11 @@ var DefaultImageItemTitle = {render: function(){var _vm=this;var _h=_vm.$createE
     bookmarkDetailUrl() {
       return `/bookmark_detail.php?illust_id=${this.illustId}`;
     },
-    // bookmarkTooltipMsg() {
-    //   return this.bookmarkTooltipMsgFunc(this.bookmarkCount);
-    // },
+    bookmarkTooltipMsg() {
+      return this.$t("bookmarkTooltip", {
+        bookmarkCount: this.bookmarkCount
+      });
+    },
     profileImgStyle() {
       return {
         backgroundImage: `url(${this.profileImgUrl})`
@@ -744,18 +755,54 @@ var patchouli = {render: function(){var _vm=this;var _h=_vm.$createElement;var _
   }
 };
 
+Vue.use(VueI18n);
+
+var i18n = new VueI18n({
+  locale: document.documentElement.lang,
+  messages: {
+    'en': {
+      bookmarkTooltip: '{bookmarkCount} bookmarks'
+    },
+    'ja': {
+      bookmarkTooltip: '{bookmarkCount}件のブックマーク'
+    }
+  }
+});
+
 store.commit('prepareMountPoint');
 
 if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();
 
   const Patchouli = new Vue({
+    i18n,
     store,
+    computed: {
+      currentLocale() {
+        return this.$store.state.locale;
+      }
+    },
+    watch: {
+      currentLocale(newValue) {
+        this.$i18n.locale = newValue;
+      }
+    },
     render: h => h(patchouli)
   });
 
   const Koakuma = new Vue({
+    i18n,
     store,
+    computed: {
+      currentLocale() {
+        return this.$store.state.locale;
+      }
+    },
+    watch: {
+      currentLocale(newValue) {
+        this.$i18n.locale = newValue;
+      }
+    },
     render: h => h(koakuma)
   });
 
@@ -771,4 +818,4 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   window.Koakuma = Koakuma;
 }
 
-}(Vue,Vuex));
+}(Vue,Vuex,VueI18n));

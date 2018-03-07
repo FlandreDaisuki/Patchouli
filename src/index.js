@@ -4,6 +4,7 @@ import koakuma from './components/Koakuma.vue';
 import patchouli from './components/Patchouli.vue';
 import { $error } from './lib/utils';
 import { removeAnnoyings } from './lib/pixiv';
+import i18n from './lib/i18n';
 
 store.commit('prepareMountPoint');
 
@@ -11,12 +12,34 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();
 
   const Patchouli = new Vue({
+    i18n,
     store,
+    computed: {
+      currentLocale() {
+        return this.$store.state.locale;
+      }
+    },
+    watch: {
+      currentLocale(newValue) {
+        this.$i18n.locale = newValue;
+      }
+    },
     render: h => h(patchouli)
   });
 
   const Koakuma = new Vue({
+    i18n,
     store,
+    computed: {
+      currentLocale() {
+        return this.$store.state.locale;
+      }
+    },
+    watch: {
+      currentLocale(newValue) {
+        this.$i18n.locale = newValue;
+      }
+    },
     render: h => h(koakuma)
   });
 

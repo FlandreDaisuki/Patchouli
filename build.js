@@ -6,10 +6,11 @@ const userscriptCSS = require('rollup-plugin-userscript-css');
 const metablock = require('rollup-plugin-userscript-metablock');
 
 const pkg = JSON.parse(readFileSync('package.json', 'utf-8'));
-const external = ['vue', 'vuex'];
+const external = ['vue', 'vuex', 'vue-i18n'];
 const globals = {
   vue: 'Vue',
-  vuex: 'Vuex'
+  vuex: 'Vuex',
+  'vue-i18n': 'VueI18n'
 };
 
 async function preBuild() {
