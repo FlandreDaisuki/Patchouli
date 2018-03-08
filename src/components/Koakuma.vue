@@ -129,13 +129,19 @@ export default {
 
 <style scoped>
 #koakuma {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
+  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 3;
   background-color: #e77;
-  box-shadow: 0 1px 3px #000000;
+  -webkit-box-shadow: 0 1px 3px #000;
+  box-shadow: 0 1px 3px #000;
   padding: 4px;
   color: #fff;
   font-size: 16px;
@@ -144,14 +150,18 @@ export default {
   margin: 0 10px;
 }
 .bookmark-count {
+  display: -webkit-inline-box !important;
+  display: -ms-inline-flexbox !important;
   display: inline-flex !important;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
 }
 #koakuma-bookmark-sort-input {
   -moz-appearance: textfield;
   border: none;
   background-color: transparent;
-  padding: 0px;
+  padding: 0;
   color: inherit;
   font-size: 16px;
   display: inline-block;
@@ -175,22 +185,22 @@ export default {
   font-size: 16px;
 }
 .main-button:enabled:hover {
+  -webkit-box-shadow: 1px 1px;
   box-shadow: 1px 1px;
 }
 .main-button:enabled:active {
+  -webkit-box-shadow: 1px 1px inset;
   box-shadow: 1px 1px inset;
 }
-.go .main-button {
+#koakuma.go .main-button {
   background-color: #64ffda;
 }
-.paused .main-button {
+#koakuma.paused .main-button {
   background-color: #ffd600;
 }
-.end .main-button {
+#koakuma.end .main-button {
   background-color: #455a64;
   color: #fff;
   opacity: 0.9;
 }
 </style>
-
-

@@ -82,24 +82,30 @@ export default {
 
 <style scoped>
 .image-item-image {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
   align-items: center;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   position: relative;
 }
 .image-flexbox {
   display: -webkit-box;
-  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
-  -webkit-flex-flow: column;
+  -ms-flex-flow: column;
   flex-flow: column;
   -webkit-box-pack: center;
-  -webkit-justify-content: center;
+  -ms-flex-pack: center;
   justify-content: center;
   -webkit-box-align: center;
-  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
   z-index: 0;
   border: 1px solid rgba(0, 0, 0, 0.04);
@@ -108,15 +114,16 @@ export default {
 }
 .top-right-slot {
   -webkit-box-flex: 0;
-  -webkit-flex: none;
+  -ms-flex: none;
   flex: none;
   display: -webkit-box;
-  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
-  -webkit-align-items: center;
+  -ms-flex-align: center;
   align-items: center;
   z-index: 1;
+  -webkit-box-sizing: border-box;
   box-sizing: border-box;
   margin: 0 0 -24px auto;
   padding: 6px;
@@ -139,7 +146,7 @@ export default {
 .ugoira-icon {
   position: absolute;
   -webkit-box-flex: 0;
-  -webkit-flex: none;
+  -ms-flex: none;
   flex: none;
   width: 40px;
   height: 40px;
@@ -167,6 +174,7 @@ img {
   background-size: cover;
   opacity: 0.8;
   filter: alpha(opacity=80);
+  -webkit-transition: opacity 0.2s ease-in-out;
   transition: opacity 0.2s ease-in-out;
 }
 ._one-click-bookmark.on {
@@ -181,5 +189,3 @@ img {
   border-radius: 0 0 4px 0;
 }
 </style>
-
-

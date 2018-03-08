@@ -87,7 +87,11 @@ export default {
 
 <style scoped>
 .image-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
   justify-content: center;
   margin: 0 0 30px 0;
   padding: 10px;
@@ -95,11 +99,14 @@ export default {
   width: 200px;
 }
 .image-item-inner {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-flow: column;
   flex-flow: column;
   max-width: 100%;
   max-height: 300px;
 }
 </style>
-
-
