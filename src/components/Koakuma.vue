@@ -159,6 +159,12 @@ export default {
   text-align: center;
   max-width: 50px;
 }
+#koakuma-bookmark-sort-input::-webkit-inner-spin-button,
+#koakuma-bookmark-sort-input::-webkit-outer-spin-button {
+  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */
+  -webkit-appearance: none;
+  margin: 0;
+}
 .tags-filter {
   min-width: 300px;
 }

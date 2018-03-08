@@ -102,11 +102,9 @@ export default {
   -webkit-align-items: center;
   align-items: center;
   z-index: 0;
-  border: 1px solid #000;
   border: 1px solid rgba(0, 0, 0, 0.04);
-  min-width: 88px;
-  min-height: 88px;
   position: relative;
+  height: 200px;
 }
 .top-right-slot {
   -webkit-box-flex: 0;

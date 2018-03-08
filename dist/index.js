@@ -582,7 +582,7 @@ var store = new Vuex.Store({
   }
 });
 
-var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.statusClass,attrs:{"id":"koakuma"}},[_c('div',{staticClass:"processed"},[_vm._v(_vm._s(_vm.$t('koakuma.processed', { count: _vm.$store.state.pixiv.imgLibrary.length })))]),_vm._v(" "),_c('div',[_c('label',{staticClass:"bookmark-count",attrs:{"for":"koakuma-bookmark-sort-input"}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "),_c('input',{attrs:{"id":"koakuma-bookmark-sort-input","type":"number","min":"0","step":"1"},domProps:{"value":_vm.filters.limit},on:{"wheel":function($event){$event.stopPropagation();$event.preventDefault();_vm.sortInputWheel($event);},"input":_vm.sortInputInput}})])]),_vm._v(" "),_c('div',[_c('input',{staticClass:"tag-filter",attrs:{"type":"text","placeholder":_vm.$t('koakuma.tagsPlaceholder')},on:{"input":_vm.tagFilterInput}})]),_vm._v(" "),_c('div',[_c('button',{staticClass:"explosion",attrs:{"disabled":_vm.status.isEnded},on:{"click":_vm.clickExplosion}},[_vm._v(" "+_vm._s(_vm.buttonMsg)+" ")])]),_vm._v(" "),_c('div',[_c('input',{attrs:{"id":"koakuma-options-fit-browser-width","type":"checkbox"},domProps:{"checked":_vm.config.fitwidth},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-fit-browser-width"}},[_vm._v(_vm._s(_vm.$t('koakuma.fitWidth')))]),_vm._v(" "),_c('input',{attrs:{"type":"checkbox","id":"koakuma-options-sort-by-bookmark-count"},domProps:{"checked":_vm.config.sort},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-sort-by-bookmark-count"}},[_vm._v(_vm._s(_vm.$t('koakuma.sortByBookmarkCount')))])])])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
+var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.statusClass,attrs:{"id":"koakuma"}},[_c('div',{staticClass:"processed"},[_vm._v(_vm._s(_vm.$t('koakuma.processed', { count: _vm.$store.state.pixiv.imgLibrary.length })))]),_vm._v(" "),_c('div',[_c('label',{staticClass:"bookmark-count",attrs:{"for":"koakuma-bookmark-sort-input"}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "),_c('input',{attrs:{"id":"koakuma-bookmark-sort-input","type":"number","min":"0","step":"1"},domProps:{"value":_vm.filters.limit},on:{"wheel":function($event){$event.stopPropagation();$event.preventDefault();_vm.sortInputWheel($event);},"input":_vm.sortInputInput}})])]),_vm._v(" "),_c('div',[_c('input',{staticClass:"tags-filter",attrs:{"type":"text","placeholder":_vm.$t('koakuma.tagsPlaceholder')},on:{"input":_vm.tagsFilterInput}})]),_vm._v(" "),_c('div',[_c('button',{staticClass:"main-button",attrs:{"disabled":_vm.status.isEnded},on:{"click":_vm.clickMainButton}},[_vm._v(" "+_vm._s(_vm.buttonMsg)+" ")])]),_vm._v(" "),_c('div',[_c('input',{attrs:{"id":"koakuma-options-fit-browser-width","type":"checkbox"},domProps:{"checked":_vm.config.fitwidth},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-fit-browser-width"}},[_vm._v(_vm._s(_vm.$t('koakuma.fitWidth')))]),_vm._v(" "),_c('input',{attrs:{"type":"checkbox","id":"koakuma-options-sort-by-bookmark-count"},domProps:{"checked":_vm.config.sort},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-sort-by-bookmark-count"}},[_vm._v(_vm._s(_vm.$t('koakuma.sortByBookmarkCount')))])])])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
   data() {
     return {
       debounceId0: null,
@@ -617,7 +617,7 @@ var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
     }
   },
   methods: {
-    clickExplosion() {
+    clickMainButton() {
       if (this.status.isPaused) {
         this.$store.dispatch("start");
       } else {
@@ -649,7 +649,7 @@ var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
       this.$store.commit("saveConfig");
       this.$store.commit("applyConfig");
     },
-    tagFilterInput(event) {
+    tagsFilterInput(event) {
       if (this.debounceId1) {
         clearTimeout(this.debounceId1);
       }

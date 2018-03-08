@@ -132,6 +132,7 @@ export default {
   width: 14px;
   height: 14px;
   background-color: dodgerblue;
+  -webkit-mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
   mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
 }
 </style>

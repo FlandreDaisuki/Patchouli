@@ -29,28 +29,34 @@
   text-align: center;
   max-width: 50px;
 }
-.tag-filter[data-v-430ffdfb] {
+#koakuma-bookmark-sort-input[data-v-430ffdfb]::-webkit-inner-spin-button,
+#koakuma-bookmark-sort-input[data-v-430ffdfb]::-webkit-outer-spin-button {
+  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */
+  -webkit-appearance: none;
+  margin: 0;
+}
+.tags-filter[data-v-430ffdfb] {
   min-width: 300px;
 }
-.explosion[data-v-430ffdfb] {
+.main-button[data-v-430ffdfb] {
   border: none;
   padding: 2px 14px;
   border-radius: 3px;
   font-size: 16px;
 }
-.explosion[data-v-430ffdfb]:enabled:hover {
+.main-button[data-v-430ffdfb]:enabled:hover {
   box-shadow: 1px 1px;
 }
-.explosion[data-v-430ffdfb]:enabled:active {
+.main-button[data-v-430ffdfb]:enabled:active {
   box-shadow: 1px 1px inset;
 }
-.go .explosion[data-v-430ffdfb] {
+.go .main-button[data-v-430ffdfb] {
   background-color: #64ffda;
 }
-.paused .explosion[data-v-430ffdfb] {
+.paused .main-button[data-v-430ffdfb] {
   background-color: #ffd600;
 }
-.end .explosion[data-v-430ffdfb] {
+.end .main-button[data-v-430ffdfb] {
   background-color: #455a64;
   color: #fff;
   opacity: 0.9;
@@ -95,11 +101,9 @@
   -webkit-align-items: center;
   align-items: center;
   z-index: 0;
-  border: 1px solid #000;
   border: 1px solid rgba(0, 0, 0, 0.04);
-  min-width: 88px;
-  min-height: 88px;
   position: relative;
+  height: 200px;
 }
 .top-right-slot[data-v-3c187ee4] {
   -webkit-box-flex: 0;
@@ -213,5 +217,6 @@ img[data-v-3c187ee4] {
   width: 14px;
   height: 14px;
   background-color: dodgerblue;
+  -webkit-mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
   mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
 }
