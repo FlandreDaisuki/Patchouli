@@ -1,5 +1,6 @@
 {
   "extends": "stylelint-config-standard",
+  "ignoreFiles": "**/*.md",
   "rules": {
     "declaration-colon-newline-after": null,
     "indentation": [2, {
