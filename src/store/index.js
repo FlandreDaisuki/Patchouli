@@ -12,19 +12,19 @@ const pageType = (() => {
   const spType = searchParam.get('type');
 
   switch (path) {
-  case '/search.php': //getPageHTMLIllustIds
+  case '/search.php':
     return 'SEARCH';
-  case '/bookmark_new_illust_r18.php': //getPageHTMLIllustIds
-  case '/bookmark_new_illust.php': //getPageHTMLIllustIds
+  case '/bookmark_new_illust_r18.php':
+  case '/bookmark_new_illust.php':
     return 'NEW_ILLUST';
-  case '/new_illust.php':          //Lagacy
-  case '/mypixiv_new_illust.php':  //Lagacy
-  case '/new_illust_r18.php':      //Lagacy
+  case '/new_illust.php':
+  case '/mypixiv_new_illust.php':
+  case '/new_illust_r18.php':
     return 'ANCIENT_NEW_ILLUST';
   case '/member_illust.php':
     return spId ? 'MEMBER_ILLIST' : 'NO_SUPPORT';
   case '/bookmark.php': {
-    if (spId) {
+    if (spId && spType !== 'user') {
       return 'MEMBER_BOOKMARK';
     } else if (!spType || spType === 'illust_all') {
       return 'MY_BOOKMARK';
