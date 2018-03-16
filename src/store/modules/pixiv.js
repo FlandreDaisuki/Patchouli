@@ -125,7 +125,13 @@ export default {
         $debug('PixivModule#startNextUrlBased: userAPIDetails:', userAPIDetails);
 
         const libraryData = makeLibraryData({ pageType: rootState.pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails });
-        state.imgLibrary.push(...libraryData);
+
+        // prevent duplicate illustId
+        for (const d of libraryData) {
+          if (!state.imgLibrary.find(x => x.illustId === d.illustId)) {
+            state.imgLibrary.push(d);
+          }
+        }
 
         times -= 1;
 

@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.0.3](https://img.shields.io/badge/latest-v4.0.3-blue.svg)](#)
+[![latest-v4.0.4](https://img.shields.io/badge/latest-v4.0.4-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -45,6 +45,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
+
+2018-03-08 v4.0.4
+
+- 修正 v-for 有 duplicate illustId 導致卡住
 
 2018-03-08 v4.0.3
 
