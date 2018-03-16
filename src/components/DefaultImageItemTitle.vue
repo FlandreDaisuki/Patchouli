@@ -4,26 +4,26 @@
       <li class="title-text">
         <a :href="illustPageUrl" :title="illustTitle">{{ illustTitle }}</a>
       </li>
-      <li class="user-info" v-if="!isMemberIllistPage">
+      <li v-if="!isMemberIllistPage" class="user-info">
         <a
-          class="user-link ui-profile-popup"
-          target="_blank"
           :href="userPageUrl"
           :title="userName"
           :data-user_id="userId"
-          :data-user_name="userName">
-          <span class="user-img" :style="profileImgStyle"/>
+          :data-user_name="userName"
+          class="user-link ui-profile-popup"
+          target="_blank">
+          <span :style="profileImgStyle" class="user-img"/>
           <span>{{ userName }}</span>
         </a>
-        <i class="follow-icon" v-if="isFollow"/>
+        <i v-if="isFollow" class="follow-icon"/>
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
           <li>
             <a
-              class="_ui-tooltip bookmark-count"
               :href="bookmarkDetailUrl"
-              :data-tooltip="$t('patchouli.bookmarkTooltip', { count: bookmarkCount })">
+              :data-tooltip="$t('patchouli.bookmarkTooltip', { count: bookmarkCount })"
+              class="_ui-tooltip bookmark-count">
               <i class="_icon _bookmark-icon-inline"/>
               {{ bookmarkCount }}
             </a>

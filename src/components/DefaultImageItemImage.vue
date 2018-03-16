@@ -1,32 +1,32 @@
 <template>
   <div class="image-item-image">
     <a
+      :href="illustPageUrl"
       class="image-flexbox"
-      rel="noopener"
-      :href="illustPageUrl" >
+      rel="noopener">
 
-      <div class="top-right-slot" v-if="illustPageCount > 1">
+      <div v-if="illustPageCount > 1" class="top-right-slot">
         <span><span class="multiple-icon"/>
-        {{ illustPageCount }}</span>
+          {{ illustPageCount }}</span>
       </div>
 
       <img :data-src="imgUrl" :src="imgUrl">
-      <div class="ugoira-icon" v-if="isUgoira"/>
+      <div v-if="isUgoira" class="ugoira-icon"/>
     </a>
     <div
-      class="_one-click-bookmark"
-      data-type="illust"
-      data-click-action="illust"
       :class="{on:selfIsBookmarked}"
       :data-click-label="illustId"
       :data-id="illustId"
       :title="selfIsBookmarked"
+      class="_one-click-bookmark"
+      data-type="illust"
+      data-click-action="illust"
       @click="oneClickBookmarkAdd"/>
-    <div class="bookmark-input-container" v-if="bookmarkId">
+    <div v-if="bookmarkId" class="bookmark-input-container">
       <input
+        :value="bookmarkId"
         type="checkbox"
-        name="book_id[]"
-        :value="bookmarkId" >
+        name="book_id[]">
     </div>
   </div>
 </template>

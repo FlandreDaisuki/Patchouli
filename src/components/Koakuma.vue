@@ -6,25 +6,25 @@
         <i class="_icon _bookmark-icon-inline"/>
         <input
           id="koakuma-bookmark-sort-input"
+          :value="filters.limit"
           type="number"
           min="0"
           step="1"
-          :value="filters.limit"
           @wheel.stop.prevent="sortInputWheel"
           @input="sortInputInput">
       </label>
     </div>
     <div>
       <input
+        :placeholder="$t('koakuma.tagsPlaceholder')"
         type="text"
         class="tags-filter"
-        :placeholder="$t('koakuma.tagsPlaceholder')"
         @input="tagsFilterInput">
     </div>
     <div>
       <button
-        class="main-button"
         :disabled="status.isEnded"
+        class="main-button"
         @click="clickMainButton">
         {{ buttonMsg }}
       </button>
@@ -32,14 +32,14 @@
     <div>
       <input
         id="koakuma-options-fit-browser-width"
-        type="checkbox"
         :checked="config.fitwidth"
+        type="checkbox"
         @change="optionsChange">
       <label for="koakuma-options-fit-browser-width">{{ $t('koakuma.fitWidth') }}</label>
       <input
-        type="checkbox"
         id="koakuma-options-sort-by-bookmark-count"
         :checked="config.sort"
+        type="checkbox"
         @change="optionsChange">
       <label for="koakuma-options-sort-by-bookmark-count">{{ $t('koakuma.sortByBookmarkCount') }}</label>
     </div>
