@@ -46,7 +46,7 @@ Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog
 
-2018-03-08 v4.0.4
+2018-03-17 v4.0.4
 
 - Fix duplicate illustId in v-for
 

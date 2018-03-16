@@ -46,7 +46,7 @@ Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
 
-2018-03-08 v4.0.4
+2018-03-17 v4.0.4
 
 - 修正 v-for 有 duplicate illustId 導致卡住
 
