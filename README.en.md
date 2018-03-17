@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.0.4](https://img.shields.io/badge/latest-v4.0.4-blue.svg)](#)
+[![latest-v4.0.5](https://img.shields.io/badge/latest-v4.0.5-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -45,6 +45,11 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog
+
+2018-03-17 v4.0.5
+
+- Main button use mouseup event (Firefox sometimes can't work on click event)
+- Add `en` name, description
 
 2018-03-17 v4.0.4
 
