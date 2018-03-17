@@ -25,7 +25,7 @@
       <button
         :disabled="status.isEnded"
         class="main-button"
-        @click="clickMainButton">
+        @mouseup="clickMainButton">
         {{ buttonMsg }}
       </button>
     </div>
