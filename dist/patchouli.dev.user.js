@@ -21,7 +21,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.0.5
+// @version           4.0.6
 // @grant             none
 // ==/UserScript==
 
@@ -116,8 +116,8 @@
         $debug('Pixiv#fetch: url:', url);
         if (url) {
           const res = await axios.get(url);
-          if (res.statusText !== 'OK') {
-            throw new Error(res.statusText);
+          if (res.status !== 200) {
+            throw new Error(`${res.status} ${res.statusText}`);
           } else {
             return res.data;
           }

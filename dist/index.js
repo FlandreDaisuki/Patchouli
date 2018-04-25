@@ -71,8 +71,8 @@ class Pixiv {
       $debug('Pixiv#fetch: url:', url);
       if (url) {
         const res = await axios.get(url);
-        if (res.statusText !== 'OK') {
-          throw new Error(res.statusText);
+        if (res.status !== 200) {
+          throw new Error(`${res.status} ${res.statusText}`);
         } else {
           return res.data;
         }
