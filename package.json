@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node build.js"
+    "build": "npm i && node build.js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +25,7 @@
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
     "eslint-plugin-vue": "^4.3.0",
+    "hoek": "^5.0.3",
     "magic-string": "^0.23.2",
     "parse5": "^2.2.3",
     "rollup": "^0.57.1",

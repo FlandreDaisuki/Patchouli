@@ -28,7 +28,7 @@
 (function (Vue,Vuex,VueI18n) {
   'use strict';
 
-  function __$styleInject( css ) {
+  function __$styleInject ( css ) {
       if(!css) return ;
 
       if(typeof(window) == 'undefined') return ;
