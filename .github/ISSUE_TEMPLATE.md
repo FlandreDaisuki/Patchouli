@@ -1,33 +1,34 @@
-# Description 問題描述
+<!-- Click Preview before submit to make issue prettier 👁 -->
+<!-- 在送出前請點 Preview 讓 issue 不傷眼 👁 -->
 
-<!-- where? how? -->
-<!-- Example: I can't see control interface at https://www.pixiv.net/bookmark_new_illust.php -->
+## Describe the bug ##
+A clear and concise description for what the bug happens on which page.
+盡可能描述在哪個頁面執行什麼動作發生的 bug。
 
-<!-- 在哪裡？遇到什麼樣的問題？ -->
-<!-- 範例：在 https://www.pixiv.net/bookmark_new_illust.php 控制界面沒跑出來 -->
+## Steps to reproduce ##
+1. Go to '...'
+2. Click on '....'
+3. Scroll down to '....'
+4. See error
 
-## Screenshot 螢幕截圖
+## Screenshots ##
+If applicable, add screenshots to help explain your problem.
+如果有截圖也可以貼上來。
 
-<!-- More information to find your questions -->
-<!-- 讓我有更多資訊找到你的問題 -->
+## Environment ##
+ - OS: [e.g. Windows 10, Linux Mint 18.03]
+ - Browser: [e.g. chrome 66.0.3359.139 64bit, firefox 60.0 64bit]
+ - Script Manager: [e.g. Tampermonkey, Violentmonkey]
+ - Version: [e.g. v4.0.6]
 
-# Environment 環境
+## Debug messages ##
+You can install `dist/patchouli.dev.user.js`, open the console, and paste as more debug messages as you can see when the bug happens to help us find the error faster.
+你可以安裝 `dist/patchouli.dev.user.js`，打開主控台並貼上出現 bug 時的錯誤訊息或除錯訊息，越多線索可以讓我越快找到問題並修復之。
 
-- OS 作業系統：
-- Browser with version 瀏覽器及版本:
-- Script manager 腳本管理器:
-- Others 其他：
+<details close>
 
-<!-- Example:
-Windows 10
-Firefox 59.0 (64bit)
-Tampermonkey 4.6.5709
+```
+Paste here. 貼在這裡。
+```
 
-uBlock Origin 1.15.10
-PixivAuto10 (https://github.com/FlandreDaisuki/My-Browser-Extensions/blob/master/userscripts/PixivAuto10.user.js)
--->
-
-# Debug information 除錯資訊
-
-<!-- Install `dist/patchouli.dev.user.js` and open devtools console, paste error message here. -->
-<!-- 安裝 `dist/patchouli.dev.user.js` 後打開控制台，如果有噴錯誤可貼在這 -->
+</details>
