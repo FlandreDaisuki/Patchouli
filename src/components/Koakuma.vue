@@ -1,7 +1,7 @@
 <template>
   <div id="koakuma" :class="statusClass">
     <div class="processed">{{ $t('koakuma.processed', { count: $store.state.pixiv.imgLibrary.length }) }}</div>
-    <div>
+    <div id="koakuma-bookmark-sort-block">
       <label for="koakuma-bookmark-sort-input" class="bookmark-count">
         <i class="_icon _bookmark-icon-inline"/>
         <input
@@ -13,6 +13,21 @@
           @wheel.stop.prevent="sortInputWheel"
           @input="sortInputInput">
       </label>
+      <a
+        id="koakuma-bookmark-input-usual-switch"
+        :class="(usualSwitchOn ? 'switch-on' : 'switch-off')"
+        role="button"
+        @click=" usualSwitchOn = !usualSwitchOn">{{ usualSwitchMsg }}</a>
+      <ul
+        v-show="usualSwitchOn"
+        id="koakuma-bookmark-input-usual-list">
+        <li v-for="usual in usualList" :key="usual">
+          <a
+            role="button"
+            class="usual-list-link"
+            @click="filters.limit = usual; usualSwitchOn = false">{{ usual }}</a>
+        </li>
+      </ul>
     </div>
     <div>
       <input
@@ -51,7 +66,9 @@ export default {
   data() {
     return {
       debounceId0: null,
-      debounceId1: null
+      debounceId1: null,
+      usualSwitchOn: false,
+      usualList: [100, 500, 1000, 3000, 5000, 10000]
     };
   },
   computed: {
@@ -79,6 +96,9 @@ export default {
       } else {
         return this.$t("koakuma.buttonPause");
       }
+    },
+    usualSwitchMsg() {
+      return this.usualSwitchOn ? "⏶" : "⏷";
     }
   },
   methods: {
@@ -105,6 +125,9 @@ export default {
         this.filters.limit = Math.max(0, Number.toInt(event.target.value));
       }, 500);
     },
+    clickUsualLink(event) {
+      console.log(event);
+    },
     optionsChange(event) {
       if (event.target.id === "koakuma-options-fit-browser-width") {
         this.config.fitwidth = event.target.checked;
@@ -128,6 +151,9 @@ export default {
 </script>
 
 <style scoped>
+a[role="button"] {
+  text-decoration: none;
+}
 #koakuma {
   display: -webkit-box;
   display: -ms-flexbox;
@@ -135,6 +161,9 @@ export default {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
   position: -webkit-sticky;
   position: sticky;
   top: 0;
@@ -148,6 +177,9 @@ export default {
 }
 #koakuma > div {
   margin: 0 10px;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
 }
 .bookmark-count {
   display: -webkit-inline-box !important;
@@ -156,6 +188,12 @@ export default {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+  margin-right: 0;
+  border-radius: 3px 0 0 3px;
+}
+#koakuma-bookmark-sort-block {
+  position: relative;
+  height: 20px;
 }
 #koakuma-bookmark-sort-input {
   -moz-appearance: textfield;
@@ -174,6 +212,38 @@ export default {
   /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */
   -webkit-appearance: none;
   margin: 0;
+}
+#koakuma-bookmark-input-usual-switch {
+  background-color: #cef;
+  padding: 1px;
+  border-left: 1px solid #888;
+  border-radius: 0 3px 3px 0;
+  cursor: pointer;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+}
+#koakuma-bookmark-input-usual-list {
+  border-radius: 3px;
+  border-top: 1px solid #888;
+  background-color: #cef;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+}
+.usual-list-link:hover::before {
+  content: "⮬";
+  position: absolute;
+  left: 6px;
+  font-weight: bolder;
+}
+.usual-list-link {
+  display: block;
+  cursor: pointer;
+  text-align: center;
 }
 .tags-filter {
   min-width: 300px;
