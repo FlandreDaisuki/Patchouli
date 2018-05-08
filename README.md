@@ -1,12 +1,12 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.0.7](https://img.shields.io/badge/latest-v4.0.7-blue.svg)](#)
+[![latest-v4.0.8](https://img.shields.io/badge/latest-v4.0.8-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
 ## Introduction 簡介
 
-一個簡單暴力的 Pixiv 搜尋引擎。命名以兩位**東方Project**角色為主。
+一個簡單暴力的 pixiv 搜尋引擎。命名以兩位**東方Project**角色為主。
 
 ## Installation 安裝
 
@@ -45,6 +45,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
+
+2018-05-08 v4.0.8
+
+- 修正 pixiv 的商標為 pixiv (全小寫)
 
 2018-05-08 v4.0.7
 

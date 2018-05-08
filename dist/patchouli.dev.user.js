@@ -5,11 +5,11 @@
 // @name:zh-CN        帕秋莉.dev
 // @name:zh-TW        帕秋莉.dev
 // @namespace         https://github.com/FlandreDaisuki
-// @description       An image searching/browsing tool on Pixiv
-// @description:en    An image searching/browsing tool on Pixiv
-// @description:ja    Pixiv 検索機能強化
-// @description:zh-CN Pixiv 搜寻/浏览 工具
-// @description:zh-TW Pixiv 搜尋/瀏覽 工具
+// @description       An image searching/browsing tool on pixiv
+// @description:en    An image searching/browsing tool on pixiv
+// @description:ja    pixiv 検索機能強化
+// @description:zh-CN pixiv 搜寻/浏览 工具
+// @description:zh-TW pixiv 搜尋/瀏覽 工具
 // @include           *://www.pixiv.net/*
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.js
@@ -21,7 +21,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.0.7
+// @version           4.0.8
 // @grant             none
 // ==/UserScript==
 
