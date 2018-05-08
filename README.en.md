@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.0.6](https://img.shields.io/badge/latest-v4.0.6-blue.svg)](#)
+[![latest-v4.0.7](https://img.shields.io/badge/latest-v4.0.7-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -45,6 +45,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog
+
+2018-05-08 v4.0.7
+
+- Add default bookmark count list for quick filtering (#16)
 
 2018-04-25 v4.0.6
 

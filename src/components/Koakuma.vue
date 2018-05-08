@@ -31,9 +31,9 @@
     </div>
     <div>
       <input
+        id="koakuma-bookmark-tags-filter-input"
         :placeholder="$t('koakuma.tagsPlaceholder')"
         type="text"
-        class="tags-filter"
         @input="tagsFilterInput">
     </div>
     <div>
@@ -44,19 +44,23 @@
         {{ buttonMsg }}
       </button>
     </div>
-    <div>
-      <input
-        id="koakuma-options-fit-browser-width"
-        :checked="config.fitwidth"
-        type="checkbox"
-        @change="optionsChange">
-      <label for="koakuma-options-fit-browser-width">{{ $t('koakuma.fitWidth') }}</label>
-      <input
-        id="koakuma-options-sort-by-bookmark-count"
-        :checked="config.sort"
-        type="checkbox"
-        @change="optionsChange">
-      <label for="koakuma-options-sort-by-bookmark-count">{{ $t('koakuma.sortByBookmarkCount') }}</label>
+    <div id="koakuma-options-block">
+      <div>
+        <input
+          id="koakuma-options-fit-browser-width-checkbox"
+          :checked="config.fitwidth"
+          type="checkbox"
+          @change="optionsChange">
+        <label for="koakuma-options-fit-browser-width-checkbox">{{ $t('koakuma.fitWidth') }}</label>
+      </div>
+      <div>
+        <input
+          id="koakuma-options-sort-by-bookmark-count-checkbox"
+          :checked="config.sort"
+          type="checkbox"
+          @change="optionsChange">
+        <label for="koakuma-options-sort-by-bookmark-count-checkbox">{{ $t('koakuma.sortByBookmarkCount') }}</label>
+      </div>
     </div>
   </div>
 </template>
@@ -129,9 +133,11 @@ export default {
       console.log(event);
     },
     optionsChange(event) {
-      if (event.target.id === "koakuma-options-fit-browser-width") {
+      if (event.target.id === "koakuma-options-fit-browser-width-checkbox") {
         this.config.fitwidth = event.target.checked;
-      } else if (event.target.id === "koakuma-options-sort-by-bookmark-count") {
+      } else if (
+        event.target.id === "koakuma-options-sort-by-bookmark-count-checkbox"
+      ) {
         this.config.sort = Number.toInt(event.target.checked);
       }
       this.$store.commit("saveConfig");
@@ -213,6 +219,9 @@ a[role="button"] {
   -webkit-appearance: none;
   margin: 0;
 }
+#koakuma-bookmark-tags-filter-input {
+  min-width: 300px;
+}
 #koakuma-bookmark-input-usual-switch {
   background-color: #cef;
   padding: 1px;
@@ -245,8 +254,8 @@ a[role="button"] {
   cursor: pointer;
   text-align: center;
 }
-.tags-filter {
-  min-width: 300px;
+#koakuma-options-block > * {
+  margin: 0 5px;
 }
 .main-button {
   border: none;

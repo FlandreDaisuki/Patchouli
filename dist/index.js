@@ -588,11 +588,13 @@ var store = new Vuex.Store({
   }
 });
 
-var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.statusClass,attrs:{"id":"koakuma"}},[_c('div',{staticClass:"processed"},[_vm._v(_vm._s(_vm.$t('koakuma.processed', { count: _vm.$store.state.pixiv.imgLibrary.length })))]),_vm._v(" "),_c('div',[_c('label',{staticClass:"bookmark-count",attrs:{"for":"koakuma-bookmark-sort-input"}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "),_c('input',{attrs:{"id":"koakuma-bookmark-sort-input","type":"number","min":"0","step":"1"},domProps:{"value":_vm.filters.limit},on:{"wheel":function($event){$event.stopPropagation();$event.preventDefault();return _vm.sortInputWheel($event)},"input":_vm.sortInputInput}})])]),_vm._v(" "),_c('div',[_c('input',{staticClass:"tags-filter",attrs:{"placeholder":_vm.$t('koakuma.tagsPlaceholder'),"type":"text"},on:{"input":_vm.tagsFilterInput}})]),_vm._v(" "),_c('div',[_c('button',{staticClass:"main-button",attrs:{"disabled":_vm.status.isEnded},on:{"mouseup":_vm.clickMainButton}},[_vm._v(" "+_vm._s(_vm.buttonMsg)+" ")])]),_vm._v(" "),_c('div',[_c('input',{attrs:{"id":"koakuma-options-fit-browser-width","type":"checkbox"},domProps:{"checked":_vm.config.fitwidth},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-fit-browser-width"}},[_vm._v(_vm._s(_vm.$t('koakuma.fitWidth')))]),_vm._v(" "),_c('input',{attrs:{"id":"koakuma-options-sort-by-bookmark-count","type":"checkbox"},domProps:{"checked":_vm.config.sort},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-sort-by-bookmark-count"}},[_vm._v(_vm._s(_vm.$t('koakuma.sortByBookmarkCount')))])])])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
+var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{class:_vm.statusClass,attrs:{"id":"koakuma"}},[_c('div',{staticClass:"processed"},[_vm._v(_vm._s(_vm.$t('koakuma.processed', { count: _vm.$store.state.pixiv.imgLibrary.length })))]),_vm._v(" "),_c('div',{attrs:{"id":"koakuma-bookmark-sort-block"}},[_c('label',{staticClass:"bookmark-count",attrs:{"for":"koakuma-bookmark-sort-input"}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v(" "),_c('input',{attrs:{"id":"koakuma-bookmark-sort-input","type":"number","min":"0","step":"1"},domProps:{"value":_vm.filters.limit},on:{"wheel":function($event){$event.stopPropagation();$event.preventDefault();return _vm.sortInputWheel($event)},"input":_vm.sortInputInput}})]),_vm._v(" "),_c('a',{class:(_vm.usualSwitchOn ? 'switch-on' : 'switch-off'),attrs:{"id":"koakuma-bookmark-input-usual-switch","role":"button"},on:{"click":function($event){_vm.usualSwitchOn = !_vm.usualSwitchOn;}}},[_vm._v(_vm._s(_vm.usualSwitchMsg))]),_vm._v(" "),_c('ul',{directives:[{name:"show",rawName:"v-show",value:(_vm.usualSwitchOn),expression:"usualSwitchOn"}],attrs:{"id":"koakuma-bookmark-input-usual-list"}},_vm._l((_vm.usualList),function(usual){return _c('li',{key:usual},[_c('a',{staticClass:"usual-list-link",attrs:{"role":"button"},on:{"click":function($event){_vm.filters.limit = usual; _vm.usualSwitchOn = false;}}},[_vm._v(_vm._s(usual))])])}))]),_vm._v(" "),_c('div',[_c('input',{attrs:{"id":"koakuma-bookmark-tags-filter-input","placeholder":_vm.$t('koakuma.tagsPlaceholder'),"type":"text"},on:{"input":_vm.tagsFilterInput}})]),_vm._v(" "),_c('div',[_c('button',{staticClass:"main-button",attrs:{"disabled":_vm.status.isEnded},on:{"mouseup":_vm.clickMainButton}},[_vm._v(" "+_vm._s(_vm.buttonMsg)+" ")])]),_vm._v(" "),_c('div',{attrs:{"id":"koakuma-options-block"}},[_c('div',[_c('input',{attrs:{"id":"koakuma-options-fit-browser-width-checkbox","type":"checkbox"},domProps:{"checked":_vm.config.fitwidth},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-fit-browser-width-checkbox"}},[_vm._v(_vm._s(_vm.$t('koakuma.fitWidth')))])]),_vm._v(" "),_c('div',[_c('input',{attrs:{"id":"koakuma-options-sort-by-bookmark-count-checkbox","type":"checkbox"},domProps:{"checked":_vm.config.sort},on:{"change":_vm.optionsChange}}),_vm._v(" "),_c('label',{attrs:{"for":"koakuma-options-sort-by-bookmark-count-checkbox"}},[_vm._v(_vm._s(_vm.$t('koakuma.sortByBookmarkCount')))])])])])},staticRenderFns: [],_scopeId: 'data-v-430ffdfb',
   data() {
     return {
       debounceId0: null,
-      debounceId1: null
+      debounceId1: null,
+      usualSwitchOn: false,
+      usualList: [100, 500, 1000, 3000, 5000, 10000]
     };
   },
   computed: {
@@ -620,6 +622,9 @@ var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
       } else {
         return this.$t("koakuma.buttonPause");
       }
+    },
+    usualSwitchMsg() {
+      return this.usualSwitchOn ? "⏶" : "⏷";
     }
   },
   methods: {
@@ -646,10 +651,15 @@ var koakuma = {render: function(){var _vm=this;var _h=_vm.$createElement;var _c=
         this.filters.limit = Math.max(0, Number.toInt(event.target.value));
       }, 500);
     },
+    clickUsualLink(event) {
+      console.log(event);
+    },
     optionsChange(event) {
-      if (event.target.id === "koakuma-options-fit-browser-width") {
+      if (event.target.id === "koakuma-options-fit-browser-width-checkbox") {
         this.config.fitwidth = event.target.checked;
-      } else if (event.target.id === "koakuma-options-sort-by-bookmark-count") {
+      } else if (
+        event.target.id === "koakuma-options-sort-by-bookmark-count-checkbox"
+      ) {
         this.config.sort = Number.toInt(event.target.checked);
       }
       this.$store.commit("saveConfig");
