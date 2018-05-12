@@ -9,14 +9,13 @@ const userscriptCSS = require('rollup-plugin-userscript-css');
 const metablock = require('rollup-plugin-userscript-metablock');
 const cleanup = require('rollup-plugin-cleanup');
 
-const pkg = JSON.parse(readFileSync('package.json', 'utf-8'));
+const pkg = require('./package.json');
 const external = ['vue', 'vuex', 'vue-i18n'];
 const globals = {
   vue: 'Vue',
   vuex: 'Vuex',
   'vue-i18n': 'VueI18n'
 };
-
 
 async function preBuild() {
   const bundle = await rollup.rollup({
@@ -37,6 +36,30 @@ async function preBuild() {
   const codeAppendCSS = code + `import '../src/pixiv.override.css';`;
 
   writeFileSync('dist/index.js', codeAppendCSS);
+
+  // Update metablock when dependencies have an upgrade version
+  // Work when `npm run publish`
+  const metablockJSON = require('./src/metablock.json');
+  const metablockDevJSON = require('./src/metablock.dev.json');
+
+  Object.entries(pkg.dependencies).forEach(([depName, depVersion]) => {
+    metablockJSON.require.forEach((cdn, idx, arr) => {
+      const depRegex = new RegExp(`${depName}/[\\d.]+`);
+      if (cdn.match(depRegex)) {
+        arr[idx] = cdn.replace(depRegex, `${depName}/${depVersion.slice(1)}`);
+      }
+    });
+
+    metablockDevJSON.require.forEach((cdn, idx, arr) => {
+      const depRegex = new RegExp(`${depName}/[\\d.]+`);
+      if (cdn.match(depRegex)) {
+        arr[idx] = cdn.replace(depRegex, `${depName}/${depVersion.slice(1)}`);
+      }
+    });
+  });
+
+  writeFileSync('src/metablock.json', JSON.stringify(metablockJSON, null, 2));
+  writeFileSync('src/metablock.dev.json', JSON.stringify(metablockDevJSON, null, 2));
 
   console.log('✔️ prepare build');
 }
