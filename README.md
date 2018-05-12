@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.0.8](https://img.shields.io/badge/latest-v4.0.8-blue.svg)](#)
+[![latest-v4.0.9](https://img.shields.io/badge/latest-v4.0.9-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -45,6 +45,11 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
+
+2018-05-12 v4.0.9
+
+- 變更主題配色，樣式，動畫
+- 修正點開預設書籤數後點頁面其他地方不會收回
 
 2018-05-08 v4.0.8
 

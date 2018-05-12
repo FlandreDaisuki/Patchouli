@@ -23,10 +23,7 @@ async function preBuild() {
     input: 'src/index.js',
     plugins: [
       vue({
-        compileTemplate: true,
-        css(style) {
-          writeFileSync('dist/index.css', style.replace(/\n{2,}/g, '\n').trim());
-        }
+        css: true
       })
     ],
     external,
@@ -37,7 +34,7 @@ async function preBuild() {
     globals,
   });
 
-  const codeAppendCSS = code + `import './index.css';` + `import '../src/pixiv.override.css';`;
+  const codeAppendCSS = code + `import '../src/pixiv.override.css';`;
 
   writeFileSync('dist/index.js', codeAppendCSS);
 

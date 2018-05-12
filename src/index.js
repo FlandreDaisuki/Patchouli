@@ -13,6 +13,9 @@ store.commit('applyConfig');
 if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();
 
+  /* setup koamuma placeholder */
+  document.querySelector('._global-header').classList.add('koakuma-placeholder');
+
   const Patchouli = new Vue({
     i18n,
     store,
@@ -48,8 +51,15 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   store.dispatch('start', { times: 1 }).then(() => {
     Patchouli.$mount(store.state.patchouliMountPoint);
     Koakuma.$mount(store.state.koakumaMountPoint);
+    document.querySelector('._global-header').classList.remove('koakuma-placeholder');
   }).catch(error => {
     $error('Fail to first mount', error);
+  });
+
+  document.body.addEventListener('click', (event) => {
+    if (event.target.id !== 'koakuma-bookmark-input-usual-switch') {
+      Koakuma.$children[0].usualSwitchOn = false;
+    }
   });
 
   window.Patchouli = Patchouli;

@@ -1,7 +1,35 @@
+._global-header {
+  /* FIXME: Chrome will show #koakuma on top of header */
+  z-index: 4;
+  transform: translate(0);
+}
+._global-header.koakuma-placeholder {
+  /* I don't know why #koakuma just 32px
+     but it should preserve 42px to keep all spacing correct */
+  margin-bottom: 42px;
+}
+.ω {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-flow: row wrap;
+          flex-flow: row wrap;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+.ω,
+.ω .layout-a,
+.ω .layout-body {
+  -webkit-transition: width 0.2s;
+  transition: width 0.2s;
+}
 .ω.↔,
 .ω.↔ .layout-a,
 .ω.↔ .layout-body {
-  width: initial !important;
+  width: 100% !important;
 }
 .ω.↔ .layout-a {
   display: -webkit-box;

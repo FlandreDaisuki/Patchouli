@@ -1,5 +1,5 @@
 <template>
-  <div id="koakuma" :class="statusClass">
+  <div id="koakuma" >
     <div class="processed">{{ $t('koakuma.processed', { count: $store.state.pixiv.imgLibrary.length }) }}</div>
     <div id="koakuma-bookmark-sort-block">
       <label for="koakuma-bookmark-sort-input" class="bookmark-count">
@@ -17,7 +17,7 @@
         id="koakuma-bookmark-input-usual-switch"
         :class="(usualSwitchOn ? 'switch-on' : 'switch-off')"
         role="button"
-        @click=" usualSwitchOn = !usualSwitchOn">{{ usualSwitchMsg }}</a>
+        @click="usualSwitchOn = !usualSwitchOn">{{ usualSwitchMsg }}</a>
       <ul
         v-show="usualSwitchOn"
         id="koakuma-bookmark-input-usual-list">
@@ -39,6 +39,7 @@
     <div>
       <button
         :disabled="status.isEnded"
+        :class="statusClass"
         class="main-button"
         @mouseup="clickMainButton">
         {{ buttonMsg }}
@@ -129,9 +130,6 @@ export default {
         this.filters.limit = Math.max(0, Number.toInt(event.target.value));
       }, 500);
     },
-    clickUsualLink(event) {
-      console.log(event);
-    },
     optionsChange(event) {
       if (event.target.id === "koakuma-options-fit-browser-width-checkbox") {
         this.config.fitwidth = event.target.checked;
@@ -157,6 +155,27 @@ export default {
 </script>
 
 <style scoped>
+@-webkit-keyframes slidedown {
+  from {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+
+@keyframes slidedown {
+  from {
+    -webkit-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  to {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
 a[role="button"] {
   text-decoration: none;
 }
@@ -174,12 +193,14 @@ a[role="button"] {
   position: sticky;
   top: 0;
   z-index: 3;
-  background-color: #e77;
-  -webkit-box-shadow: 0 1px 3px #000;
-  box-shadow: 0 1px 3px #000;
+  background-color: #e5e4ff;
+  -webkit-box-shadow: 0 2px 2px #777;
+  box-shadow: 0 2px 2px #777;
   padding: 4px;
-  color: #fff;
+  color: #00186c;
   font-size: 16px;
+  -webkit-animation: slidedown 0.7s linear;
+  animation: slidedown 0.7s linear;
 }
 #koakuma > div {
   margin: 0 10px;
@@ -200,6 +221,9 @@ a[role="button"] {
 #koakuma-bookmark-sort-block {
   position: relative;
   height: 20px;
+  -webkit-box-shadow: 0 0 1px #069;
+  box-shadow: 0 0 1px #069;
+  border-radius: 4px;
 }
 #koakuma-bookmark-sort-input {
   -moz-appearance: textfield;
@@ -239,9 +263,29 @@ a[role="button"] {
   border-radius: 3px;
   border-top: 1px solid #888;
   background-color: #cef;
+  -webkit-box-shadow: 0 0 1px #069;
+  box-shadow: 0 0 1px #069;
   position: absolute;
   top: 100%;
   width: 100%;
+}
+#koakuma-bookmark-input-usual-list > li::after {
+  content: "";
+  -webkit-box-shadow: 0 0 0 1px #89d8ff;
+  box-shadow: 0 0 0 1px #89d8ff;
+  display: inline-block;
+  margin: 0;
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+  position: absolute;
+  width: 100%;
+  -webkit-transform: scaleX(0.8);
+  transform: scaleX(0.8);
+}
+#koakuma-bookmark-input-usual-list > li:last-child::after {
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 .usual-list-link:hover::before {
   content: "⮬";
@@ -263,23 +307,34 @@ a[role="button"] {
   border-radius: 3px;
   font-size: 16px;
 }
+.main-button:enabled {
+  -webkit-transform: translate(-1px, -1px);
+  transform: translate(-1px, -1px);
+  -webkit-box-shadow: 1px 1px 1px hsl(60, 0%, 30%);
+  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);
+  cursor: pointer;
+}
 .main-button:enabled:hover {
-  -webkit-box-shadow: 1px 1px;
-  box-shadow: 1px 1px;
+  -webkit-transform: translate(0);
+  transform: translate(0);
+  -webkit-box-shadow: none;
+  box-shadow: none;
 }
 .main-button:enabled:active {
-  -webkit-box-shadow: 1px 1px inset;
-  box-shadow: 1px 1px inset;
+  -webkit-transform: translate(1px, 1px);
+  transform: translate(1px, 1px);
+  -webkit-box-shadow: -1px -1px 1px hsl(60, 0%, 30%);
+  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);
 }
-#koakuma.go .main-button {
-  background-color: #64ffda;
+.main-button.go {
+  background-color: hsl(141, 100%, 50%);
 }
-#koakuma.paused .main-button {
-  background-color: #ffd600;
+.main-button.paused {
+  background-color: hsl(60, 100%, 50%);
 }
-#koakuma.end .main-button {
-  background-color: #455a64;
+.main-button.end {
+  background-color: #878787;
   color: #fff;
-  opacity: 0.9;
+  opacity: 0.87;
 }
 </style>
