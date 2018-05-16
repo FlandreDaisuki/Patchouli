@@ -1,4 +1,4 @@
-import { $, $$find, $error, $debug } from './utils';
+import { $, $$find, $print } from './utils';
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
 
@@ -14,7 +14,7 @@ class Pixiv {
 
   async fetch(url) {
     try {
-      $debug('Pixiv#fetch: url:', url);
+      $print.debug('Pixiv#fetch: url:', url);
       if (url) {
         const res = await axios.get(url);
         if (res.status !== 200) {
@@ -23,10 +23,10 @@ class Pixiv {
           return res.data;
         }
       } else {
-        $error('Pixiv#fetch has no url');
+        $print.error('Pixiv#fetch has no url');
       }
     } catch (error) {
-      $error('Pixiv#fetch: error:', error);
+      $print.error('Pixiv#fetch: error:', error);
     }
   }
 
@@ -72,7 +72,7 @@ class Pixiv {
       }
       return ret;
     } catch (error) {
-      $error('Pixiv#getLegacyPageHTMLIllustIds: error:', error);
+      $print.error('Pixiv#getLegacyPageHTMLIllustIds: error:', error);
     }
   }
 
@@ -93,7 +93,7 @@ class Pixiv {
       }
 
       const iidHTMLs = html.match(/illustId&quot;:&quot;(\d+)&quot;/g) || [];
-      $debug('Pixiv#getPageHTMLIllustIds: iidHTMLs:', iidHTMLs);
+      $print.debug('Pixiv#getPageHTMLIllustIds: iidHTMLs:', iidHTMLs);
 
       const illustIds = [];
       for (const dataid of iidHTMLs) {
@@ -109,7 +109,7 @@ class Pixiv {
       };
       return ret;
     } catch (error) {
-      $error('Pixiv#getPageHTMLIllustIds: error:', error);
+      $print.error('Pixiv#getPageHTMLIllustIds: error:', error);
     }
   }
 
@@ -139,7 +139,7 @@ class Pixiv {
         tags
       };
     } catch (error) {
-      $error('Pixiv#getBookmarkHTMLDetail: error:', error);
+      $print.error('Pixiv#getBookmarkHTMLDetail: error:', error);
     }
   }
 
@@ -149,7 +149,7 @@ class Pixiv {
 
     try {
       const json = await this.fetch(url);
-      $debug('Pixiv#getIllustsAPIDetail: json:', json);
+      $print.debug('Pixiv#getIllustsAPIDetail: json:', json);
       if (json.error) {
         throw new Error(json.message);
       }
@@ -162,7 +162,7 @@ class Pixiv {
       }
       return details;
     } catch (error) {
-      $error('Pixiv#getIllustsAPIDetail: error:', error);
+      $print.error('Pixiv#getIllustsAPIDetail: error:', error);
     }
   }
 
@@ -172,7 +172,7 @@ class Pixiv {
 
     try {
       const json = await this.fetch(url);
-      $debug('Pixiv#getUsersAPIDetail: json:', json);
+      $print.debug('Pixiv#getUsersAPIDetail: json:', json);
       if (json.error) {
         throw new Error(json.message);
       }
@@ -186,7 +186,7 @@ class Pixiv {
       }
       return details;
     } catch (error) {
-      $error('Pixiv#getUsersAPIDetail: error:', error);
+      $print.error('Pixiv#getUsersAPIDetail: error:', error);
     }
   }
 
@@ -202,7 +202,7 @@ class Pixiv {
       const data = await this.fetch(url);
       return data.recommendations.map(x => `${x}`);
     } catch (error) {
-      $error('Pixiv#getRecommendationsAPIDetails: error:', error);
+      $print.error('Pixiv#getRecommendationsAPIDetails: error:', error);
     }
   }
 
@@ -223,13 +223,13 @@ class Pixiv {
     try {
       const res = await axios.post('/rpc/index.php', data, config);
       if (res.statusText === 'OK') {
-        $debug('Pixiv#postBookmarkAdd: res.data:', res.data);
+        $print.debug('Pixiv#postBookmarkAdd: res.data:', res.data);
         return !res.data.error;
       } else {
         throw new Error(res.statusText);
       }
     } catch (error) {
-      $error('Pixiv#postBookmarkAdd: error:', error);
+      $print.error('Pixiv#postBookmarkAdd: error:', error);
     }
   }
 }

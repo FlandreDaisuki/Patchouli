@@ -2,7 +2,7 @@ import Vue from 'vue';
 import store from './store/index';
 import koakuma from './components/Koakuma.vue';
 import patchouli from './components/Patchouli.vue';
-import { $error } from './lib/utils';
+import { $, $print } from './lib/utils';
 import { removeAnnoyings } from './lib/pixiv';
 import i18n from './lib/i18n';
 
@@ -14,7 +14,7 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();
 
   /* setup koamuma placeholder */
-  document.querySelector('._global-header').classList.add('koakuma-placeholder');
+  $('._global-header').classList.add('koakuma-placeholder');
 
   const Patchouli = new Vue({
     i18n,
@@ -51,9 +51,9 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   store.dispatch('start', { times: 1 }).then(() => {
     Patchouli.$mount(store.state.patchouliMountPoint);
     Koakuma.$mount(store.state.koakumaMountPoint);
-    document.querySelector('._global-header').classList.remove('koakuma-placeholder');
+    $('._global-header').classList.remove('koakuma-placeholder');
   }).catch(error => {
-    $error('Fail to first mount', error);
+    $print.error('Fail to first mount', error);
   });
 
   document.body.addEventListener('click', (event) => {

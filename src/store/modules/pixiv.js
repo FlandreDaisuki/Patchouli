@@ -1,5 +1,5 @@
 import { PixivAPI } from '../../lib/pixiv';
-import { $debug } from '../../lib/utils';
+import { $print } from '../../lib/utils';
 
 function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
   if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
@@ -85,13 +85,13 @@ export default {
             needBookmarkId: rootState.pageType === 'MY_BOOKMARK'
           });
         }
-        $debug('PixivModule#startNextUrlBased: page:', page);
+        $print.debug('PixivModule#startNextUrlBased: page:', page);
 
         state.nextUrl = page.nextUrl;
 
         // {[illustId : IDString]: illust_detail}
         const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
-        $debug('PixivModule#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
+        $print.debug('PixivModule#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
 
         if (rootState.pageType === 'MY_BOOKMARK') {
           // {[illustId : IDString]: {
@@ -105,7 +105,7 @@ export default {
               illustDetail.bookmarkId = bookmarkId;
             }
           }
-          $debug('PixivModule#startNextUrlBased: myBookmarkAPIDetails:', myBookmarkAPIDetails);
+          $print.debug('PixivModule#startNextUrlBased: myBookmarkAPIDetails:', myBookmarkAPIDetails);
         }
 
         // {[illustId : IDString]: {
@@ -114,7 +114,7 @@ export default {
         //   tags: string[]
         // }}
         const bookmarkHTMLDetails = await PixivAPI.getBookmarkHTMLDetails(Object.keys(illustAPIDetails));
-        $debug('PixivModule#startNextUrlBased: bookmarkHTMLDetails:', bookmarkHTMLDetails);
+        $print.debug('PixivModule#startNextUrlBased: bookmarkHTMLDetails:', bookmarkHTMLDetails);
 
         const userIds = Object.values(illustAPIDetails).map(d => d.user_id);
         // {[user_id : IDString]: {
@@ -122,7 +122,7 @@ export default {
         // isFollow
         // }}
         const userAPIDetails = await PixivAPI.getUsersAPIDetail(userIds);
-        $debug('PixivModule#startNextUrlBased: userAPIDetails:', userAPIDetails);
+        $print.debug('PixivModule#startNextUrlBased: userAPIDetails:', userAPIDetails);
 
         const libraryData = makeLibraryData({ pageType: rootState.pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails });
 

@@ -4,7 +4,7 @@ const rollup = require('rollup');
 const acorn = require('acorn');
 const walk = require('acorn/dist/walk');
 const MagicString = require('magic-string');
-const vue = require('rollup-plugin-vue');
+const VuePlugin = require('rollup-plugin-vue');
 const userscriptCSS = require('rollup-plugin-userscript-css');
 const metablock = require('rollup-plugin-userscript-metablock');
 const cleanup = require('rollup-plugin-cleanup');
@@ -21,9 +21,7 @@ async function preBuild() {
   const bundle = await rollup.rollup({
     input: 'src/index.js',
     plugins: [
-      vue({
-        css: true
-      })
+      VuePlugin()
     ],
     external,
   });
@@ -69,20 +67,11 @@ function removeDebuggers(code) {
   const ms = new MagicString(code);
 
   walk.simple(ast, {
-    FunctionDeclaration(node) {
-      while (code[node.start - 1] === ' ') {
-        node.start -= 1;
-      }
-      while (code[node.end] !== '\n') {
-        node.end += 1;
-      }
-      node.end += 1; // remove '\n'
-      if (node.id.name === '$debug') {
-        ms.remove(node.start, node.end);
-      }
-    },
     CallExpression(node) {
-      if (node.callee.name === '$debug') {
+      if (node.callee.object &&
+        node.callee.object.name === '$print' &&
+        node.callee.property.name === 'debug') {
+        // $print.debug
         while (code[node.start - 1] === ' ') {
           node.start -= 1;
         }

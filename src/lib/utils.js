@@ -21,17 +21,17 @@ function $el(tag, attr = {}, cb = () => {}) {
   return el;
 }
 
-function $log(...args) {
-  console.log.apply(console, args);
-}
-
-function $error(...args) {
-  console.error.apply(console, args);
-}
-
-function $debug(...args) {
-  console.debug.apply(console, args);
-}
+const $print = {
+  log(...args) {
+    console.log.apply(console, [...args]);
+  },
+  error(...args) {
+    console.error.apply(console, [...args]);
+  },
+  debug(...args) {
+    console.debug.apply(console, [...args]);
+  }
+};
 
 (() => {
   Math.clamp = (val, min, max) => Math.min(Math.max(min, val), max);
@@ -69,7 +69,5 @@ export {
   $find,
   $$find,
   $el,
-  $log,
-  $error,
-  $debug
+  $print
 };
