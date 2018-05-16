@@ -148,13 +148,17 @@ export default {
   getters: {
     filteredLibrary(state, getters, rootState) {
       const cloneLibrary = state.imgLibrary.slice();
+      const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
       return cloneLibrary
         .filter(el => el.bookmarkCount >= rootState.filters.limit)
         .filter(el => el.tags.match(rootState.filters.tag))
         .sort(
-          (a, b) =>
-            Number.toInt(b[rootState.filters.orderBy]) -
-            Number.toInt(a[rootState.filters.orderBy])
+          (a, b) => {
+            const av = Number.toInt(a[rootState.filters.orderBy]);
+            const bv = Number.toInt(b[rootState.filters.orderBy]);
+            const c = bv - av;
+            return dateOrder ? -c : c;
+          }
         );
     }
   }
