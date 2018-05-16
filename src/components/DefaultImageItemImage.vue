@@ -21,7 +21,7 @@
       class="_one-click-bookmark"
       data-type="illust"
       data-click-action="illust"
-      @click="oneClickBookmarkAdd"/>
+      @click.left="oneClickBookmarkAdd"/>
     <div v-if="bookmarkId" class="bookmark-input-container">
       <input
         :value="bookmarkId"

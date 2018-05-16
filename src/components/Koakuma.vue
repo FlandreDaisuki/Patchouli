@@ -17,7 +17,7 @@
         id="koakuma-bookmark-input-usual-switch"
         :class="(usualSwitchOn ? 'switch-on' : 'switch-off')"
         role="button"
-        @click="usualSwitchOn = !usualSwitchOn">{{ usualSwitchMsg }}</a>
+        @click.left="usualSwitchOn = !usualSwitchOn">{{ usualSwitchMsg }}</a>
       <ul
         v-show="usualSwitchOn"
         id="koakuma-bookmark-input-usual-list">
@@ -25,7 +25,7 @@
           <a
             role="button"
             class="usual-list-link"
-            @click="filters.limit = usual; usualSwitchOn = false">{{ usual }}</a>
+            @click.left="filters.limit = usual; usualSwitchOn = false">{{ usual }}</a>
         </li>
       </ul>
     </div>
