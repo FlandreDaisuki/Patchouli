@@ -4,7 +4,12 @@ import { $, $$find, $error, $debug } from './utils';
 
 class Pixiv {
   constructor() {
-    this.tt = $('input[name="tt"]').value;
+    try {
+      this.tt = $('input[name="tt"]').value;
+    } catch (error) {
+      /* global pixiv */
+      this.tt = pixiv.context.token;
+    }
   }
 
   async fetch(url) {
