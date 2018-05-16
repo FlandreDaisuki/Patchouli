@@ -11,17 +11,17 @@
 // @description:zh-CN pixiv 搜寻/浏览 工具
 // @description:zh-TW pixiv 搜尋/瀏覽 工具
 // @include           *://www.pixiv.net/*
-// @require           https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.13/vue.min.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.min.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.min.js
-// @require           https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/7.4.2/vue-i18n.min.js
-// @require           https://cdnjs.cloudflare.com/ajax/libs/axios/0.17.1/axios.min.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/7.6.0/vue-i18n.min.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js
 // @icon              http://i.imgur.com/VwoYc5w.png
 // @noframes
 // @author            FlandreDaisuki
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.0.9
+// @version           4.0.10
 // @grant             none
 // ==/UserScript==
 
@@ -60,9 +60,17 @@
     cb(el);
     return el;
   }
-  function $error(...args) {
-    console.error.apply(console, args);
-  }
+  const $print = {
+    log(...args) {
+      console.log.apply(console, [...args]);
+    },
+    error(...args) {
+      console.error.apply(console, [...args]);
+    },
+    debug(...args) {
+      console.debug.apply(console, [...args]);
+    }
+  };
   (() => {
     Math.clamp = (val, min, max) => Math.min(Math.max(min, val), max);
     Number.toInt = (s) => (isNaN(~~s) ? 0 : ~~s);
@@ -90,7 +98,11 @@
   })();
   class Pixiv {
     constructor() {
-      this.tt = $('input[name="tt"]').value;
+      try {
+        this.tt = $('input[name="tt"]').value;
+      } catch (error) {
+        this.tt = pixiv.context.token;
+      }
     }
     async fetch(url) {
       try {
@@ -102,10 +114,10 @@
             return res.data;
           }
         } else {
-          $error('Pixiv#fetch has no url');
+          $print.error('Pixiv#fetch has no url');
         }
       } catch (error) {
-        $error('Pixiv#fetch: error:', error);
+        $print.error('Pixiv#fetch: error:', error);
       }
     }
     async getLegacyPageHTMLIllustIds(url, { needBookmarkId } = { needBookmarkId: false }) {
@@ -146,7 +158,7 @@
         }
         return ret;
       } catch (error) {
-        $error('Pixiv#getLegacyPageHTMLIllustIds: error:', error);
+        $print.error('Pixiv#getLegacyPageHTMLIllustIds: error:', error);
       }
     }
     async getPageHTMLIllustIds(url) {
@@ -177,7 +189,7 @@
         };
         return ret;
       } catch (error) {
-        $error('Pixiv#getPageHTMLIllustIds: error:', error);
+        $print.error('Pixiv#getPageHTMLIllustIds: error:', error);
       }
     }
     async getBookmarkHTMLDetails(illustIds) {
@@ -204,7 +216,7 @@
           tags
         };
       } catch (error) {
-        $error('Pixiv#getBookmarkHTMLDetail: error:', error);
+        $print.error('Pixiv#getBookmarkHTMLDetail: error:', error);
       }
     }
     async getIllustsAPIDetail(illustIds) {
@@ -223,7 +235,7 @@
         }
         return details;
       } catch (error) {
-        $error('Pixiv#getIllustsAPIDetail: error:', error);
+        $print.error('Pixiv#getIllustsAPIDetail: error:', error);
       }
     }
     async getUsersAPIDetail(userIds) {
@@ -243,7 +255,7 @@
         }
         return details;
       } catch (error) {
-        $error('Pixiv#getUsersAPIDetail: error:', error);
+        $print.error('Pixiv#getUsersAPIDetail: error:', error);
       }
     }
     async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {
@@ -258,7 +270,7 @@
         const data = await this.fetch(url);
         return data.recommendations.map(x => `${x}`);
       } catch (error) {
-        $error('Pixiv#getRecommendationsAPIDetails: error:', error);
+        $print.error('Pixiv#getRecommendationsAPIDetails: error:', error);
       }
     }
     async postBookmarkAdd(illustId) {
@@ -282,7 +294,7 @@
           throw new Error(res.statusText);
         }
       } catch (error) {
-        $error('Pixiv#postBookmarkAdd: error:', error);
+        $print.error('Pixiv#postBookmarkAdd: error:', error);
       }
     }
   }
@@ -344,7 +356,7 @@
     }
     return vLibrary;
   }
-  var pixiv = {
+  var pixiv$1 = {
     state: {
       imgLibrary: [],
       isPaused: true,
@@ -423,13 +435,17 @@
     getters: {
       filteredLibrary(state, getters, rootState) {
         const cloneLibrary = state.imgLibrary.slice();
+        const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
         return cloneLibrary
           .filter(el => el.bookmarkCount >= rootState.filters.limit)
           .filter(el => el.tags.match(rootState.filters.tag))
           .sort(
-            (a, b) =>
-              Number.toInt(b[rootState.filters.orderBy]) -
-              Number.toInt(a[rootState.filters.orderBy])
+            (a, b) => {
+              const av = Number.toInt(a[rootState.filters.orderBy]);
+              const bv = Number.toInt(b[rootState.filters.orderBy]);
+              const c = bv - av;
+              return dateOrder ? -c : c;
+            }
           );
       }
     }
@@ -466,7 +482,7 @@
     }
   })();
   var store = new Vuex.Store({
-    modules: { pixiv },
+    modules: { pixiv: pixiv$1 },
     state: {
       locale: document.documentElement.lang,
       pageType,
@@ -673,6 +689,18 @@
             attrs: { id: "koakuma-bookmark-input-usual-switch", role: "button" },
             on: {
               click: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "left", 37, $event.key, [
+                    "Left",
+                    "ArrowLeft"
+                  ])
+                ) {
+                  return null
+                }
+                if ("button" in $event && $event.button !== 0) {
+                  return null
+                }
                 _vm.usualSwitchOn = !_vm.usualSwitchOn;
               }
             }
@@ -702,6 +730,18 @@
                   attrs: { role: "button" },
                   on: {
                     click: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "left", 37, $event.key, [
+                          "Left",
+                          "ArrowLeft"
+                        ])
+                      ) {
+                        return null
+                      }
+                      if ("button" in $event && $event.button !== 0) {
+                        return null
+                      }
                       _vm.filters.limit = usual;
                       _vm.usualSwitchOn = false;
                     }
@@ -782,9 +822,9 @@
     : {};
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject("data-v-462a1626_0", { source: "\n@-webkit-keyframes slidedown-data-v-462a1626 {\nfrom {\n    -webkit-transform: translateY(-100%);\n    transform: translateY(-100%);\n}\nto {\n    -webkit-transform: translateY(0);\n    transform: translateY(0);\n}\n}\n@keyframes slidedown-data-v-462a1626 {\nfrom {\n    -webkit-transform: translateY(-100%);\n    transform: translateY(-100%);\n}\nto {\n    -webkit-transform: translateY(0);\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-462a1626] {\n  text-decoration: none;\n}\n#koakuma[data-v-462a1626] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  -webkit-box-shadow: 0 2px 2px #777;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  -webkit-animation: slidedown-data-v-462a1626 0.7s linear;\n  animation: slidedown-data-v-462a1626 0.7s linear;\n}\n#koakuma > div[data-v-462a1626] {\n  margin: 0 10px;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n}\n.bookmark-count[data-v-462a1626] {\n  display: -webkit-inline-box !important;\n  display: -ms-inline-flexbox !important;\n  display: inline-flex !important;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-462a1626] {\n  position: relative;\n  height: 20px;\n  -webkit-box-shadow: 0 0 1px #069;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-bookmark-sort-input[data-v-462a1626] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-462a1626]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-462a1626]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-462a1626] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-462a1626] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n#koakuma-bookmark-input-usual-list[data-v-462a1626] {\n  border-radius: 3px;\n  border-top: 1px solid #888;\n  background-color: #cef;\n  -webkit-box-shadow: 0 0 1px #069;\n  box-shadow: 0 0 1px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-462a1626]::after {\n  content: \"\";\n  -webkit-box-shadow: 0 0 0 1px #89d8ff;\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  -webkit-transform: scaleX(0.8);\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-462a1626]:last-child::after {\n  -webkit-box-shadow: none;\n  box-shadow: none;\n}\n.usual-list-link[data-v-462a1626]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-462a1626] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-options-block > *[data-v-462a1626] {\n  margin: 0 5px;\n}\n.main-button[data-v-462a1626] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-462a1626]:enabled {\n  -webkit-transform: translate(-1px, -1px);\n  transform: translate(-1px, -1px);\n  -webkit-box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-462a1626]:enabled:hover {\n  -webkit-transform: translate(0);\n  transform: translate(0);\n  -webkit-box-shadow: none;\n  box-shadow: none;\n}\n.main-button[data-v-462a1626]:enabled:active {\n  -webkit-transform: translate(1px, 1px);\n  transform: translate(1px, 1px);\n  -webkit-box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-462a1626] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-462a1626] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-462a1626] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n", map: undefined, media: undefined });
+    inject("data-v-2de9511e_0", { source: "\n@-webkit-keyframes slidedown-data-v-2de9511e {\nfrom {\n    -webkit-transform: translateY(-100%);\n    transform: translateY(-100%);\n}\nto {\n    -webkit-transform: translateY(0);\n    transform: translateY(0);\n}\n}\n@keyframes slidedown-data-v-2de9511e {\nfrom {\n    -webkit-transform: translateY(-100%);\n    transform: translateY(-100%);\n}\nto {\n    -webkit-transform: translateY(0);\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-2de9511e] {\n  text-decoration: none;\n}\n#koakuma[data-v-2de9511e] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  position: -webkit-sticky;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  -webkit-box-shadow: 0 2px 2px #777;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  -webkit-animation: slidedown-data-v-2de9511e 0.7s linear;\n  animation: slidedown-data-v-2de9511e 0.7s linear;\n}\n#koakuma > div[data-v-2de9511e] {\n  margin: 0 10px;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n}\n.bookmark-count[data-v-2de9511e] {\n  display: -webkit-inline-box !important;\n  display: -ms-inline-flexbox !important;\n  display: inline-flex !important;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-2de9511e] {\n  position: relative;\n  height: 20px;\n  -webkit-box-shadow: 0 0 1px #069;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-bookmark-sort-input[data-v-2de9511e] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-2de9511e]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-2de9511e]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-2de9511e] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-2de9511e] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n#koakuma-bookmark-input-usual-list[data-v-2de9511e] {\n  border-radius: 3px;\n  border-top: 1px solid #888;\n  background-color: #cef;\n  -webkit-box-shadow: 0 0 1px #069;\n  box-shadow: 0 0 1px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-2de9511e]::after {\n  content: \"\";\n  -webkit-box-shadow: 0 0 0 1px #89d8ff;\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  -webkit-transform: scaleX(0.8);\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-2de9511e]:last-child::after {\n  -webkit-box-shadow: none;\n  box-shadow: none;\n}\n.usual-list-link[data-v-2de9511e]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-2de9511e] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-options-block > *[data-v-2de9511e] {\n  margin: 0 5px;\n}\n.main-button[data-v-2de9511e] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-2de9511e]:enabled {\n  -webkit-transform: translate(-1px, -1px);\n  transform: translate(-1px, -1px);\n  -webkit-box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-2de9511e]:enabled:hover {\n  -webkit-transform: translate(0);\n  transform: translate(0);\n  -webkit-box-shadow: none;\n  box-shadow: none;\n}\n.main-button[data-v-2de9511e]:enabled:active {\n  -webkit-transform: translate(1px, 1px);\n  transform: translate(1px, 1px);\n  -webkit-box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-2de9511e] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-2de9511e] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-2de9511e] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__ = "data-v-462a1626";
+  const __vue_scope_id__ = "data-v-2de9511e";
   const __vue_module_identifier__ = undefined;
   const __vue_is_functional_template__ = false;
   function __vue_normalize__(
@@ -827,7 +867,7 @@
   }
   function __vue_create_injector__() {
     const head = document.head || document.getElementsByTagName('head')[0];
-    const styles = {};
+    const styles = __vue_create_injector__.styles || (__vue_create_injector__.styles = {});
     const isOldIE =
       typeof navigator !== 'undefined' &&
       /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
@@ -964,7 +1004,23 @@
           "data-type": "illust",
           "data-click-action": "illust"
         },
-        on: { click: _vm.oneClickBookmarkAdd }
+        on: {
+          click: function($event) {
+            if (
+              !("button" in $event) &&
+              _vm._k($event.keyCode, "left", 37, $event.key, [
+                "Left",
+                "ArrowLeft"
+              ])
+            ) {
+              return null
+            }
+            if ("button" in $event && $event.button !== 0) {
+              return null
+            }
+            return _vm.oneClickBookmarkAdd($event)
+          }
+        }
       }),
       _vm._v(" "),
       _vm.bookmarkId
@@ -984,9 +1040,9 @@
     : {};
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject("data-v-53b1aa38_0", { source: "\n.image-item-image[data-v-53b1aa38] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-53b1aa38] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -ms-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.top-right-slot[data-v-53b1aa38] {\n  -webkit-box-flex: 0;\n  -ms-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  z-index: 1;\n  -webkit-box-sizing: border-box;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-53b1aa38] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-53b1aa38] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -ms-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-53b1aa38] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-53b1aa38] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  -webkit-transition: opacity 0.2s ease-in-out;\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-53b1aa38] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-53b1aa38] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+    inject("data-v-3040f063_0", { source: "\n.image-item-image[data-v-3040f063] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-3040f063] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -ms-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.top-right-slot[data-v-3040f063] {\n  -webkit-box-flex: 0;\n  -ms-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  z-index: 1;\n  -webkit-box-sizing: border-box;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3040f063] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3040f063] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -ms-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-3040f063] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-3040f063] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  -webkit-transition: opacity 0.2s ease-in-out;\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-3040f063] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-3040f063] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$1 = "data-v-53b1aa38";
+  const __vue_scope_id__$1 = "data-v-3040f063";
   const __vue_module_identifier__$1 = undefined;
   const __vue_is_functional_template__$1 = false;
   function __vue_normalize__$1(
@@ -1029,7 +1085,7 @@
   }
   function __vue_create_injector__$1() {
     const head = document.head || document.getElementsByTagName('head')[0];
-    const styles = {};
+    const styles = __vue_create_injector__$1.styles || (__vue_create_injector__$1.styles = {});
     const isOldIE =
       typeof navigator !== 'undefined' &&
       /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
@@ -1265,7 +1321,7 @@
   }
   function __vue_create_injector__$2() {
     const head = document.head || document.getElementsByTagName('head')[0];
-    const styles = {};
+    const styles = __vue_create_injector__$2.styles || (__vue_create_injector__$2.styles = {});
     const isOldIE =
       typeof navigator !== 'undefined' &&
       /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
@@ -1467,7 +1523,7 @@
   }
   function __vue_create_injector__$3() {
     const head = document.head || document.getElementsByTagName('head')[0];
-    const styles = {};
+    const styles = __vue_create_injector__$3.styles || (__vue_create_injector__$3.styles = {});
     const isOldIE =
       typeof navigator !== 'undefined' &&
       /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
@@ -1610,7 +1666,7 @@
   }
   function __vue_create_injector__$4() {
     const head = document.head || document.getElementsByTagName('head')[0];
-    const styles = {};
+    const styles = __vue_create_injector__$4.styles || (__vue_create_injector__$4.styles = {});
     const isOldIE =
       typeof navigator !== 'undefined' &&
       /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
@@ -1732,7 +1788,7 @@
   store.commit('applyConfig');
   if (store.state.pageType !== 'NO_SUPPORT') {
     removeAnnoyings();
-    document.querySelector('._global-header').classList.add('koakuma-placeholder');
+    $('._global-header').classList.add('koakuma-placeholder');
     const Patchouli = new Vue({
       i18n,
       store,
@@ -1766,9 +1822,9 @@
     store.dispatch('start', { times: 1 }).then(() => {
       Patchouli.$mount(store.state.patchouliMountPoint);
       Koakuma.$mount(store.state.koakumaMountPoint);
-      document.querySelector('._global-header').classList.remove('koakuma-placeholder');
+      $('._global-header').classList.remove('koakuma-placeholder');
     }).catch(error => {
-      $error('Fail to first mount', error);
+      $print.error('Fail to first mount', error);
     });
     document.body.addEventListener('click', (event) => {
       if (event.target.id !== 'koakuma-bookmark-input-usual-switch') {
