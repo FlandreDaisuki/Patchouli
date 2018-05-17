@@ -15,7 +15,7 @@
           <span :style="profileImgStyle" class="user-img"/>
           <span>{{ userName }}</span>
         </a>
-        <i v-if="isFollow" class="follow-icon"/>
+        <i v-if="isFollow" data-feather="rss"/>
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
@@ -134,13 +134,12 @@ export default {
   border-radius: 50%;
   margin-right: 4px;
 }
-.follow-icon {
+svg.feather-rss {
   display: inline-block;
   margin-left: 4px;
-  width: 14px;
-  height: 14px;
-  background-color: dodgerblue;
-  -webkit-mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
-  mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
+  width: 16px;
+  height: 16px;
+  color: dodgerblue;
+  stroke-width: 3.5;
 }
 </style>

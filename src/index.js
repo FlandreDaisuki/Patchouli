@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import feather from 'feather-icons';
 import store from './store/index';
 import koakuma from './components/Koakuma.vue';
 import patchouli from './components/Patchouli.vue';
@@ -54,11 +55,17 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     $('._global-header').classList.remove('koakuma-placeholder');
   }).catch(error => {
     $print.error('Fail to first mount', error);
+  }).then(() => {
+    // all mounted
+    feather.replace();
   });
 
   document.body.addEventListener('click', (event) => {
     if (event.target.id !== 'koakuma-bookmark-input-usual-switch') {
       Koakuma.$children[0].usualSwitchOn = false;
+    }
+    if (store.state.contextMenu.active) {
+      store.commit('deactivateContextMenu');
     }
   });
 

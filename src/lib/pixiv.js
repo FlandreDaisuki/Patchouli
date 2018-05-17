@@ -215,7 +215,7 @@ class Pixiv {
       tags: '',
       tt: this.tt
     };
-    const data = searchParams.entries.map(p => p.join('=')).join('&');
+    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
     const config = {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     };
@@ -230,6 +230,34 @@ class Pixiv {
       }
     } catch (error) {
       $print.error('Pixiv#postBookmarkAdd: error:', error);
+    }
+  }
+
+  async postThumbUp(illustId, userId) {
+    const searchParams = {
+      mode: 'save',
+      i_id: illustId,
+      u_id: userId,
+      qr: 0,
+      score: 10,
+      tt: this.tt
+    };
+
+    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
+    const config = {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    };
+
+    try {
+      const res = await axios.post('/rpc_rating.php', data, config);
+      if (res.statusText === 'OK') {
+        $print.debug('Pixiv#postThumbUp: res.data:', res.data);
+        return !!res.data.score;
+      } else {
+        throw new Error(res.statusText);
+      }
+    } catch (error) {
+      $print.error('Pixiv#postThumbUp: error:', error);
     }
   }
 }

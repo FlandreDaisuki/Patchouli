@@ -19,6 +19,10 @@ export default new VueI18n({
         buttonEnd: 'End',
         fitWidth: 'fit browser width',
         sortByBookmarkCount: 'sort by bookmark count'
+      },
+      contextMenu: {
+        thumbUp: 'Like',
+        openBookmarkPage: 'Add Bookmark Page'
       }
     },
     'ja': {
@@ -33,6 +37,10 @@ export default new VueI18n({
         buttonEnd: '終了',
         fitWidth: '全幅',
         sortByBookmarkCount: 'ブックマーク数順'
+      },
+      contextMenu: {
+        thumbUp: 'いいね',
+        openBookmarkPage: 'ブックマーク追加ページ'
       }
     },
     'zh': {
@@ -47,6 +55,10 @@ export default new VueI18n({
         buttonEnd: '完',
         fitWidth: '自适应浏览器宽度',
         sortByBookmarkCount: '书签数排序'
+      },
+      contextMenu: {
+        thumbUp: '赞',
+        openBookmarkPage: '开启添加收藏页'
       }
     },
     'zh-tw': {
@@ -61,6 +73,10 @@ export default new VueI18n({
         buttonEnd: '完',
         fitWidth: '自適應瀏覽器寬度',
         sortByBookmarkCount: '書籤數排序'
+      },
+      contextMenu: {
+        thumbUp: '讚',
+        openBookmarkPage: '開啟添加收藏頁'
       }
     }
   }

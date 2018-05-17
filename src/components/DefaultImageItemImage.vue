@@ -3,7 +3,8 @@
     <a
       :href="illustPageUrl"
       class="image-flexbox"
-      rel="noopener">
+      rel="noopener"
+      @click.right.prevent="activateContextMenu">
 
       <div v-if="illustPageCount > 1" class="top-right-slot">
         <span><span class="multiple-icon"/>
@@ -32,6 +33,8 @@
 </template>
 
 <script>
+import { $print } from "../lib/utils";
+
 export default {
   props: {
     imgUrl: {
@@ -75,6 +78,21 @@ export default {
       if (!this.selfIsBookmarked) {
         this.selfIsBookmarked = true;
       }
+    },
+    activateContextMenu(event) {
+      $print.debug("DefaultImageItemImage#activateContextMenu", event);
+      const payload = {};
+
+      payload.position = {
+        x: event.clientX,
+        y: event.clientY
+      };
+
+      payload.data = {
+        illustId: this.illustId
+      };
+
+      this.$store.commit("activateContextMenu", payload);
     }
   }
 };

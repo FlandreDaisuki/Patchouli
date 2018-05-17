@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { $, $el, $$ } from '../lib/utils';
 import pixiv from './modules/pixiv';
+import contextMenu from './modules/contextMenu';
 
 Vue.use(Vuex);
 
@@ -39,7 +40,7 @@ const pageType = (() => {
 })();
 
 export default new Vuex.Store({
-  modules: { pixiv },
+  modules: { pixiv, contextMenu },
   state: {
     locale: document.documentElement.lang,
     pageType,
