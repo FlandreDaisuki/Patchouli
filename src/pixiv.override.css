@@ -1,7 +1,9 @@
 ._global-header {
   /* FIXME: Chrome will show #koakuma on top of header */
   z-index: 4;
-  transform: translate(0);
+}
+._global-header .ui-search {
+  z-index: auto;
 }
 ._global-header.koakuma-placeholder {
   /* I don't know why #koakuma just 32px

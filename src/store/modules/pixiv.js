@@ -157,7 +157,7 @@ export default {
             const av = Number.toInt(a[rootState.filters.orderBy]);
             const bv = Number.toInt(b[rootState.filters.orderBy]);
             const c = bv - av;
-            return dateOrder ? -c : c;
+            return dateOrder && rootState.filters.orderBy === 'illustId' ? -c : c;
           }
         );
     }

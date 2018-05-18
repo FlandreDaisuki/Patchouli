@@ -15,12 +15,11 @@
       </label>
       <a
         id="koakuma-bookmark-input-usual-switch"
-        :class="(usualSwitchOn ? 'switch-on' : 'switch-off')"
         role="button"
-        @click.left="usualSwitchOn = !usualSwitchOn">{{ usualSwitchMsg }}</a>
-      <ul
-        v-show="usualSwitchOn"
-        id="koakuma-bookmark-input-usual-list">
+        @click.left="usualSwitchOn = !usualSwitchOn">
+        <i class="fas fa-angle-down"/>
+      </a>
+      <ul v-show="usualSwitchOn" id="koakuma-bookmark-input-usual-list">
         <li v-for="usual in usualList" :key="usual">
           <a
             role="button"
@@ -45,35 +44,68 @@
         {{ buttonMsg }}
       </button>
     </div>
+    <div id="koakuma-sorting-order-block">
+      <output id="koakuma-sorting-order-select-output">{{ sortingOrderMsg }}</output>
+      <a
+        id="koakuma-sorting-order-select-switch"
+        role="button"
+        @click.left="sortingOrderSwitchOn = !sortingOrderSwitchOn">
+        <i class="fas fa-angle-down"/>
+      </a>
+      <ul v-show="sortingOrderSwitchOn" id="koakuma-sorting-order-select-list">
+        <li>
+          <a
+            id="koakuma-sorting-order-by-popularity"
+            class="sorting-order-link"
+            role="button"
+            @click.left="clickSortingOrder">{{ $t("koakuma.sortByPopularity") }}</a>
+        </li>
+        <li>
+          <a
+            id="koakuma-sorting-order-by-date"
+            class="sorting-order-link"
+            role="button"
+            @click.left="clickSortingOrder">{{ $t("koakuma.sortByDate") }}</a>
+        </li>
+      </ul>
+    </div>
     <div id="koakuma-options-block">
       <div>
-        <input
-          id="koakuma-options-fit-browser-width-checkbox"
-          :checked="config.fitwidth"
-          type="checkbox"
-          @change="optionsChange">
-        <label for="koakuma-options-fit-browser-width-checkbox">{{ $t('koakuma.fitWidth') }}</label>
+        <i
+          v-show="config.fitwidth"
+          id="koakuma-options-width-compress"
+          class="fas fa-compress"
+          @click.left="optionsChange"/>
+        <i
+          v-show="!config.fitwidth"
+          id="koakuma-options-width-expand"
+          class="fas fa-expand"
+          @click.left="optionsChange"/>
       </div>
       <div>
-        <input
-          id="koakuma-options-sort-by-bookmark-count-checkbox"
-          :checked="config.sort"
-          type="checkbox"
-          @change="optionsChange">
-        <label for="koakuma-options-sort-by-bookmark-count-checkbox">{{ $t('koakuma.sortByBookmarkCount') }}</label>
+        <i class="fas fa-cog" @click.left="configPageOn = !configPageOn"/>
       </div>
+    </div>
+    <div
+      v-show="configPageOn"
+      id="koakuma-config-page"
+      @click.left="configPageOn = false">
+      <div id="koakuma-configs-block" @click.left.stop="() => {}">configs</div>
     </div>
   </div>
 </template>
 
 <script>
+import { $print } from "../lib/utils";
 export default {
   data() {
     return {
       debounceId0: null,
       debounceId1: null,
       usualSwitchOn: false,
-      usualList: [100, 500, 1000, 3000, 5000, 10000]
+      sortingOrderSwitchOn: false,
+      usualList: [100, 500, 1000, 3000, 5000, 10000],
+      configPageOn: false
     };
   },
   computed: {
@@ -102,8 +134,12 @@ export default {
         return this.$t("koakuma.buttonPause");
       }
     },
-    usualSwitchMsg() {
-      return this.usualSwitchOn ? "⏶" : "⏷";
+    sortingOrderMsg() {
+      if (this.config.sort) {
+        return this.$t("koakuma.sortByPopularity");
+      } else {
+        return this.$t("koakuma.sortByDate");
+      }
     }
   },
   methods: {
@@ -131,12 +167,11 @@ export default {
       }, 500);
     },
     optionsChange(event) {
-      if (event.target.id === "koakuma-options-fit-browser-width-checkbox") {
-        this.config.fitwidth = event.target.checked;
-      } else if (
-        event.target.id === "koakuma-options-sort-by-bookmark-count-checkbox"
-      ) {
-        this.config.sort = Number.toInt(event.target.checked);
+      $print.debug("Koakuma#optionsChange: event", event);
+      if (event.target.id === "koakuma-options-width-compress") {
+        this.config.fitwidth = false;
+      } else if (event.target.id === "koakuma-options-width-expand") {
+        this.config.fitwidth = true;
       }
       this.$store.commit("saveConfig");
       this.$store.commit("applyConfig");
@@ -149,6 +184,20 @@ export default {
         this.debounceId1 = null;
         this.filters.tag = new RegExp(event.target.value, "ig");
       }, 1500);
+    },
+    clickSortingOrder(event) {
+      $print.debug("Koakuma#clickSortingOrder: event", event);
+
+      if (event.target.id === "koakuma-sorting-order-by-popularity") {
+        this.config.sort = 1;
+      } else {
+        this.config.sort = 0;
+      }
+
+      this.$store.commit("saveConfig");
+      this.$store.commit("applyConfig");
+
+      this.sortingOrderSwitchOn = false;
     }
   }
 };
@@ -178,6 +227,9 @@ export default {
 }
 a[role="button"] {
   text-decoration: none;
+}
+a[role="button"] > .fa-angle-down {
+  padding: 2px;
 }
 #koakuma {
   display: -webkit-box;
@@ -218,12 +270,16 @@ a[role="button"] {
   margin-right: 0;
   border-radius: 3px 0 0 3px;
 }
-#koakuma-bookmark-sort-block {
+#koakuma-bookmark-sort-block,
+#koakuma-sorting-order-block {
   position: relative;
   height: 20px;
   -webkit-box-shadow: 0 0 1px #069;
   box-shadow: 0 0 1px #069;
   border-radius: 4px;
+}
+#koakuma-sorting-order-block {
+  background-color: #cef;
 }
 #koakuma-bookmark-sort-input {
   -moz-appearance: textfield;
@@ -246,7 +302,8 @@ a[role="button"] {
 #koakuma-bookmark-tags-filter-input {
   min-width: 300px;
 }
-#koakuma-bookmark-input-usual-switch {
+#koakuma-bookmark-input-usual-switch,
+#koakuma-sorting-order-select-switch {
   background-color: #cef;
   padding: 1px;
   border-left: 1px solid #888;
@@ -259,7 +316,8 @@ a[role="button"] {
   -ms-flex-align: center;
   align-items: center;
 }
-#koakuma-bookmark-input-usual-list {
+#koakuma-bookmark-input-usual-list,
+#koakuma-sorting-order-select-list {
   border-radius: 3px;
   border-top: 1px solid #888;
   background-color: #cef;
@@ -269,7 +327,8 @@ a[role="button"] {
   top: 100%;
   width: 100%;
 }
-#koakuma-bookmark-input-usual-list > li::after {
+#koakuma-bookmark-input-usual-list > li::after,
+#koakuma-sorting-order-select-list > li::after {
   content: "";
   -webkit-box-shadow: 0 0 0 1px #89d8ff;
   box-shadow: 0 0 0 1px #89d8ff;
@@ -283,20 +342,31 @@ a[role="button"] {
   -webkit-transform: scaleX(0.8);
   transform: scaleX(0.8);
 }
-#koakuma-bookmark-input-usual-list > li:last-child::after {
+#koakuma-bookmark-input-usual-list > li:last-child::after,
+#koakuma-sorting-order-select-list > li:last-child::after {
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-.usual-list-link:hover::before {
+.usual-list-link:hover::before,
+.sorting-order-link:hover::before {
   content: "⮬";
   position: absolute;
   left: 6px;
   font-weight: bolder;
 }
-.usual-list-link {
+.usual-list-link,
+.sorting-order-link {
   display: block;
   cursor: pointer;
   text-align: center;
+}
+#koakuma-sorting-order-select-output {
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+}
+#koakuma-sorting-order-select {
+  font-size: 14px;
 }
 #koakuma-options-block > * {
   margin: 0 5px;
@@ -336,5 +406,28 @@ a[role="button"] {
   background-color: #878787;
   color: #fff;
   opacity: 0.87;
+}
+#koakuma-options-width-compress,
+#koakuma-options-width-expand {
+  cursor: pointer;
+}
+#koakuma > #koakuma-config-page {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  background-color: #0003;
+  align-items: center;
+  justify-content: center;
+}
+#koakuma-configs-block {
+  background-color: #b28fce;
+  color: white;
+  border-radius: 10px;
+  display: flex;
 }
 </style>

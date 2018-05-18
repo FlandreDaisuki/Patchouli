@@ -61,6 +61,16 @@ const $print = {
       });
     });
   })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
+
+  Element.prototype.getParents = function() {
+    let elementNode = this;
+    const collection = [];
+    while (elementNode.parentElement) {
+      collection.push(elementNode.parentElement);
+      elementNode = elementNode.parentElement;
+    }
+    return collection;
+  };
 })();
 
 export {

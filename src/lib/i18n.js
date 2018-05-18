@@ -18,7 +18,8 @@ export default new VueI18n({
         buttonPause: 'Pause',
         buttonEnd: 'End',
         fitWidth: 'fit browser width',
-        sortByBookmarkCount: 'sort by bookmark count'
+        sortByPopularity: 'sort by popularity',
+        sortByDate: 'sort by date'
       },
       contextMenu: {
         thumbUp: 'Like',
@@ -37,7 +38,8 @@ export default new VueI18n({
         buttonPause: '中断',
         buttonEnd: '終了',
         fitWidth: '全幅',
-        sortByBookmarkCount: 'ブックマーク数順'
+        sortByPopularity: '人気順',
+        sortByDate: '投稿順'
       },
       contextMenu: {
         thumbUp: 'いいね',
@@ -56,7 +58,8 @@ export default new VueI18n({
         buttonPause: '停',
         buttonEnd: '完',
         fitWidth: '自适应浏览器宽度',
-        sortByBookmarkCount: '书签数排序'
+        sortByPopularity: '以人气排序',
+        sortByDate: '以日期排序'
       },
       contextMenu: {
         thumbUp: '赞',
@@ -75,7 +78,8 @@ export default new VueI18n({
         buttonPause: '停',
         buttonEnd: '完',
         fitWidth: '自適應瀏覽器寬度',
-        sortByBookmarkCount: '書籤數排序'
+        sortByPopularity: '以人氣排序',
+        sortByDate: '以日期排序'
       },
       contextMenu: {
         thumbUp: '讚',

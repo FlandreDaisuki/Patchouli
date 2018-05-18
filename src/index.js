@@ -65,8 +65,11 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   });
 
   document.body.addEventListener('click', (event) => {
-    if (event.target.id !== 'koakuma-bookmark-input-usual-switch') {
+    if (!event.target.getParents().find((el) => el.id === 'koakuma-bookmark-input-usual-switch')) {
       Koakuma.$children[0].usualSwitchOn = false;
+    }
+    if (!event.target.getParents().find((el) => el.id === 'koakuma-sorting-order-select-switch')) {
+      Koakuma.$children[0].sortingOrderSwitchOn = false;
     }
     if (store.state.contextMenu.active) {
       store.commit('deactivateContextMenu');
