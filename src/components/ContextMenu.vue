@@ -7,7 +7,7 @@
           {{ $t('contextMenu.thumbUp') }}
         </a>
       </li>
-      <li v-show="currentData && currentData.illustPageCount === 1">
+      <li v-show="isDownloadable">
         <a role="button" @click.left="downloadOne">
           <i class="fas fa-download"/>
           {{ $t('contextMenu.download') }}
@@ -66,6 +66,13 @@ export default {
       }
       const illustId = this.status.data.illustId;
       return `bookmark_add.php?type=illust&illust_id=${illustId}`;
+    },
+    isDownloadable() {
+      return (
+        this.currentData &&
+        this.currentData.illustPageCount === 1 &&
+        !this.currentData.isUgoira // unsupport ugoira currently
+      );
     }
   },
   methods: {
@@ -132,6 +139,7 @@ export default {
   white-space: nowrap;
   display: inline-flex;
   align-items: center;
+  text-align: center;
 }
 #patchouli-context-menu-list a:hover {
   background-color: #b28fce;

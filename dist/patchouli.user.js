@@ -1707,6 +1707,13 @@
         }
         const illustId = this.status.data.illustId;
         return `bookmark_add.php?type=illust&illust_id=${illustId}`;
+      },
+      isDownloadable() {
+        return (
+          this.currentData &&
+          this.currentData.illustPageCount === 1 &&
+          !this.currentData.isUgoira
+        );
       }
     },
     methods: {
@@ -1794,8 +1801,8 @@
                 {
                   name: "show",
                   rawName: "v-show",
-                  value: _vm.currentData && _vm.currentData.illustPageCount === 1,
-                  expression: "currentData && currentData.illustPageCount === 1"
+                  value: _vm.isDownloadable,
+                  expression: "isDownloadable"
                 }
               ]
             },
@@ -1865,9 +1872,9 @@
     : {};
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-680ff136_0", { source: "\n#patchouli-context-menu[data-v-680ff136] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu-list > li[data-v-680ff136] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu-list a[data-v-680ff136] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n}\n#patchouli-context-menu-list a[data-v-680ff136]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu-list i.far[data-v-680ff136],\n#patchouli-context-menu-list i.fas[data-v-680ff136] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-0129d346_0", { source: "\n#patchouli-context-menu[data-v-0129d346] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu-list > li[data-v-0129d346] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu-list a[data-v-0129d346] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu-list a[data-v-0129d346]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu-list i.far[data-v-0129d346],\n#patchouli-context-menu-list i.fas[data-v-0129d346] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$4 = "data-v-680ff136";
+  const __vue_scope_id__$4 = "data-v-0129d346";
   const __vue_module_identifier__$4 = undefined;
   const __vue_is_functional_template__$4 = false;
   function __vue_normalize__$4(
