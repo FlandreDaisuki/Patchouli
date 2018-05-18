@@ -15,14 +15,21 @@
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.min.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/7.6.0/vue-i18n.min.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js
 // @icon              http://i.imgur.com/VwoYc5w.png
+// @connect           i.pximg.net
 // @noframes
 // @author            FlandreDaisuki
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.0.10
-// @grant             none
+// @version           4.1.0-beta.2
+// @grant             GM_getValue
+// @grant             GM.getValue
+// @grant             GM_setValue
+// @grant             GM.setValue
+// @grant             GM_xmlhttpRequest
+// @grant             GM.xmlhttpRequest
 // ==/UserScript==
 
 (function (Vue,Vuex,VueI18n) {
@@ -282,7 +289,7 @@
         tags: '',
         tt: this.tt
       };
-      const data = searchParams.entries.map(p => p.join('=')).join('&');
+      const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
       const config = {
         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       };
@@ -295,6 +302,30 @@
         }
       } catch (error) {
         $print.error('Pixiv#postBookmarkAdd: error:', error);
+      }
+    }
+    async postThumbUp(illustId, userId) {
+      const searchParams = {
+        mode: 'save',
+        i_id: illustId,
+        u_id: userId,
+        qr: 0,
+        score: 10,
+        tt: this.tt
+      };
+      const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
+      const config = {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+      };
+      try {
+        const res = await axios.post('/rpc_rating.php', data, config);
+        if (res.statusText === 'OK') {
+          return !!res.data.score;
+        } else {
+          throw new Error(res.statusText);
+        }
+      } catch (error) {
+        $print.error('Pixiv#postThumbUp: error:', error);
       }
     }
   }
@@ -450,6 +481,24 @@
       }
     }
   };
+  var contextMenu = {
+    state: {
+      active: false,
+      position: { x: -1e7, y: -1e7 },
+      data: null,
+    },
+    mutations: {
+      activateContextMenu(state, payload) {
+        state.active = true;
+        state.position = payload.position;
+        state.data = payload.data;
+      },
+      deactivateContextMenu(state) {
+        state.active = false;
+        state.position = { x: -1e7, y: -1e7 };
+      }
+    }
+  };
   Vue.use(Vuex);
   const pageType = (() => {
     const path = location.pathname;
@@ -482,7 +531,7 @@
     }
   })();
   var store = new Vuex.Store({
-    modules: { pixiv: pixiv$1 },
+    modules: { pixiv: pixiv$1, contextMenu },
     state: {
       locale: document.documentElement.lang,
       pageType,
@@ -963,6 +1012,17 @@
         if (!this.selfIsBookmarked) {
           this.selfIsBookmarked = true;
         }
+      },
+      activateContextMenu(event) {
+        const payload = {};
+        payload.position = {
+          x: event.clientX,
+          y: event.clientY
+        };
+        payload.data = {
+          illustId: this.illustId
+        };
+        this.$store.commit("activateContextMenu", payload);
       }
     }
   };
@@ -976,7 +1036,13 @@
         "a",
         {
           staticClass: "image-flexbox",
-          attrs: { href: _vm.illustPageUrl, rel: "noopener" }
+          attrs: { href: _vm.illustPageUrl, rel: "noopener" },
+          on: {
+            contextmenu: function($event) {
+              $event.preventDefault();
+              return _vm.activateContextMenu($event)
+            }
+          }
         },
         [
           _vm.illustPageCount > 1
@@ -1040,9 +1106,9 @@
     : {};
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject("data-v-3040f063_0", { source: "\n.image-item-image[data-v-3040f063] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-3040f063] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -ms-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.top-right-slot[data-v-3040f063] {\n  -webkit-box-flex: 0;\n  -ms-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  z-index: 1;\n  -webkit-box-sizing: border-box;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-3040f063] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-3040f063] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -ms-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-3040f063] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-3040f063] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  -webkit-transition: opacity 0.2s ease-in-out;\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-3040f063] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-3040f063] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+    inject("data-v-4ca878ab_0", { source: "\n.image-item-image[data-v-4ca878ab] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-4ca878ab] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n  -ms-flex-flow: column;\n  flex-flow: column;\n  -webkit-box-pack: center;\n  -ms-flex-pack: center;\n  justify-content: center;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.top-right-slot[data-v-4ca878ab] {\n  -webkit-box-flex: 0;\n  -ms-flex: none;\n  flex: none;\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n  z-index: 1;\n  -webkit-box-sizing: border-box;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-4ca878ab] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-4ca878ab] {\n  position: absolute;\n  -webkit-box-flex: 0;\n  -ms-flex: none;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-4ca878ab] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-4ca878ab] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  -webkit-transition: opacity 0.2s ease-in-out;\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-4ca878ab] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-4ca878ab] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$1 = "data-v-3040f063";
+  const __vue_scope_id__$1 = "data-v-4ca878ab";
   const __vue_module_identifier__$1 = undefined;
   const __vue_is_functional_template__$1 = false;
   function __vue_normalize__$1(
@@ -1234,7 +1300,7 @@
                 ]
               ),
               _vm._v(" "),
-              _vm.isFollow ? _c("i", { staticClass: "follow-icon" }) : _vm._e()
+              _vm.isFollow ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
             ])
           : _vm._e(),
         _vm._v(" "),
@@ -1276,9 +1342,9 @@
     : {};
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject("data-v-2d61f7ae_0", { source: "\n.image-item-title[data-v-2d61f7ae] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-2d61f7ae] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-2d61f7ae] {\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.user-link[data-v-2d61f7ae] {\n  font-size: 12px;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.user-img[data-v-2d61f7ae] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\n.follow-icon[data-v-2d61f7ae] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 14px;\n  height: 14px;\n  background-color: dodgerblue;\n  -webkit-mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);\n  mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);\n}\n", map: undefined, media: undefined });
+    inject("data-v-18a3e923_0", { source: "\n.image-item-title[data-v-18a3e923] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-18a3e923] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-18a3e923] {\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.user-link[data-v-18a3e923] {\n  font-size: 12px;\n  display: -webkit-inline-box;\n  display: -ms-inline-flexbox;\n  display: inline-flex;\n  -webkit-box-align: center;\n  -ms-flex-align: center;\n  align-items: center;\n}\n.user-img[data-v-18a3e923] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-18a3e923] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$2 = "data-v-2d61f7ae";
+  const __vue_scope_id__$2 = "data-v-18a3e923";
   const __vue_module_identifier__$2 = undefined;
   const __vue_is_functional_template__$2 = false;
   function __vue_normalize__$2(
@@ -1577,11 +1643,103 @@
     typeof __vue_create_injector__$3 !== 'undefined' ? __vue_create_injector__$3 : function () {},
     typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
   );
+  const GMC = {
+    async getValue(name, failv = null) {
+      if (window.GM_getValue) {
+        return Promise.resolve(GM_getValue(name) || failv);
+      } else {
+        return (await GM.getValue(name)) || failv;
+      }
+    },
+    async setValue(name, value) {
+      if (window.GM_setValue) {
+        GM_setValue(name, value);
+      } else {
+        GM.setValue(name, value);
+      }
+    },
+    async xmlhttpRequest(details) {
+      const xhr = window.GM_xmlhttpRequest || (GM ? GM.xmlHttpRequest : null);
+      if (!xhr) {
+        return Promise.reject();
+      }
+      return new Promise((resolve, reject) => {
+        Object.assign(details, {
+          onload: resolve,
+          onabort: reject,
+          onerror: reject,
+          ontimeout: reject,
+        });
+        xhr(details);
+      });
+    }
+  };
   var script$4 = {
-    components: { DefaultImageItem },
     computed: {
-      filteredLibrary() {
-        return this.$store.getters.filteredLibrary;
+      status() {
+        return this.$store.state.contextMenu;
+      },
+      currentData() {
+        if (!this.status.data) {
+          return null;
+        }
+        const illustId = this.status.data.illustId;
+        const found = this.$store.state.pixiv.imgLibrary.find(
+          i => i.illustId === illustId
+        );
+        return found ? found : null;
+      },
+      inlineStyle() {
+        const RIGHT_BOUND = 200;
+        const position = this.status.position;
+        const ow = document.body.offsetWidth;
+        let style = `top: ${position.y}px;`;
+        if (ow - position.x < RIGHT_BOUND) {
+          style += `right: ${ow - position.x}px;`;
+        } else {
+          style += `left: ${position.x}px;`;
+        }
+        return style;
+      },
+      bookmarkPageLink() {
+        if (!this.status.data) {
+          return "#";
+        }
+        const illustId = this.status.data.illustId;
+        return `bookmark_add.php?type=illust&illust_id=${illustId}`;
+      }
+    },
+    methods: {
+      thumbUp() {
+        if (this.currentData) {
+          PixivAPI.postThumbUp(
+            this.currentData.illustId,
+            this.currentData.userId
+          );
+        }
+      },
+      async downloadOne() {
+        const imgUrl = this.currentData.url.big;
+        const illustId = this.currentData.illustId;
+        const a = $el("a", { href: imgUrl });
+        const filename = a.pathname.split("/").pop();
+        const ext = filename
+          .split(".")
+          .pop()
+          .toLowerCase();
+        const response = await GMC.xmlhttpRequest({
+          method: "GET",
+          url: imgUrl,
+          responseType: "arraybuffer",
+          headers: {
+            Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`
+          }
+        });
+        if (ext === "jpg" || ext === "jpeg") {
+          saveAs(new File([response.response], filename, { type: "image/jpeg" }));
+        } else if (ext === "png") {
+          saveAs(new File([response.response], filename, { type: "image/png" }));
+        }
       }
     }
   };
@@ -1592,26 +1750,112 @@
     var _c = _vm._self._c || _h;
     return _c(
       "div",
-      { attrs: { id: "patchouli" } },
-      _vm._l(_vm.filteredLibrary, function(d) {
-        return _c("DefaultImageItem", {
-          key: d.illustId,
-          attrs: {
-            "img-url": d.url.sq240,
-            "illust-id": d.illustId,
-            "illust-title": d.illustTitle,
-            "illust-page-count": d.illustPageCount,
-            "is-ugoira": d.isUgoira,
-            "user-name": d.userName,
-            "user-id": d.userId,
-            "profile-img-url": d.profileImg,
-            "bookmark-count": d.bookmarkCount,
-            "is-bookmarked": d.isBookmarked,
-            "is-follow": d.isFollow,
-            "bookmark-id": d.bookmarkId
-          }
-        })
-      })
+      { style: _vm.inlineStyle, attrs: { id: "patchouli-context-menu" } },
+      [
+        _c("ul", { attrs: { id: "patchouli-context-menu-list" } }, [
+          _c("li", [
+            _c(
+              "a",
+              {
+                attrs: { role: "button" },
+                on: {
+                  click: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "left", 37, $event.key, [
+                        "Left",
+                        "ArrowLeft"
+                      ])
+                    ) {
+                      return null
+                    }
+                    if ("button" in $event && $event.button !== 0) {
+                      return null
+                    }
+                    return _vm.thumbUp($event)
+                  }
+                }
+              },
+              [
+                _c("i", { staticClass: "far fa-thumbs-up" }),
+                _vm._v(
+                  "\n        " +
+                    _vm._s(_vm.$t("contextMenu.thumbUp")) +
+                    "\n      "
+                )
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.currentData && _vm.currentData.illustPageCount === 1,
+                  expression: "currentData && currentData.illustPageCount === 1"
+                }
+              ]
+            },
+            [
+              _c(
+                "a",
+                {
+                  attrs: { role: "button" },
+                  on: {
+                    click: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "left", 37, $event.key, [
+                          "Left",
+                          "ArrowLeft"
+                        ])
+                      ) {
+                        return null
+                      }
+                      if ("button" in $event && $event.button !== 0) {
+                        return null
+                      }
+                      return _vm.downloadOne($event)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-download" }),
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm.$t("contextMenu.download")) +
+                      "\n      "
+                  )
+                ]
+              )
+            ]
+          ),
+          _vm._v(" "),
+          _c("li", [
+            _c(
+              "a",
+              {
+                attrs: {
+                  href: _vm.bookmarkPageLink,
+                  role: "button",
+                  target: "_blank"
+                }
+              },
+              [
+                _c("i", { staticClass: "far fa-bookmark" }),
+                _vm._v(
+                  "\n        " +
+                    _vm._s(_vm.$t("contextMenu.openBookmarkPage")) +
+                    "\n      "
+                )
+              ]
+            )
+          ])
+        ])
+      ]
     )
   };
   var __vue_staticRenderFns__$4 = [];
@@ -1621,9 +1865,9 @@
     : {};
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-ac856c12_0", { source: "\n#patchouli[data-v-ac856c12] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-flow: wrap;\n  flex-flow: wrap;\n  -ms-flex-pack: distribute;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
+    inject("data-v-680ff136_0", { source: "\n#patchouli-context-menu[data-v-680ff136] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu-list > li[data-v-680ff136] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu-list a[data-v-680ff136] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n}\n#patchouli-context-menu-list a[data-v-680ff136]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu-list i.far[data-v-680ff136],\n#patchouli-context-menu-list i.fas[data-v-680ff136] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$4 = "data-v-ac856c12";
+  const __vue_scope_id__$4 = "data-v-680ff136";
   const __vue_module_identifier__$4 = undefined;
   const __vue_is_functional_template__$4 = false;
   function __vue_normalize__$4(
@@ -1633,7 +1877,7 @@
   ) {
     const component = script || {};
     {
-      component.__file = "/home/flandre/dev/Patchouli/src/components/Patchouli.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/ContextMenu.vue";
     }
     if (!component.render) {
       component.render = template.render;
@@ -1710,7 +1954,7 @@
       }
     }
   }
-  var patchouli = __vue_normalize__$4(
+  var ContextMenu = __vue_normalize__$4(
     __vue_template__$4,
     __vue_inject_styles__$4,
     typeof __vue_script__$4 === 'undefined' ? {} : __vue_script__$4,
@@ -1718,6 +1962,154 @@
     __vue_is_functional_template__$4,
     __vue_module_identifier__$4,
     typeof __vue_create_injector__$4 !== 'undefined' ? __vue_create_injector__$4 : function () {},
+    typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
+  );
+  var script$5 = {
+    components: { DefaultImageItem, ContextMenu },
+    computed: {
+      filteredLibrary() {
+        return this.$store.getters.filteredLibrary;
+      }
+    }
+  };
+  const __vue_script__$5 = script$5;
+  var __vue_render__$5 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      { attrs: { id: "patchouli" } },
+      [
+        _vm._l(_vm.filteredLibrary, function(d) {
+          return _c("DefaultImageItem", {
+            key: d.illustId,
+            attrs: {
+              "img-url": d.url.sq240,
+              "illust-id": d.illustId,
+              "illust-title": d.illustTitle,
+              "illust-page-count": d.illustPageCount,
+              "is-ugoira": d.isUgoira,
+              "user-name": d.userName,
+              "user-id": d.userId,
+              "profile-img-url": d.profileImg,
+              "bookmark-count": d.bookmarkCount,
+              "is-bookmarked": d.isBookmarked,
+              "is-follow": d.isFollow,
+              "bookmark-id": d.bookmarkId
+            }
+          })
+        }),
+        _vm._v(" "),
+        _c("ContextMenu")
+      ],
+      2
+    )
+  };
+  var __vue_staticRenderFns__$5 = [];
+  __vue_render__$5._withStripped = true;
+  const __vue_template__$5 = typeof __vue_render__$5 !== 'undefined'
+    ? { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 }
+    : {};
+  const __vue_inject_styles__$5 = function (inject) {
+    if (!inject) return
+    inject("data-v-7b1e7b33_0", { source: "\n#patchouli[data-v-7b1e7b33] {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-flow: wrap;\n  flex-flow: wrap;\n  -ms-flex-pack: distribute;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
+  };
+  const __vue_scope_id__$5 = "data-v-7b1e7b33";
+  const __vue_module_identifier__$5 = undefined;
+  const __vue_is_functional_template__$5 = false;
+  function __vue_normalize__$5(
+    template, style, script,
+    scope, functional, moduleIdentifier,
+    createInjector, createInjectorSSR
+  ) {
+    const component = script || {};
+    {
+      component.__file = "/home/flandre/dev/Patchouli/src/components/Patchouli.vue";
+    }
+    if (!component.render) {
+      component.render = template.render;
+      component.staticRenderFns = template.staticRenderFns;
+      component._compiled = true;
+      if (functional) component.functional = true;
+    }
+    component._scopeId = scope;
+    {
+      let hook;
+      if (style) {
+        hook = function(context) {
+          style.call(this, createInjector(context));
+        };
+      }
+      if (hook !== undefined) {
+        if (component.functional) {
+          const originalRender = component.render;
+          component.render = function renderWithStyleInjection(h, context) {
+            hook.call(context);
+            return originalRender(h, context)
+          };
+        } else {
+          const existing = component.beforeCreate;
+          component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+        }
+      }
+    }
+    return component
+  }
+  function __vue_create_injector__$5() {
+    const head = document.head || document.getElementsByTagName('head')[0];
+    const styles = __vue_create_injector__$5.styles || (__vue_create_injector__$5.styles = {});
+    const isOldIE =
+      typeof navigator !== 'undefined' &&
+      /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+    return function addStyle(id, css) {
+      if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return
+      const group = isOldIE ? css.media || 'default' : id;
+      const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+      if (!style.ids.includes(id)) {
+        let code = css.source;
+        let index = style.ids.length;
+        style.ids.push(id);
+        if (isOldIE) {
+          style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+        }
+        if (!style.element) {
+          const el = style.element = document.createElement('style');
+          el.type = 'text/css';
+          if (css.media) el.setAttribute('media', css.media);
+          if (isOldIE) {
+            el.setAttribute('data-group', group);
+            el.setAttribute('data-next-index', '0');
+          }
+          head.appendChild(el);
+        }
+        if (isOldIE) {
+          index = parseInt(style.element.getAttribute('data-next-index'));
+          style.element.setAttribute('data-next-index', index + 1);
+        }
+        if (style.element.styleSheet) {
+          style.parts.push(code);
+          style.element.styleSheet.cssText = style.parts
+            .filter(Boolean)
+            .join('\n');
+        } else {
+          const textNode = document.createTextNode(code);
+          const nodes = style.element.childNodes;
+          if (nodes[index]) style.element.removeChild(nodes[index]);
+          if (nodes.length) style.element.insertBefore(textNode, nodes[index]);
+          else style.element.appendChild(textNode);
+        }
+      }
+    }
+  }
+  var patchouli = __vue_normalize__$5(
+    __vue_template__$5,
+    __vue_inject_styles__$5,
+    typeof __vue_script__$5 === 'undefined' ? {} : __vue_script__$5,
+    __vue_scope_id__$5,
+    __vue_is_functional_template__$5,
+    __vue_module_identifier__$5,
+    typeof __vue_create_injector__$5 !== 'undefined' ? __vue_create_injector__$5 : function () {},
     typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
   );
   Vue.use(VueI18n);
@@ -1737,6 +2129,11 @@
           buttonEnd: 'End',
           fitWidth: 'fit browser width',
           sortByBookmarkCount: 'sort by bookmark count'
+        },
+        contextMenu: {
+          thumbUp: 'Like',
+          openBookmarkPage: 'Add Bookmark Page',
+          download: 'Download'
         }
       },
       'ja': {
@@ -1751,6 +2148,11 @@
           buttonEnd: '終了',
           fitWidth: '全幅',
           sortByBookmarkCount: 'ブックマーク数順'
+        },
+        contextMenu: {
+          thumbUp: 'いいね',
+          openBookmarkPage: 'ブックマーク追加ページ',
+          download: 'ダウンロード'
         }
       },
       'zh': {
@@ -1765,6 +2167,11 @@
           buttonEnd: '完',
           fitWidth: '自适应浏览器宽度',
           sortByBookmarkCount: '书签数排序'
+        },
+        contextMenu: {
+          thumbUp: '赞',
+          openBookmarkPage: '开启添加收藏页',
+          download: '下载'
         }
       },
       'zh-tw': {
@@ -1779,6 +2186,11 @@
           buttonEnd: '完',
           fitWidth: '自適應瀏覽器寬度',
           sortByBookmarkCount: '書籤數排序'
+        },
+        contextMenu: {
+          thumbUp: '讚',
+          openBookmarkPage: '開啟添加收藏頁',
+          download: '下載'
         }
       }
     }
@@ -1788,6 +2200,12 @@
   store.commit('applyConfig');
   if (store.state.pageType !== 'NO_SUPPORT') {
     removeAnnoyings();
+    const fontawesome = $el('link', {
+      rel: 'stylesheet',
+      href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css',
+      integrity: 'sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp',
+      crossOrigin: 'anonymous' });
+    document.head.appendChild(fontawesome);
     $('._global-header').classList.add('koakuma-placeholder');
     const Patchouli = new Vue({
       i18n,
@@ -1829,6 +2247,9 @@
     document.body.addEventListener('click', (event) => {
       if (event.target.id !== 'koakuma-bookmark-input-usual-switch') {
         Koakuma.$children[0].usualSwitchOn = false;
+      }
+      if (store.state.contextMenu.active) {
+        store.commit('deactivateContextMenu');
       }
     });
     window.Patchouli = Patchouli;

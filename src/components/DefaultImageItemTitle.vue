@@ -15,7 +15,7 @@
           <span :style="profileImgStyle" class="user-img"/>
           <span>{{ userName }}</span>
         </a>
-        <i v-if="isFollow" data-feather="rss"/>
+        <i v-if="isFollow" class="fas fa-rss"/>
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
@@ -134,12 +134,11 @@ export default {
   border-radius: 50%;
   margin-right: 4px;
 }
-svg.feather-rss {
+i.fa-rss {
   display: inline-block;
   margin-left: 4px;
   width: 16px;
   height: 16px;
   color: dodgerblue;
-  stroke-width: 3.5;
 }
 </style>

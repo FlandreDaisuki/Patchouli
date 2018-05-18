@@ -3,8 +3,14 @@
     <ul id="patchouli-context-menu-list">
       <li>
         <a role="button" @click.left="thumbUp">
-          <i data-feather="thumbs-up"/>
+          <i class="far fa-thumbs-up"/>
           {{ $t('contextMenu.thumbUp') }}
+        </a>
+      </li>
+      <li v-show="currentData && currentData.illustPageCount === 1">
+        <a role="button" @click.left="downloadOne">
+          <i class="fas fa-download"/>
+          {{ $t('contextMenu.download') }}
         </a>
       </li>
       <li>
@@ -12,7 +18,7 @@
           :href="bookmarkPageLink"
           role="button"
           target="_blank">
-          <i data-feather="bookmark"/>
+          <i class="far fa-bookmark"/>
           {{ $t('contextMenu.openBookmarkPage') }}
         </a>
       </li>
@@ -23,11 +29,23 @@
 
 <script>
 import { PixivAPI } from "../lib/pixiv";
+import { $el } from "../lib/utils";
+import GMC from "../lib/gmc";
 
 export default {
   computed: {
     status() {
       return this.$store.state.contextMenu;
+    },
+    currentData() {
+      if (!this.status.data) {
+        return null;
+      }
+      const illustId = this.status.data.illustId;
+      const found = this.$store.state.pixiv.imgLibrary.find(
+        i => i.illustId === illustId
+      );
+      return found ? found : null;
     },
     inlineStyle() {
       const RIGHT_BOUND = 200; // Magic Number ~
@@ -52,12 +70,38 @@ export default {
   },
   methods: {
     thumbUp() {
-      const illustId = this.status.data.illustId;
-      const found = this.$store.state.pixiv.imgLibrary.find(
-        i => i.illustId === illustId
-      );
-      if (found) {
-        PixivAPI.postThumbUp(found.illustId, found.userId);
+      if (this.currentData) {
+        PixivAPI.postThumbUp(
+          this.currentData.illustId,
+          this.currentData.userId
+        );
+      }
+    },
+    async downloadOne() {
+      const imgUrl = this.currentData.url.big;
+      const illustId = this.currentData.illustId;
+      const a = $el("a", { href: imgUrl });
+
+      const filename = a.pathname.split("/").pop();
+      const ext = filename
+        .split(".")
+        .pop()
+        .toLowerCase();
+
+      const response = await GMC.xmlhttpRequest({
+        method: "GET",
+        url: imgUrl,
+        // greasemonkey maybe no this API
+        responseType: "arraybuffer",
+        headers: {
+          Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`
+        }
+      });
+
+      if (ext === "jpg" || ext === "jpeg") {
+        saveAs(new File([response.response], filename, { type: "image/jpeg" }));
+      } else if (ext === "png") {
+        saveAs(new File([response.response], filename, { type: "image/png" }));
       }
     }
   }
@@ -94,7 +138,8 @@ export default {
   color: #fff;
   cursor: pointer;
 }
-#patchouli-context-menu-list svg.feather {
+#patchouli-context-menu-list i.far,
+#patchouli-context-menu-list i.fas {
   height: 18px;
   width: 18px;
   margin: 0 4px;

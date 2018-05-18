@@ -1,9 +1,8 @@
 import Vue from 'vue';
-import feather from 'feather-icons';
 import store from './store/index';
 import koakuma from './components/Koakuma.vue';
 import patchouli from './components/Patchouli.vue';
-import { $, $print } from './lib/utils';
+import { $, $print, $el } from './lib/utils';
 import { removeAnnoyings } from './lib/pixiv';
 import i18n from './lib/i18n';
 
@@ -13,6 +12,14 @@ store.commit('applyConfig');
 
 if (store.state.pageType !== 'NO_SUPPORT') {
   removeAnnoyings();
+
+  // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+  const fontawesome = $el('link', {
+    rel: 'stylesheet',
+    href: 'https://use.fontawesome.com/releases/v5.0.13/css/all.css',
+    integrity: 'sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp',
+    crossOrigin: 'anonymous' });
+  document.head.appendChild(fontawesome);
 
   /* setup koamuma placeholder */
   $('._global-header').classList.add('koakuma-placeholder');
@@ -55,9 +62,6 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     $('._global-header').classList.remove('koakuma-placeholder');
   }).catch(error => {
     $print.error('Fail to first mount', error);
-  }).then(() => {
-    // all mounted
-    feather.replace();
   });
 
   document.body.addEventListener('click', (event) => {

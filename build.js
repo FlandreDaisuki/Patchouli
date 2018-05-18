@@ -10,12 +10,11 @@ const metablock = require('rollup-plugin-userscript-metablock');
 const cleanup = require('rollup-plugin-cleanup');
 
 const pkg = require('./package.json');
-const external = ['vue', 'vuex', 'vue-i18n', 'feather-icons'];
+const external = ['vue', 'vuex', 'vue-i18n'];
 const globals = {
   vue: 'Vue',
   vuex: 'Vuex',
   'vue-i18n': 'VueI18n',
-  'feather-icons': 'feather'
 };
 
 async function preBuild() {
@@ -40,6 +39,8 @@ async function preBuild() {
   // Work when `npm run publish`
   const metablockJSON = require('./src/metablock.json');
   const metablockDevJSON = require('./src/metablock.dev.json');
+
+  pkg.dependencies['FileSaver.js'] = pkg.dependencies['file-saver']; // special name
 
   Object.entries(pkg.dependencies).forEach(([depName, depVersion]) => {
     metablockJSON.require.forEach((cdn, idx, arr) => {

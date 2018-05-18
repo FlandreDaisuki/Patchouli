@@ -22,7 +22,8 @@ export default new VueI18n({
       },
       contextMenu: {
         thumbUp: 'Like',
-        openBookmarkPage: 'Add Bookmark Page'
+        openBookmarkPage: 'Add Bookmark Page',
+        download: 'Download'
       }
     },
     'ja': {
@@ -40,7 +41,8 @@ export default new VueI18n({
       },
       contextMenu: {
         thumbUp: 'いいね',
-        openBookmarkPage: 'ブックマーク追加ページ'
+        openBookmarkPage: 'ブックマーク追加ページ',
+        download: 'ダウンロード'
       }
     },
     'zh': {
@@ -58,7 +60,8 @@ export default new VueI18n({
       },
       contextMenu: {
         thumbUp: '赞',
-        openBookmarkPage: '开启添加收藏页'
+        openBookmarkPage: '开启添加收藏页',
+        download: '下载'
       }
     },
     'zh-tw': {
@@ -76,7 +79,8 @@ export default new VueI18n({
       },
       contextMenu: {
         thumbUp: '讚',
-        openBookmarkPage: '開啟添加收藏頁'
+        openBookmarkPage: '開啟添加收藏頁',
+        download: '下載'
       }
     }
   }
