@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { $, $el, $$ } from '../lib/utils';
 import pixiv from './modules/pixiv';
 import contextMenu from './modules/contextMenu';
+import bigComponent from './modules/bigComponent';
 
 Vue.use(Vuex);
 
@@ -40,7 +41,7 @@ const pageType = (() => {
 })();
 
 export default new Vuex.Store({
-  modules: { pixiv, contextMenu },
+  modules: { pixiv, contextMenu, bigComponent },
   state: {
     locale: document.documentElement.lang,
     pageType,
@@ -56,7 +57,7 @@ export default new Vuex.Store({
     config: {
       fitwidth: 1,
       sort: 0
-    }
+    },
   },
   mutations: {
     prepareMountPoint(state) {
@@ -76,6 +77,10 @@ export default new Vuex.Store({
           const ul = $('ul._image-items');
           state.patchouliMountPoint = li ? li.parentElement : ul;
         }
+
+        state.bigComponentMountPoint = $el('div', {}, (el) => {
+          document.body.appendChild(el);
+        });
       }
     },
     applyConfig(state) {

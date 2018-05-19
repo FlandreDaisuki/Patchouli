@@ -34,14 +34,15 @@ import GMC from "../lib/gmc";
 
 export default {
   computed: {
-    status() {
+    // vue'x' state 'm'odule
+    xm() {
       return this.$store.state.contextMenu;
     },
     currentData() {
-      if (!this.status.data) {
+      if (!this.xm.data) {
         return null;
       }
-      const illustId = this.status.data.illustId;
+      const illustId = this.xm.data.illustId;
       const found = this.$store.state.pixiv.imgLibrary.find(
         i => i.illustId === illustId
       );
@@ -49,7 +50,7 @@ export default {
     },
     inlineStyle() {
       const RIGHT_BOUND = 200; // Magic Number ~
-      const position = this.status.position;
+      const position = this.xm.position;
       const ow = document.body.offsetWidth;
 
       let style = `top: ${position.y}px;`;
@@ -61,10 +62,10 @@ export default {
       return style;
     },
     bookmarkPageLink() {
-      if (!this.status.data) {
+      if (!this.xm.data) {
         return "#";
       }
-      const illustId = this.status.data.illustId;
+      const illustId = this.xm.data.illustId;
       return `bookmark_add.php?type=illust&illust_id=${illustId}`;
     },
     isDownloadable() {

@@ -83,14 +83,8 @@
           @click.left="optionsChange"/>
       </div>
       <div>
-        <i class="fas fa-cog" @click.left="configPageOn = !configPageOn"/>
+        <i class="fas fa-cog" @click.left="openBigComponentInConfigMode"/>
       </div>
-    </div>
-    <div
-      v-show="configPageOn"
-      id="koakuma-config-page"
-      @click.left="configPageOn = false">
-      <div id="koakuma-configs-block" @click.left.stop="() => {}">configs</div>
     </div>
   </div>
 </template>
@@ -104,8 +98,7 @@ export default {
       debounceId1: null,
       usualSwitchOn: false,
       sortingOrderSwitchOn: false,
-      usualList: [100, 500, 1000, 3000, 5000, 10000],
-      configPageOn: false
+      usualList: [100, 500, 1000, 3000, 5000, 10000]
     };
   },
   computed: {
@@ -209,30 +202,25 @@ export default {
       this.$store.commit("applyConfig");
 
       this.sortingOrderSwitchOn = false;
+    },
+    openBigComponentInConfigMode() {
+      const bc = this.$store.state.bigComponent;
+      if (bc.mode) {
+        this.$store.commit("closeBigComponent");
+      } else {
+        this.$store.commit("openBigComponent", { mode: "config", data: null });
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-@-webkit-keyframes slidedown {
-  from {
-    -webkit-transform: translateY(-100%);
-    transform: translateY(-100%);
-  }
-  to {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-  }
-}
-
 @keyframes slidedown {
   from {
-    -webkit-transform: translateY(-100%);
     transform: translateY(-100%);
   }
   to {
-    -webkit-transform: translateY(0);
     transform: translateY(0);
   }
 }
@@ -243,40 +231,25 @@ a[role="button"] > .fa-angle-down {
   padding: 2px;
 }
 #koakuma {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: center;
-  -ms-flex-pack: center;
   justify-content: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
-  position: -webkit-sticky;
   position: sticky;
   top: 0;
   z-index: 3;
   background-color: #e5e4ff;
-  -webkit-box-shadow: 0 2px 2px #777;
   box-shadow: 0 2px 2px #777;
   padding: 4px;
   color: #00186c;
   font-size: 16px;
-  -webkit-animation: slidedown 0.7s linear;
   animation: slidedown 0.7s linear;
 }
 #koakuma > div {
   margin: 0 10px;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
 }
 .bookmark-count {
-  display: -webkit-inline-box !important;
-  display: -ms-inline-flexbox !important;
   display: inline-flex !important;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
   margin-right: 0;
   border-radius: 3px 0 0 3px;
@@ -285,7 +258,6 @@ a[role="button"] > .fa-angle-down {
 #koakuma-sorting-order-block {
   position: relative;
   height: 20px;
-  -webkit-box-shadow: 0 0 1px #069;
   box-shadow: 0 0 1px #069;
   border-radius: 4px;
 }
@@ -320,11 +292,7 @@ a[role="button"] > .fa-angle-down {
   border-left: 1px solid #888;
   border-radius: 0 3px 3px 0;
   cursor: pointer;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
 }
 #koakuma-sorting-order-select-switch {
@@ -336,7 +304,6 @@ a[role="button"] > .fa-angle-down {
   border-radius: 3px;
   border-top: 1px solid #888;
   background-color: #cef;
-  -webkit-box-shadow: 0 0 1px #069;
   box-shadow: 0 0 1px #069;
   position: absolute;
   top: 100%;
@@ -345,7 +312,6 @@ a[role="button"] > .fa-angle-down {
 #koakuma-bookmark-input-usual-list > li::after,
 #koakuma-sorting-order-select-list > li::after {
   content: "";
-  -webkit-box-shadow: 0 0 0 1px #89d8ff;
   box-shadow: 0 0 0 1px #89d8ff;
   display: inline-block;
   margin: 0;
@@ -354,12 +320,10 @@ a[role="button"] > .fa-angle-down {
   font-size: 0;
   position: absolute;
   width: 100%;
-  -webkit-transform: scaleX(0.8);
   transform: scaleX(0.8);
 }
 #koakuma-bookmark-input-usual-list > li:last-child::after,
 #koakuma-sorting-order-select-list > li:last-child::after {
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 .usual-list-link:hover::before,
@@ -393,22 +357,16 @@ a[role="button"] > .fa-angle-down {
   font-size: 16px;
 }
 .main-button:enabled {
-  -webkit-transform: translate(-1px, -1px);
   transform: translate(-1px, -1px);
-  -webkit-box-shadow: 1px 1px 1px hsl(60, 0%, 30%);
   box-shadow: 1px 1px 1px hsl(60, 0%, 30%);
   cursor: pointer;
 }
 .main-button:enabled:hover {
-  -webkit-transform: translate(0);
   transform: translate(0);
-  -webkit-box-shadow: none;
   box-shadow: none;
 }
 .main-button:enabled:active {
-  -webkit-transform: translate(1px, 1px);
   transform: translate(1px, 1px);
-  -webkit-box-shadow: -1px -1px 1px hsl(60, 0%, 30%);
   box-shadow: -1px -1px 1px hsl(60, 0%, 30%);
 }
 .main-button.go {

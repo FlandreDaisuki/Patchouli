@@ -35,12 +35,8 @@ export default {
 
 <style scoped>
 #patchouli {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-flow: wrap;
   flex-flow: wrap;
-  -ms-flex-pack: distribute;
   justify-content: space-around;
 }
 </style>
