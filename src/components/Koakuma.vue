@@ -49,7 +49,7 @@
         id="koakuma-sorting-order-select-switch"
         role="button"
         @click.left="sortingOrderSwitchOn = !sortingOrderSwitchOn">
-        <output id="koakuma-sorting-order-select-output">{{ sortingOrderMsg }}</output>
+        <output id="koakuma-sorting-order-select-output" v-html="sortingOrderMsg"/>
         <i class="fas fa-angle-down"/>
       </a>
       <ul v-show="sortingOrderSwitchOn" id="koakuma-sorting-order-select-list">
@@ -135,10 +135,21 @@ export default {
       }
     },
     sortingOrderMsg() {
+      const p = this.$t("koakuma.sortByPopularity");
+      const d = this.$t("koakuma.sortByDate");
+      const ml = Math.max(p.length, d.length);
+      const [xp, xd] = [p, d].map(s => {
+        if (s.length < ml) {
+          const ps = ml - s.length; // padding space
+          const hps = Math.floor(ps / 2);
+          return "&nbsp;".repeat(hps) + s + "&nbsp;".repeat(ps - hps);
+        }
+        return s;
+      });
       if (this.config.sort) {
-        return this.$t("koakuma.sortByPopularity");
+        return xp;
       } else {
-        return this.$t("koakuma.sortByDate");
+        return xd;
       }
     }
   },
