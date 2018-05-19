@@ -45,11 +45,11 @@
       </button>
     </div>
     <div id="koakuma-sorting-order-block">
-      <output id="koakuma-sorting-order-select-output">{{ sortingOrderMsg }}</output>
       <a
         id="koakuma-sorting-order-select-switch"
         role="button"
         @click.left="sortingOrderSwitchOn = !sortingOrderSwitchOn">
+        <output id="koakuma-sorting-order-select-output">{{ sortingOrderMsg }}</output>
         <i class="fas fa-angle-down"/>
       </a>
       <ul v-show="sortingOrderSwitchOn" id="koakuma-sorting-order-select-list">
@@ -315,6 +315,10 @@ a[role="button"] > .fa-angle-down {
   -webkit-box-align: center;
   -ms-flex-align: center;
   align-items: center;
+}
+#koakuma-sorting-order-select-switch {
+  border: none;
+  border-radius: 3px;
 }
 #koakuma-bookmark-input-usual-list,
 #koakuma-sorting-order-select-list {
