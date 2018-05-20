@@ -83,7 +83,10 @@
           @click.left="optionsChange"/>
       </div>
       <div>
-        <i class="fas fa-cog" @click.left="openBigComponentInConfigMode"/>
+        <i
+          id="koakuma-options-config"
+          class="fas fa-cog"
+          @click.left="openBigComponentInConfigMode"/>
       </div>
     </div>
   </div>
@@ -381,26 +384,8 @@ a[role="button"] > .fa-angle-down {
   opacity: 0.87;
 }
 #koakuma-options-width-compress,
-#koakuma-options-width-expand {
+#koakuma-options-width-expand,
+#koakuma-options-config {
   cursor: pointer;
-}
-#koakuma > #koakuma-config-page {
-  position: fixed;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  background-color: #0003;
-  align-items: center;
-  justify-content: center;
-}
-#koakuma-configs-block {
-  background-color: #b28fce;
-  color: white;
-  border-radius: 10px;
-  display: flex;
 }
 </style>

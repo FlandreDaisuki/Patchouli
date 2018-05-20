@@ -56,7 +56,8 @@ export default new Vuex.Store({
     },
     config: {
       fitwidth: 1,
-      sort: 0
+      sort: 0,
+      contextMenu: 1
     },
   },
   mutations: {

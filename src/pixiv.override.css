@@ -10,6 +10,9 @@
      but it should preserve 42px to keep all spacing correct */
   margin-bottom: 42px;
 }
+#toolbar-items {
+  z-index: 5;
+}
 .ω {
   display: flex;
   flex-flow: row wrap;

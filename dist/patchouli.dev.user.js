@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.0-beta.4
+// @version           4.1.0-beta.5
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -51,7 +51,7 @@
   Vuex = Vuex && Vuex.hasOwnProperty('default') ? Vuex['default'] : Vuex;
   VueI18n = VueI18n && VueI18n.hasOwnProperty('default') ? VueI18n['default'] : VueI18n;
 
-  __$styleInject("._global-header {\n  z-index: 4;\n  position: relative;\n}\n._global-header .ui-search {\n  z-index: auto;\n}\n._global-header.koakuma-placeholder {\n  /* I don't know why #koakuma just 32px\n     but it should preserve 42px to keep all spacing correct */\n  margin-bottom: 42px;\n}\n.ω {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-flow: row wrap;\n  flex-flow: row wrap;\n  -ms-flex-pack: center;\n  justify-content: center;\n  position: relative;\n}\n.ω,\n.ω .layout-a,\n.ω .layout-body {\n  -webkit-transition: width 0.2s;\n  transition: width 0.2s;\n}\n.ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n  width: 100% !important;\n}\n.ω.↔ .layout-a {\n  display: -webkit-box;\n  display: -ms-flexbox;\n  display: flex;\n  -ms-flex-direction: row-reverse;\n  flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2 {\n  -ms-flex: 1;\n  flex: 1;\n  margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n  margin: 10px 20px;\n}\n");
+  __$styleInject("._global-header {\n  z-index: 4;\n  position: relative;\n}\n._global-header .ui-search {\n  z-index: auto;\n}\n._global-header.koakuma-placeholder {\n  /* I don't know why #koakuma just 32px\n     but it should preserve 42px to keep all spacing correct */\n  margin-bottom: 42px;\n}\n#toolbar-items {\n  z-index: 5;\n}\n.ω {\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: center;\n  position: relative;\n}\n.ω,\n.ω .layout-a,\n.ω .layout-body {\n  transition: width 0.2s;\n}\n.ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n  width: 100% !important;\n}\n.ω.↔ .layout-a {\n  display: flex;\n  flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2 {\n  flex: 1;\n  margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n  margin: 10px 20px;\n}\n");
 
   function $(selector) {
     return document.querySelector(selector);
@@ -667,7 +667,8 @@
       },
       config: {
         fitwidth: 1,
-        sort: 0
+        sort: 0,
+        contextMenu: 1
       },
     },
     mutations: {
@@ -1170,6 +1171,7 @@
         _c("div", [
           _c("i", {
             staticClass: "fas fa-cog",
+            attrs: { id: "koakuma-options-config" },
             on: {
               click: function($event) {
                 if (
@@ -1201,11 +1203,11 @@
   /* style */
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject("data-v-359cbdae_0", { source: "\n@keyframes slidedown-data-v-359cbdae {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-359cbdae] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-359cbdae] {\n  padding: 2px;\n}\n#koakuma[data-v-359cbdae] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-359cbdae 0.7s linear;\n}\n#koakuma > div[data-v-359cbdae] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-359cbdae] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-359cbdae],\n#koakuma-sorting-order-block[data-v-359cbdae] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-359cbdae] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-359cbdae] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-359cbdae]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-359cbdae]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-359cbdae] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-359cbdae],\n#koakuma-sorting-order-select-switch[data-v-359cbdae] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-359cbdae] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-359cbdae],\n#koakuma-sorting-order-select-list[data-v-359cbdae] {\n  border-radius: 3px;\n  border-top: 1px solid #888;\n  background-color: #cef;\n  box-shadow: 0 0 1px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-359cbdae]::after,\n#koakuma-sorting-order-select-list > li[data-v-359cbdae]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-359cbdae]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-359cbdae]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-359cbdae]:hover::before,\n.sorting-order-link[data-v-359cbdae]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-359cbdae],\n.sorting-order-link[data-v-359cbdae] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-359cbdae] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-359cbdae] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-359cbdae] {\n  margin: 0 5px;\n}\n.main-button[data-v-359cbdae] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-359cbdae]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-359cbdae]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n.main-button[data-v-359cbdae]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-359cbdae] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-359cbdae] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-359cbdae] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-359cbdae],\n#koakuma-options-width-expand[data-v-359cbdae] {\n  cursor: pointer;\n}\n#koakuma > #koakuma-config-page[data-v-359cbdae] {\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  top: 0;\n  left: 0;\n  margin: 0;\n  padding: 0;\n  display: flex;\n  background-color: #0003;\n  align-items: center;\n  justify-content: center;\n}\n#koakuma-configs-block[data-v-359cbdae] {\n  background-color: #b28fce;\n  color: white;\n  border-radius: 10px;\n  display: flex;\n}\n", map: undefined, media: undefined });
+    inject("data-v-9707882e_0", { source: "\n@keyframes slidedown-data-v-9707882e {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-9707882e] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-9707882e] {\n  padding: 2px;\n}\n#koakuma[data-v-9707882e] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-9707882e 0.7s linear;\n}\n#koakuma > div[data-v-9707882e] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-9707882e] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-9707882e],\n#koakuma-sorting-order-block[data-v-9707882e] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-9707882e] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-9707882e] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-9707882e]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-9707882e]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-9707882e] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-9707882e],\n#koakuma-sorting-order-select-switch[data-v-9707882e] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-9707882e] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-9707882e],\n#koakuma-sorting-order-select-list[data-v-9707882e] {\n  border-radius: 3px;\n  border-top: 1px solid #888;\n  background-color: #cef;\n  box-shadow: 0 0 1px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-9707882e]::after,\n#koakuma-sorting-order-select-list > li[data-v-9707882e]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-9707882e]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-9707882e]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-9707882e]:hover::before,\n.sorting-order-link[data-v-9707882e]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-9707882e],\n.sorting-order-link[data-v-9707882e] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-9707882e] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-9707882e] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-9707882e] {\n  margin: 0 5px;\n}\n.main-button[data-v-9707882e] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-9707882e]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-9707882e]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n.main-button[data-v-9707882e]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-9707882e] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-9707882e] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-9707882e] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-9707882e],\n#koakuma-options-width-expand[data-v-9707882e],\n#koakuma-options-config[data-v-9707882e] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__ = "data-v-359cbdae";
+  const __vue_scope_id__ = "data-v-9707882e";
   /* module identifier */
   const __vue_module_identifier__ = undefined;
   /* functional template */
@@ -1377,18 +1379,21 @@
       },
       activateContextMenu(event) {
         $print.debug("DefaultImageItemImage#activateContextMenu", event);
-        const payload = {};
+        if (this.$store.state.config.contextMenu) {
+          event.preventDefault();
+          const payload = {};
 
-        payload.position = {
-          x: event.clientX,
-          y: event.clientY
-        };
+          payload.position = {
+            x: event.clientX,
+            y: event.clientY
+          };
 
-        payload.data = {
-          illustId: this.illustId
-        };
+          payload.data = {
+            illustId: this.illustId
+          };
 
-        this.$store.commit("activateContextMenu", payload);
+          this.$store.commit("activateContextMenu", payload);
+        }
       }
     }
   };
@@ -1408,7 +1413,6 @@
           attrs: { href: _vm.illustPageUrl, rel: "noopener" },
           on: {
             contextmenu: function($event) {
-              $event.preventDefault();
               return _vm.activateContextMenu($event)
             }
           }
@@ -1477,11 +1481,11 @@
   /* style */
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject("data-v-dca6a2c8_0", { source: "\n.image-item-image[data-v-dca6a2c8] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-dca6a2c8] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.top-right-slot[data-v-dca6a2c8] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-dca6a2c8] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-dca6a2c8] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-dca6a2c8] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-dca6a2c8] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-dca6a2c8] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-dca6a2c8] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+    inject("data-v-cafafd26_0", { source: "\n.image-item-image[data-v-cafafd26] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-cafafd26] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.top-right-slot[data-v-cafafd26] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-cafafd26] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-cafafd26] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-cafafd26] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-cafafd26] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-cafafd26] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-cafafd26] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$1 = "data-v-dca6a2c8";
+  const __vue_scope_id__$1 = "data-v-cafafd26";
   /* module identifier */
   const __vue_module_identifier__$1 = undefined;
   /* functional template */
@@ -2709,25 +2713,32 @@
   );
 
   //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
 
   var script$6 = {
     computed: {
       // vue'x' state 'm'odule
       xm() {
         return this.$store.state.bigComponent;
+      },
+      // vue'x' state 'c'onfig
+      xc() {
+        return this.$store.state.config;
       }
     },
     methods: {
       clickBase() {
         this.$store.commit("closeBigComponent");
+      },
+      clickSwitch(event) {
+        $print.debug("BigComponent#clickSwitch: event", event);
+        const parents = event.target.getParents();
+        if (
+          event.target.id.includes("config-context-menu-switch") ||
+          parents.find(e => e.id.includes("config-context-menu-switch"))
+        ) {
+          this.xc.contextMenu = Number.toInt(!this.xc.contextMenu);
+        }
+        this.$store.commit("saveConfig");
       }
     }
   };
@@ -2770,8 +2781,147 @@
         }
       },
       [
-        _vm._v(
-          "\n  mode" + _vm._s(_vm.xm.mode) + "data" + _vm._s(_vm.xm.data) + "\n"
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.xm.mode === "config",
+                expression: "xm.mode === 'config'"
+              }
+            ],
+            attrs: { id: "config-mode" },
+            on: {
+              click: function($event) {
+                $event.stopPropagation();
+              }
+            }
+          },
+          [
+            _c(
+              "a",
+              {
+                attrs: { id: "config-context-menu-switch" },
+                on: {
+                  click: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "left", 37, $event.key, [
+                        "Left",
+                        "ArrowLeft"
+                      ])
+                    ) {
+                      return null
+                    }
+                    if ("button" in $event && $event.button !== 0) {
+                      return null
+                    }
+                    return _vm.clickSwitch($event)
+                  }
+                }
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.xc.contextMenu,
+                        expression: "xc.contextMenu"
+                      }
+                    ],
+                    attrs: { id: "config-context-menu-switch-on", role: "button" }
+                  },
+                  [_c("i", { staticClass: "fas fa-toggle-on" })]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.xc.contextMenu,
+                        expression: "!xc.contextMenu"
+                      }
+                    ],
+                    attrs: {
+                      id: "config-context-menu-switch-off",
+                      role: "button"
+                    }
+                  },
+                  [_c("i", { staticClass: "fas fa-toggle-off" })]
+                ),
+                _vm._v(" "),
+                _c("span", { attrs: { id: "config-context-menu-label" } }, [
+                  _vm._v(_vm._s(_vm.$t("config.contextMenuExtension")))
+                ])
+              ]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.xm.mode === "row-flow-preview",
+                expression: "xm.mode === 'row-flow-preview'"
+              }
+            ],
+            attrs: { id: "row-flow-preview-mode" },
+            on: {
+              click: function($event) {
+                $event.stopPropagation();
+              }
+            }
+          },
+          [
+            _vm._v(
+              "\n    [" +
+                _vm._s(_vm.xm.mode) +
+                "] [" +
+                _vm._s(_vm.xm.data) +
+                "]\n  "
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.xm.mode === "col-flow-preview",
+                expression: "xm.mode === 'col-flow-preview'"
+              }
+            ],
+            attrs: { id: "col-flow-preview-mode" },
+            on: {
+              click: function($event) {
+                $event.stopPropagation();
+              }
+            }
+          },
+          [
+            _vm._v(
+              "\n    [" +
+                _vm._s(_vm.xm.mode) +
+                "] [" +
+                _vm._s(_vm.xm.data) +
+                "]\n  "
+            )
+          ]
         )
       ]
     )
@@ -2785,11 +2935,11 @@
   /* style */
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-3608f690_0", { source: "\n#patchouli-big-component[data-v-3608f690] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n", map: undefined, media: undefined });
+    inject("data-v-9fc3777a_0", { source: "\n#patchouli-big-component[data-v-9fc3777a] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#patchouli-big-component > div[data-v-9fc3777a] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #a5b6fa;\n}\n#config-mode[data-v-9fc3777a] {\n  display: flex;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-9fc3777a] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-9fc3777a] {\n  flex: 1;\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-9fc3777a]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-9fc3777a] {\n  flex: 4;\n  text-align: center;\n  margin: 0 5px;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$6 = "data-v-3608f690";
+  const __vue_scope_id__$6 = "data-v-9fc3777a";
   /* module identifier */
   const __vue_module_identifier__$6 = undefined;
   /* functional template */
@@ -2937,6 +3087,9 @@
           thumbUp: 'Like',
           openBookmarkPage: 'Add Bookmark Page',
           download: 'Download'
+        },
+        config: {
+          contextMenuExtension: 'Right click extension'
         }
       },
       'ja': {
@@ -2957,6 +3110,9 @@
           thumbUp: 'いいね',
           openBookmarkPage: 'ブックマーク追加ページ',
           download: 'ダウンロード'
+        },
+        config: {
+          contextMenuExtension: '右クリックの拡張機能'
         }
       },
       'zh': {
@@ -2977,6 +3133,9 @@
           thumbUp: '赞',
           openBookmarkPage: '开启添加收藏页',
           download: '下载'
+        },
+        config: {
+          contextMenuExtension: '右键扩展'
         }
       },
       'zh-tw': {
@@ -2997,6 +3156,9 @@
           thumbUp: '讚',
           openBookmarkPage: '開啟添加收藏頁',
           download: '下載'
+        },
+        config: {
+          contextMenuExtension: '擴充右鍵'
         }
       }
     }

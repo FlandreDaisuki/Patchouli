@@ -4,7 +4,7 @@
       :href="illustPageUrl"
       class="image-flexbox"
       rel="noopener"
-      @click.right.prevent="activateContextMenu">
+      @click.right="activateContextMenu">
 
       <div v-if="illustPageCount > 1" class="top-right-slot">
         <span><span class="multiple-icon"/>
@@ -81,18 +81,21 @@ export default {
     },
     activateContextMenu(event) {
       $print.debug("DefaultImageItemImage#activateContextMenu", event);
-      const payload = {};
+      if (this.$store.state.config.contextMenu) {
+        event.preventDefault();
+        const payload = {};
 
-      payload.position = {
-        x: event.clientX,
-        y: event.clientY
-      };
+        payload.position = {
+          x: event.clientX,
+          y: event.clientY
+        };
 
-      payload.data = {
-        illustId: this.illustId
-      };
+        payload.data = {
+          illustId: this.illustId
+        };
 
-      this.$store.commit("activateContextMenu", payload);
+        this.$store.commit("activateContextMenu", payload);
+      }
     }
   }
 };
