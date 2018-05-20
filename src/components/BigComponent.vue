@@ -53,7 +53,7 @@ import { $print } from "../lib/utils";
 
 export default {
   data() {
-    return { buff: "" };
+    return { blacklistBuffer: this.$parent.blacklist };
   },
   computed: {
     // vue'x' state 'm'odule
@@ -63,26 +63,23 @@ export default {
     // vue'x' state 'c'onfig
     xc() {
       return this.$store.state.config;
-    },
-    blacklistBuffer: {
-      get() {
-        return this.buff || this.xc.blacklist.join("\n");
-      },
-      set(newValue) {
-        this.buff = newValue || " "; // clean all
-      }
     }
   },
   methods: {
     clickBase() {
       this.$store.commit("closeBigComponent");
-      // FIXME:
-      // These buff, blacklistBuffer is messy workaround
-      // that i don't know how to initial data from vuex
-      this.xc.blacklist = this.clearBufferString(this.blacklistBuffer)
-        .split("\n")
-        .filter(Boolean);
-      this.buff = "";
+
+      this.xc.blacklist = [
+        ...new Set(
+          this.blacklistBuffer
+            .split("\n")
+            .filter(Boolean)
+            .map(s => s.trim())
+        )
+      ];
+      this.xc.blacklist.sort();
+
+      this.blacklistBuffer = this.xc.blacklist.join("\n");
       this.$store.commit("saveConfig");
     },
     focusForeground(event) {
@@ -99,18 +96,6 @@ export default {
       if (isClickContextMenuSwitch) {
         this.xc.contextMenu = Number.toInt(!this.xc.contextMenu);
       }
-    },
-    clearBufferString(str) {
-      const a = [
-        ...new Set(
-          str
-            .split("\n")
-            .filter(Boolean)
-            .map(s => s.trim())
-        )
-      ];
-      a.sort();
-      return a.join("\n");
     }
   }
 };

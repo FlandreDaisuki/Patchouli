@@ -60,6 +60,9 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   const BigComponent = new Vue({
     i18n,
     store,
+    data: {
+      blacklist: store.state.config.blacklist.join('\n')
+    },
     computed: {
       currentLocale() {
         return this.$store.state.locale;
