@@ -152,12 +152,13 @@ export default {
       return cloneLibrary
         .filter(el => el.bookmarkCount >= rootState.filters.limit)
         .filter(el => el.tags.match(rootState.filters.tag))
+        .filter(el => !rootState.config.blacklist.includes(el.userName))
         .sort(
           (a, b) => {
-            const av = Number.toInt(a[rootState.filters.orderBy]);
-            const bv = Number.toInt(b[rootState.filters.orderBy]);
+            const av = Number.toInt(a[getters.orderBy]);
+            const bv = Number.toInt(b[getters.orderBy]);
             const c = bv - av;
-            return dateOrder && rootState.filters.orderBy === 'illustId' ? -c : c;
+            return dateOrder && getters.orderBy === 'illustId' ? -c : c;
           }
         );
     }

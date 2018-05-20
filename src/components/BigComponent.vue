@@ -2,7 +2,9 @@
   <div
     v-show="xm.mode"
     id="patchouli-big-component"
-    @click.left="clickBase">
+    @click.left="clickBase"
+    @scroll="focusForeground"
+    @wheel="focusForeground">
     <div
       v-show="xm.mode === 'config'"
       id="config-mode"
@@ -22,6 +24,14 @@
         </a>
         <span id="config-context-menu-label">{{ $t('config.contextMenuExtension') }}</span>
       </a>
+      <a id="config-blacklist-label">
+        <i class="far fa-eye-slash"/>{{ $t('config.blacklist') }}
+      </a>
+      <textarea
+        id="config-blacklist-textarea"
+        v-model="blacklistBuffer"
+        spellcheck="false"
+        rows="5"/>
     </div>
     <div
       v-show="xm.mode === 'row-flow-preview'"
@@ -42,6 +52,9 @@
 import { $print } from "../lib/utils";
 
 export default {
+  data() {
+    return { buff: "" };
+  },
   computed: {
     // vue'x' state 'm'odule
     xm() {
@@ -50,22 +63,54 @@ export default {
     // vue'x' state 'c'onfig
     xc() {
       return this.$store.state.config;
+    },
+    blacklistBuffer: {
+      get() {
+        return this.buff || this.xc.blacklist.join("\n");
+      },
+      set(newValue) {
+        this.buff = newValue || " "; // clean all
+      }
     }
   },
   methods: {
     clickBase() {
       this.$store.commit("closeBigComponent");
+      // FIXME:
+      // These buff, blacklistBuffer is messy workaround
+      // that i don't know how to initial data from vuex
+      this.xc.blacklist = this.clearBufferString(this.blacklistBuffer)
+        .split("\n")
+        .filter(Boolean);
+      this.buff = "";
+      this.$store.commit("saveConfig");
+    },
+    focusForeground(event) {
+      if (event.target.id === "patchouli-big-component") {
+        event.preventDefault();
+      }
     },
     clickSwitch(event) {
       $print.debug("BigComponent#clickSwitch: event", event);
       const parents = event.target.getParents();
-      if (
-        event.target.id.includes("config-context-menu-switch") ||
-        parents.find(e => e.id.includes("config-context-menu-switch"))
-      ) {
+      const isClickContextMenuSwitch = [event.target, ...parents].find(e =>
+        e.id.includes("config-context-menu-switch")
+      );
+      if (isClickContextMenuSwitch) {
         this.xc.contextMenu = Number.toInt(!this.xc.contextMenu);
       }
-      this.$store.commit("saveConfig");
+    },
+    clearBufferString(str) {
+      const a = [
+        ...new Set(
+          str
+            .split("\n")
+            .filter(Boolean)
+            .map(s => s.trim())
+        )
+      ];
+      a.sort();
+      return a.join("\n");
     }
   }
 };
@@ -91,6 +136,7 @@ export default {
 }
 #config-mode {
   display: flex;
+  flex-flow: column;
   padding: 10px;
   border-radius: 10px;
   font-size: 18px;
@@ -112,6 +158,13 @@ export default {
   text-align: center;
   margin: 0 5px;
 }
+#config-blacklist-label > .fa-eye-slash {
+  margin: 0 4px;
+}
+#config-blacklist-textarea {
+  box-sizing: border-box;
+  flex: 5;
+  resize: none;
+  font-size: 11pt;
+}
 </style>
-
-

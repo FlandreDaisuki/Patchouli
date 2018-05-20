@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.0-beta.5
+// @version           4.1.0-beta.6
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -570,12 +570,13 @@
         return cloneLibrary
           .filter(el => el.bookmarkCount >= rootState.filters.limit)
           .filter(el => el.tags.match(rootState.filters.tag))
+          .filter(el => !rootState.config.blacklist.includes(el.userName))
           .sort(
             (a, b) => {
-              const av = Number.toInt(a[rootState.filters.orderBy]);
-              const bv = Number.toInt(b[rootState.filters.orderBy]);
+              const av = Number.toInt(a[getters.orderBy]);
+              const bv = Number.toInt(b[getters.orderBy]);
               const c = bv - av;
-              return dateOrder && rootState.filters.orderBy === 'illustId' ? -c : c;
+              return dateOrder && getters.orderBy === 'illustId' ? -c : c;
             }
           );
       }
@@ -663,12 +664,12 @@
       filters: {
         limit: 0,
         tag: new RegExp('', 'i'),
-        orderBy: 'illustId'
       },
       config: {
         fitwidth: 1,
         sort: 0,
-        contextMenu: 1
+        contextMenu: 1,
+        blacklist: []
       },
     },
     mutations: {
@@ -702,11 +703,6 @@
           } else {
             $('.ω').classList.remove('↔');
           }
-          if (state.config.sort) {
-            state.filters.orderBy = 'bookmarkCount';
-          } else {
-            state.filters.orderBy = 'illustId';
-          }
           if (state.pageType === 'MY_BOOKMARK') {
             for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
               marker.addEventListener('click', () => {
@@ -725,6 +721,15 @@
       loadConfig(state) {
         const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
         Object.assign(state.config, config);
+      }
+    },
+    getters: {
+      orderBy(state) {
+        if (state.config.sort) {
+          return 'bookmarkCount';
+        } else {
+          return 'illustId';
+        }
       }
     }
   });
@@ -2715,6 +2720,9 @@
   //
 
   var script$6 = {
+    data() {
+      return { buff: "" };
+    },
     computed: {
       // vue'x' state 'm'odule
       xm() {
@@ -2723,22 +2731,54 @@
       // vue'x' state 'c'onfig
       xc() {
         return this.$store.state.config;
+      },
+      blacklistBuffer: {
+        get() {
+          return this.buff || this.xc.blacklist.join("\n");
+        },
+        set(newValue) {
+          this.buff = newValue || " "; // clean all
+        }
       }
     },
     methods: {
       clickBase() {
         this.$store.commit("closeBigComponent");
+        // FIXME:
+        // These buff, blacklistBuffer is messy workaround
+        // that i don't know how to initial data from vuex
+        this.xc.blacklist = this.clearBufferString(this.blacklistBuffer)
+          .split("\n")
+          .filter(Boolean);
+        this.buff = "";
+        this.$store.commit("saveConfig");
+      },
+      focusForeground(event) {
+        if (event.target.id === "patchouli-big-component") {
+          event.preventDefault();
+        }
       },
       clickSwitch(event) {
         $print.debug("BigComponent#clickSwitch: event", event);
         const parents = event.target.getParents();
-        if (
-          event.target.id.includes("config-context-menu-switch") ||
-          parents.find(e => e.id.includes("config-context-menu-switch"))
-        ) {
+        const isClickContextMenuSwitch = [event.target, ...parents].find(e =>
+          e.id.includes("config-context-menu-switch")
+        );
+        if (isClickContextMenuSwitch) {
           this.xc.contextMenu = Number.toInt(!this.xc.contextMenu);
         }
-        this.$store.commit("saveConfig");
+      },
+      clearBufferString(str) {
+        const a = [
+          ...new Set(
+            str
+              .split("\n")
+              .filter(Boolean)
+              .map(s => s.trim())
+          )
+        ];
+        a.sort();
+        return a.join("\n");
       }
     }
   };
@@ -2777,7 +2817,9 @@
               return null
             }
             return _vm.clickBase($event)
-          }
+          },
+          scroll: _vm.focusForeground,
+          wheel: _vm.focusForeground
         }
       },
       [
@@ -2862,7 +2904,37 @@
                   _vm._v(_vm._s(_vm.$t("config.contextMenuExtension")))
                 ])
               ]
-            )
+            ),
+            _vm._v(" "),
+            _c("a", { attrs: { id: "config-blacklist-label" } }, [
+              _c("i", { staticClass: "far fa-eye-slash" }),
+              _vm._v(_vm._s(_vm.$t("config.blacklist")) + "\n    ")
+            ]),
+            _vm._v(" "),
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.blacklistBuffer,
+                  expression: "blacklistBuffer"
+                }
+              ],
+              attrs: {
+                id: "config-blacklist-textarea",
+                spellcheck: "false",
+                rows: "5"
+              },
+              domProps: { value: _vm.blacklistBuffer },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.blacklistBuffer = $event.target.value;
+                }
+              }
+            })
           ]
         ),
         _vm._v(" "),
@@ -2935,11 +3007,11 @@
   /* style */
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-9fc3777a_0", { source: "\n#patchouli-big-component[data-v-9fc3777a] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#patchouli-big-component > div[data-v-9fc3777a] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #a5b6fa;\n}\n#config-mode[data-v-9fc3777a] {\n  display: flex;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-9fc3777a] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-9fc3777a] {\n  flex: 1;\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-9fc3777a]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-9fc3777a] {\n  flex: 4;\n  text-align: center;\n  margin: 0 5px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-f00bec6e_0", { source: "\n#patchouli-big-component[data-v-f00bec6e] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#patchouli-big-component > div[data-v-f00bec6e] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #a5b6fa;\n}\n#config-mode[data-v-f00bec6e] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-f00bec6e] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-f00bec6e] {\n  flex: 1;\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-f00bec6e]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-f00bec6e] {\n  flex: 4;\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-f00bec6e] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-f00bec6e] {\n  box-sizing: border-box;\n  flex: 5;\n  resize: none;\n  font-size: 11pt;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$6 = "data-v-9fc3777a";
+  const __vue_scope_id__$6 = "data-v-f00bec6e";
   /* module identifier */
   const __vue_module_identifier__$6 = undefined;
   /* functional template */
@@ -3089,7 +3161,8 @@
           download: 'Download'
         },
         config: {
-          contextMenuExtension: 'Right click extension'
+          contextMenuExtension: 'Right click extension',
+          blacklist: 'Blacklist'
         }
       },
       'ja': {
@@ -3112,7 +3185,8 @@
           download: 'ダウンロード'
         },
         config: {
-          contextMenuExtension: '右クリックの拡張機能'
+          contextMenuExtension: '右クリックの拡張機能',
+          blacklist: 'ブラックリスト'
         }
       },
       'zh': {
@@ -3135,7 +3209,8 @@
           download: '下载'
         },
         config: {
-          contextMenuExtension: '右键扩展'
+          contextMenuExtension: '右键扩展',
+          blacklist: '黑名單'
         }
       },
       'zh-tw': {
@@ -3158,7 +3233,8 @@
           download: '下載'
         },
         config: {
-          contextMenuExtension: '擴充右鍵'
+          contextMenuExtension: '擴充右鍵',
+          blacklist: '黑名單'
         }
       }
     }

@@ -27,7 +27,8 @@ export default new VueI18n({
         download: 'Download'
       },
       config: {
-        contextMenuExtension: 'Right click extension'
+        contextMenuExtension: 'Right click extension',
+        blacklist: 'Blacklist'
       }
     },
     'ja': {
@@ -50,7 +51,8 @@ export default new VueI18n({
         download: 'ダウンロード'
       },
       config: {
-        contextMenuExtension: '右クリックの拡張機能'
+        contextMenuExtension: '右クリックの拡張機能',
+        blacklist: 'ブラックリスト'
       }
     },
     'zh': {
@@ -73,7 +75,8 @@ export default new VueI18n({
         download: '下载'
       },
       config: {
-        contextMenuExtension: '右键扩展'
+        contextMenuExtension: '右键扩展',
+        blacklist: '黑名單'
       }
     },
     'zh-tw': {
@@ -96,7 +99,8 @@ export default new VueI18n({
         download: '下載'
       },
       config: {
-        contextMenuExtension: '擴充右鍵'
+        contextMenuExtension: '擴充右鍵',
+        blacklist: '黑名單'
       }
     }
   }

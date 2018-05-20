@@ -52,12 +52,12 @@ export default new Vuex.Store({
     filters: {
       limit: 0,
       tag: new RegExp('', 'i'),
-      orderBy: 'illustId'
     },
     config: {
       fitwidth: 1,
       sort: 0,
-      contextMenu: 1
+      contextMenu: 1,
+      blacklist: []
     },
   },
   mutations: {
@@ -91,11 +91,6 @@ export default new Vuex.Store({
         } else {
           $('.ω').classList.remove('↔');
         }
-        if (state.config.sort) {
-          state.filters.orderBy = 'bookmarkCount';
-        } else {
-          state.filters.orderBy = 'illustId';
-        }
         if (state.pageType === 'MY_BOOKMARK') {
           for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
             marker.addEventListener('click', () => {
@@ -114,6 +109,15 @@ export default new Vuex.Store({
     loadConfig(state) {
       const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
       Object.assign(state.config, config);
+    }
+  },
+  getters: {
+    orderBy(state) {
+      if (state.config.sort) {
+        return 'bookmarkCount';
+      } else {
+        return 'illustId';
+      }
     }
   }
 });
