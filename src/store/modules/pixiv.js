@@ -1,17 +1,22 @@
 import { PixivAPI } from '../../lib/pixiv';
 import { $print } from '../../lib/utils';
 
-function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
+function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails, illustHTMLDetails }) {
   if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
     throw new Error('makeLibraryData: illustAPIDetails is falsy.');
   }
 
   const vLibrary = [];
+
   for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
+    const atags = illustHTMLDetails[illustId].tags;
+    const btags = bookmarkHTMLDetails[illustId].tags;
+
+    const allTags = [...new Set([...atags, ...btags])].join(', ');
     const d = {
       illustId,
       bookmarkCount: bookmarkHTMLDetails[illustId].bookmarkCount,
-      tags: bookmarkHTMLDetails[illustId].tags.join(', '),
+      tags: allTags,
       illustTitle: illustDetail.illust_title,
       illustPageCount: Number.toInt(illustDetail.illust_page_count),
       userId: illustDetail.user_id,
@@ -93,6 +98,10 @@ export default {
         const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
         $print.debug('PixivModule#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
 
+        // {[illustId : IDString]: illust_detail}
+        const illustHTMLDetails = await PixivAPI.getIllustHTMLDetails(page.illustIds);
+        $print.debug('PixivModule#startNextUrlBased: illustHTMLDetails:', illustHTMLDetails);
+
         if (rootState.pageType === 'MY_BOOKMARK') {
           // {[illustId : IDString]: {
           //   illustId,
@@ -124,7 +133,11 @@ export default {
         const userAPIDetails = await PixivAPI.getUsersAPIDetail(userIds);
         $print.debug('PixivModule#startNextUrlBased: userAPIDetails:', userAPIDetails);
 
-        const libraryData = makeLibraryData({ pageType: rootState.pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails });
+        const libraryData = makeLibraryData({ pageType: rootState.pageType,
+          illustAPIDetails,
+          bookmarkHTMLDetails,
+          userAPIDetails,
+          illustHTMLDetails });
 
         // prevent duplicate illustId
         for (const d of libraryData) {

@@ -190,6 +190,42 @@ class Pixiv {
     }
   }
 
+  async getIllustHTMLDetail(illustId) {
+    const url = `/member_illust.php?mode=medium&illust_id=${illustId}`;
+    const failResult = {
+      illustId,
+      tags: []
+    };
+    try {
+      const html = await this.fetch(url);
+      const tagHTMLPart = html.match(/class="work-tags"[.\s\S]*template-work-tag/ig);
+      if (!tagHTMLPart) {
+        return failResult;
+      }
+      const tagHTMLs = tagHTMLPart[0].replace('\n', '').match(/((translation|original|romaji)-tag">|tag-translation( romaji)?">)[^<]+/ig);
+      if (!tagHTMLs) {
+        return failResult;
+      }
+      const tags = tagHTMLs.map(tagHTML => tagHTML.replace(/.*>(.*)$/, '$1'));
+      return {
+        illustId,
+        tags
+      };
+    } catch (error) {
+      $print.error('Pixiv#getIllustHTMLDetail: error:', error);
+    }
+  }
+
+  async getIllustHTMLDetails(illustIds) {
+    const IllustHTMLDetails = illustIds.map(id => this.getIllustHTMLDetail(id));
+    const IllustDetails = await Promise.all(IllustHTMLDetails);
+    const detail = {};
+    for (const d of IllustDetails) {
+      detail[d.illustId] = d;
+    }
+    return detail;
+  }
+
   async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {
     const searchParams = {
       type: 'illust',

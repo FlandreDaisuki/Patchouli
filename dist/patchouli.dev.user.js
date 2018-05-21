@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.0-beta.6
+// @version           4.1.0-beta.7
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -314,6 +314,42 @@
       }
     }
 
+    async getIllustHTMLDetail(illustId) {
+      const url = `/member_illust.php?mode=medium&illust_id=${illustId}`;
+      const failResult = {
+        illustId,
+        tags: []
+      };
+      try {
+        const html = await this.fetch(url);
+        const tagHTMLPart = html.match(/class="work-tags"[.\s\S]*template-work-tag/ig);
+        if (!tagHTMLPart) {
+          return failResult;
+        }
+        const tagHTMLs = tagHTMLPart[0].replace('\n', '').match(/((translation|original|romaji)-tag">|tag-translation( romaji)?">)[^<]+/ig);
+        if (!tagHTMLs) {
+          return failResult;
+        }
+        const tags = tagHTMLs.map(tagHTML => tagHTML.replace(/.*>(.*)$/, '$1'));
+        return {
+          illustId,
+          tags
+        };
+      } catch (error) {
+        $print.error('Pixiv#getIllustHTMLDetail: error:', error);
+      }
+    }
+
+    async getIllustHTMLDetails(illustIds) {
+      const IllustHTMLDetails = illustIds.map(id => this.getIllustHTMLDetail(id));
+      const IllustDetails = await Promise.all(IllustHTMLDetails);
+      const detail = {};
+      for (const d of IllustDetails) {
+        detail[d.illustId] = d;
+      }
+      return detail;
+    }
+
     async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {
       const searchParams = {
         type: 'illust',
@@ -419,17 +455,22 @@
 
   const PixivAPI = new Pixiv();
 
-  function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
+  function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails, illustHTMLDetails }) {
     if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
       throw new Error('makeLibraryData: illustAPIDetails is falsy.');
     }
 
     const vLibrary = [];
+
     for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
+      const atags = illustHTMLDetails[illustId].tags;
+      const btags = bookmarkHTMLDetails[illustId].tags;
+
+      const allTags = [...new Set([...atags, ...btags])].join(', ');
       const d = {
         illustId,
         bookmarkCount: bookmarkHTMLDetails[illustId].bookmarkCount,
-        tags: bookmarkHTMLDetails[illustId].tags.join(', '),
+        tags: allTags,
         illustTitle: illustDetail.illust_title,
         illustPageCount: Number.toInt(illustDetail.illust_page_count),
         userId: illustDetail.user_id,
@@ -511,6 +552,10 @@
           const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
           $print.debug('PixivModule#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
 
+          // {[illustId : IDString]: illust_detail}
+          const illustHTMLDetails = await PixivAPI.getIllustHTMLDetails(page.illustIds);
+          $print.debug('PixivModule#startNextUrlBased: illustHTMLDetails:', illustHTMLDetails);
+
           if (rootState.pageType === 'MY_BOOKMARK') {
             // {[illustId : IDString]: {
             //   illustId,
@@ -542,7 +587,11 @@
           const userAPIDetails = await PixivAPI.getUsersAPIDetail(userIds);
           $print.debug('PixivModule#startNextUrlBased: userAPIDetails:', userAPIDetails);
 
-          const libraryData = makeLibraryData({ pageType: rootState.pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails });
+          const libraryData = makeLibraryData({ pageType: rootState.pageType,
+            illustAPIDetails,
+            bookmarkHTMLDetails,
+            userAPIDetails,
+            illustHTMLDetails });
 
           // prevent duplicate illustId
           for (const d of libraryData) {
@@ -1208,11 +1257,11 @@
   /* style */
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject("data-v-9707882e_0", { source: "\n@keyframes slidedown-data-v-9707882e {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-9707882e] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-9707882e] {\n  padding: 2px;\n}\n#koakuma[data-v-9707882e] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-9707882e 0.7s linear;\n}\n#koakuma > div[data-v-9707882e] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-9707882e] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-9707882e],\n#koakuma-sorting-order-block[data-v-9707882e] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-9707882e] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-9707882e] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-9707882e]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-9707882e]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-9707882e] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-9707882e],\n#koakuma-sorting-order-select-switch[data-v-9707882e] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-9707882e] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-9707882e],\n#koakuma-sorting-order-select-list[data-v-9707882e] {\n  border-radius: 3px;\n  border-top: 1px solid #888;\n  background-color: #cef;\n  box-shadow: 0 0 1px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-9707882e]::after,\n#koakuma-sorting-order-select-list > li[data-v-9707882e]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-9707882e]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-9707882e]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-9707882e]:hover::before,\n.sorting-order-link[data-v-9707882e]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-9707882e],\n.sorting-order-link[data-v-9707882e] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-9707882e] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-9707882e] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-9707882e] {\n  margin: 0 5px;\n}\n.main-button[data-v-9707882e] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-9707882e]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-9707882e]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n.main-button[data-v-9707882e]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-9707882e] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-9707882e] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-9707882e] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-9707882e],\n#koakuma-options-width-expand[data-v-9707882e],\n#koakuma-options-config[data-v-9707882e] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
+    inject("data-v-40228a9c_0", { source: "\n@keyframes slidedown-data-v-40228a9c {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-40228a9c] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-40228a9c] {\n  padding: 2px;\n}\n#koakuma[data-v-40228a9c] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-40228a9c 0.7s linear;\n}\n#koakuma > div[data-v-40228a9c] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-40228a9c] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-40228a9c],\n#koakuma-sorting-order-block[data-v-40228a9c] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-40228a9c] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-40228a9c] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-40228a9c]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-40228a9c]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-40228a9c] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-40228a9c],\n#koakuma-sorting-order-select-switch[data-v-40228a9c] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-40228a9c] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-40228a9c],\n#koakuma-sorting-order-select-list[data-v-40228a9c] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-40228a9c]::after,\n#koakuma-sorting-order-select-list > li[data-v-40228a9c]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-40228a9c]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-40228a9c]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-40228a9c]:hover::before,\n.sorting-order-link[data-v-40228a9c]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-40228a9c],\n.sorting-order-link[data-v-40228a9c] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-40228a9c] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-40228a9c] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-40228a9c] {\n  margin: 0 5px;\n}\n.main-button[data-v-40228a9c] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-40228a9c]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-40228a9c]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n.main-button[data-v-40228a9c]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-40228a9c] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-40228a9c] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-40228a9c] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-40228a9c],\n#koakuma-options-width-expand[data-v-40228a9c],\n#koakuma-options-config[data-v-40228a9c] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__ = "data-v-9707882e";
+  const __vue_scope_id__ = "data-v-40228a9c";
   /* module identifier */
   const __vue_module_identifier__ = undefined;
   /* functional template */
