@@ -568,7 +568,7 @@ var pixiv$1 = {
       return cloneLibrary
         .filter(el => el.bookmarkCount >= rootState.filters.limit)
         .filter(el => el.tags.match(rootState.filters.tag))
-        .filter(el => !rootState.config.blacklist.includes(el.userName))
+        .filter(el => !rootState.config.blacklist.includes(el.userId))
         .sort(
           (a, b) => {
             const av = Number.toInt(a[getters.orderBy]);
@@ -1392,7 +1392,8 @@ var script$1 = {
         };
 
         payload.data = {
-          illustId: this.illustId
+          illustId: this.illustId,
+          type: "image-item-image"
         };
 
         this.$store.commit("activateContextMenu", payload);
@@ -1484,11 +1485,11 @@ const __vue_template__$1 = typeof __vue_render__$1 !== 'undefined'
 /* style */
 const __vue_inject_styles__$1 = function (inject) {
   if (!inject) return
-  inject("data-v-cafafd26_0", { source: "\n.image-item-image[data-v-cafafd26] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-cafafd26] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.top-right-slot[data-v-cafafd26] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-cafafd26] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-cafafd26] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-cafafd26] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-cafafd26] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-cafafd26] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-cafafd26] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+  inject("data-v-dfb73510_0", { source: "\n.image-item-image[data-v-dfb73510] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-dfb73510] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.top-right-slot[data-v-dfb73510] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.multiple-icon[data-v-dfb73510] {\n  display: inline-block;\n  margin-right: 4px;\n  width: 10px;\n  height: 10px;\n  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);\n}\n.ugoira-icon[data-v-dfb73510] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)\n    50% no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-dfb73510] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-dfb73510] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)\n    center transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-dfb73510] {\n  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-dfb73510] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$1 = "data-v-cafafd26";
+const __vue_scope_id__$1 = "data-v-dfb73510";
 /* module identifier */
 const __vue_module_identifier__$1 = undefined;
 /* functional template */
@@ -1613,41 +1614,6 @@ var DefaultImageItemImage = __vue_normalize__$1(
 )
 
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 var script$2 = {
   props: {
@@ -1703,6 +1669,27 @@ var script$2 = {
     isMemberIllistPage() {
       return this.$store.state.pageType === "MEMBER_ILLIST";
     }
+  },
+  methods: {
+    activateContextMenu(event) {
+      $print.debug("DefaultImageItemTitle#activateContextMenu", event);
+      if (this.$store.state.config.contextMenu) {
+        event.preventDefault();
+        const payload = {};
+
+        payload.position = {
+          x: event.clientX,
+          y: event.clientY
+        };
+
+        payload.data = {
+          illustId: this.illustId,
+          type: "image-item-title"
+        };
+
+        this.$store.commit("activateContextMenu", payload);
+      }
+    }
   }
 };
 
@@ -1714,72 +1701,82 @@ var __vue_render__$2 = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c("figcaption", { staticClass: "image-item-title" }, [
-    _c("ul", [
-      _c("li", { staticClass: "title-text" }, [
-        _c(
-          "a",
-          { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
-          [_vm._v(_vm._s(_vm.illustTitle))]
-        )
-      ]),
-      _vm._v(" "),
-      !_vm.isMemberIllistPage
-        ? _c("li", { staticClass: "user-info" }, [
-            _c(
-              "a",
-              {
-                staticClass: "user-link ui-profile-popup",
-                attrs: {
-                  href: _vm.userPageUrl,
-                  title: _vm.userName,
-                  "data-user_id": _vm.userId,
-                  "data-user_name": _vm.userName,
-                  target: "_blank"
-                }
-              },
-              [
-                _c("span", {
-                  staticClass: "user-img",
-                  style: _vm.profileImgStyle
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.userName))])
-              ]
-            ),
-            _vm._v(" "),
-            _vm.isFollow ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
-          ])
-        : _vm._e(),
-      _vm._v(" "),
-      _vm.bookmarkCount > 0
-        ? _c("li", [
-            _c("ul", { staticClass: "count-list" }, [
-              _c("li", [
-                _c(
-                  "a",
-                  {
-                    staticClass: "_ui-tooltip bookmark-count",
-                    attrs: {
-                      href: _vm.bookmarkDetailUrl,
-                      "data-tooltip": _vm.$t("patchouli.bookmarkTooltip", {
-                        count: _vm.bookmarkCount
-                      })
-                    }
-                  },
-                  [
-                    _c("i", { staticClass: "_icon _bookmark-icon-inline" }),
-                    _vm._v(
-                      "\n            " +
-                        _vm._s(_vm.bookmarkCount) +
-                        "\n          "
-                    )
-                  ]
-                )
+    _c(
+      "ul",
+      {
+        on: {
+          contextmenu: function($event) {
+            return _vm.activateContextMenu($event)
+          }
+        }
+      },
+      [
+        _c("li", { staticClass: "title-text" }, [
+          _c(
+            "a",
+            { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
+            [_vm._v(_vm._s(_vm.illustTitle))]
+          )
+        ]),
+        _vm._v(" "),
+        !_vm.isMemberIllistPage
+          ? _c("li", { staticClass: "user-info" }, [
+              _c(
+                "a",
+                {
+                  staticClass: "user-link ui-profile-popup",
+                  attrs: {
+                    href: _vm.userPageUrl,
+                    title: _vm.userName,
+                    "data-user_id": _vm.userId,
+                    "data-user_name": _vm.userName,
+                    target: "_blank"
+                  }
+                },
+                [
+                  _c("span", {
+                    staticClass: "user-img",
+                    style: _vm.profileImgStyle
+                  }),
+                  _vm._v(" "),
+                  _c("span", [_vm._v(_vm._s(_vm.userName))])
+                ]
+              ),
+              _vm._v(" "),
+              _vm.isFollow ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.bookmarkCount > 0
+          ? _c("li", [
+              _c("ul", { staticClass: "count-list" }, [
+                _c("li", [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "_ui-tooltip bookmark-count",
+                      attrs: {
+                        href: _vm.bookmarkDetailUrl,
+                        "data-tooltip": _vm.$t("patchouli.bookmarkTooltip", {
+                          count: _vm.bookmarkCount
+                        })
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "_icon _bookmark-icon-inline" }),
+                      _vm._v(
+                        "\n            " +
+                          _vm._s(_vm.bookmarkCount) +
+                          "\n          "
+                      )
+                    ]
+                  )
+                ])
               ])
             ])
-          ])
-        : _vm._e()
-    ])
+          : _vm._e()
+      ]
+    )
   ])
 };
 var __vue_staticRenderFns__$2 = [];
@@ -1791,11 +1788,11 @@ const __vue_template__$2 = typeof __vue_render__$2 !== 'undefined'
 /* style */
 const __vue_inject_styles__$2 = function (inject) {
   if (!inject) return
-  inject("data-v-67e08f47_0", { source: "\n.image-item-title[data-v-67e08f47] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-67e08f47] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-67e08f47] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-67e08f47] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-67e08f47] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-67e08f47] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
+  inject("data-v-254e2e43_0", { source: "\n.image-item-title[data-v-254e2e43] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-254e2e43] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-254e2e43] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-254e2e43] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-254e2e43] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-254e2e43] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$2 = "data-v-67e08f47";
+const __vue_scope_id__$2 = "data-v-254e2e43";
 /* module identifier */
 const __vue_module_identifier__$2 = undefined;
 /* functional template */
@@ -2200,7 +2197,13 @@ var script$4 = {
     xm() {
       return this.$store.state.contextMenu;
     },
-    currentData() {
+    currentType() {
+      if (!this.xm.data) {
+        return "";
+      }
+      return this.xm.data.type;
+    },
+    currentImageItem() {
       if (!this.xm.data) {
         return null;
       }
@@ -2232,24 +2235,24 @@ var script$4 = {
     },
     isDownloadable() {
       return (
-        this.currentData &&
-        this.currentData.illustPageCount === 1 &&
-        !this.currentData.isUgoira // unsupport ugoira currently
+        this.currentImageItem &&
+        this.currentImageItem.illustPageCount === 1 &&
+        !this.currentImageItem.isUgoira // unsupport ugoira currently
       );
     }
   },
   methods: {
     thumbUp() {
-      if (this.currentData) {
+      if (this.currentImageItem) {
         PixivAPI.postThumbUp(
-          this.currentData.illustId,
-          this.currentData.userId
+          this.currentImageItem.illustId,
+          this.currentImageItem.userId
         );
       }
     },
     async downloadOne() {
-      const imgUrl = this.currentData.url.big;
-      const illustId = this.currentData.illustId;
+      const imgUrl = this.currentImageItem.url.big;
+      const illustId = this.currentImageItem.illustId;
       const a = $el("a", { href: imgUrl });
 
       const filename = a.pathname.split("/").pop();
@@ -2273,6 +2276,14 @@ var script$4 = {
       } else if (ext === "png") {
         saveAs(new File([response.response], filename, { type: "image/png" }));
       }
+    },
+    addToBlacklist() {
+      if (this.currentImageItem) {
+        const userId = this.currentImageItem.userId;
+        this.$store.state.config.blacklist.push(userId);
+        this.$store.state.config.blacklist.sort((a, b) => a - b);
+        this.$store.commit("saveConfig");
+      }
     }
   }
 };
@@ -2288,54 +2299,21 @@ var __vue_render__$4 = function() {
     "div",
     { style: _vm.inlineStyle, attrs: { id: "patchouli-context-menu" } },
     [
-      _c("ul", { attrs: { id: "patchouli-context-menu-list" } }, [
-        _c("li", [
-          _c(
-            "a",
+      _c(
+        "ul",
+        {
+          directives: [
             {
-              attrs: { role: "button" },
-              on: {
-                click: function($event) {
-                  if (
-                    !("button" in $event) &&
-                    _vm._k($event.keyCode, "left", 37, $event.key, [
-                      "Left",
-                      "ArrowLeft"
-                    ])
-                  ) {
-                    return null
-                  }
-                  if ("button" in $event && $event.button !== 0) {
-                    return null
-                  }
-                  return _vm.thumbUp($event)
-                }
-              }
-            },
-            [
-              _c("i", { staticClass: "far fa-thumbs-up" }),
-              _vm._v(
-                "\n        " +
-                  _vm._s(_vm.$t("contextMenu.thumbUp")) +
-                  "\n      "
-              )
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.isDownloadable,
-                expression: "isDownloadable"
-              }
-            ]
-          },
-          [
+              name: "show",
+              rawName: "v-show",
+              value: _vm.currentType === "image-item-image",
+              expression: "currentType === 'image-item-image'"
+            }
+          ],
+          attrs: { id: "patchouli-context-menu-list-image-item-image" }
+        },
+        [
+          _c("li", [
             _c(
               "a",
               {
@@ -2354,43 +2332,140 @@ var __vue_render__$4 = function() {
                     if ("button" in $event && $event.button !== 0) {
                       return null
                     }
-                    return _vm.downloadOne($event)
+                    return _vm.thumbUp($event)
                   }
                 }
               },
               [
-                _c("i", { staticClass: "fas fa-download" }),
+                _c("i", { staticClass: "far fa-thumbs-up" }),
                 _vm._v(
                   "\n        " +
-                    _vm._s(_vm.$t("contextMenu.download")) +
+                    _vm._s(_vm.$t("contextMenu.thumbUp")) +
                     "\n      "
                 )
               ]
             )
-          ]
-        ),
-        _vm._v(" "),
-        _c("li", [
+          ]),
+          _vm._v(" "),
           _c(
-            "a",
+            "li",
             {
-              attrs: {
-                href: _vm.bookmarkPageLink,
-                role: "button",
-                target: "_blank"
-              }
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.isDownloadable,
+                  expression: "isDownloadable"
+                }
+              ]
             },
             [
-              _c("i", { staticClass: "far fa-bookmark" }),
-              _vm._v(
-                "\n        " +
-                  _vm._s(_vm.$t("contextMenu.openBookmarkPage")) +
-                  "\n      "
+              _c(
+                "a",
+                {
+                  attrs: { role: "button" },
+                  on: {
+                    click: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "left", 37, $event.key, [
+                          "Left",
+                          "ArrowLeft"
+                        ])
+                      ) {
+                        return null
+                      }
+                      if ("button" in $event && $event.button !== 0) {
+                        return null
+                      }
+                      return _vm.downloadOne($event)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-download" }),
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm.$t("contextMenu.download")) +
+                      "\n      "
+                  )
+                ]
               )
             ]
-          )
-        ])
-      ])
+          ),
+          _vm._v(" "),
+          _c("li", [
+            _c(
+              "a",
+              {
+                attrs: {
+                  href: _vm.bookmarkPageLink,
+                  role: "button",
+                  target: "_blank"
+                }
+              },
+              [
+                _c("i", { staticClass: "far fa-bookmark" }),
+                _vm._v(
+                  "\n        " +
+                    _vm._s(_vm.$t("contextMenu.openBookmarkPage")) +
+                    "\n      "
+                )
+              ]
+            )
+          ])
+        ]
+      ),
+      _vm._v(" "),
+      _c(
+        "ul",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.currentType === "image-item-title",
+              expression: "currentType === 'image-item-title'"
+            }
+          ],
+          attrs: { id: "patchouli-context-menu-list-image-item-title" }
+        },
+        [
+          _c("li", [
+            _c(
+              "a",
+              {
+                attrs: { role: "button" },
+                on: {
+                  click: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "left", 37, $event.key, [
+                        "Left",
+                        "ArrowLeft"
+                      ])
+                    ) {
+                      return null
+                    }
+                    if ("button" in $event && $event.button !== 0) {
+                      return null
+                    }
+                    return _vm.addToBlacklist($event)
+                  }
+                }
+              },
+              [
+                _c("i", { staticClass: "far fa-eye-slash" }),
+                _vm._v(
+                  "\n        " +
+                    _vm._s(_vm.$t("contextMenu.addToBlacklist")) +
+                    "\n      "
+                )
+              ]
+            )
+          ])
+        ]
+      )
     ]
   )
 };
@@ -2403,11 +2478,11 @@ const __vue_template__$4 = typeof __vue_render__$4 !== 'undefined'
 /* style */
 const __vue_inject_styles__$4 = function (inject) {
   if (!inject) return
-  inject("data-v-f27205cc_0", { source: "\n#patchouli-context-menu[data-v-f27205cc] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu-list > li[data-v-f27205cc] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu-list a[data-v-f27205cc] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu-list a[data-v-f27205cc]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu-list i.far[data-v-f27205cc],\n#patchouli-context-menu-list i.fas[data-v-f27205cc] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+  inject("data-v-47525b28_0", { source: "\n#patchouli-context-menu[data-v-47525b28] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-47525b28] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-47525b28] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-47525b28]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-47525b28],\n#patchouli-context-menu > ul i.fas[data-v-47525b28] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$4 = "data-v-f27205cc";
+const __vue_scope_id__$4 = "data-v-47525b28";
 /* module identifier */
 const __vue_module_identifier__$4 = undefined;
 /* functional template */
@@ -2718,9 +2793,6 @@ var patchouli = __vue_normalize__$5(
 //
 
 var script$6 = {
-  data() {
-    return { blacklistBuffer: this.$parent.blacklist };
-  },
   computed: {
     // vue'x' state 'm'odule
     xm() {
@@ -2737,15 +2809,14 @@ var script$6 = {
 
       this.xc.blacklist = [
         ...new Set(
-          this.blacklistBuffer
-            .split("\n")
+          $("#config-blacklist-textarea")
+            .value.split("\n")
             .filter(Boolean)
             .map(s => s.trim())
         )
       ];
-      this.xc.blacklist.sort();
+      this.xc.blacklist.sort((a, b) => a - b);
 
-      this.blacklistBuffer = this.xc.blacklist.join("\n");
       this.$store.commit("saveConfig");
     },
     focusForeground(event) {
@@ -2895,28 +2966,12 @@ var __vue_render__$6 = function() {
           ]),
           _vm._v(" "),
           _c("textarea", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.blacklistBuffer,
-                expression: "blacklistBuffer"
-              }
-            ],
             attrs: {
               id: "config-blacklist-textarea",
               spellcheck: "false",
               rows: "5"
             },
-            domProps: { value: _vm.blacklistBuffer },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
-                }
-                _vm.blacklistBuffer = $event.target.value;
-              }
-            }
+            domProps: { value: _vm.xc.blacklist.join("\n") }
           })
         ]
       ),
@@ -2990,11 +3045,11 @@ const __vue_template__$6 = typeof __vue_render__$6 !== 'undefined'
 /* style */
 const __vue_inject_styles__$6 = function (inject) {
   if (!inject) return
-  inject("data-v-53f3e6c6_0", { source: "\n#patchouli-big-component[data-v-53f3e6c6] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#patchouli-big-component > div[data-v-53f3e6c6] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #a5b6fa;\n}\n#config-mode[data-v-53f3e6c6] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-53f3e6c6] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-53f3e6c6] {\n  flex: 1;\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-53f3e6c6]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-53f3e6c6] {\n  flex: 4;\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-53f3e6c6] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-53f3e6c6] {\n  box-sizing: border-box;\n  flex: 5;\n  resize: none;\n  font-size: 11pt;\n}\n", map: undefined, media: undefined });
+  inject("data-v-5f8193d0_0", { source: "\n#patchouli-big-component[data-v-5f8193d0] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#patchouli-big-component > div[data-v-5f8193d0] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #a5b6fa;\n}\n#config-mode[data-v-5f8193d0] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-5f8193d0] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-5f8193d0] {\n  flex: 1;\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-5f8193d0]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-5f8193d0] {\n  flex: 4;\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-5f8193d0] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-5f8193d0] {\n  box-sizing: border-box;\n  flex: 5;\n  resize: none;\n  font-size: 11pt;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$6 = "data-v-53f3e6c6";
+const __vue_scope_id__$6 = "data-v-5f8193d0";
 /* module identifier */
 const __vue_module_identifier__$6 = undefined;
 /* functional template */
@@ -3141,7 +3196,8 @@ var i18n = new VueI18n({
       contextMenu: {
         thumbUp: 'Like',
         openBookmarkPage: 'Add Bookmark Page',
-        download: 'Download'
+        download: 'Download',
+        addToBlacklist: 'Add to Blacklist'
       },
       config: {
         contextMenuExtension: 'Right click extension',
@@ -3165,7 +3221,8 @@ var i18n = new VueI18n({
       contextMenu: {
         thumbUp: 'いいね',
         openBookmarkPage: 'ブックマーク追加ページ',
-        download: 'ダウンロード'
+        download: 'ダウンロード',
+        addToBlacklist: 'ブラックリストへ'
       },
       config: {
         contextMenuExtension: '右クリックの拡張機能',
@@ -3189,7 +3246,8 @@ var i18n = new VueI18n({
       contextMenu: {
         thumbUp: '赞',
         openBookmarkPage: '开启添加收藏页',
-        download: '下载'
+        download: '下载',
+        addToBlacklist: '拉黑'
       },
       config: {
         contextMenuExtension: '右键扩展',
@@ -3213,7 +3271,8 @@ var i18n = new VueI18n({
       contextMenu: {
         thumbUp: '讚',
         openBookmarkPage: '開啟添加收藏頁',
-        download: '下載'
+        download: '下載',
+        addToBlacklist: '加入黑名單'
       },
       config: {
         contextMenuExtension: '擴充右鍵',
@@ -3276,9 +3335,6 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   const BigComponent = new Vue({
     i18n,
     store,
-    data: {
-      blacklist: store.state.config.blacklist.join('\n')
-    },
     computed: {
       currentLocale() {
         return this.$store.state.locale;

@@ -165,7 +165,7 @@ export default {
       return cloneLibrary
         .filter(el => el.bookmarkCount >= rootState.filters.limit)
         .filter(el => el.tags.match(rootState.filters.tag))
-        .filter(el => !rootState.config.blacklist.includes(el.userName))
+        .filter(el => !rootState.config.blacklist.includes(el.userId))
         .sort(
           (a, b) => {
             const av = Number.toInt(a[getters.orderBy]);

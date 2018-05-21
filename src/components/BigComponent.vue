@@ -29,7 +29,7 @@
       </a>
       <textarea
         id="config-blacklist-textarea"
-        v-model="blacklistBuffer"
+        :value="xc.blacklist.join('\n')"
         spellcheck="false"
         rows="5"/>
     </div>
@@ -49,12 +49,9 @@
 </template>
 
 <script>
-import { $print } from "../lib/utils";
+import { $, $print } from "../lib/utils";
 
 export default {
-  data() {
-    return { blacklistBuffer: this.$parent.blacklist };
-  },
   computed: {
     // vue'x' state 'm'odule
     xm() {
@@ -71,15 +68,14 @@ export default {
 
       this.xc.blacklist = [
         ...new Set(
-          this.blacklistBuffer
-            .split("\n")
+          $("#config-blacklist-textarea")
+            .value.split("\n")
             .filter(Boolean)
             .map(s => s.trim())
         )
       ];
-      this.xc.blacklist.sort();
+      this.xc.blacklist.sort((a, b) => a - b);
 
-      this.blacklistBuffer = this.xc.blacklist.join("\n");
       this.$store.commit("saveConfig");
     },
     focusForeground(event) {

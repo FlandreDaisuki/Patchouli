@@ -1,6 +1,6 @@
 <template>
   <figcaption class="image-item-title">
-    <ul>
+    <ul @click.right="activateContextMenu">
       <li class="title-text">
         <a :href="illustPageUrl" :title="illustTitle">{{ illustTitle }}</a>
       </li>
@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import { $print } from "../lib/utils";
+
 export default {
   props: {
     illustId: {
@@ -88,6 +90,27 @@ export default {
     },
     isMemberIllistPage() {
       return this.$store.state.pageType === "MEMBER_ILLIST";
+    }
+  },
+  methods: {
+    activateContextMenu(event) {
+      $print.debug("DefaultImageItemTitle#activateContextMenu", event);
+      if (this.$store.state.config.contextMenu) {
+        event.preventDefault();
+        const payload = {};
+
+        payload.position = {
+          x: event.clientX,
+          y: event.clientY
+        };
+
+        payload.data = {
+          illustId: this.illustId,
+          type: "image-item-title"
+        };
+
+        this.$store.commit("activateContextMenu", payload);
+      }
     }
   }
 };

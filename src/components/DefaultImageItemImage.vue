@@ -91,7 +91,8 @@ export default {
         };
 
         payload.data = {
-          illustId: this.illustId
+          illustId: this.illustId,
+          type: "image-item-image"
         };
 
         this.$store.commit("activateContextMenu", payload);

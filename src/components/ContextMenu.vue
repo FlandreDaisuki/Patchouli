@@ -1,6 +1,6 @@
 <template>
   <div id="patchouli-context-menu" :style="inlineStyle">
-    <ul id="patchouli-context-menu-list">
+    <ul v-show="currentType === 'image-item-image'" id="patchouli-context-menu-list-image-item-image" >
       <li>
         <a role="button" @click.left="thumbUp">
           <i class="far fa-thumbs-up"/>
@@ -23,6 +23,14 @@
         </a>
       </li>
     </ul>
+    <ul v-show="currentType === 'image-item-title'" id="patchouli-context-menu-list-image-item-title" >
+      <li>
+        <a role="button" @click.left="addToBlacklist">
+          <i class="far fa-eye-slash"/>
+          {{ $t('contextMenu.addToBlacklist') }}
+        </a>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -38,7 +46,13 @@ export default {
     xm() {
       return this.$store.state.contextMenu;
     },
-    currentData() {
+    currentType() {
+      if (!this.xm.data) {
+        return "";
+      }
+      return this.xm.data.type;
+    },
+    currentImageItem() {
       if (!this.xm.data) {
         return null;
       }
@@ -70,24 +84,24 @@ export default {
     },
     isDownloadable() {
       return (
-        this.currentData &&
-        this.currentData.illustPageCount === 1 &&
-        !this.currentData.isUgoira // unsupport ugoira currently
+        this.currentImageItem &&
+        this.currentImageItem.illustPageCount === 1 &&
+        !this.currentImageItem.isUgoira // unsupport ugoira currently
       );
     }
   },
   methods: {
     thumbUp() {
-      if (this.currentData) {
+      if (this.currentImageItem) {
         PixivAPI.postThumbUp(
-          this.currentData.illustId,
-          this.currentData.userId
+          this.currentImageItem.illustId,
+          this.currentImageItem.userId
         );
       }
     },
     async downloadOne() {
-      const imgUrl = this.currentData.url.big;
-      const illustId = this.currentData.illustId;
+      const imgUrl = this.currentImageItem.url.big;
+      const illustId = this.currentImageItem.illustId;
       const a = $el("a", { href: imgUrl });
 
       const filename = a.pathname.split("/").pop();
@@ -111,6 +125,14 @@ export default {
       } else if (ext === "png") {
         saveAs(new File([response.response], filename, { type: "image/png" }));
       }
+    },
+    addToBlacklist() {
+      if (this.currentImageItem) {
+        const userId = this.currentImageItem.userId;
+        this.$store.state.config.blacklist.push(userId);
+        this.$store.state.config.blacklist.sort((a, b) => a - b);
+        this.$store.commit("saveConfig");
+      }
     }
   }
 };
@@ -127,11 +149,11 @@ export default {
   overflow: hidden;
   border-radius: 6px;
 }
-#patchouli-context-menu-list > li {
+#patchouli-context-menu > ul > li {
   display: flex;
   align-items: center;
 }
-#patchouli-context-menu-list a {
+#patchouli-context-menu > ul a {
   color: #85a;
   padding: 3px;
   flex: 1;
@@ -142,13 +164,13 @@ export default {
   align-items: center;
   text-align: center;
 }
-#patchouli-context-menu-list a:hover {
+#patchouli-context-menu > ul a:hover {
   background-color: #b28fce;
   color: #fff;
   cursor: pointer;
 }
-#patchouli-context-menu-list i.far,
-#patchouli-context-menu-list i.fas {
+#patchouli-context-menu > ul i.far,
+#patchouli-context-menu > ul i.fas {
   height: 18px;
   width: 18px;
   margin: 0 4px;
