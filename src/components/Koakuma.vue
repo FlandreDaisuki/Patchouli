@@ -305,12 +305,12 @@ a[role="button"] > .fa-angle-down {
 #koakuma-bookmark-input-usual-list,
 #koakuma-sorting-order-select-list {
   border-radius: 3px;
-  border-top: 1px solid #888;
   background-color: #cef;
-  box-shadow: 0 0 1px #069;
+  box-shadow: 0 0 2px #069;
   position: absolute;
   top: 100%;
   width: 100%;
+  margin-top: 1px;
 }
 #koakuma-bookmark-input-usual-list > li::after,
 #koakuma-sorting-order-select-list > li::after {
