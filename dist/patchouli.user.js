@@ -1553,26 +1553,27 @@
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
     return _c("figcaption", { staticClass: "image-item-title" }, [
-      _c(
-        "ul",
-        {
-          on: {
-            contextmenu: function($event) {
-              return _vm.activateContextMenu($event)
-            }
-          }
-        },
-        [
-          _c("li", { staticClass: "title-text" }, [
-            _c(
-              "a",
-              { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
-              [_vm._v(_vm._s(_vm.illustTitle))]
-            )
-          ]),
-          _vm._v(" "),
-          !_vm.isMemberIllistPage
-            ? _c("li", { staticClass: "user-info" }, [
+      _c("ul", [
+        _c("li", { staticClass: "title-text" }, [
+          _c(
+            "a",
+            { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
+            [_vm._v(_vm._s(_vm.illustTitle))]
+          )
+        ]),
+        _vm._v(" "),
+        !_vm.isMemberIllistPage
+          ? _c(
+              "li",
+              {
+                staticClass: "user-info",
+                on: {
+                  contextmenu: function($event) {
+                    return _vm.activateContextMenu($event)
+                  }
+                }
+              },
+              [
                 _c(
                   "a",
                   {
@@ -1596,39 +1597,39 @@
                 ),
                 _vm._v(" "),
                 _vm.isFollow ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.bookmarkCount > 0
-            ? _c("li", [
-                _c("ul", { staticClass: "count-list" }, [
-                  _c("li", [
-                    _c(
-                      "a",
-                      {
-                        staticClass: "_ui-tooltip bookmark-count",
-                        attrs: {
-                          href: _vm.bookmarkDetailUrl,
-                          "data-tooltip": _vm.$t("patchouli.bookmarkTooltip", {
-                            count: _vm.bookmarkCount
-                          })
-                        }
-                      },
-                      [
-                        _c("i", { staticClass: "_icon _bookmark-icon-inline" }),
-                        _vm._v(
-                          "\n            " +
-                            _vm._s(_vm.bookmarkCount) +
-                            "\n          "
-                        )
-                      ]
-                    )
-                  ])
+              ]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.bookmarkCount > 0
+          ? _c("li", [
+              _c("ul", { staticClass: "count-list" }, [
+                _c("li", [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "_ui-tooltip bookmark-count",
+                      attrs: {
+                        href: _vm.bookmarkDetailUrl,
+                        "data-tooltip": _vm.$t("patchouli.bookmarkTooltip", {
+                          count: _vm.bookmarkCount
+                        })
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "_icon _bookmark-icon-inline" }),
+                      _vm._v(
+                        "\n            " +
+                          _vm._s(_vm.bookmarkCount) +
+                          "\n          "
+                      )
+                    ]
+                  )
                 ])
               ])
-            : _vm._e()
-        ]
-      )
+            ])
+          : _vm._e()
+      ])
     ])
   };
   var __vue_staticRenderFns__$2 = [];
@@ -1638,9 +1639,9 @@
     : {};
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject("data-v-254e2e43_0", { source: "\n.image-item-title[data-v-254e2e43] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-254e2e43] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-254e2e43] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-254e2e43] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-254e2e43] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-254e2e43] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
+    inject("data-v-2c87868a_0", { source: "\n.image-item-title[data-v-2c87868a] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-2c87868a] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-2c87868a] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-2c87868a] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-2c87868a] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-2c87868a] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$2 = "data-v-254e2e43";
+  const __vue_scope_id__$2 = "data-v-2c87868a";
   const __vue_module_identifier__$2 = undefined;
   const __vue_is_functional_template__$2 = false;
   function __vue_normalize__$2(

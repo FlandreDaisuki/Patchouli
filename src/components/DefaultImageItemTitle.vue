@@ -1,10 +1,13 @@
 <template>
   <figcaption class="image-item-title">
-    <ul @click.right="activateContextMenu">
+    <ul>
       <li class="title-text">
         <a :href="illustPageUrl" :title="illustTitle">{{ illustTitle }}</a>
       </li>
-      <li v-if="!isMemberIllistPage" class="user-info">
+      <li
+        v-if="!isMemberIllistPage"
+        class="user-info"
+        @click.right="activateContextMenu">
         <a
           :href="userPageUrl"
           :title="userName"
