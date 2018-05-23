@@ -7,7 +7,7 @@
       @click.right="activateContextMenu">
 
       <div v-if="illustPageCount > 1" class="top-right-slot">
-        <span><span class="multiple-icon"/>
+        <span><i class="far fa-images"/>
           {{ illustPageCount }}</span>
       </div>
 
@@ -119,6 +119,9 @@ export default {
   position: relative;
   height: 200px;
 }
+.image-flexbox:hover {
+  text-decoration: none;
+}
 .top-right-slot {
   flex: none;
   display: flex;
@@ -136,20 +139,13 @@ export default {
   line-height: 1;
   font-weight: 700;
 }
-.multiple-icon {
-  display: inline-block;
-  margin-right: 4px;
-  width: 10px;
-  height: 10px;
-  background: url(https://source.pixiv.net/www/js/bundle/3b9b0b9e331e13c46aeadaea83132203.svg);
-}
 .ugoira-icon {
   position: absolute;
   flex: none;
   width: 40px;
   height: 40px;
-  background: url(https://source.pixiv.net/www/js/bundle/f608d897f389e8161e230b817068526d.svg)
-    50% no-repeat;
+  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%
+    no-repeat;
   top: 50%;
   left: 50%;
   margin: -20px 0 0 -20px;
@@ -166,8 +162,8 @@ img {
   z-index: 2;
   text-align: center;
   cursor: pointer;
-  background: url(https://source.pixiv.net/www/images/bookmark-heart-off.svg)
-    center transparent;
+  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center
+    transparent;
   background-repeat: no-repeat;
   background-size: cover;
   opacity: 0.8;
@@ -175,7 +171,7 @@ img {
   transition: opacity 0.2s ease-in-out;
 }
 ._one-click-bookmark.on {
-  background-image: url(https://source.pixiv.net/www/images/bookmark-heart-on.svg);
+  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);
 }
 .bookmark-input-container {
   position: absolute;
