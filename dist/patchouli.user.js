@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.0-beta.8
+// @version           4.1.0-beta.9
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -307,6 +307,27 @@
         detail[d.illustId] = d;
       }
       return detail;
+    }
+    async getMultipleIllustHTMLDetail(illustId) {
+      const url = `/member_illust.php?mode=manga&illust_id=${illustId}`;
+      const failResult = {
+        illustId,
+        imgSrcs: []
+      };
+      try {
+        const html = await this.fetch(url);
+        const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
+        if (!srcAttrHTML) {
+          return failResult;
+        }
+        const imgSrcs = srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
+        return {
+          illustId,
+          imgSrcs
+        };
+      } catch (error) {
+        $print.error('Pixiv#getMultipleIllustHTMLDetail: error:', error);
+      }
     }
     async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {
       const searchParams = {
@@ -2017,6 +2038,9 @@
           this.currentImageItem.illustPageCount === 1 &&
           !this.currentImageItem.isUgoira
         );
+      },
+      isUgoira() {
+        return this.currentImageItem && this.currentImageItem.isUgoira;
       }
     },
     methods: {
@@ -2058,6 +2082,12 @@
           this.$store.state.config.blacklist.sort((a, b) => a - b);
           this.$store.commit("saveConfig");
         }
+      },
+      openPreview() {
+        this.$store.commit("openBigComponent", {
+          mode: "preview",
+          data: this.currentImageItem
+        });
       }
     }
   };
@@ -2165,6 +2195,53 @@
               ]
             ),
             _vm._v(" "),
+            _c(
+              "li",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.isUgoira,
+                    expression: "!isUgoira"
+                  }
+                ]
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    attrs: { role: "button" },
+                    on: {
+                      click: function($event) {
+                        if (
+                          !("button" in $event) &&
+                          _vm._k($event.keyCode, "left", 37, $event.key, [
+                            "Left",
+                            "ArrowLeft"
+                          ])
+                        ) {
+                          return null
+                        }
+                        if ("button" in $event && $event.button !== 0) {
+                          return null
+                        }
+                        return _vm.openPreview($event)
+                      }
+                    }
+                  },
+                  [
+                    _c("i", { staticClass: "fas fa-search-plus" }),
+                    _vm._v(
+                      "\n        " +
+                        _vm._s(_vm.$t("contextMenu.preview")) +
+                        "\n      "
+                    )
+                  ]
+                )
+              ]
+            ),
+            _vm._v(" "),
             _c("li", [
               _c(
                 "a",
@@ -2247,9 +2324,9 @@
     : {};
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-47525b28_0", { source: "\n#patchouli-context-menu[data-v-47525b28] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-47525b28] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-47525b28] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-47525b28]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-47525b28],\n#patchouli-context-menu > ul i.fas[data-v-47525b28] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-62a3feb7_0", { source: "\n#patchouli-context-menu[data-v-62a3feb7] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-62a3feb7] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-62a3feb7] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-62a3feb7]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-62a3feb7],\n#patchouli-context-menu > ul i.fas[data-v-62a3feb7] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$4 = "data-v-47525b28";
+  const __vue_scope_id__$4 = "data-v-62a3feb7";
   const __vue_module_identifier__$4 = undefined;
   const __vue_is_functional_template__$4 = false;
   function __vue_normalize__$4(
@@ -2495,12 +2572,39 @@
     typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
   );
   var script$6 = {
+    data() {
+      return {
+        previewSrcList: [],
+        previewCurrentIndex: 0
+      };
+    },
     computed: {
       xm() {
         return this.$store.state.bigComponent;
       },
       xc() {
         return this.$store.state.config;
+      },
+      mode() {
+        return this.xm.mode;
+      }
+    },
+    watch: {
+      async mode(value) {
+        if (value === "preview") {
+          const imageItem = this.xm.data;
+          if (imageItem.illustPageCount > 1) {
+            const d = await PixivAPI.getMultipleIllustHTMLDetail(
+              imageItem.illustId
+            );
+            this.previewSrcList.push(...d.imgSrcs);
+          } else {
+            this.previewSrcList.push(imageItem.url.big);
+          }
+        } else if (!value) {
+          this.previewSrcList.length = 0;
+          this.previewCurrentIndex = 0;
+        }
       }
     },
     methods: {
@@ -2530,6 +2634,9 @@
         if (isClickContextMenuSwitch) {
           this.xc.contextMenu = Number.toInt(!this.xc.contextMenu);
         }
+      },
+      jumpPreview(index) {
+        this.previewCurrentIndex = index;
       }
     }
   };
@@ -2542,12 +2649,7 @@
       "div",
       {
         directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.xm.mode,
-            expression: "xm.mode"
-          }
+          { name: "show", rawName: "v-show", value: _vm.mode, expression: "mode" }
         ],
         attrs: { id: "patchouli-big-component" },
         on: {
@@ -2578,8 +2680,8 @@
               {
                 name: "show",
                 rawName: "v-show",
-                value: _vm.xm.mode === "config",
-                expression: "xm.mode === 'config'"
+                value: _vm.mode === "config",
+                expression: "mode === 'config'"
               }
             ],
             attrs: { id: "config-mode" },
@@ -2677,11 +2779,11 @@
               {
                 name: "show",
                 rawName: "v-show",
-                value: _vm.xm.mode === "row-flow-preview",
-                expression: "xm.mode === 'row-flow-preview'"
+                value: _vm.mode === "preview",
+                expression: "mode === 'preview'"
               }
             ],
-            attrs: { id: "row-flow-preview-mode" },
+            attrs: { id: "preview-mode" },
             on: {
               click: function($event) {
                 $event.stopPropagation();
@@ -2689,41 +2791,67 @@
             }
           },
           [
-            _vm._v(
-              "\n    [" +
-                _vm._s(_vm.xm.mode) +
-                "] [" +
-                _vm._s(_vm.xm.data) +
-                "]\n  "
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            directives: [
+            _c("div", { attrs: { id: "preview-display-area" } }, [
+              _c(
+                "a",
+                {
+                  attrs: {
+                    href: _vm.previewSrcList[_vm.previewCurrentIndex],
+                    target: "_blank"
+                  }
+                },
+                [
+                  _c("img", {
+                    attrs: { src: _vm.previewSrcList[_vm.previewCurrentIndex] }
+                  })
+                ]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "ul",
               {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.xm.mode === "col-flow-preview",
-                expression: "xm.mode === 'col-flow-preview'"
-              }
-            ],
-            attrs: { id: "col-flow-preview-mode" },
-            on: {
-              click: function($event) {
-                $event.stopPropagation();
-              }
-            }
-          },
-          [
-            _vm._v(
-              "\n    [" +
-                _vm._s(_vm.xm.mode) +
-                "] [" +
-                _vm._s(_vm.xm.data) +
-                "]\n  "
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.previewSrcList.length > 1,
+                    expression: "previewSrcList.length > 1"
+                  }
+                ],
+                attrs: { id: "preview-thumbnails-area" }
+              },
+              _vm._l(_vm.previewSrcList, function(pSrc, index) {
+                return _c("li", { key: pSrc }, [
+                  _c(
+                    "a",
+                    {
+                      class:
+                        index === _vm.previewCurrentIndex
+                          ? "current-preview"
+                          : "",
+                      on: {
+                        click: function($event) {
+                          if (
+                            !("button" in $event) &&
+                            _vm._k($event.keyCode, "left", 37, $event.key, [
+                              "Left",
+                              "ArrowLeft"
+                            ])
+                          ) {
+                            return null
+                          }
+                          if ("button" in $event && $event.button !== 0) {
+                            return null
+                          }
+                          _vm.jumpPreview(index);
+                        }
+                      }
+                    },
+                    [_c("img", { attrs: { src: pSrc } })]
+                  )
+                ])
+              })
             )
           ]
         )
@@ -2737,9 +2865,9 @@
     : {};
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-5f8193d0_0", { source: "\n#patchouli-big-component[data-v-5f8193d0] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#patchouli-big-component > div[data-v-5f8193d0] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #a5b6fa;\n}\n#config-mode[data-v-5f8193d0] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-5f8193d0] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-5f8193d0] {\n  flex: 1;\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-5f8193d0]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-5f8193d0] {\n  flex: 4;\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-5f8193d0] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-5f8193d0] {\n  box-sizing: border-box;\n  flex: 5;\n  resize: none;\n  font-size: 11pt;\n}\n", map: undefined, media: undefined });
+    inject("data-v-7b1d5183_0", { source: "\n#patchouli-big-component[data-v-7b1d5183] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-7b1d5183],\n#preview-mode[data-v-7b1d5183] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-7b1d5183] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-7b1d5183] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-7b1d5183] {\n  flex: 1;\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-7b1d5183]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-7b1d5183] {\n  flex: 4;\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-7b1d5183] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-7b1d5183] {\n  box-sizing: border-box;\n  flex: 5;\n  resize: none;\n  font-size: 11pt;\n}\n#preview-mode[data-v-7b1d5183] {\n  min-width: 70vw;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: 1fr max-content;\n}\n#preview-display-area[data-v-7b1d5183] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n}\n#preview-display-area img[data-v-7b1d5183] {\n  object-fit: contain;\n  width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-7b1d5183] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  max-width: 70vw;\n}\n#preview-thumbnails-area > li[data-v-7b1d5183] {\n  margin: 0 5px;\n}\n#preview-thumbnails-area > li > a[data-v-7b1d5183] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-7b1d5183] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-7b1d5183] {\n  max-height: 100px;\n  cursor: pointer;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$6 = "data-v-5f8193d0";
+  const __vue_scope_id__$6 = "data-v-7b1d5183";
   const __vue_module_identifier__$6 = undefined;
   const __vue_is_functional_template__$6 = false;
   function __vue_normalize__$6(
@@ -2859,7 +2987,8 @@
           thumbUp: 'Like',
           openBookmarkPage: 'Add Bookmark Page',
           download: 'Download',
-          addToBlacklist: 'Add to Blacklist'
+          addToBlacklist: 'Add to Blacklist',
+          preview: 'Preview'
         },
         config: {
           contextMenuExtension: 'Right click extension',
@@ -2884,7 +3013,8 @@
           thumbUp: 'いいね',
           openBookmarkPage: 'ブックマーク追加ページ',
           download: 'ダウンロード',
-          addToBlacklist: 'ブラックリストへ'
+          addToBlacklist: 'ブラックリストへ',
+          preview: 'プレビュー'
         },
         config: {
           contextMenuExtension: '右クリックの拡張機能',
@@ -2909,7 +3039,8 @@
           thumbUp: '赞',
           openBookmarkPage: '开启添加收藏页',
           download: '下载',
-          addToBlacklist: '拉黑'
+          addToBlacklist: '拉黑',
+          preview: '原图预览'
         },
         config: {
           contextMenuExtension: '右键扩展',
@@ -2934,7 +3065,8 @@
           thumbUp: '讚',
           openBookmarkPage: '開啟添加收藏頁',
           download: '下載',
-          addToBlacklist: '加入黑名單'
+          addToBlacklist: '加入黑名單',
+          preview: '原圖預覽'
         },
         config: {
           contextMenuExtension: '擴充右鍵',

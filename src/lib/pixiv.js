@@ -192,10 +192,12 @@ class Pixiv {
 
   async getIllustHTMLDetail(illustId) {
     const url = `/member_illust.php?mode=medium&illust_id=${illustId}`;
+
     const failResult = {
       illustId,
       tags: []
     };
+
     try {
       const html = await this.fetch(url);
       const tagHTMLPart = html.match(/class="work-tags"[.\s\S]*template-work-tag/ig);
@@ -224,6 +226,32 @@ class Pixiv {
       detail[d.illustId] = d;
     }
     return detail;
+  }
+
+  async getMultipleIllustHTMLDetail(illustId) {
+    const url = `/member_illust.php?mode=manga&illust_id=${illustId}`;
+
+    const failResult = {
+      illustId,
+      imgSrcs: []
+    };
+
+    try {
+      const html = await this.fetch(url);
+      const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
+      $print.debug('Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
+      if (!srcAttrHTML) {
+        return failResult;
+      }
+      const imgSrcs = srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
+      $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
+      return {
+        illustId,
+        imgSrcs
+      };
+    } catch (error) {
+      $print.error('Pixiv#getMultipleIllustHTMLDetail: error:', error);
+    }
   }
 
   async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {

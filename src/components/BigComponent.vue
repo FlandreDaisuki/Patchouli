@@ -1,12 +1,12 @@
 <template>
   <div
-    v-show="xm.mode"
+    v-show="mode"
     id="patchouli-big-component"
     @click.left="clickBase"
     @scroll="focusForeground"
     @wheel="focusForeground">
     <div
-      v-show="xm.mode === 'config'"
+      v-show="mode === 'config'"
       id="config-mode"
       @click.stop="0">
       <a id="config-context-menu-switch" @click.left="clickSwitch">
@@ -34,24 +34,38 @@
         rows="5"/>
     </div>
     <div
-      v-show="xm.mode === 'row-flow-preview'"
-      id="row-flow-preview-mode"
+      v-show="mode === 'preview'"
+      id="preview-mode"
       @click.stop="0">
-      [{{ xm.mode }}] [{{ xm.data }}]
-    </div>
-    <div
-      v-show="xm.mode === 'col-flow-preview'"
-      id="col-flow-preview-mode"
-      @click.stop="0">
-      [{{ xm.mode }}] [{{ xm.data }}]
+      <div id="preview-display-area">
+        <a :href="previewSrcList[previewCurrentIndex]" target="_blank">
+          <img :src="previewSrcList[previewCurrentIndex]">
+        </a>
+      </div>
+      <ul v-show="previewSrcList.length > 1" id="preview-thumbnails-area">
+        <li v-for="(pSrc, index) in previewSrcList" :key="pSrc">
+          <a
+            :class="(index === previewCurrentIndex) ? 'current-preview' : ''"
+            @click.left="jumpPreview(index)" >
+            <img :src="pSrc">
+          </a>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script>
+import { PixivAPI } from "../lib/pixiv";
 import { $, $print } from "../lib/utils";
 
 export default {
+  data() {
+    return {
+      previewSrcList: [],
+      previewCurrentIndex: 0
+    };
+  },
   computed: {
     // vue'x' state 'm'odule
     xm() {
@@ -60,6 +74,28 @@ export default {
     // vue'x' state 'c'onfig
     xc() {
       return this.$store.state.config;
+    },
+    mode() {
+      return this.xm.mode;
+    }
+  },
+  watch: {
+    async mode(value) {
+      $print.debug("watch mode change:", value);
+      if (value === "preview") {
+        const imageItem = this.xm.data;
+        if (imageItem.illustPageCount > 1) {
+          const d = await PixivAPI.getMultipleIllustHTMLDetail(
+            imageItem.illustId
+          );
+          this.previewSrcList.push(...d.imgSrcs);
+        } else {
+          this.previewSrcList.push(imageItem.url.big);
+        }
+      } else if (!value) {
+        this.previewSrcList.length = 0;
+        this.previewCurrentIndex = 0;
+      }
     }
   },
   methods: {
@@ -92,6 +128,9 @@ export default {
       if (isClickContextMenuSwitch) {
         this.xc.contextMenu = Number.toInt(!this.xc.contextMenu);
       }
+    },
+    jumpPreview(index) {
+      this.previewCurrentIndex = index;
     }
   }
 };
@@ -110,10 +149,11 @@ export default {
   align-items: center;
   justify-content: center;
 }
-#patchouli-big-component > div {
+#config-mode,
+#preview-mode {
   min-width: 100px;
   min-height: 100px;
-  background-color: #a5b6fa;
+  background-color: #eef;
 }
 #config-mode {
   display: flex;
@@ -147,5 +187,45 @@ export default {
   flex: 5;
   resize: none;
   font-size: 11pt;
+}
+#preview-mode {
+  min-width: 70vw;
+  height: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-rows: 1fr max-content;
+}
+#preview-display-area {
+  border: 2px #00186c solid;
+  box-sizing: border-box;
+}
+#preview-display-area img {
+  object-fit: contain;
+  width: 100%;
+  max-height: 100%;
+}
+#preview-thumbnails-area {
+  background-color: ghostwhite;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 70vw;
+}
+#preview-thumbnails-area > li {
+  margin: 0 5px;
+}
+#preview-thumbnails-area > li > a {
+  cursor: pointer;
+  display: inline-block;
+}
+.current-preview {
+  border: 3px solid palevioletred;
+}
+#preview-thumbnails-area > li > a > img {
+  max-height: 100px;
+  cursor: pointer;
+  box-sizing: border-box;
+  display: inline-block;
 }
 </style>

@@ -25,7 +25,8 @@ export default new VueI18n({
         thumbUp: 'Like',
         openBookmarkPage: 'Add Bookmark Page',
         download: 'Download',
-        addToBlacklist: 'Add to Blacklist'
+        addToBlacklist: 'Add to Blacklist',
+        preview: 'Preview'
       },
       config: {
         contextMenuExtension: 'Right click extension',
@@ -50,7 +51,8 @@ export default new VueI18n({
         thumbUp: 'いいね',
         openBookmarkPage: 'ブックマーク追加ページ',
         download: 'ダウンロード',
-        addToBlacklist: 'ブラックリストへ'
+        addToBlacklist: 'ブラックリストへ',
+        preview: 'プレビュー'
       },
       config: {
         contextMenuExtension: '右クリックの拡張機能',
@@ -75,7 +77,8 @@ export default new VueI18n({
         thumbUp: '赞',
         openBookmarkPage: '开启添加收藏页',
         download: '下载',
-        addToBlacklist: '拉黑'
+        addToBlacklist: '拉黑',
+        preview: '原图预览'
       },
       config: {
         contextMenuExtension: '右键扩展',
@@ -100,7 +103,8 @@ export default new VueI18n({
         thumbUp: '讚',
         openBookmarkPage: '開啟添加收藏頁',
         download: '下載',
-        addToBlacklist: '加入黑名單'
+        addToBlacklist: '加入黑名單',
+        preview: '原圖預覽'
       },
       config: {
         contextMenuExtension: '擴充右鍵',

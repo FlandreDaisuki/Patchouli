@@ -13,6 +13,12 @@
           {{ $t('contextMenu.download') }}
         </a>
       </li>
+      <li v-show="!isUgoira">
+        <a role="button" @click.left="openPreview">
+          <i class="fas fa-search-plus"/>
+          {{ $t('contextMenu.preview') }}
+        </a>
+      </li>
       <li>
         <a
           :href="bookmarkPageLink"
@@ -88,6 +94,9 @@ export default {
         this.currentImageItem.illustPageCount === 1 &&
         !this.currentImageItem.isUgoira // unsupport ugoira currently
       );
+    },
+    isUgoira() {
+      return this.currentImageItem && this.currentImageItem.isUgoira;
     }
   },
   methods: {
@@ -133,6 +142,12 @@ export default {
         this.$store.state.config.blacklist.sort((a, b) => a - b);
         this.$store.commit("saveConfig");
       }
+    },
+    openPreview() {
+      this.$store.commit("openBigComponent", {
+        mode: "preview",
+        data: this.currentImageItem
+      });
     }
   }
 };
