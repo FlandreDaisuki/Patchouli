@@ -189,19 +189,24 @@ export default {
   font-size: 11pt;
 }
 #preview-mode {
-  min-width: 70vw;
+  width: 70%;
   height: 100%;
   box-sizing: border-box;
   display: grid;
-  grid-template-rows: 1fr max-content;
+  grid-template-rows: minmax(0, auto) max-content;
 }
 #preview-display-area {
   border: 2px #00186c solid;
   box-sizing: border-box;
+  text-align: center;
 }
-#preview-display-area img {
+#preview-display-area > a {
+  display: inline-block;
+  height: 100%;
+}
+#preview-display-area > a > img {
   object-fit: contain;
-  width: 100%;
+  max-width: 100%;
   max-height: 100%;
 }
 #preview-thumbnails-area {
@@ -210,7 +215,7 @@ export default {
   align-items: center;
   overflow-x: auto;
   overflow-y: hidden;
-  max-width: 70vw;
+  height: 100%;
 }
 #preview-thumbnails-area > li {
   margin: 0 5px;
