@@ -168,14 +168,12 @@ export default {
   text-decoration: none;
 }
 #config-mode [id$="switch"] {
-  flex: 1;
   text-align: center;
 }
 #config-mode [id$="switch"]:hover {
   cursor: pointer;
 }
 #config-mode [id$="label"] {
-  flex: 4;
   text-align: center;
   margin: 0 5px;
 }
@@ -184,9 +182,10 @@ export default {
 }
 #config-blacklist-textarea {
   box-sizing: border-box;
-  flex: 5;
+  flex: 1;
   resize: none;
   font-size: 11pt;
+  height: 90px;
 }
 #preview-mode {
   width: 70%;
