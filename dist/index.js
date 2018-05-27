@@ -306,49 +306,6 @@ class Pixiv {
     }
   }
 
-  async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {
-    const searchParams = {
-      type: 'illust',
-      sample_illusts: illustIds,
-      num_recommendations: numRecommendations,
-      tt: this.tt
-    };
-    const url = `/rpc/recommender.php?${searchParams.entries.map(p => p.join('=')).join('&')}`;
-    try {
-      const data = await this.fetch(url);
-      return data.recommendations.map(x => `${x}`);
-    } catch (error) {
-      $print.error('Pixiv#getRecommendationsAPIDetails: error:', error);
-    }
-  }
-
-  async postBookmarkAdd(illustId) {
-    const searchParams = {
-      mode: 'save_illust_bookmark',
-      illust_id: illustId,
-      restrict: 0,
-      comment: '',
-      tags: '',
-      tt: this.tt
-    };
-    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
-    const config = {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    };
-
-    try {
-      const res = await axios.post('/rpc/index.php', data, config);
-      if (res.statusText === 'OK') {
-        $print.debug('Pixiv#postBookmarkAdd: res.data:', res.data);
-        return !res.data.error;
-      } else {
-        throw new Error(res.statusText);
-      }
-    } catch (error) {
-      $print.error('Pixiv#postBookmarkAdd: error:', error);
-    }
-  }
-
   async postThumbUp(illustId, userId) {
     const searchParams = {
       mode: 'save',
@@ -616,7 +573,7 @@ var bigComponent = {
     openBigComponent(state, payload) {
       Object.assign(state, payload);
     },
-    closeBigComponent(state, /*payload*/) {
+    closeBigComponent(state) {
       state.mode = null;
     }
   }
@@ -744,8 +701,8 @@ var store = new Vuex.Store({
 var script = {
   data() {
     return {
-      debounceId0: null,
-      debounceId1: null,
+      debounceId4sortInput: null,
+      debounceId4tagsFilter: null,
       usualSwitchOn: false,
       sortingOrderSwitchOn: false,
       usualList: [100, 500, 1000, 3000, 5000, 10000]
@@ -812,11 +769,11 @@ var script = {
       }
     },
     sortInputInput(event) {
-      if (this.debounceId0) {
-        clearTimeout(this.debounceId0);
+      if (this.debounceId4sortInput) {
+        clearTimeout(this.debounceId4sortInput);
       }
-      this.debounceId0 = setTimeout(() => {
-        this.debounceId0 = null;
+      this.debounceId4sortInput = setTimeout(() => {
+        this.debounceId4sortInput = null;
         this.filters.limit = Math.max(0, toInt(event.target.value));
       }, 500);
     },
@@ -831,11 +788,11 @@ var script = {
       this.$store.commit("applyConfig");
     },
     tagsFilterInput(event) {
-      if (this.debounceId1) {
-        clearTimeout(this.debounceId1);
+      if (this.debounceId4tagsFilter) {
+        clearTimeout(this.debounceId4tagsFilter);
       }
-      this.debounceId1 = setTimeout(() => {
-        this.debounceId1 = null;
+      this.debounceId4tagsFilter = setTimeout(() => {
+        this.debounceId4tagsFilter = null;
         this.filters.tag = new RegExp(event.target.value, "ig");
       }, 1500);
     },
@@ -854,12 +811,7 @@ var script = {
       this.sortingOrderSwitchOn = false;
     },
     openBigComponentInConfigMode() {
-      const bc = this.$store.state.bigComponent;
-      if (bc.mode) {
-        this.$store.commit("closeBigComponent");
-      } else {
-        this.$store.commit("openBigComponent", { mode: "config", data: null });
-      }
+      this.$store.commit("openBigComponent", { mode: "config", data: null });
     }
   }
 };
@@ -998,9 +950,8 @@ var __vue_render__ = function() {
       _c(
         "button",
         {
-          staticClass: "main-button",
           class: _vm.statusClass,
-          attrs: { disabled: _vm.status.isEnded },
+          attrs: { id: "koakuma-main-button", disabled: _vm.status.isEnded },
           on: { mouseup: _vm.clickMainButton }
         },
         [_vm._v("\n      " + _vm._s(_vm.buttonMsg) + "\n    ")]
@@ -1214,11 +1165,11 @@ const __vue_template__ = typeof __vue_render__ !== 'undefined'
 /* style */
 const __vue_inject_styles__ = function (inject) {
   if (!inject) return
-  inject("data-v-6501f2e6_0", { source: "\n@keyframes slidedown-data-v-6501f2e6 {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-6501f2e6] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-6501f2e6] {\n  padding: 2px;\n}\n#koakuma[data-v-6501f2e6] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-6501f2e6 0.7s linear;\n}\n#koakuma > div[data-v-6501f2e6] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-6501f2e6] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-6501f2e6],\n#koakuma-sorting-order-block[data-v-6501f2e6] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-6501f2e6] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-6501f2e6] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-6501f2e6]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-6501f2e6]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-6501f2e6] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-6501f2e6],\n#koakuma-sorting-order-select-switch[data-v-6501f2e6] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-6501f2e6] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-6501f2e6],\n#koakuma-sorting-order-select-list[data-v-6501f2e6] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-6501f2e6]::after,\n#koakuma-sorting-order-select-list > li[data-v-6501f2e6]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-6501f2e6]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-6501f2e6]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-6501f2e6]:hover::before,\n.sorting-order-link[data-v-6501f2e6]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-6501f2e6],\n.sorting-order-link[data-v-6501f2e6] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-6501f2e6] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-6501f2e6] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-6501f2e6] {\n  margin: 0 5px;\n}\n.main-button[data-v-6501f2e6] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-6501f2e6]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-6501f2e6]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n.main-button[data-v-6501f2e6]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-6501f2e6] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-6501f2e6] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-6501f2e6] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-6501f2e6],\n#koakuma-options-width-expand[data-v-6501f2e6],\n#koakuma-options-config[data-v-6501f2e6] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
+  inject("data-v-c7132180_0", { source: "\n@keyframes slidedown-data-v-c7132180 {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-c7132180] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-c7132180] {\n  padding: 2px;\n}\n#koakuma[data-v-c7132180] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-c7132180 0.7s linear;\n}\n#koakuma > div[data-v-c7132180] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-c7132180] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-c7132180],\n#koakuma-sorting-order-block[data-v-c7132180] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-c7132180] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-c7132180] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-c7132180]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-c7132180]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-c7132180] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-c7132180],\n#koakuma-sorting-order-select-switch[data-v-c7132180] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-c7132180] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-c7132180],\n#koakuma-sorting-order-select-list[data-v-c7132180] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-c7132180]::after,\n#koakuma-sorting-order-select-list > li[data-v-c7132180]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-c7132180]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-c7132180]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-c7132180]:hover::before,\n.sorting-order-link[data-v-c7132180]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-c7132180],\n.sorting-order-link[data-v-c7132180] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-c7132180] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-c7132180] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-c7132180] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-c7132180] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-c7132180]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-c7132180]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-c7132180]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-c7132180] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-c7132180] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-c7132180] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-c7132180],\n#koakuma-options-width-expand[data-v-c7132180],\n#koakuma-options-config[data-v-c7132180] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__ = "data-v-6501f2e6";
+const __vue_scope_id__ = "data-v-c7132180";
 /* module identifier */
 const __vue_module_identifier__ = undefined;
 /* functional template */
@@ -1978,11 +1929,6 @@ var script$3 = {
       type: Number,
       default: 0
     }
-  },
-  computed: {
-    pageType() {
-      return this.$store.state.pageType;
-    }
   }
 };
 
@@ -2017,8 +1963,7 @@ var __vue_render__$3 = function() {
             "user-id": _vm.userId,
             "is-follow": _vm.isFollow,
             "profile-img-url": _vm.profileImgUrl,
-            "bookmark-count": _vm.bookmarkCount,
-            "page-type": _vm.pageType
+            "bookmark-count": _vm.bookmarkCount
           }
         })
       ],
@@ -2035,11 +1980,11 @@ const __vue_template__$3 = typeof __vue_render__$3 !== 'undefined'
 /* style */
 const __vue_inject_styles__$3 = function (inject) {
   if (!inject) return
-  inject("data-v-7bb09aa8_0", { source: "\n.image-item[data-v-7bb09aa8] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-7bb09aa8] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: undefined, media: undefined });
+  inject("data-v-0b72785a_0", { source: "\n.image-item[data-v-0b72785a] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-0b72785a] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$3 = "data-v-7bb09aa8";
+const __vue_scope_id__$3 = "data-v-0b72785a";
 /* module identifier */
 const __vue_module_identifier__$3 = undefined;
 /* functional template */
@@ -2206,17 +2151,20 @@ var script$4 = {
     xm() {
       return this.$store.state.contextMenu;
     },
+    xmd() {
+      return this.xm.data;
+    },
     currentType() {
-      if (!this.xm.data) {
+      if (!this.xmd) {
         return "";
       }
-      return this.xm.data.type;
+      return this.xmd.type;
     },
     currentImageItem() {
-      if (!this.xm.data) {
+      if (!this.xmd) {
         return null;
       }
-      const illustId = this.xm.data.illustId;
+      const illustId = this.xmd.illustId;
       const found = this.$store.state.pixiv.imgLibrary.find(
         i => i.illustId === illustId
       );
@@ -2236,10 +2184,10 @@ var script$4 = {
       return style;
     },
     bookmarkPageLink() {
-      if (!this.xm.data) {
+      if (!this.xmd) {
         return "#";
       }
-      const illustId = this.xm.data.illustId;
+      const illustId = this.xmd.illustId;
       return `bookmark_add.php?type=illust&illust_id=${illustId}`;
     },
     isDownloadable() {
@@ -2543,11 +2491,11 @@ const __vue_template__$4 = typeof __vue_render__$4 !== 'undefined'
 /* style */
 const __vue_inject_styles__$4 = function (inject) {
   if (!inject) return
-  inject("data-v-62a3feb7_0", { source: "\n#patchouli-context-menu[data-v-62a3feb7] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-62a3feb7] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-62a3feb7] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-62a3feb7]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-62a3feb7],\n#patchouli-context-menu > ul i.fas[data-v-62a3feb7] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+  inject("data-v-ffdc5b42_0", { source: "\n#patchouli-context-menu[data-v-ffdc5b42] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-ffdc5b42] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-ffdc5b42] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-ffdc5b42]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-ffdc5b42],\n#patchouli-context-menu > ul i.fas[data-v-ffdc5b42] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$4 = "data-v-62a3feb7";
+const __vue_scope_id__$4 = "data-v-ffdc5b42";
 /* module identifier */
 const __vue_module_identifier__$4 = undefined;
 /* functional template */
@@ -2880,6 +2828,7 @@ var script$6 = {
   watch: {
     async mode(value) {
       $print.debug("watch mode change:", value);
+
       if (value === "preview") {
         const imageItem = this.xm.data;
         if (imageItem.illustPageCount > 1) {
@@ -3160,11 +3109,11 @@ const __vue_template__$6 = typeof __vue_render__$6 !== 'undefined'
 /* style */
 const __vue_inject_styles__$6 = function (inject) {
   if (!inject) return
-  inject("data-v-5c79af83_0", { source: "\n#patchouli-big-component[data-v-5c79af83] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-5c79af83],\n#preview-mode[data-v-5c79af83] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-5c79af83] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-5c79af83] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-5c79af83] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-5c79af83]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-5c79af83] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-5c79af83] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-5c79af83] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-5c79af83] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-5c79af83] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-5c79af83] {\n  display: inline-block;\n  height: 100%;\n}\n#preview-display-area > a > img[data-v-5c79af83] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-5c79af83] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n}\n#preview-thumbnails-area > li[data-v-5c79af83] {\n  margin: 0 5px;\n}\n#preview-thumbnails-area > li > a[data-v-5c79af83] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-5c79af83] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-5c79af83] {\n  max-height: 100px;\n  cursor: pointer;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+  inject("data-v-eaeda36e_0", { source: "\n#patchouli-big-component[data-v-eaeda36e] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-eaeda36e],\n#preview-mode[data-v-eaeda36e] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-eaeda36e] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-eaeda36e] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-eaeda36e] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-eaeda36e]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-eaeda36e] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-eaeda36e] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-eaeda36e] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-eaeda36e] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-eaeda36e] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-eaeda36e] {\n  display: inline-block;\n  height: 100%;\n}\n#preview-display-area > a > img[data-v-eaeda36e] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-eaeda36e] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n}\n#preview-thumbnails-area > li[data-v-eaeda36e] {\n  margin: 0 5px;\n}\n#preview-thumbnails-area > li > a[data-v-eaeda36e] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-eaeda36e] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-eaeda36e] {\n  max-height: 100px;\n  cursor: pointer;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$6 = "data-v-5c79af83";
+const __vue_scope_id__$6 = "data-v-eaeda36e";
 /* module identifier */
 const __vue_module_identifier__$6 = undefined;
 /* functional template */

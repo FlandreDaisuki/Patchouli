@@ -7,7 +7,7 @@ export default {
     openBigComponent(state, payload) {
       Object.assign(state, payload);
     },
-    closeBigComponent(state, /*payload*/) {
+    closeBigComponent(state) {
       state.mode = null;
     }
   }

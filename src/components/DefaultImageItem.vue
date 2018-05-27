@@ -15,8 +15,7 @@
         :user-id="userId"
         :is-follow="isFollow"
         :profile-img-url="profileImgUrl"
-        :bookmark-count="bookmarkCount"
-        :page-type="pageType"/>
+        :bookmark-count="bookmarkCount"/>
     </figure>
   </div>
 </template>
@@ -75,11 +74,6 @@ export default {
     bookmarkCount: {
       type: Number,
       default: 0
-    }
-  },
-  computed: {
-    pageType() {
-      return this.$store.state.pageType;
     }
   }
 };

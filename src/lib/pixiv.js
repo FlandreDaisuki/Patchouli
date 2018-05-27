@@ -254,49 +254,6 @@ class Pixiv {
     }
   }
 
-  async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {
-    const searchParams = {
-      type: 'illust',
-      sample_illusts: illustIds,
-      num_recommendations: numRecommendations,
-      tt: this.tt
-    };
-    const url = `/rpc/recommender.php?${searchParams.entries.map(p => p.join('=')).join('&')}`;
-    try {
-      const data = await this.fetch(url);
-      return data.recommendations.map(x => `${x}`);
-    } catch (error) {
-      $print.error('Pixiv#getRecommendationsAPIDetails: error:', error);
-    }
-  }
-
-  async postBookmarkAdd(illustId) {
-    const searchParams = {
-      mode: 'save_illust_bookmark',
-      illust_id: illustId,
-      restrict: 0,
-      comment: '',
-      tags: '',
-      tt: this.tt
-    };
-    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
-    const config = {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    };
-
-    try {
-      const res = await axios.post('/rpc/index.php', data, config);
-      if (res.statusText === 'OK') {
-        $print.debug('Pixiv#postBookmarkAdd: res.data:', res.data);
-        return !res.data.error;
-      } else {
-        throw new Error(res.statusText);
-      }
-    } catch (error) {
-      $print.error('Pixiv#postBookmarkAdd: error:', error);
-    }
-  }
-
   async postThumbUp(illustId, userId) {
     const searchParams = {
       mode: 'save',

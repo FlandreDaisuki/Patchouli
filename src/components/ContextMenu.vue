@@ -52,17 +52,20 @@ export default {
     xm() {
       return this.$store.state.contextMenu;
     },
+    xmd() {
+      return this.xm.data;
+    },
     currentType() {
-      if (!this.xm.data) {
+      if (!this.xmd) {
         return "";
       }
-      return this.xm.data.type;
+      return this.xmd.type;
     },
     currentImageItem() {
-      if (!this.xm.data) {
+      if (!this.xmd) {
         return null;
       }
-      const illustId = this.xm.data.illustId;
+      const illustId = this.xmd.illustId;
       const found = this.$store.state.pixiv.imgLibrary.find(
         i => i.illustId === illustId
       );
@@ -82,10 +85,10 @@ export default {
       return style;
     },
     bookmarkPageLink() {
-      if (!this.xm.data) {
+      if (!this.xmd) {
         return "#";
       }
-      const illustId = this.xm.data.illustId;
+      const illustId = this.xmd.illustId;
       return `bookmark_add.php?type=illust&illust_id=${illustId}`;
     },
     isDownloadable() {

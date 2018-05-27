@@ -37,9 +37,9 @@
     </div>
     <div>
       <button
+        id="koakuma-main-button"
         :disabled="status.isEnded"
         :class="statusClass"
-        class="main-button"
         @mouseup="clickMainButton">
         {{ buttonMsg }}
       </button>
@@ -97,8 +97,8 @@ import { $print, toInt } from "../lib/utils";
 export default {
   data() {
     return {
-      debounceId0: null,
-      debounceId1: null,
+      debounceId4sortInput: null,
+      debounceId4tagsFilter: null,
       usualSwitchOn: false,
       sortingOrderSwitchOn: false,
       usualList: [100, 500, 1000, 3000, 5000, 10000]
@@ -165,11 +165,11 @@ export default {
       }
     },
     sortInputInput(event) {
-      if (this.debounceId0) {
-        clearTimeout(this.debounceId0);
+      if (this.debounceId4sortInput) {
+        clearTimeout(this.debounceId4sortInput);
       }
-      this.debounceId0 = setTimeout(() => {
-        this.debounceId0 = null;
+      this.debounceId4sortInput = setTimeout(() => {
+        this.debounceId4sortInput = null;
         this.filters.limit = Math.max(0, toInt(event.target.value));
       }, 500);
     },
@@ -184,11 +184,11 @@ export default {
       this.$store.commit("applyConfig");
     },
     tagsFilterInput(event) {
-      if (this.debounceId1) {
-        clearTimeout(this.debounceId1);
+      if (this.debounceId4tagsFilter) {
+        clearTimeout(this.debounceId4tagsFilter);
       }
-      this.debounceId1 = setTimeout(() => {
-        this.debounceId1 = null;
+      this.debounceId4tagsFilter = setTimeout(() => {
+        this.debounceId4tagsFilter = null;
         this.filters.tag = new RegExp(event.target.value, "ig");
       }, 1500);
     },
@@ -207,12 +207,7 @@ export default {
       this.sortingOrderSwitchOn = false;
     },
     openBigComponentInConfigMode() {
-      const bc = this.$store.state.bigComponent;
-      if (bc.mode) {
-        this.$store.commit("closeBigComponent");
-      } else {
-        this.$store.commit("openBigComponent", { mode: "config", data: null });
-      }
+      this.$store.commit("openBigComponent", { mode: "config", data: null });
     }
   }
 };
@@ -353,32 +348,32 @@ a[role="button"] > .fa-angle-down {
 #koakuma-options-block > * {
   margin: 0 5px;
 }
-.main-button {
+#koakuma-main-button {
   border: none;
   padding: 2px 14px;
   border-radius: 3px;
   font-size: 16px;
 }
-.main-button:enabled {
+#koakuma-main-button:enabled {
   transform: translate(-1px, -1px);
   box-shadow: 1px 1px 1px hsl(60, 0%, 30%);
   cursor: pointer;
 }
-.main-button:enabled:hover {
+#koakuma-main-button:enabled:hover {
   transform: translate(0);
   box-shadow: none;
 }
-.main-button:enabled:active {
+#koakuma-main-button:enabled:active {
   transform: translate(1px, 1px);
   box-shadow: -1px -1px 1px hsl(60, 0%, 30%);
 }
-.main-button.go {
+#koakuma-main-button.go {
   background-color: hsl(141, 100%, 50%);
 }
-.main-button.paused {
+#koakuma-main-button.paused {
   background-color: hsl(60, 100%, 50%);
 }
-.main-button.end {
+#koakuma-main-button.end {
   background-color: #878787;
   color: #fff;
   opacity: 0.87;

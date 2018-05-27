@@ -82,6 +82,7 @@ export default {
   watch: {
     async mode(value) {
       $print.debug("watch mode change:", value);
+
       if (value === "preview") {
         const imageItem = this.xm.data;
         if (imageItem.illustPageCount > 1) {
