@@ -267,6 +267,7 @@ class Pixiv {
       };
     } catch (error) {
       $print.error('Pixiv#getIllustHTMLDetail: error:', error);
+      return failResult;
     }
   }
 

@@ -279,6 +279,7 @@
         };
       } catch (error) {
         $print.error('Pixiv#getIllustHTMLDetail: error:', error);
+        return failResult;
       }
     }
     async getIllustHTMLDetails(illustIds) {
