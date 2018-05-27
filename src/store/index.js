@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { $, $el, $$ } from '../lib/utils';
+import { $, $el, $$, $after } from '../lib/utils';
 import pixiv from './modules/pixiv';
 import contextMenu from './modules/contextMenu';
 import bigComponent from './modules/bigComponent';
@@ -47,6 +47,7 @@ export default new Vuex.Store({
     pageType,
     koakumaMountPoint: null,
     patchouliMountPoint: null,
+    bigComponentMountPoint: null,
     VERSION: GM_info.script.version,
     NAME: GM_info.script.name,
     filters: {
@@ -66,7 +67,7 @@ export default new Vuex.Store({
         $('#wrapper').classList.add('ω');
 
         state.koakumaMountPoint = $el('div', { className: 'koakumaMountPoint' }, (el) => {
-          $('header._global-header').after(el);
+          $after($('header._global-header'), el);
         });
 
         if (pageType === 'SEARCH') {
@@ -79,7 +80,7 @@ export default new Vuex.Store({
           state.patchouliMountPoint = li ? li.parentElement : ul;
         }
 
-        state.bigComponentMountPoint = $el('div', {}, (el) => {
+        state.bigComponentMountPoint = $el('div', null, (el) => {
           document.body.appendChild(el);
         });
       }

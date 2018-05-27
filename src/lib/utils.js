@@ -33,45 +33,24 @@ const $print = {
   }
 };
 
-(() => {
-  Math.clamp = (val, min, max) => Math.min(Math.max(min, val), max);
-  Number.toInt = (s) => (isNaN(~~s) ? 0 : ~~s);
+const toInt = (x) => {
+  const t = Number(x);
+  return isNaN(t) ? 0 : Math.floor(t);
+};
 
-  // from: https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/after()/after().md
-  (function(arr) {
-    arr.forEach(function(item) {
-      if (item.hasOwnProperty('after')) {
-        return;
-      }
-      Object.defineProperty(item, 'after', {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: function after() {
-          const argArr = Array.prototype.slice.call(arguments);
-          const docFrag = document.createDocumentFragment();
+function $after(el, target) {
+  el.parentNode.insertBefore(target, el.nextSibling);
+}
 
-          argArr.forEach(function(argItem) {
-            const isNode = argItem instanceof Node;
-            docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
-          });
-
-          this.parentNode.insertBefore(docFrag, this.nextSibling);
-        }
-      });
-    });
-  })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
-
-  Element.prototype.getParents = function() {
-    let elementNode = this;
-    const collection = [];
-    while (elementNode.parentElement) {
-      collection.push(elementNode.parentElement);
-      elementNode = elementNode.parentElement;
-    }
-    return collection;
-  };
-})();
+function $parents(el) {
+  let cur = el;
+  const collection = [];
+  while (cur.parentElement) {
+    collection.push(cur.parentElement);
+    cur = cur.parentElement;
+  }
+  return collection;
+}
 
 export {
   $,
@@ -79,5 +58,8 @@ export {
   $find,
   $$find,
   $el,
-  $print
+  $print,
+  $after,
+  $parents,
+  toInt,
 };

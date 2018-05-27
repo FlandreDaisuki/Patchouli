@@ -3,7 +3,7 @@ import store from './store/index';
 import koakuma from './components/Koakuma.vue';
 import patchouli from './components/Patchouli.vue';
 import bigComponent from './components/BigComponent.vue';
-import { $, $print, $el } from './lib/utils';
+import { $, $print, $el, $parents } from './lib/utils';
 import { removeAnnoyings } from './lib/pixiv';
 import i18n from './lib/i18n';
 
@@ -83,10 +83,12 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   });
 
   document.body.addEventListener('click', (event) => {
-    if (!event.target.getParents().find((el) => el.id === 'koakuma-bookmark-input-usual-switch')) {
+    $print.debug('body#click event:', event);
+
+    if (!$parents(event.target).find((el) => el.id === 'koakuma-bookmark-input-usual-switch')) {
       Koakuma.$children[0].usualSwitchOn = false;
     }
-    if (!event.target.getParents().find((el) => el.id === 'koakuma-sorting-order-select-switch')) {
+    if (!$parents(event.target).find((el) => el.id === 'koakuma-sorting-order-select-switch')) {
       Koakuma.$children[0].sortingOrderSwitchOn = false;
     }
     if (store.state.contextMenu.active) {

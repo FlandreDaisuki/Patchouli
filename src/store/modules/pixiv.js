@@ -1,5 +1,5 @@
 import { PixivAPI } from '../../lib/pixiv';
-import { $print } from '../../lib/utils';
+import { $print, toInt } from '../../lib/utils';
 
 function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails, illustHTMLDetails }) {
   if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
@@ -18,7 +18,7 @@ function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, user
       bookmarkCount: bookmarkHTMLDetails[illustId].bookmarkCount,
       tags: allTags,
       illustTitle: illustDetail.illust_title,
-      illustPageCount: Number.toInt(illustDetail.illust_page_count),
+      illustPageCount: toInt(illustDetail.illust_page_count),
       userId: illustDetail.user_id,
       userName: illustDetail.user_name,
       isFollow: userAPIDetails[illustDetail.user_id].isFollow,
@@ -168,8 +168,8 @@ export default {
         .filter(el => !rootState.config.blacklist.includes(el.userId))
         .sort(
           (a, b) => {
-            const av = Number.toInt(a[getters.orderBy]);
-            const bv = Number.toInt(b[getters.orderBy]);
+            const av = toInt(a[getters.orderBy]);
+            const bv = toInt(b[getters.orderBy]);
             const c = bv - av;
             return dateOrder && getters.orderBy === 'illustId' ? -c : c;
           }

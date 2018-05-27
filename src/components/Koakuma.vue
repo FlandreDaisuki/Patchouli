@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { $print } from "../lib/utils";
+import { $print, toInt } from "../lib/utils";
 export default {
   data() {
     return {
@@ -159,9 +159,9 @@ export default {
     },
     sortInputWheel(event) {
       if (event.deltaY < 0) {
-        this.filters.limit = Number.toInt(event.target.value) + 20;
+        this.filters.limit = toInt(event.target.value) + 20;
       } else {
-        this.filters.limit = Math.max(0, Number.toInt(event.target.value) - 20);
+        this.filters.limit = Math.max(0, toInt(event.target.value) - 20);
       }
     },
     sortInputInput(event) {
@@ -170,7 +170,7 @@ export default {
       }
       this.debounceId0 = setTimeout(() => {
         this.debounceId0 = null;
-        this.filters.limit = Math.max(0, Number.toInt(event.target.value));
+        this.filters.limit = Math.max(0, toInt(event.target.value));
       }, 500);
     },
     optionsChange(event) {

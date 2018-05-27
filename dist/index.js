@@ -33,45 +33,24 @@ const $print = {
   }
 };
 
-(() => {
-  Math.clamp = (val, min, max) => Math.min(Math.max(min, val), max);
-  Number.toInt = (s) => (isNaN(~~s) ? 0 : ~~s);
+const toInt = (x) => {
+  const t = Number(x);
+  return isNaN(t) ? 0 : Math.floor(t);
+};
 
-  // from: https://github.com/jserz/js_piece/blob/master/DOM/ChildNode/after()/after().md
-  (function(arr) {
-    arr.forEach(function(item) {
-      if (item.hasOwnProperty('after')) {
-        return;
-      }
-      Object.defineProperty(item, 'after', {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: function after() {
-          const argArr = Array.prototype.slice.call(arguments);
-          const docFrag = document.createDocumentFragment();
+function $after(el, target) {
+  el.parentNode.insertBefore(target, el.nextSibling);
+}
 
-          argArr.forEach(function(argItem) {
-            const isNode = argItem instanceof Node;
-            docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
-          });
-
-          this.parentNode.insertBefore(docFrag, this.nextSibling);
-        }
-      });
-    });
-  })([Element.prototype, CharacterData.prototype, DocumentType.prototype]);
-
-  Element.prototype.getParents = function() {
-    let elementNode = this;
-    const collection = [];
-    while (elementNode.parentElement) {
-      collection.push(elementNode.parentElement);
-      elementNode = elementNode.parentElement;
-    }
-    return collection;
-  };
-})();
+function $parents(el) {
+  let cur = el;
+  const collection = [];
+  while (cur.parentElement) {
+    collection.push(cur.parentElement);
+    cur = cur.parentElement;
+  }
+  return collection;
+}
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
 
@@ -449,7 +428,7 @@ function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, user
       bookmarkCount: bookmarkHTMLDetails[illustId].bookmarkCount,
       tags: allTags,
       illustTitle: illustDetail.illust_title,
-      illustPageCount: Number.toInt(illustDetail.illust_page_count),
+      illustPageCount: toInt(illustDetail.illust_page_count),
       userId: illustDetail.user_id,
       userName: illustDetail.user_name,
       isFollow: userAPIDetails[illustDetail.user_id].isFollow,
@@ -599,8 +578,8 @@ var pixiv$1 = {
         .filter(el => !rootState.config.blacklist.includes(el.userId))
         .sort(
           (a, b) => {
-            const av = Number.toInt(a[getters.orderBy]);
-            const bv = Number.toInt(b[getters.orderBy]);
+            const av = toInt(a[getters.orderBy]);
+            const bv = toInt(b[getters.orderBy]);
             const c = bv - av;
             return dateOrder && getters.orderBy === 'illustId' ? -c : c;
           }
@@ -685,6 +664,7 @@ var store = new Vuex.Store({
     pageType,
     koakumaMountPoint: null,
     patchouliMountPoint: null,
+    bigComponentMountPoint: null,
     VERSION: GM_info.script.version,
     NAME: GM_info.script.name,
     filters: {
@@ -704,7 +684,7 @@ var store = new Vuex.Store({
         $('#wrapper').classList.add('ω');
 
         state.koakumaMountPoint = $el('div', { className: 'koakumaMountPoint' }, (el) => {
-          $('header._global-header').after(el);
+          $after($('header._global-header'), el);
         });
 
         if (pageType === 'SEARCH') {
@@ -717,7 +697,7 @@ var store = new Vuex.Store({
           state.patchouliMountPoint = li ? li.parentElement : ul;
         }
 
-        state.bigComponentMountPoint = $el('div', {}, (el) => {
+        state.bigComponentMountPoint = $el('div', null, (el) => {
           document.body.appendChild(el);
         });
       }
@@ -826,9 +806,9 @@ var script = {
     },
     sortInputWheel(event) {
       if (event.deltaY < 0) {
-        this.filters.limit = Number.toInt(event.target.value) + 20;
+        this.filters.limit = toInt(event.target.value) + 20;
       } else {
-        this.filters.limit = Math.max(0, Number.toInt(event.target.value) - 20);
+        this.filters.limit = Math.max(0, toInt(event.target.value) - 20);
       }
     },
     sortInputInput(event) {
@@ -837,7 +817,7 @@ var script = {
       }
       this.debounceId0 = setTimeout(() => {
         this.debounceId0 = null;
-        this.filters.limit = Math.max(0, Number.toInt(event.target.value));
+        this.filters.limit = Math.max(0, toInt(event.target.value));
       }, 500);
     },
     optionsChange(event) {
@@ -1234,11 +1214,11 @@ const __vue_template__ = typeof __vue_render__ !== 'undefined'
 /* style */
 const __vue_inject_styles__ = function (inject) {
   if (!inject) return
-  inject("data-v-40228a9c_0", { source: "\n@keyframes slidedown-data-v-40228a9c {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-40228a9c] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-40228a9c] {\n  padding: 2px;\n}\n#koakuma[data-v-40228a9c] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-40228a9c 0.7s linear;\n}\n#koakuma > div[data-v-40228a9c] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-40228a9c] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-40228a9c],\n#koakuma-sorting-order-block[data-v-40228a9c] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-40228a9c] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-40228a9c] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-40228a9c]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-40228a9c]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-40228a9c] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-40228a9c],\n#koakuma-sorting-order-select-switch[data-v-40228a9c] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-40228a9c] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-40228a9c],\n#koakuma-sorting-order-select-list[data-v-40228a9c] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-40228a9c]::after,\n#koakuma-sorting-order-select-list > li[data-v-40228a9c]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-40228a9c]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-40228a9c]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-40228a9c]:hover::before,\n.sorting-order-link[data-v-40228a9c]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-40228a9c],\n.sorting-order-link[data-v-40228a9c] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-40228a9c] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-40228a9c] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-40228a9c] {\n  margin: 0 5px;\n}\n.main-button[data-v-40228a9c] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-40228a9c]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-40228a9c]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n.main-button[data-v-40228a9c]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-40228a9c] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-40228a9c] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-40228a9c] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-40228a9c],\n#koakuma-options-width-expand[data-v-40228a9c],\n#koakuma-options-config[data-v-40228a9c] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
+  inject("data-v-6501f2e6_0", { source: "\n@keyframes slidedown-data-v-6501f2e6 {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-6501f2e6] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-6501f2e6] {\n  padding: 2px;\n}\n#koakuma[data-v-6501f2e6] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-6501f2e6 0.7s linear;\n}\n#koakuma > div[data-v-6501f2e6] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-6501f2e6] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-6501f2e6],\n#koakuma-sorting-order-block[data-v-6501f2e6] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-6501f2e6] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-6501f2e6] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-6501f2e6]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-6501f2e6]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-6501f2e6] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-6501f2e6],\n#koakuma-sorting-order-select-switch[data-v-6501f2e6] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-6501f2e6] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-6501f2e6],\n#koakuma-sorting-order-select-list[data-v-6501f2e6] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-6501f2e6]::after,\n#koakuma-sorting-order-select-list > li[data-v-6501f2e6]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-6501f2e6]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-6501f2e6]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-6501f2e6]:hover::before,\n.sorting-order-link[data-v-6501f2e6]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-6501f2e6],\n.sorting-order-link[data-v-6501f2e6] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-6501f2e6] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-6501f2e6] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-6501f2e6] {\n  margin: 0 5px;\n}\n.main-button[data-v-6501f2e6] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n.main-button[data-v-6501f2e6]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n.main-button[data-v-6501f2e6]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n.main-button[data-v-6501f2e6]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n.main-button.go[data-v-6501f2e6] {\n  background-color: hsl(141, 100%, 50%);\n}\n.main-button.paused[data-v-6501f2e6] {\n  background-color: hsl(60, 100%, 50%);\n}\n.main-button.end[data-v-6501f2e6] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-6501f2e6],\n#koakuma-options-width-expand[data-v-6501f2e6],\n#koakuma-options-config[data-v-6501f2e6] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__ = "data-v-40228a9c";
+const __vue_scope_id__ = "data-v-6501f2e6";
 /* module identifier */
 const __vue_module_identifier__ = undefined;
 /* functional template */
@@ -2917,7 +2897,8 @@ var script$6 = {
     }
   },
   methods: {
-    clickBase() {
+    clickBase(event) {
+      $print.debug("BigComponent#clickBase: event", event);
       this.$store.commit("closeBigComponent");
 
       this.xc.blacklist = [
@@ -2939,12 +2920,9 @@ var script$6 = {
     },
     clickSwitch(event) {
       $print.debug("BigComponent#clickSwitch: event", event);
-      const parents = event.target.getParents();
-      const isClickContextMenuSwitch = [event.target, ...parents].find(e =>
-        e.id.includes("config-context-menu-switch")
-      );
-      if (isClickContextMenuSwitch) {
-        this.xc.contextMenu = Number.toInt(!this.xc.contextMenu);
+
+      if (event.currentTarget.id === "config-context-menu-switch") {
+        this.xc.contextMenu = toInt(!this.xc.contextMenu);
       }
     },
     jumpPreview(index) {
@@ -3182,11 +3160,11 @@ const __vue_template__$6 = typeof __vue_render__$6 !== 'undefined'
 /* style */
 const __vue_inject_styles__$6 = function (inject) {
   if (!inject) return
-  inject("data-v-1faca81e_0", { source: "\n#patchouli-big-component[data-v-1faca81e] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-1faca81e],\n#preview-mode[data-v-1faca81e] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-1faca81e] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-1faca81e] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-1faca81e] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-1faca81e]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-1faca81e] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-1faca81e] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-1faca81e] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-1faca81e] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-1faca81e] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-1faca81e] {\n  display: inline-block;\n  height: 100%;\n}\n#preview-display-area > a > img[data-v-1faca81e] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-1faca81e] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n}\n#preview-thumbnails-area > li[data-v-1faca81e] {\n  margin: 0 5px;\n}\n#preview-thumbnails-area > li > a[data-v-1faca81e] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-1faca81e] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-1faca81e] {\n  max-height: 100px;\n  cursor: pointer;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+  inject("data-v-5c79af83_0", { source: "\n#patchouli-big-component[data-v-5c79af83] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-5c79af83],\n#preview-mode[data-v-5c79af83] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-5c79af83] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-5c79af83] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-5c79af83] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-5c79af83]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-5c79af83] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-5c79af83] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-5c79af83] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-5c79af83] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-5c79af83] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-5c79af83] {\n  display: inline-block;\n  height: 100%;\n}\n#preview-display-area > a > img[data-v-5c79af83] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-5c79af83] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n}\n#preview-thumbnails-area > li[data-v-5c79af83] {\n  margin: 0 5px;\n}\n#preview-thumbnails-area > li > a[data-v-5c79af83] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-5c79af83] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-5c79af83] {\n  max-height: 100px;\n  cursor: pointer;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$6 = "data-v-1faca81e";
+const __vue_scope_id__$6 = "data-v-5c79af83";
 /* module identifier */
 const __vue_module_identifier__$6 = undefined;
 /* functional template */
@@ -3499,10 +3477,12 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   });
 
   document.body.addEventListener('click', (event) => {
-    if (!event.target.getParents().find((el) => el.id === 'koakuma-bookmark-input-usual-switch')) {
+    $print.debug('body#click event:', event);
+
+    if (!$parents(event.target).find((el) => el.id === 'koakuma-bookmark-input-usual-switch')) {
       Koakuma.$children[0].usualSwitchOn = false;
     }
-    if (!event.target.getParents().find((el) => el.id === 'koakuma-sorting-order-select-switch')) {
+    if (!$parents(event.target).find((el) => el.id === 'koakuma-sorting-order-select-switch')) {
       Koakuma.$children[0].sortingOrderSwitchOn = false;
     }
     if (store.state.contextMenu.active) {

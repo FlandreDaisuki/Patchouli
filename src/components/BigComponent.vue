@@ -57,7 +57,7 @@
 
 <script>
 import { PixivAPI } from "../lib/pixiv";
-import { $, $print } from "../lib/utils";
+import { $, $print, toInt } from "../lib/utils";
 
 export default {
   data() {
@@ -99,7 +99,8 @@ export default {
     }
   },
   methods: {
-    clickBase() {
+    clickBase(event) {
+      $print.debug("BigComponent#clickBase: event", event);
       this.$store.commit("closeBigComponent");
 
       this.xc.blacklist = [
@@ -121,12 +122,9 @@ export default {
     },
     clickSwitch(event) {
       $print.debug("BigComponent#clickSwitch: event", event);
-      const parents = event.target.getParents();
-      const isClickContextMenuSwitch = [event.target, ...parents].find(e =>
-        e.id.includes("config-context-menu-switch")
-      );
-      if (isClickContextMenuSwitch) {
-        this.xc.contextMenu = Number.toInt(!this.xc.contextMenu);
+
+      if (event.currentTarget.id === "config-context-menu-switch") {
+        this.xc.contextMenu = toInt(!this.xc.contextMenu);
       }
     },
     jumpPreview(index) {
