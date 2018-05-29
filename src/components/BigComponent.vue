@@ -199,8 +199,10 @@ export default {
   text-align: center;
 }
 #preview-display-area > a {
-  display: inline-block;
+  display: inline-flex;
   height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 #preview-display-area > a > img {
   object-fit: contain;
