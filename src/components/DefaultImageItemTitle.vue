@@ -1,7 +1,7 @@
 <template>
-  <figcaption class="image-item-title">
+  <figcaption class="image-item-title-user">
     <ul>
-      <li class="title-text">
+      <li class="title-text" @click.right="activateContextMenu">
         <a :href="illustPageUrl" :title="illustTitle">{{ illustTitle }}</a>
       </li>
       <li
@@ -106,11 +106,19 @@ export default {
           x: event.clientX,
           y: event.clientY
         };
+        const ct = event.currentTarget;
 
-        payload.data = {
-          illustId: this.illustId,
-          type: "image-item-title"
-        };
+        if (ct.classList.contains("user-info")) {
+          payload.data = {
+            illustId: this.illustId,
+            type: "image-item-title-user"
+          };
+        } else {
+          payload.data = {
+            illustId: this.illustId,
+            type: "image-item-image"
+          };
+        }
 
         this.$store.commit("activateContextMenu", payload);
       }
@@ -120,7 +128,7 @@ export default {
 </script>
 
 <style scoped>
-.image-item-title {
+.image-item-title-user {
   max-width: 100%;
   margin: 8px auto;
   text-align: center;

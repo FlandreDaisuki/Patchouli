@@ -56,6 +56,23 @@ export default {
       state.isPaused = true;
       state.isEnded = true;
     },
+    editImgItem(state, options = {}) {
+      const DEFAULT_OPT = {
+        type: null,
+        illustId: '',
+        userId: '',
+      };
+
+      const opt = Object.assign({}, DEFAULT_OPT, options);
+
+      if (opt.type === 'follow-user' && opt.userId) {
+        state.imgLibrary
+          .filter(i => i.userId ===  opt.userId)
+          .forEach(i => {
+            i.isFollow = true;
+          });
+      }
+    }
   },
   actions: {
     async start({ state, dispatch, rootState }, { times } = {}) {

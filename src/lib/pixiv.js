@@ -272,7 +272,7 @@ class Pixiv {
 
     try {
       const res = await axios.post('/rpc_rating.php', data, config);
-      if (res.statusText === 'OK') {
+      if (res.status === 200) {
         $print.debug('Pixiv#postThumbUp: res.data:', res.data);
         return !!res.data.score;
       } else {
@@ -280,6 +280,34 @@ class Pixiv {
       }
     } catch (error) {
       $print.error('Pixiv#postThumbUp: error:', error);
+    }
+  }
+
+  async postFollowUser(userId) {
+    const searchParams = {
+      mode: 'add',
+      user_id: userId,
+      format: 'json',
+      type: 'user',
+      restrict: 0,
+      tt: this.tt
+    };
+
+    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
+    const config = {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    };
+
+    try {
+      const res = await axios.post('/bookmark_add.php', data, config);
+      if (res.status === 200) {
+        $print.debug('Pixiv#postFollowUser: res.data:', res.data);
+        return !!res.data;
+      } else {
+        throw new Error(res.statusText);
+      }
+    } catch (error) {
+      $print.error('Pixiv#postFollowUser: error:', error);
     }
   }
 }

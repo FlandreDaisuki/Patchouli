@@ -1,6 +1,6 @@
 {
   "name": "patchouli",
-  "version": "4.1.0-beta.9",
+  "version": "4.1.0-beta.10",
   "description": "An image searching and browsing tool on pixiv.",
   "main": "index.js",
   "scripts": {

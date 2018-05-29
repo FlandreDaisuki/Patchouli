@@ -324,7 +324,7 @@ class Pixiv {
 
     try {
       const res = await axios.post('/rpc_rating.php', data, config);
-      if (res.statusText === 'OK') {
+      if (res.status === 200) {
         $print.debug('Pixiv#postThumbUp: res.data:', res.data);
         return !!res.data.score;
       } else {
@@ -332,6 +332,34 @@ class Pixiv {
       }
     } catch (error) {
       $print.error('Pixiv#postThumbUp: error:', error);
+    }
+  }
+
+  async postFollowUser(userId) {
+    const searchParams = {
+      mode: 'add',
+      user_id: userId,
+      format: 'json',
+      type: 'user',
+      restrict: 0,
+      tt: this.tt
+    };
+
+    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
+    const config = {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    };
+
+    try {
+      const res = await axios.post('/bookmark_add.php', data, config);
+      if (res.status === 200) {
+        $print.debug('Pixiv#postFollowUser: res.data:', res.data);
+        return !!res.data;
+      } else {
+        throw new Error(res.statusText);
+      }
+    } catch (error) {
+      $print.error('Pixiv#postFollowUser: error:', error);
     }
   }
 }
@@ -424,6 +452,23 @@ var pixiv$1 = {
       state.isPaused = true;
       state.isEnded = true;
     },
+    editImgItem(state, options = {}) {
+      const DEFAULT_OPT = {
+        type: null,
+        illustId: '',
+        userId: '',
+      };
+
+      const opt = Object.assign({}, DEFAULT_OPT, options);
+
+      if (opt.type === 'follow-user' && opt.userId) {
+        state.imgLibrary
+          .filter(i => i.userId ===  opt.userId)
+          .forEach(i => {
+            i.isFollow = true;
+          });
+      }
+    }
   },
   actions: {
     async start({ state, dispatch, rootState }, { times } = {}) {
@@ -1333,7 +1378,6 @@ var script$1 = {
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
     }
   },
-
   methods: {
     oneClickBookmarkAdd() {
       if (!this.selfIsBookmarked) {
@@ -1445,11 +1489,11 @@ const __vue_template__$1 = typeof __vue_render__$1 !== 'undefined'
 /* style */
 const __vue_inject_styles__$1 = function (inject) {
   if (!inject) return
-  inject("data-v-6b61a5a4_0", { source: "\n.image-item-image[data-v-6b61a5a4] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-6b61a5a4] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-6b61a5a4]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-6b61a5a4] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-6b61a5a4] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-6b61a5a4] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-6b61a5a4] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-6b61a5a4] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-6b61a5a4] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+  inject("data-v-5aebea38_0", { source: "\n.image-item-image[data-v-5aebea38] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-5aebea38] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-5aebea38]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-5aebea38] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-5aebea38] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-5aebea38] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-5aebea38] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-5aebea38] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-5aebea38] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$1 = "data-v-6b61a5a4";
+const __vue_scope_id__$1 = "data-v-5aebea38";
 /* module identifier */
 const __vue_module_identifier__$1 = undefined;
 /* functional template */
@@ -1641,11 +1685,19 @@ var script$2 = {
           x: event.clientX,
           y: event.clientY
         };
+        const ct = event.currentTarget;
 
-        payload.data = {
-          illustId: this.illustId,
-          type: "image-item-title"
-        };
+        if (ct.classList.contains("user-info")) {
+          payload.data = {
+            illustId: this.illustId,
+            type: "image-item-title-user"
+          };
+        } else {
+          payload.data = {
+            illustId: this.illustId,
+            type: "image-item-image"
+          };
+        }
 
         this.$store.commit("activateContextMenu", payload);
       }
@@ -1660,15 +1712,26 @@ var __vue_render__$2 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c("figcaption", { staticClass: "image-item-title" }, [
+  return _c("figcaption", { staticClass: "image-item-title-user" }, [
     _c("ul", [
-      _c("li", { staticClass: "title-text" }, [
-        _c(
-          "a",
-          { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
-          [_vm._v(_vm._s(_vm.illustTitle))]
-        )
-      ]),
+      _c(
+        "li",
+        {
+          staticClass: "title-text",
+          on: {
+            contextmenu: function($event) {
+              return _vm.activateContextMenu($event)
+            }
+          }
+        },
+        [
+          _c(
+            "a",
+            { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
+            [_vm._v(_vm._s(_vm.illustTitle))]
+          )
+        ]
+      ),
       _vm._v(" "),
       !_vm.isMemberIllistPage
         ? _c(
@@ -1749,11 +1812,11 @@ const __vue_template__$2 = typeof __vue_render__$2 !== 'undefined'
 /* style */
 const __vue_inject_styles__$2 = function (inject) {
   if (!inject) return
-  inject("data-v-2c87868a_0", { source: "\n.image-item-title[data-v-2c87868a] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-2c87868a] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-2c87868a] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-2c87868a] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-2c87868a] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-2c87868a] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
+  inject("data-v-28aefe0a_0", { source: "\n.image-item-title-user[data-v-28aefe0a] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-28aefe0a] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-28aefe0a] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-28aefe0a] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-28aefe0a] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-28aefe0a] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$2 = "data-v-2c87868a";
+const __vue_scope_id__$2 = "data-v-28aefe0a";
 /* module identifier */
 const __vue_module_identifier__$2 = undefined;
 /* functional template */
@@ -2251,6 +2314,18 @@ var script$4 = {
         mode: "preview",
         data: this.currentImageItem
       });
+    },
+    async followUser() {
+      if (this.currentImageItem) {
+        const userId = this.currentImageItem.userId;
+
+        if (await PixivAPI.postFollowUser(userId)) {
+          this.$store.commit("editImgItem", {
+            type: "follow-user",
+            userId: this.currentImageItem.userId
+          });
+        }
+      }
     }
   }
 };
@@ -2438,11 +2513,11 @@ var __vue_render__$4 = function() {
             {
               name: "show",
               rawName: "v-show",
-              value: _vm.currentType === "image-item-title",
-              expression: "currentType === 'image-item-title'"
+              value: _vm.currentType === "image-item-title-user",
+              expression: "currentType === 'image-item-title-user'"
             }
           ],
-          attrs: { id: "patchouli-context-menu-list-image-item-title" }
+          attrs: { id: "patchouli-context-menu-list-image-item-title-user" }
         },
         [
           _c("li", [
@@ -2477,7 +2552,54 @@ var __vue_render__$4 = function() {
                 )
               ]
             )
-          ])
+          ]),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.currentImageItem && !_vm.currentImageItem.isFollow,
+                  expression: "currentImageItem && !currentImageItem.isFollow"
+                }
+              ]
+            },
+            [
+              _c(
+                "a",
+                {
+                  attrs: { role: "button" },
+                  on: {
+                    click: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "left", 37, $event.key, [
+                          "Left",
+                          "ArrowLeft"
+                        ])
+                      ) {
+                        return null
+                      }
+                      if ("button" in $event && $event.button !== 0) {
+                        return null
+                      }
+                      return _vm.followUser($event)
+                    }
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-rss" }),
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm.$t("contextMenu.followUser")) +
+                      "\n      "
+                  )
+                ]
+              )
+            ]
+          )
         ]
       )
     ]
@@ -2492,11 +2614,11 @@ const __vue_template__$4 = typeof __vue_render__$4 !== 'undefined'
 /* style */
 const __vue_inject_styles__$4 = function (inject) {
   if (!inject) return
-  inject("data-v-ffdc5b42_0", { source: "\n#patchouli-context-menu[data-v-ffdc5b42] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-ffdc5b42] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-ffdc5b42] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-ffdc5b42]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-ffdc5b42],\n#patchouli-context-menu > ul i.fas[data-v-ffdc5b42] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+  inject("data-v-6351f20e_0", { source: "\n#patchouli-context-menu[data-v-6351f20e] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-6351f20e] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-6351f20e] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-6351f20e]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-6351f20e],\n#patchouli-context-menu > ul i.fas[data-v-6351f20e] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$4 = "data-v-ffdc5b42";
+const __vue_scope_id__$4 = "data-v-6351f20e";
 /* module identifier */
 const __vue_module_identifier__$4 = undefined;
 /* functional template */
@@ -3263,7 +3385,8 @@ var i18n = new VueI18n({
         openBookmarkPage: 'Add Bookmark Page',
         download: 'Download',
         addToBlacklist: 'Add to Blacklist',
-        preview: 'Preview'
+        preview: 'Preview',
+        followUser: 'Follow'
       },
       config: {
         contextMenuExtension: 'Right click extension',
@@ -3289,7 +3412,8 @@ var i18n = new VueI18n({
         openBookmarkPage: 'ブックマーク追加ページ',
         download: 'ダウンロード',
         addToBlacklist: 'ブラックリストへ',
-        preview: 'プレビュー'
+        preview: 'プレビュー',
+        followUser: 'フォローする'
       },
       config: {
         contextMenuExtension: '右クリックの拡張機能',
@@ -3315,7 +3439,8 @@ var i18n = new VueI18n({
         openBookmarkPage: '开启添加收藏页',
         download: '下载',
         addToBlacklist: '拉黑',
-        preview: '原图预览'
+        preview: '原图预览',
+        followUser: '加关注'
       },
       config: {
         contextMenuExtension: '右键扩展',
@@ -3341,7 +3466,8 @@ var i18n = new VueI18n({
         openBookmarkPage: '開啟添加收藏頁',
         download: '下載',
         addToBlacklist: '加入黑名單',
-        preview: '原圖預覽'
+        preview: '原圖預覽',
+        followUser: '加關注'
       },
       config: {
         contextMenuExtension: '擴充右鍵',

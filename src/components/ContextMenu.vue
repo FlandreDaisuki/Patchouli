@@ -29,11 +29,17 @@
         </a>
       </li>
     </ul>
-    <ul v-show="currentType === 'image-item-title'" id="patchouli-context-menu-list-image-item-title" >
+    <ul v-show="currentType === 'image-item-title-user'" id="patchouli-context-menu-list-image-item-title-user" >
       <li>
         <a role="button" @click.left="addToBlacklist">
           <i class="far fa-eye-slash"/>
           {{ $t('contextMenu.addToBlacklist') }}
+        </a>
+      </li>
+      <li v-show="currentImageItem && !currentImageItem.isFollow">
+        <a role="button" @click.left="followUser">
+          <i class="fas fa-rss"/>
+          {{ $t('contextMenu.followUser') }}
         </a>
       </li>
     </ul>
@@ -151,6 +157,18 @@ export default {
         mode: "preview",
         data: this.currentImageItem
       });
+    },
+    async followUser() {
+      if (this.currentImageItem) {
+        const userId = this.currentImageItem.userId;
+
+        if (await PixivAPI.postFollowUser(userId)) {
+          this.$store.commit("editImgItem", {
+            type: "follow-user",
+            userId: this.currentImageItem.userId
+          });
+        }
+      }
     }
   }
 };

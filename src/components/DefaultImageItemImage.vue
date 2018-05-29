@@ -72,7 +72,6 @@ export default {
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
     }
   },
-
   methods: {
     oneClickBookmarkAdd() {
       if (!this.selfIsBookmarked) {
