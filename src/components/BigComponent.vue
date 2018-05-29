@@ -216,9 +216,12 @@ export default {
   overflow-x: auto;
   overflow-y: hidden;
   height: 100%;
+  border: 2px solid #014;
+  box-sizing: border-box;
+  border-top: 0;
 }
 #preview-thumbnails-area > li {
-  margin: 0 5px;
+  padding: 0 10px;
 }
 #preview-thumbnails-area > li > a {
   cursor: pointer;
@@ -229,7 +232,6 @@ export default {
 }
 #preview-thumbnails-area > li > a > img {
   max-height: 100px;
-  cursor: pointer;
   box-sizing: border-box;
   display: inline-block;
 }
