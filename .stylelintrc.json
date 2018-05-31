@@ -8,6 +8,6 @@
       "severity": "warning"
     }],
     "rule-empty-line-before": "never",
-    "unit-whitelist": ["px", "%", "s"]
+    "unit-whitelist": ["px", "%", "s", "pt"]
   }
 }

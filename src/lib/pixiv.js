@@ -190,46 +190,124 @@ class Pixiv {
     }
   }
 
-  async getRecommendationsAPIDetails(illustIds = 'auto', numRecommendations = 500) {
-    const searchParams = {
-      type: 'illust',
-      sample_illusts: illustIds,
-      num_recommendations: numRecommendations,
-      tt: this.tt
+  async getIllustHTMLDetail(illustId) {
+    const url = `/member_illust.php?mode=medium&illust_id=${illustId}`;
+
+    const failResult = {
+      illustId,
+      tags: []
     };
-    const url = `/rpc/recommender.php?${searchParams.entries.map(p => p.join('=')).join('&')}`;
+
     try {
-      const data = await this.fetch(url);
-      return data.recommendations.map(x => `${x}`);
+      const html = await this.fetch(url);
+      const tagHTMLPart = html.match(/class="work-tags"[.\s\S]*template-work-tag/ig);
+      if (!tagHTMLPart) {
+        return failResult;
+      }
+      const tagHTMLs = tagHTMLPart[0].replace('\n', '').match(/((translation|original|romaji)-tag">|tag-translation( romaji)?">)[^<]+/ig);
+      if (!tagHTMLs) {
+        return failResult;
+      }
+      const tags = tagHTMLs.map(tagHTML => tagHTML.replace(/.*>(.*)$/, '$1'));
+      return {
+        illustId,
+        tags
+      };
     } catch (error) {
-      $print.error('Pixiv#getRecommendationsAPIDetails: error:', error);
+      $print.error('Pixiv#getIllustHTMLDetail: error:', error);
+      return failResult;
     }
   }
 
-  async postBookmarkAdd(illustId) {
+  async getIllustHTMLDetails(illustIds) {
+    const IllustHTMLDetails = illustIds.map(id => this.getIllustHTMLDetail(id));
+    const IllustDetails = await Promise.all(IllustHTMLDetails);
+    const detail = {};
+    for (const d of IllustDetails) {
+      detail[d.illustId] = d;
+    }
+    return detail;
+  }
+
+  async getMultipleIllustHTMLDetail(illustId) {
+    const url = `/member_illust.php?mode=manga&illust_id=${illustId}`;
+
+    const failResult = {
+      illustId,
+      imgSrcs: []
+    };
+
+    try {
+      const html = await this.fetch(url);
+      const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
+      $print.debug('Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
+      if (!srcAttrHTML) {
+        return failResult;
+      }
+      const imgSrcs = srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
+      $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
+      return {
+        illustId,
+        imgSrcs
+      };
+    } catch (error) {
+      $print.error('Pixiv#getMultipleIllustHTMLDetail: error:', error);
+    }
+  }
+
+  async postThumbUp(illustId, userId) {
     const searchParams = {
-      mode: 'save_illust_bookmark',
-      illust_id: illustId,
-      restrict: 0,
-      comment: '',
-      tags: '',
+      mode: 'save',
+      i_id: illustId,
+      u_id: userId,
+      qr: 0,
+      score: 10,
       tt: this.tt
     };
-    const data = searchParams.entries.map(p => p.join('=')).join('&');
+
+    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
     const config = {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
     };
 
     try {
-      const res = await axios.post('/rpc/index.php', data, config);
-      if (res.statusText === 'OK') {
-        $print.debug('Pixiv#postBookmarkAdd: res.data:', res.data);
-        return !res.data.error;
+      const res = await axios.post('/rpc_rating.php', data, config);
+      if (res.status === 200) {
+        $print.debug('Pixiv#postThumbUp: res.data:', res.data);
+        return !!res.data.score;
       } else {
         throw new Error(res.statusText);
       }
     } catch (error) {
-      $print.error('Pixiv#postBookmarkAdd: error:', error);
+      $print.error('Pixiv#postThumbUp: error:', error);
+    }
+  }
+
+  async postFollowUser(userId) {
+    const searchParams = {
+      mode: 'add',
+      user_id: userId,
+      format: 'json',
+      type: 'user',
+      restrict: 0,
+      tt: this.tt
+    };
+
+    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
+    const config = {
+      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+    };
+
+    try {
+      const res = await axios.post('/bookmark_add.php', data, config);
+      if (res.status === 200) {
+        $print.debug('Pixiv#postFollowUser: res.data:', res.data);
+        return !!res.data;
+      } else {
+        throw new Error(res.statusText);
+      }
+    } catch (error) {
+      $print.error('Pixiv#postFollowUser: error:', error);
     }
   }
 }

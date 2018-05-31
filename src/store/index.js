@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { $, $el, $$ } from '../lib/utils';
+import { $, $el, $$, $after } from '../lib/utils';
 import pixiv from './modules/pixiv';
+import contextMenu from './modules/contextMenu';
+import bigComponent from './modules/bigComponent';
 
 Vue.use(Vuex);
 
@@ -39,23 +41,26 @@ const pageType = (() => {
 })();
 
 export default new Vuex.Store({
-  modules: { pixiv },
+  modules: { pixiv, contextMenu, bigComponent },
   state: {
     locale: document.documentElement.lang,
     pageType,
     koakumaMountPoint: null,
     patchouliMountPoint: null,
+    bigComponentMountPoint: null,
     VERSION: GM_info.script.version,
     NAME: GM_info.script.name,
     filters: {
       limit: 0,
       tag: new RegExp('', 'i'),
-      orderBy: 'illustId'
     },
     config: {
       fitwidth: 1,
-      sort: 0
-    }
+      sort: 0,
+      contextMenu: 1,
+      userTooltip: 1,
+      blacklist: []
+    },
   },
   mutations: {
     prepareMountPoint(state) {
@@ -63,7 +68,7 @@ export default new Vuex.Store({
         $('#wrapper').classList.add('ω');
 
         state.koakumaMountPoint = $el('div', { className: 'koakumaMountPoint' }, (el) => {
-          $('header._global-header').after(el);
+          $after($('header._global-header'), el);
         });
 
         if (pageType === 'SEARCH') {
@@ -75,6 +80,10 @@ export default new Vuex.Store({
           const ul = $('ul._image-items');
           state.patchouliMountPoint = li ? li.parentElement : ul;
         }
+
+        state.bigComponentMountPoint = $el('div', null, (el) => {
+          document.body.appendChild(el);
+        });
       }
     },
     applyConfig(state) {
@@ -83,11 +92,6 @@ export default new Vuex.Store({
           $('.ω').classList.add('↔');
         } else {
           $('.ω').classList.remove('↔');
-        }
-        if (state.config.sort) {
-          state.filters.orderBy = 'bookmarkCount';
-        } else {
-          state.filters.orderBy = 'illustId';
         }
         if (state.pageType === 'MY_BOOKMARK') {
           for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
@@ -107,6 +111,15 @@ export default new Vuex.Store({
     loadConfig(state) {
       const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
       Object.assign(state.config, config);
+    }
+  },
+  getters: {
+    orderBy(state) {
+      if (state.config.sort) {
+        return 'bookmarkCount';
+      } else {
+        return 'illustId';
+      }
     }
   }
 });

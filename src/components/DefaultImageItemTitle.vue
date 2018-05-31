@@ -1,21 +1,25 @@
 <template>
-  <figcaption class="image-item-title">
+  <figcaption class="image-item-title-user">
     <ul>
-      <li class="title-text">
+      <li class="title-text" @click.right="activateContextMenu">
         <a :href="illustPageUrl" :title="illustTitle">{{ illustTitle }}</a>
       </li>
-      <li v-if="!isMemberIllistPage" class="user-info">
+      <li
+        v-if="!isMemberIllistPage"
+        class="user-info"
+        @click.right="activateContextMenu">
         <a
           :href="userPageUrl"
           :title="userName"
           :data-user_id="userId"
           :data-user_name="userName"
-          class="user-link ui-profile-popup"
+          :class="isEnableUserTooltip ? 'ui-profile-popup' : ''"
+          class="user-link"
           target="_blank">
           <span :style="profileImgStyle" class="user-img"/>
           <span>{{ userName }}</span>
         </a>
-        <i v-if="isFollow" class="follow-icon"/>
+        <i v-if="isFollow" class="fas fa-rss"/>
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
@@ -35,6 +39,8 @@
 </template>
 
 <script>
+import { $print } from "../lib/utils";
+
 export default {
   props: {
     illustId: {
@@ -88,13 +94,45 @@ export default {
     },
     isMemberIllistPage() {
       return this.$store.state.pageType === "MEMBER_ILLIST";
+    },
+    isEnableUserTooltip() {
+      return this.$store.state.config.userTooltip;
+    }
+  },
+  methods: {
+    activateContextMenu(event) {
+      $print.debug("DefaultImageItemTitle#activateContextMenu", event);
+      if (this.$store.state.config.contextMenu) {
+        event.preventDefault();
+        const payload = {};
+
+        payload.position = {
+          x: event.clientX,
+          y: event.clientY
+        };
+        const ct = event.currentTarget;
+
+        if (ct.classList.contains("user-info")) {
+          payload.data = {
+            illustId: this.illustId,
+            type: "image-item-title-user"
+          };
+        } else {
+          payload.data = {
+            illustId: this.illustId,
+            type: "image-item-image"
+          };
+        }
+
+        this.$store.commit("activateContextMenu", payload);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
-.image-item-title {
+.image-item-title-user {
   max-width: 100%;
   margin: 8px auto;
   text-align: center;
@@ -110,20 +148,12 @@ export default {
   font-weight: 700;
 }
 .user-info {
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
 }
 .user-link {
   font-size: 12px;
-  display: -webkit-inline-box;
-  display: -ms-inline-flexbox;
   display: inline-flex;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
   align-items: center;
 }
 .user-img {
@@ -134,13 +164,11 @@ export default {
   border-radius: 50%;
   margin-right: 4px;
 }
-.follow-icon {
+i.fa-rss {
   display: inline-block;
   margin-left: 4px;
-  width: 14px;
-  height: 14px;
-  background-color: dodgerblue;
-  -webkit-mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
-  mask-image: url(https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg);
+  width: 16px;
+  height: 16px;
+  color: dodgerblue;
 }
 </style>

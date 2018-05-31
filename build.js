@@ -1,4 +1,4 @@
-const { writeFileSync, readFileSync, readdirSync, unlinkSync } = require('fs');
+const { writeFileSync, readFileSync } = require('fs');
 
 const rollup = require('rollup');
 const acorn = require('acorn');
@@ -14,7 +14,7 @@ const external = ['vue', 'vuex', 'vue-i18n'];
 const globals = {
   vue: 'Vue',
   vuex: 'Vuex',
-  'vue-i18n': 'VueI18n'
+  'vue-i18n': 'VueI18n',
 };
 
 async function preBuild() {
@@ -39,6 +39,8 @@ async function preBuild() {
   // Work when `npm run publish`
   const metablockJSON = require('./src/metablock.json');
   const metablockDevJSON = require('./src/metablock.dev.json');
+
+  pkg.dependencies['FileSaver.js'] = pkg.dependencies['file-saver']; // special name
 
   Object.entries(pkg.dependencies).forEach(([depName, depVersion]) => {
     metablockJSON.require.forEach((cdn, idx, arr) => {
@@ -134,38 +136,31 @@ async function buildDev() {
 
   console.log('✔️ build userscript for develop');
 }
+
 function updateReadme() {
-  ['README.md', 'README.en.md'].forEach(file => {
-    const readme = readFileSync(file, 'utf8');
-    const replaced = readme.replace(/latest-v[\d.]+/g, `latest-v${pkg.version}`);
-    writeFileSync(file, replaced);
+  if ((/^\d+\.\d+\.\d+$/).test(pkg.version)) {
+    ['README.md', 'README.en.md'].forEach(file => {
+      const readme = readFileSync(file, 'utf8');
+      const replaced = readme.replace(/latest-v[\d.]+/g, `latest-v${pkg.version}`);
+      writeFileSync(file, replaced);
 
-    const lines = replaced.split(/\r?\n/);
-    const changelogIdx = lines.findIndex(line => line.includes('## Changelog'));
-    let hasChangelog = false;
-    for (const line of lines.slice(changelogIdx, -1)) {
-      if (line.includes(pkg.version)) {
-        hasChangelog = true;
-        break;
+      const lines = replaced.split(/\r?\n/);
+      const changelogIdx = lines.findIndex(line => line.includes('## Changelog'));
+      let hasChangelog = false;
+      for (const line of lines.slice(changelogIdx, -1)) {
+        if (line.includes(pkg.version)) {
+          hasChangelog = true;
+          break;
+        }
       }
-    }
-    if (!hasChangelog) {
-      console.warn('🛠 No changelog in current version.');
-    }
-  });
-}
-
-function cleanBuildDir() {
-  const files = readdirSync('dist');
-  for (const f of files) {
-    if (f.endsWith('.js') || f.endsWith('.css')) {
-      unlinkSync(`dist/${f}`);
-    }
+      if (!hasChangelog) {
+        console.warn('🛠 No changelog in current version.');
+      }
+    });
   }
 }
 
 // entry
-cleanBuildDir();
 preBuild().then(() => {
   buildRel();
   buildDev();

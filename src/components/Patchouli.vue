@@ -15,14 +15,16 @@
       :is-bookmarked="d.isBookmarked"
       :is-follow="d.isFollow"
       :bookmark-id="d.bookmarkId" />
+    <ContextMenu/>
   </div>
 </template>
 
 <script>
 import DefaultImageItem from "./DefaultImageItem.vue";
+import ContextMenu from "./ContextMenu.vue";
 
 export default {
-  components: { DefaultImageItem },
+  components: { DefaultImageItem, ContextMenu },
   computed: {
     filteredLibrary() {
       return this.$store.getters.filteredLibrary;
@@ -33,12 +35,8 @@ export default {
 
 <style scoped>
 #patchouli {
-  display: -webkit-box;
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-flow: wrap;
   flex-flow: wrap;
-  -ms-flex-pack: distribute;
   justify-content: space-around;
 }
 </style>

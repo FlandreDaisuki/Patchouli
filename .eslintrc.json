@@ -6,7 +6,8 @@
     "greasemonkey": true
   },
   "globals": {
-    "axios": true
+    "axios": true,
+    "saveAs": true
   },
   "parserOptions": {
     "sourceType": "module",

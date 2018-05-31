@@ -18,7 +18,21 @@ export default new VueI18n({
         buttonPause: 'Pause',
         buttonEnd: 'End',
         fitWidth: 'fit browser width',
-        sortByBookmarkCount: 'sort by bookmark count'
+        sortByPopularity: 'sort by popularity',
+        sortByDate: 'sort by date'
+      },
+      contextMenu: {
+        thumbUp: 'Like',
+        openBookmarkPage: 'Add Bookmark Page',
+        download: 'Download',
+        addToBlacklist: 'Add to Blacklist',
+        preview: 'Preview',
+        followUser: 'Follow'
+      },
+      config: {
+        contextMenuExtension: 'Right click extension',
+        blacklist: 'Blacklist',
+        userTooltip: 'Illustrator tooltip'
       }
     },
     'ja': {
@@ -32,7 +46,21 @@ export default new VueI18n({
         buttonPause: '中断',
         buttonEnd: '終了',
         fitWidth: '全幅',
-        sortByBookmarkCount: 'ブックマーク数順'
+        sortByPopularity: '人気順',
+        sortByDate: '投稿順'
+      },
+      contextMenu: {
+        thumbUp: 'いいね',
+        openBookmarkPage: 'ブックマーク追加ページ',
+        download: 'ダウンロード',
+        addToBlacklist: 'ブラックリストへ',
+        preview: 'プレビュー',
+        followUser: 'フォローする'
+      },
+      config: {
+        contextMenuExtension: '右クリックの拡張機能',
+        blacklist: 'ブラックリスト',
+        userTooltip: 'イラストレーターツールチップ'
       }
     },
     'zh': {
@@ -46,7 +74,21 @@ export default new VueI18n({
         buttonPause: '停',
         buttonEnd: '完',
         fitWidth: '自适应浏览器宽度',
-        sortByBookmarkCount: '书签数排序'
+        sortByPopularity: '以人气排序',
+        sortByDate: '以日期排序'
+      },
+      contextMenu: {
+        thumbUp: '赞',
+        openBookmarkPage: '开启添加收藏页',
+        download: '下载',
+        addToBlacklist: '拉黑',
+        preview: '原图预览',
+        followUser: '加关注'
+      },
+      config: {
+        contextMenuExtension: '右键扩展',
+        blacklist: '黑名單',
+        userTooltip: '绘师提示框'
       }
     },
     'zh-tw': {
@@ -60,7 +102,21 @@ export default new VueI18n({
         buttonPause: '停',
         buttonEnd: '完',
         fitWidth: '自適應瀏覽器寬度',
-        sortByBookmarkCount: '書籤數排序'
+        sortByPopularity: '以人氣排序',
+        sortByDate: '以日期排序'
+      },
+      contextMenu: {
+        thumbUp: '讚',
+        openBookmarkPage: '開啟添加收藏頁',
+        download: '下載',
+        addToBlacklist: '加入黑名單',
+        preview: '原圖預覽',
+        followUser: '加關注'
+      },
+      config: {
+        contextMenuExtension: '擴充右鍵',
+        blacklist: '黑名單',
+        userTooltip: '繪師提示框'
       }
     }
   }

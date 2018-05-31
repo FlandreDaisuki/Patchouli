@@ -1,19 +1,24 @@
 import { PixivAPI } from '../../lib/pixiv';
-import { $print } from '../../lib/utils';
+import { $print, toInt } from '../../lib/utils';
 
-function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails }) {
+function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails, illustHTMLDetails }) {
   if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
     throw new Error('makeLibraryData: illustAPIDetails is falsy.');
   }
 
   const vLibrary = [];
+
   for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
+    const atags = illustHTMLDetails[illustId].tags;
+    const btags = bookmarkHTMLDetails[illustId].tags;
+
+    const allTags = [...new Set([...atags, ...btags])].join(', ');
     const d = {
       illustId,
       bookmarkCount: bookmarkHTMLDetails[illustId].bookmarkCount,
-      tags: bookmarkHTMLDetails[illustId].tags.join(', '),
+      tags: allTags,
       illustTitle: illustDetail.illust_title,
-      illustPageCount: Number.toInt(illustDetail.illust_page_count),
+      illustPageCount: toInt(illustDetail.illust_page_count),
       userId: illustDetail.user_id,
       userName: illustDetail.user_name,
       isFollow: userAPIDetails[illustDetail.user_id].isFollow,
@@ -51,6 +56,23 @@ export default {
       state.isPaused = true;
       state.isEnded = true;
     },
+    editImgItem(state, options = {}) {
+      const DEFAULT_OPT = {
+        type: null,
+        illustId: '',
+        userId: '',
+      };
+
+      const opt = Object.assign({}, DEFAULT_OPT, options);
+
+      if (opt.type === 'follow-user' && opt.userId) {
+        state.imgLibrary
+          .filter(i => i.userId ===  opt.userId)
+          .forEach(i => {
+            i.isFollow = true;
+          });
+      }
+    }
   },
   actions: {
     async start({ state, dispatch, rootState }, { times } = {}) {
@@ -93,6 +115,10 @@ export default {
         const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
         $print.debug('PixivModule#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
 
+        // {[illustId : IDString]: illust_detail}
+        const illustHTMLDetails = await PixivAPI.getIllustHTMLDetails(page.illustIds);
+        $print.debug('PixivModule#startNextUrlBased: illustHTMLDetails:', illustHTMLDetails);
+
         if (rootState.pageType === 'MY_BOOKMARK') {
           // {[illustId : IDString]: {
           //   illustId,
@@ -124,7 +150,11 @@ export default {
         const userAPIDetails = await PixivAPI.getUsersAPIDetail(userIds);
         $print.debug('PixivModule#startNextUrlBased: userAPIDetails:', userAPIDetails);
 
-        const libraryData = makeLibraryData({ pageType: rootState.pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails });
+        const libraryData = makeLibraryData({ pageType: rootState.pageType,
+          illustAPIDetails,
+          bookmarkHTMLDetails,
+          userAPIDetails,
+          illustHTMLDetails });
 
         // prevent duplicate illustId
         for (const d of libraryData) {
@@ -152,12 +182,13 @@ export default {
       return cloneLibrary
         .filter(el => el.bookmarkCount >= rootState.filters.limit)
         .filter(el => el.tags.match(rootState.filters.tag))
+        .filter(el => !rootState.config.blacklist.includes(el.userId))
         .sort(
           (a, b) => {
-            const av = Number.toInt(a[rootState.filters.orderBy]);
-            const bv = Number.toInt(b[rootState.filters.orderBy]);
+            const av = toInt(a[getters.orderBy]);
+            const bv = toInt(b[getters.orderBy]);
             const c = bv - av;
-            return dateOrder ? -c : c;
+            return dateOrder && getters.orderBy === 'illustId' ? -c : c;
           }
         );
     }

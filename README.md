@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.0.10](https://img.shields.io/badge/latest-v4.0.10-blue.svg)](#)
+[![latest-v4.1.0](https://img.shields.io/badge/latest-v4.1.0-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -16,23 +16,26 @@
 ## Functions 功能
 
 - 自動找圖
-- 以 (收藏數／標籤) 過濾結果
-- 以 (投稿時間／收藏數) 排序結果
-- 切換 (自適應螢幕／預設) 寬度
 - 部份 i18n 界面 (en, ja, zh, zh-tw)
-- 以圖示 <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg" width="12"> 標注 (已關注／未關注) 畫師
+- 以 **收藏數** 過濾結果<br>
+  ![bookmark count filter](assets/bookmark-count-filter.png)
+- 以 **人氣／日期** 排序結果<br>
+  ![sorting by](assets/sorting-by.png)
+- 以圖示 <img src="assets/fas-compress.svg" width="12"> <img src="assets/fas-expand.svg" width="12"> 切換寬度
+- 以圖示 <img src="assets/fas-rss.svg" width="12"> 標注已關注繪師
+- 擴充右鍵功能
+  - 圖片上右鍵
+    - 點讚
+    - 原圖下載 (只支援單張圖片)
+    - 預覽原圖 (支援單張、多張；不支援動圖)
+    - 開啟加入書籤頁 (可加標籤，若無此需求可使用 <img src="assets/bookmark-heart-off.svg" width="12"> 快速添加)
+  - 繪師名稱上右鍵
+    - 加關注
+    - 加黑單 (類似高級會員靜音功能)
 
 ## Usage 使用說明
 
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=E1yWWO9e--k" target="_blank">
-    <img src="https://img.youtube.com/vi/E1yWWO9e--k/0.jpg" alt="示範影片"/>
-  </a>
-</p>
-
-- 按`找`或`停`來開關搜尋
-- 滑鼠移動到收藏數可用滾輪增減收藏數，或直接打數字
-- 標籤過濾器可以過濾圖片標籤，支援 regexp (ex. `レミ|フラン`)
+[![demo video](https://img.youtube.com/vi/zIoCwdpZr0M/0.jpg)](https://www.youtube.com/watch?v=zIoCwdpZr0M)
 
 ## Contribution 貢獻
 
@@ -45,6 +48,11 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
+
+2018-06-01 v4.1.0
+
+- 新增擴充右鍵功能
+- 變更圖示
 
 2018-05-17 v4.0.10
 
