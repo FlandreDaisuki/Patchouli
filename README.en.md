@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.0.10](https://img.shields.io/badge/latest-v4.0.10-blue.svg)](#)
+[![latest-v4.1.0](https://img.shields.io/badge/latest-v4.1.0-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -16,23 +16,26 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 ## Functions
 
 - Find pictures automatically
-- Filter by bookmarks or tags
-- Sort by bookmarks or upload time
-- Switch self-adaptive width or default width
 - The UI with i18n (en, ja, zh, zh-tw)
-- Use icon <img src="https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/rss.svg" width="12"> to indicate following illustrator
+- Filter by **bookmarks count**<br>
+  ![bookmark count filter](assets/bookmark-count-filter.png)
+- Sort by **bookmarks count or upload time**<br>
+  ![sorting by](assets/sorting-by.png)
+- Use icon <img src="assets/fas-compress.svg" width="12"> <img src="assets/fas-expand.svg" width="12"> to switch width
+- Use icon <img src="assets/fas-rss.svg" width="12"> to indicate following illustrator
+- Right click extension
+  - Click on image
+    - Like
+    - Download original size image (only support single image)
+    - Preview  original size images (not support ugoira)
+    - Open add bookmark page (Just click <img src="assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
+  - Click on illustrator name
+    - Follow
+    - Blacklist (fake mute)
 
 ## Usage
 
-<p align="center">
-  <a href="https://www.youtube.com/watch?v=E1yWWO9e--k" target="_blank">
-    <img src="https://img.youtube.com/vi/E1yWWO9e--k/0.jpg" alt="Demo video"/>
-  </a>
-</p>
-
-- `Go` and `Pause` to switch searching
-- Using mouse wheel to change bookmark filter, or type number
-- You can use regexp or part of tags in tag filter (ex. `レミ|フラン`)
+[![demo video](https://img.youtube.com/vi/zIoCwdpZr0M/0.jpg)](https://www.youtube.com/watch?v=zIoCwdpZr0M)
 
 ## Contribution
 
@@ -45,6 +48,11 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog
+
+2018-06-01 v4.1.0
+
+- Add right click extension
+- Change icons
 
 2018-05-17 v4.0.10
 
