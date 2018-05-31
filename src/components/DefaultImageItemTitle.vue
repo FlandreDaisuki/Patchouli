@@ -13,7 +13,8 @@
           :title="userName"
           :data-user_id="userId"
           :data-user_name="userName"
-          class="user-link ui-profile-popup"
+          :class="isEnableUserTooltip ? 'ui-profile-popup' : ''"
+          class="user-link"
           target="_blank">
           <span :style="profileImgStyle" class="user-img"/>
           <span>{{ userName }}</span>
@@ -93,6 +94,9 @@ export default {
     },
     isMemberIllistPage() {
       return this.$store.state.pageType === "MEMBER_ILLIST";
+    },
+    isEnableUserTooltip() {
+      return this.$store.state.config.userTooltip;
     }
   },
   methods: {

@@ -58,6 +58,7 @@ export default new Vuex.Store({
       fitwidth: 1,
       sort: 0,
       contextMenu: 1,
+      userTooltip: 1,
       blacklist: []
     },
   },

@@ -678,6 +678,7 @@ var store = new Vuex.Store({
       fitwidth: 1,
       sort: 0,
       contextMenu: 1,
+      userTooltip: 1,
       blacklist: []
     },
   },
@@ -1672,6 +1673,9 @@ var script$2 = {
     },
     isMemberIllistPage() {
       return this.$store.state.pageType === "MEMBER_ILLIST";
+    },
+    isEnableUserTooltip() {
+      return this.$store.state.config.userTooltip;
     }
   },
   methods: {
@@ -1748,7 +1752,8 @@ var __vue_render__$2 = function() {
               _c(
                 "a",
                 {
-                  staticClass: "user-link ui-profile-popup",
+                  staticClass: "user-link",
+                  class: _vm.isEnableUserTooltip ? "ui-profile-popup" : "",
                   attrs: {
                     href: _vm.userPageUrl,
                     title: _vm.userName,
@@ -1812,11 +1817,11 @@ const __vue_template__$2 = typeof __vue_render__$2 !== 'undefined'
 /* style */
 const __vue_inject_styles__$2 = function (inject) {
   if (!inject) return
-  inject("data-v-28aefe0a_0", { source: "\n.image-item-title-user[data-v-28aefe0a] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-28aefe0a] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-28aefe0a] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-28aefe0a] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-28aefe0a] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-28aefe0a] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
+  inject("data-v-711525b0_0", { source: "\n.image-item-title-user[data-v-711525b0] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-711525b0] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-711525b0] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-711525b0] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-711525b0] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-711525b0] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$2 = "data-v-28aefe0a";
+const __vue_scope_id__$2 = "data-v-711525b0";
 /* module identifier */
 const __vue_module_identifier__$2 = undefined;
 /* functional template */
@@ -2996,6 +3001,10 @@ var script$6 = {
       if (event.currentTarget.id === "config-context-menu-switch") {
         this.xc.contextMenu = toInt(!this.xc.contextMenu);
       }
+
+      if (event.currentTarget.id === "config-user-tooltip-switch") {
+        this.xc.userTooltip = toInt(!this.xc.userTooltip);
+      }
     },
     jumpPreview(index) {
       this.previewCurrentIndex = index;
@@ -3121,6 +3130,70 @@ var __vue_render__$6 = function() {
             ]
           ),
           _vm._v(" "),
+          _c(
+            "a",
+            {
+              attrs: { id: "config-user-tooltip-switch" },
+              on: {
+                click: function($event) {
+                  if (
+                    !("button" in $event) &&
+                    _vm._k($event.keyCode, "left", 37, $event.key, [
+                      "Left",
+                      "ArrowLeft"
+                    ])
+                  ) {
+                    return null
+                  }
+                  if ("button" in $event && $event.button !== 0) {
+                    return null
+                  }
+                  return _vm.clickSwitch($event)
+                }
+              }
+            },
+            [
+              _c(
+                "a",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.xc.userTooltip,
+                      expression: "xc.userTooltip"
+                    }
+                  ],
+                  attrs: { id: "config-user-tooltip-switch-on", role: "button" }
+                },
+                [_c("i", { staticClass: "fas fa-toggle-on" })]
+              ),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.xc.userTooltip,
+                      expression: "!xc.userTooltip"
+                    }
+                  ],
+                  attrs: {
+                    id: "config-user-tooltip-switch-off",
+                    role: "button"
+                  }
+                },
+                [_c("i", { staticClass: "fas fa-toggle-off" })]
+              ),
+              _vm._v(" "),
+              _c("span", { attrs: { id: "config-user-tooltip-label" } }, [
+                _vm._v(_vm._s(_vm.$t("config.userTooltip")))
+              ])
+            ]
+          ),
+          _vm._v(" "),
           _c("a", { attrs: { id: "config-blacklist-label" } }, [
             _c("i", { staticClass: "far fa-eye-slash" }),
             _vm._v(_vm._s(_vm.$t("config.blacklist")) + "\n    ")
@@ -3232,11 +3305,11 @@ const __vue_template__$6 = typeof __vue_render__$6 !== 'undefined'
 /* style */
 const __vue_inject_styles__$6 = function (inject) {
   if (!inject) return
-  inject("data-v-20eea592_0", { source: "\n#patchouli-big-component[data-v-20eea592] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-20eea592],\n#preview-mode[data-v-20eea592] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-20eea592] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-20eea592] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-20eea592] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-20eea592]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-20eea592] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-20eea592] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-20eea592] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-20eea592] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-20eea592] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-20eea592] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-20eea592] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-20eea592] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-20eea592] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-20eea592] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-20eea592] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-20eea592] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+  inject("data-v-ac961bd6_0", { source: "\n#patchouli-big-component[data-v-ac961bd6] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-ac961bd6],\n#preview-mode[data-v-ac961bd6] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-ac961bd6] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-ac961bd6] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-ac961bd6] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-ac961bd6]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-ac961bd6] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-ac961bd6] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-ac961bd6] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-ac961bd6] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-ac961bd6] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-ac961bd6] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-ac961bd6] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-ac961bd6] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-ac961bd6] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-ac961bd6] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-ac961bd6] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-ac961bd6] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$6 = "data-v-20eea592";
+const __vue_scope_id__$6 = "data-v-ac961bd6";
 /* module identifier */
 const __vue_module_identifier__$6 = undefined;
 /* functional template */
@@ -3390,7 +3463,8 @@ var i18n = new VueI18n({
       },
       config: {
         contextMenuExtension: 'Right click extension',
-        blacklist: 'Blacklist'
+        blacklist: 'Blacklist',
+        userTooltip: 'Illustrator tooltip'
       }
     },
     'ja': {
@@ -3417,7 +3491,8 @@ var i18n = new VueI18n({
       },
       config: {
         contextMenuExtension: '右クリックの拡張機能',
-        blacklist: 'ブラックリスト'
+        blacklist: 'ブラックリスト',
+        userTooltip: 'イラストレーターツールチップ'
       }
     },
     'zh': {
@@ -3444,7 +3519,8 @@ var i18n = new VueI18n({
       },
       config: {
         contextMenuExtension: '右键扩展',
-        blacklist: '黑名單'
+        blacklist: '黑名單',
+        userTooltip: '绘师提示框'
       }
     },
     'zh-tw': {
@@ -3471,7 +3547,8 @@ var i18n = new VueI18n({
       },
       config: {
         contextMenuExtension: '擴充右鍵',
-        blacklist: '黑名單'
+        blacklist: '黑名單',
+        userTooltip: '繪師提示框'
       }
     }
   }

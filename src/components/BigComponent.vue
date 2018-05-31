@@ -24,6 +24,21 @@
         </a>
         <span id="config-context-menu-label">{{ $t('config.contextMenuExtension') }}</span>
       </a>
+      <a id="config-user-tooltip-switch" @click.left="clickSwitch">
+        <a
+          v-show="xc.userTooltip"
+          id="config-user-tooltip-switch-on"
+          role="button">
+          <i class="fas fa-toggle-on"/>
+        </a>
+        <a
+          v-show="!xc.userTooltip"
+          id="config-user-tooltip-switch-off"
+          role="button">
+          <i class="fas fa-toggle-off"/>
+        </a>
+        <span id="config-user-tooltip-label">{{ $t('config.userTooltip') }}</span>
+      </a>
       <a id="config-blacklist-label">
         <i class="far fa-eye-slash"/>{{ $t('config.blacklist') }}
       </a>
@@ -126,6 +141,10 @@ export default {
 
       if (event.currentTarget.id === "config-context-menu-switch") {
         this.xc.contextMenu = toInt(!this.xc.contextMenu);
+      }
+
+      if (event.currentTarget.id === "config-user-tooltip-switch") {
+        this.xc.userTooltip = toInt(!this.xc.userTooltip);
       }
     },
     jumpPreview(index) {
