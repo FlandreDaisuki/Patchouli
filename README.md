@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.1.0](https://img.shields.io/badge/latest-v4.1.0-blue.svg)](#)
+[![latest-v4.1.1](https://img.shields.io/badge/latest-v4.1.1-blue.svg)](#)
 
 [English](./README.en.md) - [中文](./README.md)
 
@@ -48,6 +48,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
+
+2018-06-03 v4.1.1
+
+- 修正收藏數門檻驟降導致 UI 卡死，此修正降低一點點抓圖速度
 
 2018-06-01 v4.1.0
 

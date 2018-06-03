@@ -28,7 +28,8 @@ function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, user
       url: {
         big: illustDetail.url.big,
         sq240: illustDetail.url['240mw'].replace('240x480', '240x240')
-      }
+      },
+      _show: true
     };
 
     if (pageType === 'MY_BOOKMARK') {
@@ -179,10 +180,17 @@ export default {
     filteredLibrary(state, getters, rootState) {
       const cloneLibrary = state.imgLibrary.slice();
       const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
+      const imgToShow = (el) => {
+        return el.bookmarkCount >= rootState.filters.limit &&
+        el.tags.match(rootState.filters.tag) &&
+        !rootState.config.blacklist.includes(el.userId);
+      };
+
       return cloneLibrary
-        .filter(el => el.bookmarkCount >= rootState.filters.limit)
-        .filter(el => el.tags.match(rootState.filters.tag))
-        .filter(el => !rootState.config.blacklist.includes(el.userId))
+        .map(el => {
+          el._show = imgToShow(el);
+          return el;
+        })
         .sort(
           (a, b) => {
             const av = toInt(a[getters.orderBy]);

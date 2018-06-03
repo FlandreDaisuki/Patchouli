@@ -2,6 +2,7 @@
   <div id="patchouli">
     <DefaultImageItem
       v-for="d in filteredLibrary"
+      v-show="d._show"
       :key="d.illustId"
       :img-url="d.url.sq240"
       :illust-id="d.illustId"

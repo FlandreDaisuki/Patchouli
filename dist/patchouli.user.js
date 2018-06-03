@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.0
+// @version           4.1.1
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -413,7 +413,8 @@
         url: {
           big: illustDetail.url.big,
           sq240: illustDetail.url['240mw'].replace('240x480', '240x240')
-        }
+        },
+        _show: true
       };
       if (pageType === 'MY_BOOKMARK') {
         d.bookmarkId = illustDetail.bookmarkId;
@@ -522,10 +523,16 @@
       filteredLibrary(state, getters, rootState) {
         const cloneLibrary = state.imgLibrary.slice();
         const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
+        const imgToShow = (el) => {
+          return el.bookmarkCount >= rootState.filters.limit &&
+          el.tags.match(rootState.filters.tag) &&
+          !rootState.config.blacklist.includes(el.userId);
+        };
         return cloneLibrary
-          .filter(el => el.bookmarkCount >= rootState.filters.limit)
-          .filter(el => el.tags.match(rootState.filters.tag))
-          .filter(el => !rootState.config.blacklist.includes(el.userId))
+          .map(el => {
+            el._show = imgToShow(el);
+            return el;
+          })
           .sort(
             (a, b) => {
               const av = toInt(a[getters.orderBy]);
@@ -2499,6 +2506,14 @@
       [
         _vm._l(_vm.filteredLibrary, function(d) {
           return _c("DefaultImageItem", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: d._show,
+                expression: "d._show"
+              }
+            ],
             key: d.illustId,
             attrs: {
               "img-url": d.url.sq240,
@@ -2529,9 +2544,9 @@
     : {};
   const __vue_inject_styles__$5 = function (inject) {
     if (!inject) return
-    inject("data-v-1747bc52_0", { source: "\n#patchouli[data-v-1747bc52] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
+    inject("data-v-5f5a552f_0", { source: "\n#patchouli[data-v-5f5a552f] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$5 = "data-v-1747bc52";
+  const __vue_scope_id__$5 = "data-v-5f5a552f";
   const __vue_module_identifier__$5 = undefined;
   const __vue_is_functional_template__$5 = false;
   function __vue_normalize__$5(
