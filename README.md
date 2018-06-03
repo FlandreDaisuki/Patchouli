@@ -18,17 +18,17 @@
 - 自動找圖
 - 部份 i18n 界面 (en, ja, zh, zh-tw)
 - 以 **收藏數** 過濾結果<br>
-  ![bookmark count filter](assets/bookmark-count-filter.png)
+  ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
 - 以 **人氣／日期** 排序結果<br>
-  ![sorting by](assets/sorting-by.png)
-- 以圖示 <img src="assets/fas-compress.svg" width="12"> <img src="assets/fas-expand.svg" width="12"> 切換寬度
-- 以圖示 <img src="assets/fas-rss.svg" width="12"> 標注已關注繪師
+  ![sorting by](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/sorting-by.png)
+- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> 切換寬度
+- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> 標注已關注繪師
 - 擴充右鍵功能
   - 圖片上右鍵
     - 點讚
     - 原圖下載 (只支援單張圖片)
     - 預覽原圖 (支援單張、多張；不支援動圖)
-    - 開啟加入書籤頁 (可加標籤，若無此需求可使用 <img src="assets/bookmark-heart-off.svg" width="12"> 快速添加)
+    - 開啟加入書籤頁 (可加標籤，若無此需求可使用 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> 快速添加)
   - 繪師名稱上右鍵
     - 加關注
     - 加黑單 (類似高級會員靜音功能)
@@ -51,7 +51,8 @@ Copyright (c) 2016-2018 FlandreDaisuki
 
 2018-06-03 v4.1.1
 
-- 修正收藏數門檻驟降導致 UI 卡死，此修正降低一點點抓圖速度
+- 修正收藏數門檻驟降導致 UI 卡死 (從1千到0)
+   - 此修正會降低一點點抓圖速度
 
 2018-06-01 v4.1.0
 

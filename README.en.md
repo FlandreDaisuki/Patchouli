@@ -18,17 +18,17 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 - Find pictures automatically
 - The UI with i18n (en, ja, zh, zh-tw)
 - Filter by **bookmarks count**<br>
-  ![bookmark count filter](assets/bookmark-count-filter.png)
+  ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
 - Sort by **bookmarks count or upload time**<br>
-  ![sorting by](assets/sorting-by.png)
-- Use icon <img src="assets/fas-compress.svg" width="12"> <img src="assets/fas-expand.svg" width="12"> to switch width
-- Use icon <img src="assets/fas-rss.svg" width="12"> to indicate following illustrator
+  ![sorting by](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/sorting-by.png)
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> to indicate following illustrator
 - Right click extension
   - Click on image
     - Like
     - Download original size image (only support single image)
     - Preview  original size images (not support ugoira)
-    - Open add bookmark page (Just click <img src="assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
+    - Open add bookmark page (Just click <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
   - Click on illustrator name
     - Follow
     - Blacklist (fake mute)
@@ -51,7 +51,8 @@ Copyright (c) 2016-2018 FlandreDaisuki
 
 2018-06-03 v4.1.1
 
-- Fix bookmark threshold decrease too fast to stuck UI. This fix will slow the crawler speed a little.
+- Fix the UI stucks when bookmark threshold decreased too fast (e.g. 1k to 0)
+   - This fix will slow the crawler speed a little
 
 2018-06-01 v4.1.0
 
