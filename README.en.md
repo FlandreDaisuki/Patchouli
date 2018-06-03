@@ -24,14 +24,14 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> to indicate following illustrator
 - Right click extension
-  - Click on image
-    - Like
-    - Download original size image (only support single image)
-    - Preview  original size images (not support ugoira)
-    - Open add bookmark page (Just click <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
-  - Click on illustrator name
-    - Follow
-    - Blacklist (fake mute)
+   - Click on image
+      - Like
+      - Download original size image (only support single image)
+      - Preview  original size images (not support ugoira)
+      - Open add bookmark page (Just click <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
+   - Click on illustrator name
+      - Follow
+      - Blacklist (fake mute)
 
 ## Usage
 

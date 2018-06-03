@@ -24,14 +24,14 @@
 - 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> 切換寬度
 - 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> 標注已關注繪師
 - 擴充右鍵功能
-  - 圖片上右鍵
-    - 點讚
-    - 原圖下載 (只支援單張圖片)
-    - 預覽原圖 (支援單張、多張；不支援動圖)
-    - 開啟加入書籤頁 (可加標籤，若無此需求可使用 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> 快速添加)
-  - 繪師名稱上右鍵
-    - 加關注
-    - 加黑單 (類似高級會員靜音功能)
+   - 圖片上右鍵
+      - 點讚
+      - 原圖下載 (只支援單張圖片)
+      - 預覽原圖 (支援單張、多張；不支援動圖)
+      - 開啟加入書籤頁 (可加標籤，若無此需求可使用 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> 快速添加)
+   - 繪師名稱上右鍵
+      - 加關注
+      - 加黑單 (類似高級會員靜音功能)
 
 ## Usage 使用說明
 
