@@ -2,7 +2,7 @@
 
 [![latest-v4.1.1](https://img.shields.io/badge/latest-v4.1.1-blue.svg)](#)
 
-[English](./README.en.md) - [中文](./README.md)
+[English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
 ## Introduction 簡介
 
@@ -19,6 +19,10 @@
 - 部份 i18n 界面 (en, ja, zh, zh-tw)
 - 以 **收藏數** 過濾結果<br>
   ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
+- 以 **標籤正規表達式** 過濾結果<br>
+  ![tags filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tags-filter.png)
+   - 完整／部份標籤範例： `芙蘭朵露`, `users入り`
+   - 正規表達式範例： `芙蘭朵露|古明地戀`, `\d{3,}users入り`
 - 以 **人氣／日期** 排序結果<br>
   ![sorting by](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/sorting-by.png)
 - 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> 切換寬度

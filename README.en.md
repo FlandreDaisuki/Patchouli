@@ -2,7 +2,7 @@
 
 [![latest-v4.1.1](https://img.shields.io/badge/latest-v4.1.1-blue.svg)](#)
 
-[English](./README.en.md) - [中文](./README.md)
+[English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
 ## Introduction
 
@@ -19,6 +19,10 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 - The UI with i18n (en, ja, zh, zh-tw)
 - Filter by **bookmarks count**<br>
   ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
+- Filter by **tags with regexp**<br>
+  ![tags filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tags-filter.png)
+   - example of tags or part of tags: `flandre`, `users入り`
+   - example of regexp: `flandre|koishi`, `\d{3,}users入り`
 - Sort by **bookmarks count or upload time**<br>
   ![sorting by](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/sorting-by.png)
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
