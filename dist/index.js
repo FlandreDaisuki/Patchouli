@@ -59,8 +59,8 @@ class Pixiv {
     try {
       this.tt = $('input[name="tt"]').value;
     } catch (error) {
-      /* global pixiv */
-      this.tt = pixiv.context.token;
+      const pixivData = window.globalInitData || window.pixiv.context;
+      this.tt = pixivData.token;
     }
   }
 
@@ -82,7 +82,9 @@ class Pixiv {
     }
   }
 
-  async getLegacyPageHTMLIllustIds(url, { needBookmarkId } = { needBookmarkId: false }) {
+  async getLegacyPageHTMLIllustIds(url, { needBookmarkId } = {
+    needBookmarkId: false
+  }) {
     try {
       const html = await this.fetch(url);
       const nextTag = html.match(/class="next"[^/]*/);
@@ -107,16 +109,14 @@ class Pixiv {
         }
       }
 
-      const ret = {
-        nextUrl,
-        illustIds
-      };
+      const ret = { nextUrl, illustIds };
       if (needBookmarkId) {
         ret.bookmarkIds = {};
 
         const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
         for (const bim of bimHTMLs) {
-          const [illustId, bookmarkId] = bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
+          const [illustId, bookmarkId] =
+              bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
           if (illustIds.includes(illustId)) {
             ret.bookmarkIds[illustId] = { illustId, bookmarkId };
           }
@@ -155,10 +155,7 @@ class Pixiv {
         }
       }
 
-      const ret = {
-        nextUrl,
-        illustIds
-      };
+      const ret = { nextUrl, illustIds };
       return ret;
     } catch (error) {
       $print.error('Pixiv#getPageHTMLIllustIds: error:', error);
@@ -166,7 +163,8 @@ class Pixiv {
   }
 
   async getBookmarkHTMLDetails(illustIds) {
-    const bookmarkHTMLDetails = illustIds.map(id => this.getBookmarkHTMLDetail(id));
+    const bookmarkHTMLDetails =
+        illustIds.map(id => this.getBookmarkHTMLDetail(id));
     const bookmarkDetails = await Promise.all(bookmarkHTMLDetails);
     const detail = {};
     for (const d of bookmarkDetails) {
@@ -180,16 +178,14 @@ class Pixiv {
 
     try {
       const html = await this.fetch(url);
-      const bkMatches = html.match(/<i class="_icon _bookmark-icon-inline"><\/i>(\d+)/);
+      const bkMatches =
+          html.match(/<i class="_icon _bookmark-icon-inline"><\/i>(\d+)/);
       const bookmarkCount = bkMatches ? parseInt(bkMatches[1]) : 0;
       const tagsListHTML = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
-      const tagHTMLs = tagsListHTML ? tagsListHTML[0].match(/>[^<]+?(?=<\/a>)/g) : [];
+      const tagHTMLs =
+          tagsListHTML ? tagsListHTML[0].match(/>[^<]+?(?=<\/a>)/g) : [];
       const tags = tagHTMLs ? tagHTMLs.map(x => x.slice(1)) : [];
-      return {
-        bookmarkCount,
-        illustId,
-        tags
-      };
+      return { bookmarkCount, illustId, tags };
     } catch (error) {
       $print.error('Pixiv#getBookmarkHTMLDetail: error:', error);
     }
@@ -197,7 +193,8 @@ class Pixiv {
 
   async getIllustsAPIDetail(illustIds) {
     const iids = illustIds.join(',');
-    const url = `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
+    const url =
+        `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
 
     try {
       const json = await this.fetch(url);
@@ -231,10 +228,7 @@ class Pixiv {
 
       const details = {};
       for (const u of json.body) {
-        details[u.user_id] = {
-          userId: u.user_id,
-          isFollow: u.is_follow
-        };
+        details[u.user_id] = { userId: u.user_id, isFollow: u.is_follow };
       }
       return details;
     } catch (error) {
@@ -245,26 +239,22 @@ class Pixiv {
   async getIllustHTMLDetail(illustId) {
     const url = `/member_illust.php?mode=medium&illust_id=${illustId}`;
 
-    const failResult = {
-      illustId,
-      tags: []
-    };
+    const failResult = { illustId, tags: [] };
 
     try {
       const html = await this.fetch(url);
-      const tagHTMLPart = html.match(/class="work-tags"[.\s\S]*template-work-tag/ig);
+      const tagHTMLPart =
+          html.match(/class="work-tags"[.\s\S]*template-work-tag/ig);
       if (!tagHTMLPart) {
         return failResult;
       }
-      const tagHTMLs = tagHTMLPart[0].replace('\n', '').match(/((translation|original|romaji)-tag">|tag-translation( romaji)?">)[^<]+/ig);
+      const tagHTMLs = tagHTMLPart[0].replace('\n', '').match(
+        /((translation|original|romaji)-tag">|tag-translation( romaji)?">)[^<]+/ig);
       if (!tagHTMLs) {
         return failResult;
       }
       const tags = tagHTMLs.map(tagHTML => tagHTML.replace(/.*>(.*)$/, '$1'));
-      return {
-        illustId,
-        tags
-      };
+      return { illustId, tags };
     } catch (error) {
       $print.error('Pixiv#getIllustHTMLDetail: error:', error);
       return failResult;
@@ -284,24 +274,20 @@ class Pixiv {
   async getMultipleIllustHTMLDetail(illustId) {
     const url = `/member_illust.php?mode=manga&illust_id=${illustId}`;
 
-    const failResult = {
-      illustId,
-      imgSrcs: []
-    };
+    const failResult = { illustId, imgSrcs: [] };
 
     try {
       const html = await this.fetch(url);
       const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
-      $print.debug('Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
+      $print.debug(
+        'Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
       if (!srcAttrHTML) {
         return failResult;
       }
-      const imgSrcs = srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
+      const imgSrcs =
+          srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
       $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
-      return {
-        illustId,
-        imgSrcs
-      };
+      return { illustId, imgSrcs };
     } catch (error) {
       $print.error('Pixiv#getMultipleIllustHTMLDetail: error:', error);
     }
@@ -368,24 +354,12 @@ function removeAnnoyings(doc = document) {
   const annoyings = [
     'iframe',
     // Ad
-    '.ad',
-    '.ads_area',
-    '.ad-footer',
-    '.ads_anchor',
-    '.ads-top-info',
-    '.comic-hot-works',
-    '.user-ad-container',
-    '.ads_area_no_margin',
+    '.ad', '.ads_area', '.ad-footer', '.ads_anchor', '.ads-top-info',
+    '.comic-hot-works', '.user-ad-container', '.ads_area_no_margin',
     // Premium
-    '.hover-item',
-    '.ad-printservice',
-    '.bookmark-ranges',
-    '.require-premium',
-    '.showcase-reminder',
-    '.sample-user-search',
-    '.popular-introduction',
-    '._premium-lead-tag-search-bar',
-    '._premium-lead-popular-d-body'
+    '.hover-item', '.ad-printservice', '.bookmark-ranges', '.require-premium',
+    '.showcase-reminder', '.sample-user-search', '.popular-introduction',
+    '._premium-lead-tag-search-bar', '._premium-lead-popular-d-body'
   ];
 
   for (const selector of annoyings) {
@@ -438,7 +412,7 @@ function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, user
   return vLibrary;
 }
 
-var pixiv$1 = {
+var pixiv = {
   state: {
     imgLibrary: [],
     isPaused: true,
@@ -669,7 +643,7 @@ const pageType = (() => {
 })();
 
 var store = new Vuex.Store({
-  modules: { pixiv: pixiv$1, contextMenu, bigComponent },
+  modules: { pixiv, contextMenu, bigComponent },
   state: {
     locale: document.documentElement.lang,
     pageType,
