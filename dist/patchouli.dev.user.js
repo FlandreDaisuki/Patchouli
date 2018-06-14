@@ -113,13 +113,25 @@
 
   class Pixiv {
     constructor() {
-      try {
-        this.tt = $('input[name="tt"]').value;
-      } catch (error) {
-        const pixivData =
-          window.pixiv ? window.pixiv.context : window.globalInitData;
-        this.tt = pixivData.token;
+      this._tt = null;
+    }
+
+    get tt() {
+      if (this._tt) {
+        return this._tt;
       }
+
+      const inputTT = $('input[name="tt"]');
+      if (inputTT) {
+        this._tt = inputTT.value;
+      } else if (window.pixiv) {
+        this._tt = window.pixiv.context.token;
+      } else if (window.globalInitData) {
+        this._tt = window.globalInitData.token;
+      } else {
+        $print.error('Pixiv#tt getter');
+      }
+      return this._tt;
     }
 
     async fetch(url) {
@@ -292,32 +304,27 @@
       }
     }
 
-    async postThumbUp(illustId, userId) {
-      const searchParams = {
-        mode: 'save',
-        i_id: illustId,
-        u_id: userId,
-        qr: 0,
-        score: 10,
-        tt: this.tt
-      };
+    // new API to like an illust, return true if succeeded
+    async postIllustLike(illustId) {
+      const url = '/ajax/illusts/like';
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-csrf-token': this.tt,
+        },
+        credentials: 'same-origin',
+        body: JSON.stringify({
+          illust_id: illustId,
+        }),
+      });
 
-      const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
-      const config = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      };
-
-      try {
-        const res = await axios.post('/rpc_rating.php', data, config);
-        if (res.status === 200) {
-          $print.debug('Pixiv#postThumbUp: res.data:', res.data);
-          return !!res.data.score;
-        } else {
-          throw new Error(res.statusText);
-        }
-      } catch (error) {
-        $print.error('Pixiv#postThumbUp: error:', error);
+      if (!resp.ok) {
+        throw new Error(`${resp.statusText}`);
       }
+
+      const data = await resp.json();
+      return !data.error;
     }
 
     async postFollowUser(userId) {
@@ -2244,10 +2251,7 @@
     methods: {
       thumbUp() {
         if (this.currentImageItem) {
-          PixivAPI.postThumbUp(
-            this.currentImageItem.illustId,
-            this.currentImageItem.userId
-          );
+          PixivAPI.postIllustLike(this.currentImageItem.illustId);
         }
       },
       async downloadOne() {
@@ -2591,11 +2595,11 @@
   /* style */
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-836bb3ae_0", { source: "\n#patchouli-context-menu[data-v-836bb3ae] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-836bb3ae] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-836bb3ae] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-836bb3ae]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-836bb3ae],\n#patchouli-context-menu > ul i.fas[data-v-836bb3ae] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-508b0e5d_0", { source: "\n#patchouli-context-menu[data-v-508b0e5d] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-508b0e5d] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-508b0e5d] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-508b0e5d]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-508b0e5d],\n#patchouli-context-menu > ul i.fas[data-v-508b0e5d] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$4 = "data-v-836bb3ae";
+  const __vue_scope_id__$4 = "data-v-508b0e5d";
   /* module identifier */
   const __vue_module_identifier__$4 = undefined;
   /* functional template */

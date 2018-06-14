@@ -111,10 +111,7 @@ export default {
   methods: {
     thumbUp() {
       if (this.currentImageItem) {
-        PixivAPI.postThumbUp(
-          this.currentImageItem.illustId,
-          this.currentImageItem.userId
-        );
+        PixivAPI.postIllustLike(this.currentImageItem.illustId);
       }
     },
     async downloadOne() {

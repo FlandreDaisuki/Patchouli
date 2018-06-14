@@ -14,13 +14,25 @@ import {
 
 class Pixiv {
   constructor() {
-    try {
-      this.tt = $('input[name="tt"]').value;
-    } catch (error) {
-      const pixivData =
-        window.pixiv ? window.pixiv.context : window.globalInitData;
-      this.tt = pixivData.token;
+    this._tt = null;
+  }
+
+  get tt() {
+    if (this._tt) {
+      return this._tt;
     }
+
+    const inputTT = $('input[name="tt"]');
+    if (inputTT) {
+      this._tt = inputTT.value;
+    } else if (window.pixiv) {
+      this._tt = window.pixiv.context.token;
+    } else if (window.globalInitData) {
+      this._tt = window.globalInitData.token;
+    } else {
+      $print.error('Pixiv#tt getter');
+    }
+    return this._tt;
   }
 
   async fetch(url) {
@@ -193,32 +205,27 @@ class Pixiv {
     }
   }
 
-  async postThumbUp(illustId, userId) {
-    const searchParams = {
-      mode: 'save',
-      i_id: illustId,
-      u_id: userId,
-      qr: 0,
-      score: 10,
-      tt: this.tt
-    };
+  // new API to like an illust, return true if succeeded
+  async postIllustLike(illustId) {
+    const url = '/ajax/illusts/like';
+    const resp = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-csrf-token': this.tt,
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        illust_id: illustId,
+      }),
+    });
 
-    const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
-    const config = {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-    };
-
-    try {
-      const res = await axios.post('/rpc_rating.php', data, config);
-      if (res.status === 200) {
-        $print.debug('Pixiv#postThumbUp: res.data:', res.data);
-        return !!res.data.score;
-      } else {
-        throw new Error(res.statusText);
-      }
-    } catch (error) {
-      $print.error('Pixiv#postThumbUp: error:', error);
+    if (!resp.ok) {
+      throw new Error(`${resp.statusText}`);
     }
+
+    const data = await resp.json();
+    return !data.error;
   }
 
   async postFollowUser(userId) {
