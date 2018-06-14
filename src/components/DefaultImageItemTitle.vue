@@ -19,7 +19,7 @@
           <span :style="profileImgStyle" class="user-img"/>
           <span>{{ userName }}</span>
         </a>
-        <i v-if="isFollow" class="fas fa-rss"/>
+        <i v-if="isFollowed" class="fas fa-rss"/>
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
@@ -67,7 +67,7 @@ export default {
       type: Number,
       default: 0
     },
-    isFollow: {
+    isFollowed: {
       type: Boolean,
       default: false
     }

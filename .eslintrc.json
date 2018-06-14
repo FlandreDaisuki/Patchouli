@@ -24,7 +24,6 @@
     "space-infix-ops": "error",
     "semi": ["error", "always"],
     "space-before-blocks": "error",
-    "object-curly-spacing": ["error", "always"],
     "space-before-function-paren": ["error", "never"],
     "vue/max-attributes-per-line": [2, {
       "singleline": 2,

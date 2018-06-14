@@ -13,7 +13,7 @@
         :illust-title="illustTitle"
         :user-name="userName"
         :user-id="userId"
-        :is-follow="isFollow"
+        :is-followed="isFollowed"
         :profile-img-url="profileImgUrl"
         :bookmark-count="bookmarkCount"/>
     </figure>
@@ -63,7 +63,7 @@ export default {
       type: Boolean,
       default: false
     },
-    isFollow: {
+    isFollowed: {
       type: Boolean,
       default: false
     },

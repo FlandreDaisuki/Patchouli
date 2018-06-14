@@ -13,7 +13,7 @@
 // @include           *://www.pixiv.net/*
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.16/vue.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.js
-// @require           https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/7.6.0/vue-i18n.js
+// @require           https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/7.8.0/vue-i18n.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js
 // @icon              http://i.imgur.com/VwoYc5w.png
@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.1
+// @version           4.1.2
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -105,12 +105,19 @@
 
   // (get|post)Name(HTMLDetail|APIDetail)s?
 
+  // new API
+  // (get|post) (illust|user) name? Data (Group)?
+  // └ method                 |              |
+  //                          └ special attr |
+  //                 group array of requests ┘
+
   class Pixiv {
     constructor() {
       try {
         this.tt = $('input[name="tt"]').value;
       } catch (error) {
-        const pixivData = window.globalInitData || window.pixiv.context;
+        const pixivData =
+          window.pixiv ? window.pixiv.context : window.globalInitData;
         this.tt = pixivData.token;
       }
     }
@@ -133,9 +140,60 @@
       }
     }
 
-    async getLegacyPageHTMLIllustIds(url, { needBookmarkId } = {
-      needBookmarkId: false
-    }) {
+    // new API to get an illust data
+    async getIllustData(illustId) {
+      const url = `/ajax/illust/${illustId}`;
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        throw new Error(`${resp.statusText}`);
+      }
+      const data = await resp.json();
+      if (data.error) {
+        $print.error('Pixiv#getIllustData', data.message);
+        return null;
+      }
+      return data.body;
+    }
+
+    async getIllustDataGroup(illustIds) {
+      const uniqIllustIds = [...new Set(illustIds)];
+      const illustDataGroup = await Promise.all(uniqIllustIds.map(this.getIllustData));
+      $print.debug('getIllustDataGroup: illustDataGroup:', illustDataGroup);
+      return illustDataGroup
+        .filter(Boolean)
+        .reduce((collect, d) => {
+          collect[d.illustId] = d;
+          return collect;
+        }, {});
+    }
+
+    // new API to get an user data
+    async getUserData(userId) {
+      const url = `/ajax/user/${userId}`;
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        throw new Error(`${resp.statusText}`);
+      }
+      const data = await resp.json();
+      if (data.error) {
+        $print.error('Pixiv#getUserData', data.message);
+        return null;
+      }
+      return data.body;
+    }
+
+    async getUserDataGroup(userIds) {
+      const uniqUserIds = [...new Set(userIds)];
+      const userDataGroup = await Promise.all(uniqUserIds.map(this.getUserData));
+      return userDataGroup
+        .filter(Boolean)
+        .reduce((collect, d) => {
+          collect[d.userId] = d;
+          return collect;
+        }, {});
+    }
+
+    async getLegacyPageHTMLIllustIds(url) {
       try {
         const html = await this.fetch(url);
         const nextTag = html.match(/class="next"[^/]*/);
@@ -159,20 +217,10 @@
             illustIds.push(iid);
           }
         }
-
-        const ret = { nextUrl, illustIds };
-        if (needBookmarkId) {
-          ret.bookmarkIds = {};
-
-          const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
-          for (const bim of bimHTMLs) {
-            const [illustId, bookmarkId] =
-                bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
-            if (illustIds.includes(illustId)) {
-              ret.bookmarkIds[illustId] = { illustId, bookmarkId };
-            }
-          }
-        }
+        const ret = {
+          nextUrl,
+          illustIds
+        };
         return ret;
       } catch (error) {
         $print.error('Pixiv#getLegacyPageHTMLIllustIds: error:', error);
@@ -206,126 +254,23 @@
           }
         }
 
-        const ret = { nextUrl, illustIds };
+        const ret = {
+          nextUrl,
+          illustIds
+        };
         return ret;
       } catch (error) {
         $print.error('Pixiv#getPageHTMLIllustIds: error:', error);
       }
     }
 
-    async getBookmarkHTMLDetails(illustIds) {
-      const bookmarkHTMLDetails =
-          illustIds.map(id => this.getBookmarkHTMLDetail(id));
-      const bookmarkDetails = await Promise.all(bookmarkHTMLDetails);
-      const detail = {};
-      for (const d of bookmarkDetails) {
-        detail[d.illustId] = d;
-      }
-      return detail;
-    }
-
-    async getBookmarkHTMLDetail(illustId) {
-      const url = `/bookmark_detail.php?illust_id=${illustId}`;
-
-      try {
-        const html = await this.fetch(url);
-        const bkMatches =
-            html.match(/<i class="_icon _bookmark-icon-inline"><\/i>(\d+)/);
-        const bookmarkCount = bkMatches ? parseInt(bkMatches[1]) : 0;
-        const tagsListHTML = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
-        const tagHTMLs =
-            tagsListHTML ? tagsListHTML[0].match(/>[^<]+?(?=<\/a>)/g) : [];
-        const tags = tagHTMLs ? tagHTMLs.map(x => x.slice(1)) : [];
-        return { bookmarkCount, illustId, tags };
-      } catch (error) {
-        $print.error('Pixiv#getBookmarkHTMLDetail: error:', error);
-      }
-    }
-
-    async getIllustsAPIDetail(illustIds) {
-      const iids = illustIds.join(',');
-      const url =
-          `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
-
-      try {
-        const json = await this.fetch(url);
-        $print.debug('Pixiv#getIllustsAPIDetail: json:', json);
-        if (json.error) {
-          throw new Error(json.message);
-        }
-
-        const details = json.body;
-        for (const [key, detail] of Object.entries(details)) {
-          if (detail.error) {
-            delete details[key];
-          }
-        }
-        return details;
-      } catch (error) {
-        $print.error('Pixiv#getIllustsAPIDetail: error:', error);
-      }
-    }
-
-    async getUsersAPIDetail(userIds) {
-      const uids = [...new Set(userIds)].join(',');
-      const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
-
-      try {
-        const json = await this.fetch(url);
-        $print.debug('Pixiv#getUsersAPIDetail: json:', json);
-        if (json.error) {
-          throw new Error(json.message);
-        }
-
-        const details = {};
-        for (const u of json.body) {
-          details[u.user_id] = { userId: u.user_id, isFollow: u.is_follow };
-        }
-        return details;
-      } catch (error) {
-        $print.error('Pixiv#getUsersAPIDetail: error:', error);
-      }
-    }
-
-    async getIllustHTMLDetail(illustId) {
-      const url = `/member_illust.php?mode=medium&illust_id=${illustId}`;
-
-      const failResult = { illustId, tags: [] };
-
-      try {
-        const html = await this.fetch(url);
-        const tagHTMLPart =
-            html.match(/class="work-tags"[.\s\S]*template-work-tag/ig);
-        if (!tagHTMLPart) {
-          return failResult;
-        }
-        const tagHTMLs = tagHTMLPart[0].replace('\n', '').match(
-          /((translation|original|romaji)-tag">|tag-translation( romaji)?">)[^<]+/ig);
-        if (!tagHTMLs) {
-          return failResult;
-        }
-        const tags = tagHTMLs.map(tagHTML => tagHTML.replace(/.*>(.*)$/, '$1'));
-        return { illustId, tags };
-      } catch (error) {
-        $print.error('Pixiv#getIllustHTMLDetail: error:', error);
-        return failResult;
-      }
-    }
-
-    async getIllustHTMLDetails(illustIds) {
-      const IllustHTMLDetails = illustIds.map(id => this.getIllustHTMLDetail(id));
-      const IllustDetails = await Promise.all(IllustHTMLDetails);
-      const detail = {};
-      for (const d of IllustDetails) {
-        detail[d.illustId] = d;
-      }
-      return detail;
-    }
-
     async getMultipleIllustHTMLDetail(illustId) {
       const url = `/member_illust.php?mode=manga&illust_id=${illustId}`;
 
-      const failResult = { illustId, imgSrcs: [] };
+      const failResult = {
+        illustId,
+        imgSrcs: []
+      };
 
       try {
         const html = await this.fetch(url);
@@ -336,9 +281,12 @@
           return failResult;
         }
         const imgSrcs =
-            srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
+          srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
         $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
-        return { illustId, imgSrcs };
+        return {
+          illustId,
+          imgSrcs
+        };
       } catch (error) {
         $print.error('Pixiv#getMultipleIllustHTMLDetail: error:', error);
       }
@@ -422,39 +370,49 @@
 
   const PixivAPI = new Pixiv();
 
-  function makeLibraryData({ pageType, illustAPIDetails, bookmarkHTMLDetails, userAPIDetails, illustHTMLDetails }) {
-    if (!illustAPIDetails || !Object.keys(illustAPIDetails).length) {
-      throw new Error('makeLibraryData: illustAPIDetails is falsy.');
+  function makeNewTag(tag) {
+    if (tag.translation) {
+      const trs = Object.values(tag.translation);
+      return [tag.tag, ...trs].join(', ');
+    }
+    return [tag.tag, tag.romaji].join(', ');
+  }
+
+  function makeLibraryData({
+    pageType,
+    illustDataGroup,
+    userDataGroup,
+  }) {
+    if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
+      throw new Error('makeLibraryData: illustDataGroup is falsy.');
     }
 
     const vLibrary = [];
 
-    for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
-      const atags = illustHTMLDetails[illustId].tags;
-      const btags = bookmarkHTMLDetails[illustId].tags;
+    for (const [illustId, illustData] of Object.entries(illustDataGroup)) {
 
-      const allTags = [...new Set([...atags, ...btags])].join(', ');
+      const allTags = illustData.tags.tags.map(makeNewTag).join(', ');
       const d = {
         illustId,
-        bookmarkCount: bookmarkHTMLDetails[illustId].bookmarkCount,
+        bookmarkCount: illustData.bookmarkCount,
         tags: allTags,
-        illustTitle: illustDetail.illust_title,
-        illustPageCount: toInt(illustDetail.illust_page_count),
-        userId: illustDetail.user_id,
-        userName: illustDetail.user_name,
-        isFollow: userAPIDetails[illustDetail.user_id].isFollow,
-        isBookmarked: illustDetail.is_bookmarked,
-        isUgoira: !!illustDetail.ugoira_meta,
-        profileImg: illustDetail.profile_img,
-        url: {
-          big: illustDetail.url.big,
-          sq240: illustDetail.url['240mw'].replace('240x480', '240x240')
+        illustTitle: illustData.illustTitle,
+        illustPageCount: toInt(illustData.pageCount),
+        userId: illustData.userId,
+        userName: illustData.userName,
+        isFollowed: userDataGroup[illustData.userId].isFollowed,
+        isBookmarked: Boolean(illustData.bookmarkData),
+        isUgoira: illustData.illustType === 2,
+        profileImg: userDataGroup[illustData.userId].image,
+        urls: {
+          original: illustData.urls.original,
+          thumb: illustData.urls.thumb
         },
         _show: true
       };
 
       if (pageType === 'MY_BOOKMARK') {
-        d.bookmarkId = illustDetail.bookmarkId;
+        d.bookmarkId = illustData.bookmarkData.id;
       }
 
       vLibrary.push(d);
@@ -489,15 +447,21 @@
 
         if (opt.type === 'follow-user' && opt.userId) {
           state.imgLibrary
-            .filter(i => i.userId ===  opt.userId)
+            .filter(i => i.userId === opt.userId)
             .forEach(i => {
-              i.isFollow = true;
+              i.isFollowed = true;
             });
         }
       }
     },
     actions: {
-      async start({ state, dispatch, rootState }, { times } = {}) {
+      async start({
+        state,
+        dispatch,
+        rootState
+      }, {
+        times
+      } = {}) {
         times = times || Infinity;
 
         if (state.isEnded || times <= 0) {
@@ -511,13 +475,21 @@
         case 'MEMBER_ILLIST':
         case 'MEMBER_BOOKMARK':
         case 'ANCIENT_NEW_ILLUST':
-          await dispatch('startNextUrlBased', { times });
+          await dispatch('startNextUrlBased', {
+            times
+          });
           break;
         default:
           break;
         }
       },
-      async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
+      async startNextUrlBased({
+        state,
+        commit,
+        rootState
+      }, {
+        times
+      } = {}) {
         state.isPaused = false;
 
         while (!state.isPaused && !state.isEnded && times) {
@@ -525,58 +497,24 @@
           if (['SEARCH', 'NEW_ILLUST'].includes(rootState.pageType)) {
             page = await PixivAPI.getPageHTMLIllustIds(state.nextUrl);
           } else {
-            page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextUrl, {
-              needBookmarkId: rootState.pageType === 'MY_BOOKMARK'
-            });
+            page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextUrl);
           }
           $print.debug('PixivModule#startNextUrlBased: page:', page);
 
           state.nextUrl = page.nextUrl;
 
-          // {[illustId : IDString]: illust_detail}
-          const illustAPIDetails = await PixivAPI.getIllustsAPIDetail(page.illustIds);
-          $print.debug('PixivModule#startNextUrlBased: illustAPIDetails:', illustAPIDetails);
+          const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
+          $print.debug('PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
 
-          // {[illustId : IDString]: illust_detail}
-          const illustHTMLDetails = await PixivAPI.getIllustHTMLDetails(page.illustIds);
-          $print.debug('PixivModule#startNextUrlBased: illustHTMLDetails:', illustHTMLDetails);
+          const userIds = Object.values(illustDataGroup).map(d => d.userId);
+          const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
+          $print.debug('PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
 
-          if (rootState.pageType === 'MY_BOOKMARK') {
-            // {[illustId : IDString]: {
-            //   illustId,
-            //   bookmarkId
-            // }}
-            const myBookmarkAPIDetails = page.bookmarkIds;
-            for (const [illustId, illustDetail] of Object.entries(illustAPIDetails)) {
-              const bookmarkId = myBookmarkAPIDetails[illustId].bookmarkId;
-              if (bookmarkId) {
-                illustDetail.bookmarkId = bookmarkId;
-              }
-            }
-            $print.debug('PixivModule#startNextUrlBased: myBookmarkAPIDetails:', myBookmarkAPIDetails);
-          }
-
-          // {[illustId : IDString]: {
-          //   illustId,
-          //   bookmarkCount,
-          //   tags: string[]
-          // }}
-          const bookmarkHTMLDetails = await PixivAPI.getBookmarkHTMLDetails(Object.keys(illustAPIDetails));
-          $print.debug('PixivModule#startNextUrlBased: bookmarkHTMLDetails:', bookmarkHTMLDetails);
-
-          const userIds = Object.values(illustAPIDetails).map(d => d.user_id);
-          // {[user_id : IDString]: {
-          // userId,
-          // isFollow
-          // }}
-          const userAPIDetails = await PixivAPI.getUsersAPIDetail(userIds);
-          $print.debug('PixivModule#startNextUrlBased: userAPIDetails:', userAPIDetails);
-
-          const libraryData = makeLibraryData({ pageType: rootState.pageType,
-            illustAPIDetails,
-            bookmarkHTMLDetails,
-            userAPIDetails,
-            illustHTMLDetails });
+          const libraryData = makeLibraryData({
+            pageType: rootState.pageType,
+            illustDataGroup,
+            userDataGroup,
+          });
 
           // prevent duplicate illustId
           for (const d of libraryData) {
@@ -603,8 +541,8 @@
         const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
         const imgToShow = (el) => {
           return el.bookmarkCount >= rootState.filters.limit &&
-          el.tags.match(rootState.filters.tag) &&
-          !rootState.config.blacklist.includes(el.userId);
+            el.tags.match(rootState.filters.tag) &&
+            !rootState.config.blacklist.includes(el.userId);
         };
 
         return cloneLibrary
@@ -1260,7 +1198,7 @@
     scope, functional, moduleIdentifier,
     createInjector, createInjectorSSR
   ) {
-    const component = script$$1 || {};
+    const component = (typeof script$$1 === 'function' ? script$$1.options : script$$1) || {};
 
     {
       component.__file = "/home/flandre/dev/Patchouli/src/components/Koakuma.vue";
@@ -1538,7 +1476,7 @@
     scope, functional, moduleIdentifier,
     createInjector, createInjectorSSR
   ) {
-    const component = script || {};
+    const component = (typeof script === 'function' ? script.options : script) || {};
 
     {
       component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue";
@@ -1679,7 +1617,7 @@
         type: Number,
         default: 0
       },
-      isFollow: {
+      isFollowed: {
         type: Boolean,
         default: false
       }
@@ -1805,7 +1743,7 @@
                   ]
                 ),
                 _vm._v(" "),
-                _vm.isFollow ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
+                _vm.isFollowed ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
               ]
             )
           : _vm._e(),
@@ -1850,11 +1788,11 @@
   /* style */
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject("data-v-711525b0_0", { source: "\n.image-item-title-user[data-v-711525b0] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-711525b0] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-711525b0] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-711525b0] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-711525b0] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-711525b0] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
+    inject("data-v-11d33448_0", { source: "\n.image-item-title-user[data-v-11d33448] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-11d33448] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-11d33448] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-11d33448] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-11d33448] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-11d33448] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$2 = "data-v-711525b0";
+  const __vue_scope_id__$2 = "data-v-11d33448";
   /* module identifier */
   const __vue_module_identifier__$2 = undefined;
   /* functional template */
@@ -1865,7 +1803,7 @@
     scope, functional, moduleIdentifier,
     createInjector, createInjectorSSR
   ) {
-    const component = script || {};
+    const component = (typeof script === 'function' ? script.options : script) || {};
 
     {
       component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemTitle.vue";
@@ -2019,7 +1957,7 @@
         type: Boolean,
         default: false
       },
-      isFollow: {
+      isFollowed: {
         type: Boolean,
         default: false
       },
@@ -2063,7 +2001,7 @@
               "illust-title": _vm.illustTitle,
               "user-name": _vm.userName,
               "user-id": _vm.userId,
-              "is-follow": _vm.isFollow,
+              "is-followed": _vm.isFollowed,
               "profile-img-url": _vm.profileImgUrl,
               "bookmark-count": _vm.bookmarkCount
             }
@@ -2082,11 +2020,11 @@
   /* style */
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject("data-v-0b72785a_0", { source: "\n.image-item[data-v-0b72785a] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-0b72785a] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-5a57c5d4_0", { source: "\n.image-item[data-v-5a57c5d4] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-5a57c5d4] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$3 = "data-v-0b72785a";
+  const __vue_scope_id__$3 = "data-v-5a57c5d4";
   /* module identifier */
   const __vue_module_identifier__$3 = undefined;
   /* functional template */
@@ -2097,7 +2035,7 @@
     scope, functional, moduleIdentifier,
     createInjector, createInjectorSSR
   ) {
-    const component = script || {};
+    const component = (typeof script === 'function' ? script.options : script) || {};
 
     {
       component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItem.vue";
@@ -2313,7 +2251,7 @@
         }
       },
       async downloadOne() {
-        const imgUrl = this.currentImageItem.url.big;
+        const imgUrl = this.currentImageItem.urls.original;
         const illustId = this.currentImageItem.illustId;
         const a = $el("a", { href: imgUrl });
 
@@ -2599,8 +2537,9 @@
                   {
                     name: "show",
                     rawName: "v-show",
-                    value: _vm.currentImageItem && !_vm.currentImageItem.isFollow,
-                    expression: "currentImageItem && !currentImageItem.isFollow"
+                    value:
+                      _vm.currentImageItem && !_vm.currentImageItem.isFollowed,
+                    expression: "currentImageItem && !currentImageItem.isFollowed"
                   }
                 ]
               },
@@ -2652,11 +2591,11 @@
   /* style */
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-6351f20e_0", { source: "\n#patchouli-context-menu[data-v-6351f20e] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-6351f20e] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-6351f20e] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-6351f20e]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-6351f20e],\n#patchouli-context-menu > ul i.fas[data-v-6351f20e] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-836bb3ae_0", { source: "\n#patchouli-context-menu[data-v-836bb3ae] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-836bb3ae] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-836bb3ae] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-836bb3ae]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-836bb3ae],\n#patchouli-context-menu > ul i.fas[data-v-836bb3ae] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$4 = "data-v-6351f20e";
+  const __vue_scope_id__$4 = "data-v-836bb3ae";
   /* module identifier */
   const __vue_module_identifier__$4 = undefined;
   /* functional template */
@@ -2667,7 +2606,7 @@
     scope, functional, moduleIdentifier,
     createInjector, createInjectorSSR
   ) {
-    const component = script || {};
+    const component = (typeof script === 'function' ? script.options : script) || {};
 
     {
       component.__file = "/home/flandre/dev/Patchouli/src/components/ContextMenu.vue";
@@ -2814,7 +2753,7 @@
             ],
             key: d.illustId,
             attrs: {
-              "img-url": d.url.sq240,
+              "img-url": d.urls.thumb,
               "illust-id": d.illustId,
               "illust-title": d.illustTitle,
               "illust-page-count": d.illustPageCount,
@@ -2824,7 +2763,7 @@
               "profile-img-url": d.profileImg,
               "bookmark-count": d.bookmarkCount,
               "is-bookmarked": d.isBookmarked,
-              "is-follow": d.isFollow,
+              "is-followed": d.isFollowed,
               "bookmark-id": d.bookmarkId
             }
           })
@@ -2844,11 +2783,11 @@
   /* style */
   const __vue_inject_styles__$5 = function (inject) {
     if (!inject) return
-    inject("data-v-5f5a552f_0", { source: "\n#patchouli[data-v-5f5a552f] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
+    inject("data-v-5df49a38_0", { source: "\n#patchouli[data-v-5df49a38] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$5 = "data-v-5f5a552f";
+  const __vue_scope_id__$5 = "data-v-5df49a38";
   /* module identifier */
   const __vue_module_identifier__$5 = undefined;
   /* functional template */
@@ -2859,7 +2798,7 @@
     scope, functional, moduleIdentifier,
     createInjector, createInjectorSSR
   ) {
-    const component = script || {};
+    const component = (typeof script === 'function' ? script.options : script) || {};
 
     {
       component.__file = "/home/flandre/dev/Patchouli/src/components/Patchouli.vue";
@@ -3006,7 +2945,7 @@
             );
             this.previewSrcList.push(...d.imgSrcs);
           } else {
-            this.previewSrcList.push(imageItem.url.big);
+            this.previewSrcList.push(imageItem.urls.original);
           }
         } else if (!value) {
           this.previewSrcList.length = 0;
@@ -3346,11 +3285,11 @@
   /* style */
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-ac961bd6_0", { source: "\n#patchouli-big-component[data-v-ac961bd6] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-ac961bd6],\n#preview-mode[data-v-ac961bd6] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-ac961bd6] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-ac961bd6] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-ac961bd6] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-ac961bd6]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-ac961bd6] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-ac961bd6] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-ac961bd6] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-ac961bd6] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-ac961bd6] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-ac961bd6] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-ac961bd6] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-ac961bd6] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-ac961bd6] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-ac961bd6] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-ac961bd6] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-ac961bd6] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+    inject("data-v-22e6292f_0", { source: "\n#patchouli-big-component[data-v-22e6292f] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-22e6292f],\n#preview-mode[data-v-22e6292f] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-22e6292f] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-22e6292f] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-22e6292f] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-22e6292f]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-22e6292f] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-22e6292f] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-22e6292f] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-22e6292f] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-22e6292f] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-22e6292f] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-22e6292f] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-22e6292f] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-22e6292f] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-22e6292f] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-22e6292f] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-22e6292f] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$6 = "data-v-ac961bd6";
+  const __vue_scope_id__$6 = "data-v-22e6292f";
   /* module identifier */
   const __vue_module_identifier__$6 = undefined;
   /* functional template */
@@ -3361,7 +3300,7 @@
     scope, functional, moduleIdentifier,
     createInjector, createInjectorSSR
   ) {
-    const component = script || {};
+    const component = (typeof script === 'function' ? script.options : script) || {};
 
     {
       component.__file = "/home/flandre/dev/Patchouli/src/components/BigComponent.vue";

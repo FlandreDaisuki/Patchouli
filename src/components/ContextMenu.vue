@@ -36,7 +36,7 @@
           {{ $t('contextMenu.addToBlacklist') }}
         </a>
       </li>
-      <li v-show="currentImageItem && !currentImageItem.isFollow">
+      <li v-show="currentImageItem && !currentImageItem.isFollowed">
         <a role="button" @click.left="followUser">
           <i class="fas fa-rss"/>
           {{ $t('contextMenu.followUser') }}
@@ -118,7 +118,7 @@ export default {
       }
     },
     async downloadOne() {
-      const imgUrl = this.currentImageItem.url.big;
+      const imgUrl = this.currentImageItem.urls.original;
       const illustId = this.currentImageItem.illustId;
       const a = $el("a", { href: imgUrl });
 

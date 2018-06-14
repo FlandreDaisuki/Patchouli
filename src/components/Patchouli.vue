@@ -4,7 +4,7 @@
       v-for="d in filteredLibrary"
       v-show="d._show"
       :key="d.illustId"
-      :img-url="d.url.sq240"
+      :img-url="d.urls.thumb"
       :illust-id="d.illustId"
       :illust-title="d.illustTitle"
       :illust-page-count="d.illustPageCount"
@@ -14,7 +14,7 @@
       :profile-img-url="d.profileImg"
       :bookmark-count="d.bookmarkCount"
       :is-bookmarked="d.isBookmarked"
-      :is-follow="d.isFollow"
+      :is-followed="d.isFollowed"
       :bookmark-id="d.bookmarkId" />
     <ContextMenu/>
   </div>

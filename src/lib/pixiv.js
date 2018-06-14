@@ -1,13 +1,24 @@
-import { $, $$find, $print } from './utils';
+import {
+  $,
+  $$find,
+  $print
+} from './utils';
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
+
+// new API
+// (get|post) (illust|user) name? Data (Group)?
+// └ method                 |              |
+//                          └ special attr |
+//                 group array of requests ┘
 
 class Pixiv {
   constructor() {
     try {
       this.tt = $('input[name="tt"]').value;
     } catch (error) {
-      const pixivData = window.globalInitData || window.pixiv.context;
+      const pixivData =
+        window.pixiv ? window.pixiv.context : window.globalInitData;
       this.tt = pixivData.token;
     }
   }
@@ -30,9 +41,60 @@ class Pixiv {
     }
   }
 
-  async getLegacyPageHTMLIllustIds(url, { needBookmarkId } = {
-    needBookmarkId: false
-  }) {
+  // new API to get an illust data
+  async getIllustData(illustId) {
+    const url = `/ajax/illust/${illustId}`;
+    const resp = await fetch(url);
+    if (!resp.ok) {
+      throw new Error(`${resp.statusText}`);
+    }
+    const data = await resp.json();
+    if (data.error) {
+      $print.error('Pixiv#getIllustData', data.message);
+      return null;
+    }
+    return data.body;
+  }
+
+  async getIllustDataGroup(illustIds) {
+    const uniqIllustIds = [...new Set(illustIds)];
+    const illustDataGroup = await Promise.all(uniqIllustIds.map(this.getIllustData));
+    $print.debug('getIllustDataGroup: illustDataGroup:', illustDataGroup);
+    return illustDataGroup
+      .filter(Boolean)
+      .reduce((collect, d) => {
+        collect[d.illustId] = d;
+        return collect;
+      }, {});
+  }
+
+  // new API to get an user data
+  async getUserData(userId) {
+    const url = `/ajax/user/${userId}`;
+    const resp = await fetch(url);
+    if (!resp.ok) {
+      throw new Error(`${resp.statusText}`);
+    }
+    const data = await resp.json();
+    if (data.error) {
+      $print.error('Pixiv#getUserData', data.message);
+      return null;
+    }
+    return data.body;
+  }
+
+  async getUserDataGroup(userIds) {
+    const uniqUserIds = [...new Set(userIds)];
+    const userDataGroup = await Promise.all(uniqUserIds.map(this.getUserData));
+    return userDataGroup
+      .filter(Boolean)
+      .reduce((collect, d) => {
+        collect[d.userId] = d;
+        return collect;
+      }, {});
+  }
+
+  async getLegacyPageHTMLIllustIds(url) {
     try {
       const html = await this.fetch(url);
       const nextTag = html.match(/class="next"[^/]*/);
@@ -56,20 +118,10 @@ class Pixiv {
           illustIds.push(iid);
         }
       }
-
-      const ret = { nextUrl, illustIds };
-      if (needBookmarkId) {
-        ret.bookmarkIds = {};
-
-        const bimHTMLs = html.match(/name="book_id[^;]+;illust_id=\d+/g) || [];
-        for (const bim of bimHTMLs) {
-          const [illustId, bookmarkId] =
-              bim.replace(/\D+(\d+)\D+(\d+)/, '$2 $1').split(' ');
-          if (illustIds.includes(illustId)) {
-            ret.bookmarkIds[illustId] = { illustId, bookmarkId };
-          }
-        }
-      }
+      const ret = {
+        nextUrl,
+        illustIds
+      };
       return ret;
     } catch (error) {
       $print.error('Pixiv#getLegacyPageHTMLIllustIds: error:', error);
@@ -103,126 +155,23 @@ class Pixiv {
         }
       }
 
-      const ret = { nextUrl, illustIds };
+      const ret = {
+        nextUrl,
+        illustIds
+      };
       return ret;
     } catch (error) {
       $print.error('Pixiv#getPageHTMLIllustIds: error:', error);
     }
   }
 
-  async getBookmarkHTMLDetails(illustIds) {
-    const bookmarkHTMLDetails =
-        illustIds.map(id => this.getBookmarkHTMLDetail(id));
-    const bookmarkDetails = await Promise.all(bookmarkHTMLDetails);
-    const detail = {};
-    for (const d of bookmarkDetails) {
-      detail[d.illustId] = d;
-    }
-    return detail;
-  }
-
-  async getBookmarkHTMLDetail(illustId) {
-    const url = `/bookmark_detail.php?illust_id=${illustId}`;
-
-    try {
-      const html = await this.fetch(url);
-      const bkMatches =
-          html.match(/<i class="_icon _bookmark-icon-inline"><\/i>(\d+)/);
-      const bookmarkCount = bkMatches ? parseInt(bkMatches[1]) : 0;
-      const tagsListHTML = html.match(/<ul class="tags[^>]+>.*?(?=<\/ul>)/);
-      const tagHTMLs =
-          tagsListHTML ? tagsListHTML[0].match(/>[^<]+?(?=<\/a>)/g) : [];
-      const tags = tagHTMLs ? tagHTMLs.map(x => x.slice(1)) : [];
-      return { bookmarkCount, illustId, tags };
-    } catch (error) {
-      $print.error('Pixiv#getBookmarkHTMLDetail: error:', error);
-    }
-  }
-
-  async getIllustsAPIDetail(illustIds) {
-    const iids = illustIds.join(',');
-    const url =
-        `/rpc/index.php?mode=get_illust_detail_by_ids&illust_ids=${iids}&tt=${this.tt}`;
-
-    try {
-      const json = await this.fetch(url);
-      $print.debug('Pixiv#getIllustsAPIDetail: json:', json);
-      if (json.error) {
-        throw new Error(json.message);
-      }
-
-      const details = json.body;
-      for (const [key, detail] of Object.entries(details)) {
-        if (detail.error) {
-          delete details[key];
-        }
-      }
-      return details;
-    } catch (error) {
-      $print.error('Pixiv#getIllustsAPIDetail: error:', error);
-    }
-  }
-
-  async getUsersAPIDetail(userIds) {
-    const uids = [...new Set(userIds)].join(',');
-    const url = `/rpc/get_profile.php?user_ids=${uids}&tt=${this.tt}`;
-
-    try {
-      const json = await this.fetch(url);
-      $print.debug('Pixiv#getUsersAPIDetail: json:', json);
-      if (json.error) {
-        throw new Error(json.message);
-      }
-
-      const details = {};
-      for (const u of json.body) {
-        details[u.user_id] = { userId: u.user_id, isFollow: u.is_follow };
-      }
-      return details;
-    } catch (error) {
-      $print.error('Pixiv#getUsersAPIDetail: error:', error);
-    }
-  }
-
-  async getIllustHTMLDetail(illustId) {
-    const url = `/member_illust.php?mode=medium&illust_id=${illustId}`;
-
-    const failResult = { illustId, tags: [] };
-
-    try {
-      const html = await this.fetch(url);
-      const tagHTMLPart =
-          html.match(/class="work-tags"[.\s\S]*template-work-tag/ig);
-      if (!tagHTMLPart) {
-        return failResult;
-      }
-      const tagHTMLs = tagHTMLPart[0].replace('\n', '').match(
-        /((translation|original|romaji)-tag">|tag-translation( romaji)?">)[^<]+/ig);
-      if (!tagHTMLs) {
-        return failResult;
-      }
-      const tags = tagHTMLs.map(tagHTML => tagHTML.replace(/.*>(.*)$/, '$1'));
-      return { illustId, tags };
-    } catch (error) {
-      $print.error('Pixiv#getIllustHTMLDetail: error:', error);
-      return failResult;
-    }
-  }
-
-  async getIllustHTMLDetails(illustIds) {
-    const IllustHTMLDetails = illustIds.map(id => this.getIllustHTMLDetail(id));
-    const IllustDetails = await Promise.all(IllustHTMLDetails);
-    const detail = {};
-    for (const d of IllustDetails) {
-      detail[d.illustId] = d;
-    }
-    return detail;
-  }
-
   async getMultipleIllustHTMLDetail(illustId) {
     const url = `/member_illust.php?mode=manga&illust_id=${illustId}`;
 
-    const failResult = { illustId, imgSrcs: [] };
+    const failResult = {
+      illustId,
+      imgSrcs: []
+    };
 
     try {
       const html = await this.fetch(url);
@@ -233,9 +182,12 @@ class Pixiv {
         return failResult;
       }
       const imgSrcs =
-          srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
+        srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
       $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
-      return { illustId, imgSrcs };
+      return {
+        illustId,
+        imgSrcs
+      };
     } catch (error) {
       $print.error('Pixiv#getMultipleIllustHTMLDetail: error:', error);
     }
@@ -319,4 +271,7 @@ function removeAnnoyings(doc = document) {
 
 const PixivAPI = new Pixiv();
 
-export { PixivAPI, removeAnnoyings };
+export {
+  PixivAPI,
+  removeAnnoyings
+};

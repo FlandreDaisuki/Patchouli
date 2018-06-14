@@ -106,7 +106,7 @@ export default {
           );
           this.previewSrcList.push(...d.imgSrcs);
         } else {
-          this.previewSrcList.push(imageItem.url.big);
+          this.previewSrcList.push(imageItem.urls.original);
         }
       } else if (!value) {
         this.previewSrcList.length = 0;
