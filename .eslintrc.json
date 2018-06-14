@@ -23,6 +23,7 @@
     "keyword-spacing": "error",
     "space-infix-ops": "error",
     "semi": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
     "space-before-blocks": "error",
     "space-before-function-paren": ["error", "never"],
     "vue/max-attributes-per-line": [2, {
