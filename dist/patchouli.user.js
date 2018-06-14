@@ -114,71 +114,85 @@
       }
       return this._tt;
     }
-    async fetch(url) {
+    async fetch(url, options = {}) {
+      const opt = Object.assign({
+        credentials: 'same-origin'
+      }, options);
       try {
         if (url) {
-          const res = await axios.get(url);
-          if (res.status !== 200) {
-            throw new Error(`${res.status} ${res.statusText}`);
-          } else {
-            return res.data;
+          const resp = await fetch(url, opt);
+          if (!resp.ok) {
+            throw new Error(`${resp.status} ${resp.statusText}`);
           }
+          return resp;
         } else {
-          $print.error('Pixiv#fetch has no url');
+          $print.error('Pixiv#fetch without url');
         }
       } catch (error) {
         $print.error('Pixiv#fetch: error:', error);
       }
     }
+    async fetchJSON(url, options = {}) {
+      try {
+        const resp = await this.fetch(url, options);
+        const data = await resp.json();
+        const properties = Object.keys(data);
+        if (properties.includes('error') && properties.includes('body')) {
+          if (data.error) {
+            $print.error('Pixiv#fetchJSON: JSON has error:', data.message);
+            return null;
+          } else {
+            return data.body;
+          }
+        } else {
+          return data;
+        }
+      } catch (error) {
+        $print.error('Pixiv#fetchJSON: error:', error);
+      }
+    }
+    async fetchHTML(url, options = {}) {
+      try {
+        const resp = await this.fetch(url, options);
+        const data = await resp.text();
+        return data;
+      } catch (error) {
+        $print.error('Pixiv#fetchHTML: error:', error);
+      }
+    }
     async getIllustData(illustId) {
       const url = `/ajax/illust/${illustId}`;
-      const resp = await fetch(url);
-      if (!resp.ok) {
-        throw new Error(`${resp.statusText}`);
-      }
-      const data = await resp.json();
-      if (data.error) {
-        $print.error('Pixiv#getIllustData', data.message);
-        return null;
-      }
-      return data.body;
+      const data = await this.fetchJSON(url);
+      return data;
     }
     async getIllustDataGroup(illustIds) {
       const uniqIllustIds = [...new Set(illustIds)];
-      const illustDataGroup = await Promise.all(uniqIllustIds.map(this.getIllustData));
-      return illustDataGroup
-        .filter(Boolean)
-        .reduce((collect, d) => {
+      const illustDataGroup =
+        await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
+      return illustDataGroup.filter(Boolean).reduce(
+        (collect, d) => {
           collect[d.illustId] = d;
           return collect;
         }, {});
     }
     async getUserData(userId) {
       const url = `/ajax/user/${userId}`;
-      const resp = await fetch(url);
-      if (!resp.ok) {
-        throw new Error(`${resp.statusText}`);
-      }
-      const data = await resp.json();
-      if (data.error) {
-        $print.error('Pixiv#getUserData', data.message);
-        return null;
-      }
-      return data.body;
+      const data = await this.fetchJSON(url);
+      return data;
     }
     async getUserDataGroup(userIds) {
       const uniqUserIds = [...new Set(userIds)];
-      const userDataGroup = await Promise.all(uniqUserIds.map(this.getUserData));
-      return userDataGroup
-        .filter(Boolean)
-        .reduce((collect, d) => {
+      const userDataGroup =
+        await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
+      return userDataGroup.filter(Boolean).reduce(
+        (collect, d) => {
           collect[d.userId] = d;
           return collect;
         }, {});
     }
-    async getLegacyPageHTMLIllustIds(url) {
+    async getIllustIdsInLegacyPageHTML(url) {
       try {
-        const html = await this.fetch(url);
+        const html = await this.fetchHTML(url);
         const nextTag = html.match(/class="next"[^/]*/);
         let nextUrl = '';
         if (nextTag) {
@@ -204,12 +218,12 @@
         };
         return ret;
       } catch (error) {
-        $print.error('Pixiv#getLegacyPageHTMLIllustIds: error:', error);
+        $print.error('Pixiv#getIllustIdsInLegacyPageHTML: error:', error);
       }
     }
-    async getPageHTMLIllustIds(url) {
+    async getIllustIdsInPageHTML(url) {
       try {
-        const html = await this.fetch(url);
+        const html = await this.fetchHTML(url);
         const nextTag = html.match(/class="next"[^/]*/);
         let nextUrl = '';
         if (nextTag) {
@@ -235,7 +249,7 @@
         };
         return ret;
       } catch (error) {
-        $print.error('Pixiv#getPageHTMLIllustIds: error:', error);
+        $print.error('Pixiv#getIllustIdsInPageHTML: error:', error);
       }
     }
     async getMultipleIllustHTMLDetail(illustId) {
@@ -245,7 +259,7 @@
         imgSrcs: []
       };
       try {
-        const html = await this.fetch(url);
+        const html = await this.fetchHTML(url);
         const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
         if (!srcAttrHTML) {
           return failResult;
@@ -262,24 +276,20 @@
     }
     async postIllustLike(illustId) {
       const url = '/ajax/illusts/like';
-      const resp = await fetch(url, {
+      const data = await this.fetchJSON(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'x-csrf-token': this.tt,
         },
-        credentials: 'same-origin',
         body: JSON.stringify({
           illust_id: illustId,
         }),
       });
-      if (!resp.ok) {
-        throw new Error(`${resp.statusText}`);
-      }
-      const data = await resp.json();
-      return !data.error;
+      return Boolean(data);
     }
     async postFollowUser(userId) {
+      const url = '/bookmark_add.php';
       const searchParams = {
         mode: 'add',
         user_id: userId,
@@ -288,20 +298,15 @@
         restrict: 0,
         tt: this.tt
       };
-      const data = Object.entries(searchParams).map(p => p.join('=')).join('&');
-      const config = {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
-      };
-      try {
-        const res = await axios.post('/bookmark_add.php', data, config);
-        if (res.status === 200) {
-          return !!res.data;
-        } else {
-          throw new Error(res.statusText);
-        }
-      } catch (error) {
-        $print.error('Pixiv#postFollowUser: error:', error);
-      }
+      const body = Object.entries(searchParams).map(p => p.join('=')).join('&');
+      const data = await this.fetchJSON(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        },
+        body,
+      });
+      return Boolean(data);
     }
   }
   function removeAnnoyings(doc = document) {
@@ -386,11 +391,9 @@
         };
         const opt = Object.assign({}, DEFAULT_OPT, options);
         if (opt.type === 'follow-user' && opt.userId) {
-          state.imgLibrary
-            .filter(i => i.userId === opt.userId)
-            .forEach(i => {
-              i.isFollowed = true;
-            });
+          state.imgLibrary.filter(i => i.userId === opt.userId).forEach(i => {
+            i.isFollowed = true;
+          });
         }
       }
     },
@@ -432,12 +435,13 @@
         while (!state.isPaused && !state.isEnded && times) {
           let page = null;
           if (['SEARCH', 'NEW_ILLUST'].includes(rootState.pageType)) {
-            page = await PixivAPI.getPageHTMLIllustIds(state.nextUrl);
+            page = await PixivAPI.getIllustIdsInPageHTML(state.nextUrl);
           } else {
-            page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextUrl);
+            page = await PixivAPI.getIllustIdsInLegacyPageHTML(state.nextUrl);
           }
           state.nextUrl = page.nextUrl;
-          const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
+          const illustDataGroup =
+            await PixivAPI.getIllustDataGroup(page.illustIds);
           const userIds = Object.values(illustDataGroup).map(d => d.userId);
           const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
           const libraryData = makeLibraryData({
@@ -463,7 +467,8 @@
     getters: {
       filteredLibrary(state, getters, rootState) {
         const cloneLibrary = state.imgLibrary.slice();
-        const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
+        const dateOrder =
+          (new URLSearchParams(location.href)).get('order') === 'date';
         const imgToShow = (el) => {
           return el.bookmarkCount >= rootState.filters.limit &&
             el.tags.match(rootState.filters.tag) &&
@@ -474,14 +479,12 @@
             el._show = imgToShow(el);
             return el;
           })
-          .sort(
-            (a, b) => {
-              const av = toInt(a[getters.orderBy]);
-              const bv = toInt(b[getters.orderBy]);
-              const c = bv - av;
-              return dateOrder && getters.orderBy === 'illustId' ? -c : c;
-            }
-          );
+          .sort((a, b) => {
+            const av = toInt(a[getters.orderBy]);
+            const bv = toInt(b[getters.orderBy]);
+            const c = bv - av;
+            return dateOrder && getters.orderBy === 'illustId' ? -c : c;
+          });
       }
     }
   };

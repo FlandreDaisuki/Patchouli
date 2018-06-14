@@ -26,7 +26,6 @@ function makeLibraryData({
   const vLibrary = [];
 
   for (const [illustId, illustData] of Object.entries(illustDataGroup)) {
-
     const allTags = illustData.tags.tags.map(makeNewTag).join(', ');
     const d = {
       illustId,
@@ -82,11 +81,9 @@ export default {
       const opt = Object.assign({}, DEFAULT_OPT, options);
 
       if (opt.type === 'follow-user' && opt.userId) {
-        state.imgLibrary
-          .filter(i => i.userId === opt.userId)
-          .forEach(i => {
-            i.isFollowed = true;
-          });
+        state.imgLibrary.filter(i => i.userId === opt.userId).forEach(i => {
+          i.isFollowed = true;
+        });
       }
     }
   },
@@ -131,20 +128,23 @@ export default {
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
         if (['SEARCH', 'NEW_ILLUST'].includes(rootState.pageType)) {
-          page = await PixivAPI.getPageHTMLIllustIds(state.nextUrl);
+          page = await PixivAPI.getIllustIdsInPageHTML(state.nextUrl);
         } else {
-          page = await PixivAPI.getLegacyPageHTMLIllustIds(state.nextUrl);
+          page = await PixivAPI.getIllustIdsInLegacyPageHTML(state.nextUrl);
         }
         $print.debug('PixivModule#startNextUrlBased: page:', page);
 
         state.nextUrl = page.nextUrl;
 
-        const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
-        $print.debug('PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
+        const illustDataGroup =
+          await PixivAPI.getIllustDataGroup(page.illustIds);
+        $print.debug(
+          'PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
 
         const userIds = Object.values(illustDataGroup).map(d => d.userId);
         const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
-        $print.debug('PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
+        $print.debug(
+          'PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
 
         const libraryData = makeLibraryData({
           pageType: rootState.pageType,
@@ -174,7 +174,8 @@ export default {
   getters: {
     filteredLibrary(state, getters, rootState) {
       const cloneLibrary = state.imgLibrary.slice();
-      const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
+      const dateOrder =
+        (new URLSearchParams(location.href)).get('order') === 'date';
       const imgToShow = (el) => {
         return el.bookmarkCount >= rootState.filters.limit &&
           el.tags.match(rootState.filters.tag) &&
@@ -186,14 +187,12 @@ export default {
           el._show = imgToShow(el);
           return el;
         })
-        .sort(
-          (a, b) => {
-            const av = toInt(a[getters.orderBy]);
-            const bv = toInt(b[getters.orderBy]);
-            const c = bv - av;
-            return dateOrder && getters.orderBy === 'illustId' ? -c : c;
-          }
-        );
+        .sort((a, b) => {
+          const av = toInt(a[getters.orderBy]);
+          const bv = toInt(b[getters.orderBy]);
+          const c = bv - av;
+          return dateOrder && getters.orderBy === 'illustId' ? -c : c;
+        });
     }
   }
 };
