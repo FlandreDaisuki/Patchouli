@@ -4,7 +4,7 @@ const rollup = require('rollup');
 const acorn = require('acorn');
 const walk = require('acorn/dist/walk');
 const MagicString = require('magic-string');
-const VuePlugin = require('rollup-plugin-vue');
+const VuePlugin = require('rollup-plugin-vue').default;
 const userscriptCSS = require('rollup-plugin-userscript-css');
 const metablock = require('rollup-plugin-userscript-metablock');
 const cleanup = require('rollup-plugin-cleanup');
@@ -65,7 +65,10 @@ async function preBuild() {
 }
 
 function removeDebuggers(code) {
-  const ast = acorn.parse(code, { ecmaVersion: 9, ranges: true });
+  const ast = acorn.parse(code, {
+    ecmaVersion: 9,
+    ranges: true
+  });
   const ms = new MagicString(code);
 
   walk.simple(ast, {
