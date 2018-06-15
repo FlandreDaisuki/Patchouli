@@ -114,9 +114,7 @@
       return this._tt;
     }
     async fetch(url, options = {}) {
-      const opt = Object.assign({
-        credentials: 'same-origin'
-      }, options);
+      const opt = Object.assign({ credentials: 'same-origin' }, options);
       try {
         if (url) {
           const resp = await fetch(url, opt);
@@ -166,10 +164,10 @@
     }
     async getIllustDataGroup(illustIds) {
       const uniqIllustIds = [...new Set(illustIds)];
-      const illustDataGroup =
-        await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
-      return illustDataGroup.filter(Boolean).reduce(
-        (collect, d) => {
+      const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
+      return illustDataGroup
+        .filter(Boolean)
+        .reduce((collect, d) => {
           collect[d.illustId] = d;
           return collect;
         }, {});
@@ -181,10 +179,10 @@
     }
     async getUserDataGroup(userIds) {
       const uniqUserIds = [...new Set(userIds)];
-      const userDataGroup =
-        await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
-      return userDataGroup.filter(Boolean).reduce(
-        (collect, d) => {
+      const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
+      return userDataGroup
+        .filter(Boolean)
+        .reduce((collect, d) => {
           collect[d.userId] = d;
           return collect;
         }, {});
@@ -297,7 +295,9 @@
         restrict: 0,
         tt: this.tt
       };
-      const body = Object.entries(searchParams).map(p => p.join('=')).join('&');
+      const body = Object.entries(searchParams)
+        .map(p => p.join('='))
+        .join('&');
       const data = await this.fetchJSON(url, {
         method: 'POST',
         headers: {
@@ -331,11 +331,7 @@
     }
     return [tag.tag, tag.romaji].join(', ');
   }
-  function makeLibraryData({
-    pageType,
-    illustDataGroup,
-    userDataGroup,
-  }) {
+  function makeLibraryData({ pageType, illustDataGroup, userDataGroup }) {
     if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
       throw new Error('makeLibraryData: illustDataGroup is falsy.');
     }
@@ -390,20 +386,16 @@
         };
         const opt = Object.assign({}, DEFAULT_OPT, options);
         if (opt.type === 'follow-user' && opt.userId) {
-          state.imgLibrary.filter(i => i.userId === opt.userId).forEach(i => {
-            i.isFollowed = true;
-          });
+          state.imgLibrary
+            .filter(i => i.userId === opt.userId)
+            .forEach(i => {
+              i.isFollowed = true;
+            });
         }
       }
     },
     actions: {
-      async start({
-        state,
-        dispatch,
-        rootState
-      }, {
-        times
-      } = {}) {
+      async start({ state, dispatch, rootState }, { times } = {}) {
         times = times || Infinity;
         if (state.isEnded || times <= 0) {
           return;
@@ -415,21 +407,13 @@
         case 'MEMBER_ILLIST':
         case 'MEMBER_BOOKMARK':
         case 'ANCIENT_NEW_ILLUST':
-          await dispatch('startNextUrlBased', {
-            times
-          });
+          await dispatch('startNextUrlBased', { times });
           break;
         default:
           break;
         }
       },
-      async startNextUrlBased({
-        state,
-        commit,
-        rootState
-      }, {
-        times
-      } = {}) {
+      async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
         state.isPaused = false;
         while (!state.isPaused && !state.isEnded && times) {
           let page = null;
@@ -439,8 +423,7 @@
             page = await PixivAPI.getIllustIdsInLegacyPageHTML(state.nextUrl);
           }
           state.nextUrl = page.nextUrl;
-          const illustDataGroup =
-            await PixivAPI.getIllustDataGroup(page.illustIds);
+          const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
           const userIds = Object.values(illustDataGroup).map(d => d.userId);
           const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
           const libraryData = makeLibraryData({
@@ -466,8 +449,7 @@
     getters: {
       filteredLibrary(state, getters, rootState) {
         const cloneLibrary = state.imgLibrary.slice();
-        const dateOrder =
-          (new URLSearchParams(location.href)).get('order') === 'date';
+        const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
         const imgToShow = (el) => {
           return el.bookmarkCount >= rootState.filters.limit &&
             el.tags.match(rootState.filters.tag) &&

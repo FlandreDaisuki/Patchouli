@@ -1,10 +1,5 @@
-import {
-  PixivAPI
-} from '../../lib/pixiv';
-import {
-  $print,
-  toInt
-} from '../../lib/utils';
+import { PixivAPI } from '../../lib/pixiv';
+import { $print, toInt } from '../../lib/utils';
 
 function makeNewTag(tag) {
   if (tag.translation) {
@@ -14,11 +9,7 @@ function makeNewTag(tag) {
   return [tag.tag, tag.romaji].join(', ');
 }
 
-function makeLibraryData({
-  pageType,
-  illustDataGroup,
-  userDataGroup,
-}) {
+function makeLibraryData({ pageType, illustDataGroup, userDataGroup }) {
   if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
     throw new Error('makeLibraryData: illustDataGroup is falsy.');
   }
@@ -81,20 +72,16 @@ export default {
       const opt = Object.assign({}, DEFAULT_OPT, options);
 
       if (opt.type === 'follow-user' && opt.userId) {
-        state.imgLibrary.filter(i => i.userId === opt.userId).forEach(i => {
-          i.isFollowed = true;
-        });
+        state.imgLibrary
+          .filter(i => i.userId === opt.userId)
+          .forEach(i => {
+            i.isFollowed = true;
+          });
       }
     }
   },
   actions: {
-    async start({
-      state,
-      dispatch,
-      rootState
-    }, {
-      times
-    } = {}) {
+    async start({ state, dispatch, rootState }, { times } = {}) {
       times = times || Infinity;
 
       if (state.isEnded || times <= 0) {
@@ -108,21 +95,13 @@ export default {
       case 'MEMBER_ILLIST':
       case 'MEMBER_BOOKMARK':
       case 'ANCIENT_NEW_ILLUST':
-        await dispatch('startNextUrlBased', {
-          times
-        });
+        await dispatch('startNextUrlBased', { times });
         break;
       default:
         break;
       }
     },
-    async startNextUrlBased({
-      state,
-      commit,
-      rootState
-    }, {
-      times
-    } = {}) {
+    async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
       state.isPaused = false;
 
       while (!state.isPaused && !state.isEnded && times) {
@@ -136,15 +115,12 @@ export default {
 
         state.nextUrl = page.nextUrl;
 
-        const illustDataGroup =
-          await PixivAPI.getIllustDataGroup(page.illustIds);
-        $print.debug(
-          'PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
+        const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
+        $print.debug('PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
 
         const userIds = Object.values(illustDataGroup).map(d => d.userId);
         const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
-        $print.debug(
-          'PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
+        $print.debug('PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
 
         const libraryData = makeLibraryData({
           pageType: rootState.pageType,
@@ -174,8 +150,7 @@ export default {
   getters: {
     filteredLibrary(state, getters, rootState) {
       const cloneLibrary = state.imgLibrary.slice();
-      const dateOrder =
-        (new URLSearchParams(location.href)).get('order') === 'date';
+      const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
       const imgToShow = (el) => {
         return el.bookmarkCount >= rootState.filters.limit &&
           el.tags.match(rootState.filters.tag) &&

@@ -1,8 +1,4 @@
-import {
-  $,
-  $$find,
-  $print
-} from './utils';
+import { $, $$find,  $print } from './utils';
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
 
@@ -36,9 +32,7 @@ class Pixiv {
   }
 
   async fetch(url, options = {}) {
-    const opt = Object.assign({
-      credentials: 'same-origin'
-    }, options);
+    const opt = Object.assign({ credentials: 'same-origin' }, options);
 
     $print.debug('Pixiv#fetch: url:', url);
 
@@ -97,11 +91,11 @@ class Pixiv {
 
   async getIllustDataGroup(illustIds) {
     const uniqIllustIds = [...new Set(illustIds)];
-    const illustDataGroup =
-      await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
+    const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
     $print.debug('Pixiv#getIllustDataGroup: illustDataGroup:', illustDataGroup);
-    return illustDataGroup.filter(Boolean).reduce(
-      (collect, d) => {
+    return illustDataGroup
+      .filter(Boolean)
+      .reduce((collect, d) => {
         collect[d.illustId] = d;
         return collect;
       }, {});
@@ -117,10 +111,10 @@ class Pixiv {
 
   async getUserDataGroup(userIds) {
     const uniqUserIds = [...new Set(userIds)];
-    const userDataGroup =
-      await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
-    return userDataGroup.filter(Boolean).reduce(
-      (collect, d) => {
+    const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
+    return userDataGroup
+      .filter(Boolean)
+      .reduce((collect, d) => {
         collect[d.userId] = d;
         return collect;
       }, {});
@@ -208,8 +202,7 @@ class Pixiv {
     try {
       const html = await this.fetchHTML(url);
       const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
-      $print.debug(
-        'Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
+      $print.debug('Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
       if (!srcAttrHTML) {
         return failResult;
       }
@@ -254,7 +247,9 @@ class Pixiv {
       tt: this.tt
     };
 
-    const body = Object.entries(searchParams).map(p => p.join('=')).join('&');
+    const body = Object.entries(searchParams)
+      .map(p => p.join('='))
+      .join('&');
 
 
     const data = await this.fetchJSON(url, {

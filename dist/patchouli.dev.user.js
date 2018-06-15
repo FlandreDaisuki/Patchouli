@@ -134,9 +134,7 @@
     }
 
     async fetch(url, options = {}) {
-      const opt = Object.assign({
-        credentials: 'same-origin'
-      }, options);
+      const opt = Object.assign({ credentials: 'same-origin' }, options);
 
       $print.debug('Pixiv#fetch: url:', url);
 
@@ -195,11 +193,11 @@
 
     async getIllustDataGroup(illustIds) {
       const uniqIllustIds = [...new Set(illustIds)];
-      const illustDataGroup =
-        await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
+      const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
       $print.debug('Pixiv#getIllustDataGroup: illustDataGroup:', illustDataGroup);
-      return illustDataGroup.filter(Boolean).reduce(
-        (collect, d) => {
+      return illustDataGroup
+        .filter(Boolean)
+        .reduce((collect, d) => {
           collect[d.illustId] = d;
           return collect;
         }, {});
@@ -215,10 +213,10 @@
 
     async getUserDataGroup(userIds) {
       const uniqUserIds = [...new Set(userIds)];
-      const userDataGroup =
-        await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
-      return userDataGroup.filter(Boolean).reduce(
-        (collect, d) => {
+      const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
+      return userDataGroup
+        .filter(Boolean)
+        .reduce((collect, d) => {
           collect[d.userId] = d;
           return collect;
         }, {});
@@ -306,8 +304,7 @@
       try {
         const html = await this.fetchHTML(url);
         const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
-        $print.debug(
-          'Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
+        $print.debug('Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
         if (!srcAttrHTML) {
           return failResult;
         }
@@ -352,7 +349,9 @@
         tt: this.tt
       };
 
-      const body = Object.entries(searchParams).map(p => p.join('=')).join('&');
+      const body = Object.entries(searchParams)
+        .map(p => p.join('='))
+        .join('&');
 
 
       const data = await this.fetchJSON(url, {
@@ -396,11 +395,7 @@
     return [tag.tag, tag.romaji].join(', ');
   }
 
-  function makeLibraryData({
-    pageType,
-    illustDataGroup,
-    userDataGroup,
-  }) {
+  function makeLibraryData({ pageType, illustDataGroup, userDataGroup }) {
     if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
       throw new Error('makeLibraryData: illustDataGroup is falsy.');
     }
@@ -463,20 +458,16 @@
         const opt = Object.assign({}, DEFAULT_OPT, options);
 
         if (opt.type === 'follow-user' && opt.userId) {
-          state.imgLibrary.filter(i => i.userId === opt.userId).forEach(i => {
-            i.isFollowed = true;
-          });
+          state.imgLibrary
+            .filter(i => i.userId === opt.userId)
+            .forEach(i => {
+              i.isFollowed = true;
+            });
         }
       }
     },
     actions: {
-      async start({
-        state,
-        dispatch,
-        rootState
-      }, {
-        times
-      } = {}) {
+      async start({ state, dispatch, rootState }, { times } = {}) {
         times = times || Infinity;
 
         if (state.isEnded || times <= 0) {
@@ -490,21 +481,13 @@
         case 'MEMBER_ILLIST':
         case 'MEMBER_BOOKMARK':
         case 'ANCIENT_NEW_ILLUST':
-          await dispatch('startNextUrlBased', {
-            times
-          });
+          await dispatch('startNextUrlBased', { times });
           break;
         default:
           break;
         }
       },
-      async startNextUrlBased({
-        state,
-        commit,
-        rootState
-      }, {
-        times
-      } = {}) {
+      async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
         state.isPaused = false;
 
         while (!state.isPaused && !state.isEnded && times) {
@@ -518,15 +501,12 @@
 
           state.nextUrl = page.nextUrl;
 
-          const illustDataGroup =
-            await PixivAPI.getIllustDataGroup(page.illustIds);
-          $print.debug(
-            'PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
+          const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
+          $print.debug('PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
 
           const userIds = Object.values(illustDataGroup).map(d => d.userId);
           const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
-          $print.debug(
-            'PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
+          $print.debug('PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
 
           const libraryData = makeLibraryData({
             pageType: rootState.pageType,
@@ -556,8 +536,7 @@
     getters: {
       filteredLibrary(state, getters, rootState) {
         const cloneLibrary = state.imgLibrary.slice();
-        const dateOrder =
-          (new URLSearchParams(location.href)).get('order') === 'date';
+        const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
         const imgToShow = (el) => {
           return el.bookmarkCount >= rootState.filters.limit &&
             el.tags.match(rootState.filters.tag) &&

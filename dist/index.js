@@ -84,9 +84,7 @@ class Pixiv {
   }
 
   async fetch(url, options = {}) {
-    const opt = Object.assign({
-      credentials: 'same-origin'
-    }, options);
+    const opt = Object.assign({ credentials: 'same-origin' }, options);
 
     $print.debug('Pixiv#fetch: url:', url);
 
@@ -145,11 +143,11 @@ class Pixiv {
 
   async getIllustDataGroup(illustIds) {
     const uniqIllustIds = [...new Set(illustIds)];
-    const illustDataGroup =
-      await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
+    const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
     $print.debug('Pixiv#getIllustDataGroup: illustDataGroup:', illustDataGroup);
-    return illustDataGroup.filter(Boolean).reduce(
-      (collect, d) => {
+    return illustDataGroup
+      .filter(Boolean)
+      .reduce((collect, d) => {
         collect[d.illustId] = d;
         return collect;
       }, {});
@@ -165,10 +163,10 @@ class Pixiv {
 
   async getUserDataGroup(userIds) {
     const uniqUserIds = [...new Set(userIds)];
-    const userDataGroup =
-      await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
-    return userDataGroup.filter(Boolean).reduce(
-      (collect, d) => {
+    const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
+    return userDataGroup
+      .filter(Boolean)
+      .reduce((collect, d) => {
         collect[d.userId] = d;
         return collect;
       }, {});
@@ -256,8 +254,7 @@ class Pixiv {
     try {
       const html = await this.fetchHTML(url);
       const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
-      $print.debug(
-        'Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
+      $print.debug('Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
       if (!srcAttrHTML) {
         return failResult;
       }
@@ -302,7 +299,9 @@ class Pixiv {
       tt: this.tt
     };
 
-    const body = Object.entries(searchParams).map(p => p.join('=')).join('&');
+    const body = Object.entries(searchParams)
+      .map(p => p.join('='))
+      .join('&');
 
 
     const data = await this.fetchJSON(url, {
@@ -346,11 +345,7 @@ function makeNewTag(tag) {
   return [tag.tag, tag.romaji].join(', ');
 }
 
-function makeLibraryData({
-  pageType,
-  illustDataGroup,
-  userDataGroup,
-}) {
+function makeLibraryData({ pageType, illustDataGroup, userDataGroup }) {
   if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
     throw new Error('makeLibraryData: illustDataGroup is falsy.');
   }
@@ -413,20 +408,16 @@ var pixiv = {
       const opt = Object.assign({}, DEFAULT_OPT, options);
 
       if (opt.type === 'follow-user' && opt.userId) {
-        state.imgLibrary.filter(i => i.userId === opt.userId).forEach(i => {
-          i.isFollowed = true;
-        });
+        state.imgLibrary
+          .filter(i => i.userId === opt.userId)
+          .forEach(i => {
+            i.isFollowed = true;
+          });
       }
     }
   },
   actions: {
-    async start({
-      state,
-      dispatch,
-      rootState
-    }, {
-      times
-    } = {}) {
+    async start({ state, dispatch, rootState }, { times } = {}) {
       times = times || Infinity;
 
       if (state.isEnded || times <= 0) {
@@ -440,21 +431,13 @@ var pixiv = {
       case 'MEMBER_ILLIST':
       case 'MEMBER_BOOKMARK':
       case 'ANCIENT_NEW_ILLUST':
-        await dispatch('startNextUrlBased', {
-          times
-        });
+        await dispatch('startNextUrlBased', { times });
         break;
       default:
         break;
       }
     },
-    async startNextUrlBased({
-      state,
-      commit,
-      rootState
-    }, {
-      times
-    } = {}) {
+    async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
       state.isPaused = false;
 
       while (!state.isPaused && !state.isEnded && times) {
@@ -468,15 +451,12 @@ var pixiv = {
 
         state.nextUrl = page.nextUrl;
 
-        const illustDataGroup =
-          await PixivAPI.getIllustDataGroup(page.illustIds);
-        $print.debug(
-          'PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
+        const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
+        $print.debug('PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
 
         const userIds = Object.values(illustDataGroup).map(d => d.userId);
         const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
-        $print.debug(
-          'PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
+        $print.debug('PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
 
         const libraryData = makeLibraryData({
           pageType: rootState.pageType,
@@ -506,8 +486,7 @@ var pixiv = {
   getters: {
     filteredLibrary(state, getters, rootState) {
       const cloneLibrary = state.imgLibrary.slice();
-      const dateOrder =
-        (new URLSearchParams(location.href)).get('order') === 'date';
+      const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
       const imgToShow = (el) => {
         return el.bookmarkCount >= rootState.filters.limit &&
           el.tags.match(rootState.filters.tag) &&
@@ -1276,7 +1255,7 @@ var koakuma = __vue_normalize__(
   __vue_module_identifier__,
   typeof __vue_create_injector__ !== 'undefined' ? __vue_create_injector__ : function () {},
   typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
-)
+);
 
 //
 
@@ -1554,7 +1533,7 @@ var DefaultImageItemImage = __vue_normalize__$1(
   __vue_module_identifier__$1,
   typeof __vue_create_injector__$1 !== 'undefined' ? __vue_create_injector__$1 : function () {},
   typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
-)
+);
 
 //
 
@@ -1881,7 +1860,7 @@ var DefaultImageItemTitle = __vue_normalize__$2(
   __vue_module_identifier__$2,
   typeof __vue_create_injector__$2 !== 'undefined' ? __vue_create_injector__$2 : function () {},
   typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
-)
+);
 
 //
 
@@ -2113,7 +2092,7 @@ var DefaultImageItem = __vue_normalize__$3(
   __vue_module_identifier__$3,
   typeof __vue_create_injector__$3 !== 'undefined' ? __vue_create_injector__$3 : function () {},
   typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
-)
+);
 
 const GMC = {
   async getValue(name, failv = null) {
@@ -2681,7 +2660,7 @@ var ContextMenu = __vue_normalize__$4(
   __vue_module_identifier__$4,
   typeof __vue_create_injector__$4 !== 'undefined' ? __vue_create_injector__$4 : function () {},
   typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
-)
+);
 
 //
 
@@ -2873,7 +2852,7 @@ var patchouli = __vue_normalize__$5(
   __vue_module_identifier__$5,
   typeof __vue_create_injector__$5 !== 'undefined' ? __vue_create_injector__$5 : function () {},
   typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
-)
+);
 
 //
 
@@ -3375,7 +3354,7 @@ var bigComponent$1 = __vue_normalize__$6(
   __vue_module_identifier__$6,
   typeof __vue_create_injector__$6 !== 'undefined' ? __vue_create_injector__$6 : function () {},
   typeof __vue_create_injector_ssr__ !== 'undefined' ? __vue_create_injector_ssr__ : function () {}
-)
+);
 
 Vue.use(VueI18n);
 
