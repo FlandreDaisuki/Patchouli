@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.1.2](https://img.shields.io/badge/latest-v4.1.2-blue.svg)](#)
+[![latest-v4.1.3](https://img.shields.io/badge/latest-v4.1.3-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
@@ -52,6 +52,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog
+
+2018-06-16 v4.1.3
+
+- Remove axios dependency
 
 2018-06-14 v4.1.2
 

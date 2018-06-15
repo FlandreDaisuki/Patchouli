@@ -6,7 +6,6 @@
     "greasemonkey": true
   },
   "globals": {
-    "axios": true,
     "saveAs": true
   },
   "parserOptions": {
