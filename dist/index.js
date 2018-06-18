@@ -1312,11 +1312,9 @@ var script$1 = {
   },
   mounted() {
     this.$nextTick(async() => {
-      if (!this.isUgoira && !this.canHoverPlay) {
-        return;
+      if (this.isUgoira && this.canHoverPlay) {
+        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);
       }
-      this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);
-
     });
   },
   methods: {
@@ -1345,6 +1343,9 @@ var script$1 = {
       }
     },
     controlUgoira(event) {
+      if (!this.ugoiraMeta) {
+        return;
+      }
       if (!this.ugoiraPlayer) {
         this.ugoiraPlayer = new ZipImagePlayer({
           canvas: this.$refs.smallUgoiraPreview,
@@ -1490,11 +1491,11 @@ const __vue_template__$1 = typeof __vue_render__$1 !== 'undefined'
 /* style */
 const __vue_inject_styles__$1 = function (inject) {
   if (!inject) return
-  inject("data-v-1657d8ac_0", { source: "\n.image-item-image[data-v-1657d8ac] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-1657d8ac] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-1657d8ac]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-1657d8ac] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-1657d8ac] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-1657d8ac],\ncanvas[data-v-1657d8ac] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-1657d8ac] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-1657d8ac] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-1657d8ac] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+  inject("data-v-b21dd472_0", { source: "\n.image-item-image[data-v-b21dd472] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-b21dd472] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-b21dd472]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-b21dd472] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-b21dd472] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-b21dd472],\ncanvas[data-v-b21dd472] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-b21dd472] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-b21dd472] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-b21dd472] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$1 = "data-v-1657d8ac";
+const __vue_scope_id__$1 = "data-v-b21dd472";
 /* module identifier */
 const __vue_module_identifier__$1 = undefined;
 /* functional template */

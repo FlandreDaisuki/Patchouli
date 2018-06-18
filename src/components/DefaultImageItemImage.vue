@@ -93,11 +93,9 @@ export default {
   },
   mounted() {
     this.$nextTick(async() => {
-      if (!this.isUgoira && !this.canHoverPlay) {
-        return;
+      if (this.isUgoira && this.canHoverPlay) {
+        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);
       }
-      this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);
-
     });
   },
   methods: {
@@ -126,6 +124,9 @@ export default {
       }
     },
     controlUgoira(event) {
+      if (!this.ugoiraMeta) {
+        return;
+      }
       if (!this.ugoiraPlayer) {
         this.ugoiraPlayer = new ZipImagePlayer({
           canvas: this.$refs.smallUgoiraPreview,
