@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.1.3](https://img.shields.io/badge/latest-v4.1.3-blue.svg)](#)
+[![latest-v4.1.4](https://img.shields.io/badge/latest-v4.1.4-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
@@ -31,7 +31,7 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
    - Click on image
       - Like
       - Download original size image (only support single image)
-      - Preview  original size images (not support ugoira)
+      - Preview  original size images
       - Open add bookmark page (Just click <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
    - Click on illustrator name
       - Follow
@@ -52,6 +52,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog
+
+2018-06-16 v4.1.4
+
+- Right click extension previewing supports ugoira (small size and original size)
 
 2018-06-16 v4.1.3
 

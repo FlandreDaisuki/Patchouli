@@ -6,7 +6,8 @@
     "greasemonkey": true
   },
   "globals": {
-    "saveAs": true
+    "saveAs": true,
+    "ZipImagePlayer": true
   },
   "parserOptions": {
     "sourceType": "module",

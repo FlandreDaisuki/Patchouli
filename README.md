@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.1.3](https://img.shields.io/badge/latest-v4.1.3-blue.svg)](#)
+[![latest-v4.1.4](https://img.shields.io/badge/latest-v4.1.4-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
@@ -31,7 +31,7 @@
    - 圖片上右鍵
       - 點讚
       - 原圖下載 (只支援單張圖片)
-      - 預覽原圖 (支援單張、多張；不支援動圖)
+      - 預覽原圖 (支援單張、多張、動圖)
       - 開啟加入書籤頁 (可加標籤，若無此需求可使用 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> 快速添加)
    - 繪師名稱上右鍵
       - 加關注
@@ -52,6 +52,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
+
+2018-06-16 v4.1.4
+
+- 擴充右鍵可預覽動圖 (縮小尺寸、原尺寸)
 
 2018-06-16 v4.1.3
 

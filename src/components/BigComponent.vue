@@ -53,9 +53,16 @@
       id="preview-mode"
       @click.stop="0">
       <div id="preview-display-area">
-        <a :href="previewSrcList[previewCurrentIndex]" target="_blank">
+        <a
+          v-show="!previewUgoiraMetaData"
+          :href="previewSrcList[previewCurrentIndex]"
+          target="_blank">
           <img :src="previewSrcList[previewCurrentIndex]">
         </a>
+        <div v-show="!!previewUgoiraMetaData">
+          <canvas v-show="previewCurrentIndex === 0" ref="previewUgoiraCanvas"/>
+          <canvas v-show="previewCurrentIndex === 1" ref="previewOriginalUgoiraCanvas"/>
+        </div>
       </div>
       <ul v-show="previewSrcList.length > 1" id="preview-thumbnails-area">
         <li v-for="(pSrc, index) in previewSrcList" :key="pSrc">
@@ -78,7 +85,9 @@ export default {
   data() {
     return {
       previewSrcList: [],
-      previewCurrentIndex: 0
+      previewCurrentIndex: 0,
+      previewUgoiraMetaData: null,
+      ugoiraPlayers: []
     };
   },
   computed: {
@@ -100,10 +109,13 @@ export default {
 
       if (value === "preview") {
         const imageItem = this.xm.data;
-        if (imageItem.illustPageCount > 1) {
-          const d = await PixivAPI.getMultipleIllustHTMLDetail(
-            imageItem.illustId
-          );
+        if (imageItem.isUgoira) {
+          this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(imageItem.illustId);
+          this.initZipImagePlayer();
+          this.previewSrcList.push(imageItem.urls.thumb);
+          this.previewSrcList.push(imageItem.urls.original);
+        } else if (imageItem.illustPageCount > 1) {
+          const d = await PixivAPI.getMultipleIllustHTMLDetail(imageItem.illustId);
           this.previewSrcList.push(...d.imgSrcs);
         } else {
           this.previewSrcList.push(imageItem.urls.original);
@@ -111,6 +123,9 @@ export default {
       } else if (!value) {
         this.previewSrcList.length = 0;
         this.previewCurrentIndex = 0;
+        this.previewUgoiraMetaData = null;
+        this.ugoiraPlayers.forEach(player => player.stop());
+        this.ugoiraPlayers.length = 0;
       }
     }
   },
@@ -149,6 +164,31 @@ export default {
     },
     jumpPreview(index) {
       this.previewCurrentIndex = index;
+    },
+    initZipImagePlayer() {
+      const meta = this.previewUgoiraMetaData;
+      // resize as clear
+      this.$refs.previewOriginalUgoiraCanvas.width = 0;
+      this.$refs.previewUgoiraCanvas.width = 0;
+
+      this.ugoiraPlayers.push(new ZipImagePlayer({
+        canvas: this.$refs.previewOriginalUgoiraCanvas,
+        source: meta.originalSrc,
+        metadata: meta,
+        chunkSize: 300000,
+        loop: true,
+        autoStart: true,
+        autosize: true
+      }));
+      this.ugoiraPlayers.push(new ZipImagePlayer({
+        canvas: this.$refs.previewUgoiraCanvas,
+        source: meta.src,
+        metadata: meta,
+        chunkSize: 300000,
+        loop: true,
+        autoStart: true,
+        autosize: true
+      }));
     }
   }
 };
@@ -217,13 +257,15 @@ export default {
   box-sizing: border-box;
   text-align: center;
 }
-#preview-display-area > a {
+#preview-display-area > a,
+#preview-display-area > div {
   display: inline-flex;
   height: 100%;
   justify-content: center;
   align-items: center;
 }
-#preview-display-area > a > img {
+#preview-display-area > a > img,
+#preview-display-area > div > canvas {
   object-fit: contain;
   max-width: 100%;
   max-height: 100%;

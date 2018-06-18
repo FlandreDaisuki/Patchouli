@@ -22,7 +22,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.3
+// @version           4.1.4
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -186,6 +186,11 @@
           collect[d.userId] = d;
           return collect;
         }, {});
+    }
+    async getIllustUgoiraMetaData(illustId) {
+      const url = `/ajax/illust/${illustId}/ugoira_meta`;
+      const data = await this.fetchJSON(url);
+      return data;
     }
     async getIllustIdsInLegacyPageHTML(url) {
       try {
@@ -2134,52 +2139,39 @@
               ]
             ),
             _vm._v(" "),
-            _c(
-              "li",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.isUgoira,
-                    expression: "!isUgoira"
-                  }
-                ]
-              },
-              [
-                _c(
-                  "a",
-                  {
-                    attrs: { role: "button" },
-                    on: {
-                      click: function($event) {
-                        if (
-                          !("button" in $event) &&
-                          _vm._k($event.keyCode, "left", 37, $event.key, [
-                            "Left",
-                            "ArrowLeft"
-                          ])
-                        ) {
-                          return null
-                        }
-                        if ("button" in $event && $event.button !== 0) {
-                          return null
-                        }
-                        return _vm.openPreview($event)
+            _c("li", [
+              _c(
+                "a",
+                {
+                  attrs: { role: "button" },
+                  on: {
+                    click: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "left", 37, $event.key, [
+                          "Left",
+                          "ArrowLeft"
+                        ])
+                      ) {
+                        return null
                       }
+                      if ("button" in $event && $event.button !== 0) {
+                        return null
+                      }
+                      return _vm.openPreview($event)
                     }
-                  },
-                  [
-                    _c("i", { staticClass: "fas fa-search-plus" }),
-                    _vm._v(
-                      "\n        " +
-                        _vm._s(_vm.$t("contextMenu.preview")) +
-                        "\n      "
-                    )
-                  ]
-                )
-              ]
-            ),
+                  }
+                },
+                [
+                  _c("i", { staticClass: "fas fa-search-plus" }),
+                  _vm._v(
+                    "\n        " +
+                      _vm._s(_vm.$t("contextMenu.preview")) +
+                      "\n      "
+                  )
+                ]
+              )
+            ]),
             _vm._v(" "),
             _c("li", [
               _c(
@@ -2311,9 +2303,9 @@
     : {};
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-508b0e5d_0", { source: "\n#patchouli-context-menu[data-v-508b0e5d] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-508b0e5d] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-508b0e5d] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-508b0e5d]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-508b0e5d],\n#patchouli-context-menu > ul i.fas[data-v-508b0e5d] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-9d44a274_0", { source: "\n#patchouli-context-menu[data-v-9d44a274] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-9d44a274] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-9d44a274] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-9d44a274]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-9d44a274],\n#patchouli-context-menu > ul i.fas[data-v-9d44a274] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$4 = "data-v-508b0e5d";
+  const __vue_scope_id__$4 = "data-v-9d44a274";
   const __vue_module_identifier__$4 = undefined;
   const __vue_is_functional_template__$4 = false;
   function __vue_normalize__$4(
@@ -2570,7 +2562,9 @@
     data() {
       return {
         previewSrcList: [],
-        previewCurrentIndex: 0
+        previewCurrentIndex: 0,
+        previewUgoiraMetaData: null,
+        ugoiraPlayers: []
       };
     },
     computed: {
@@ -2588,10 +2582,13 @@
       async mode(value) {
         if (value === "preview") {
           const imageItem = this.xm.data;
-          if (imageItem.illustPageCount > 1) {
-            const d = await PixivAPI.getMultipleIllustHTMLDetail(
-              imageItem.illustId
-            );
+          if (imageItem.isUgoira) {
+            this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(imageItem.illustId);
+            this.initZipImagePlayer();
+            this.previewSrcList.push(imageItem.urls.thumb);
+            this.previewSrcList.push(imageItem.urls.original);
+          } else if (imageItem.illustPageCount > 1) {
+            const d = await PixivAPI.getMultipleIllustHTMLDetail(imageItem.illustId);
             this.previewSrcList.push(...d.imgSrcs);
           } else {
             this.previewSrcList.push(imageItem.urls.original);
@@ -2599,6 +2596,9 @@
         } else if (!value) {
           this.previewSrcList.length = 0;
           this.previewCurrentIndex = 0;
+          this.previewUgoiraMetaData = null;
+          this.ugoiraPlayers.forEach(player => player.stop());
+          this.ugoiraPlayers.length = 0;
         }
       }
     },
@@ -2631,6 +2631,29 @@
       },
       jumpPreview(index) {
         this.previewCurrentIndex = index;
+      },
+      initZipImagePlayer() {
+        const meta = this.previewUgoiraMetaData;
+        this.$refs.previewOriginalUgoiraCanvas.width = 0;
+        this.$refs.previewUgoiraCanvas.width = 0;
+        this.ugoiraPlayers.push(new ZipImagePlayer({
+          canvas: this.$refs.previewOriginalUgoiraCanvas,
+          source: meta.originalSrc,
+          metadata: meta,
+          chunkSize: 300000,
+          loop: true,
+          autoStart: true,
+          autosize: true
+        }));
+        this.ugoiraPlayers.push(new ZipImagePlayer({
+          canvas: this.$refs.previewUgoiraCanvas,
+          source: meta.src,
+          metadata: meta,
+          chunkSize: 300000,
+          loop: true,
+          autoStart: true,
+          autosize: true
+        }));
       }
     }
   };
@@ -2853,6 +2876,14 @@
               _c(
                 "a",
                 {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.previewUgoiraMetaData,
+                      expression: "!previewUgoiraMetaData"
+                    }
+                  ],
                   attrs: {
                     href: _vm.previewSrcList[_vm.previewCurrentIndex],
                     target: "_blank"
@@ -2861,6 +2892,45 @@
                 [
                   _c("img", {
                     attrs: { src: _vm.previewSrcList[_vm.previewCurrentIndex] }
+                  })
+                ]
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !!_vm.previewUgoiraMetaData,
+                      expression: "!!previewUgoiraMetaData"
+                    }
+                  ]
+                },
+                [
+                  _c("canvas", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.previewCurrentIndex === 0,
+                        expression: "previewCurrentIndex === 0"
+                      }
+                    ],
+                    ref: "previewUgoiraCanvas"
+                  }),
+                  _vm._v(" "),
+                  _c("canvas", {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.previewCurrentIndex === 1,
+                        expression: "previewCurrentIndex === 1"
+                      }
+                    ],
+                    ref: "previewOriginalUgoiraCanvas"
                   })
                 ]
               )
@@ -2923,9 +2993,9 @@
     : {};
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-22e6292f_0", { source: "\n#patchouli-big-component[data-v-22e6292f] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-22e6292f],\n#preview-mode[data-v-22e6292f] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-22e6292f] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-22e6292f] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-22e6292f] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-22e6292f]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-22e6292f] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-22e6292f] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-22e6292f] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-22e6292f] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-22e6292f] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-22e6292f] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-22e6292f] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-22e6292f] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-22e6292f] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-22e6292f] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-22e6292f] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-22e6292f] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+    inject("data-v-9dfc2e44_0", { source: "\n#patchouli-big-component[data-v-9dfc2e44] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-9dfc2e44],\n#preview-mode[data-v-9dfc2e44] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-9dfc2e44] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-9dfc2e44] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-9dfc2e44] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-9dfc2e44]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-9dfc2e44] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-9dfc2e44] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-9dfc2e44] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-9dfc2e44] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-9dfc2e44] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-9dfc2e44],\n#preview-display-area > div[data-v-9dfc2e44] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-9dfc2e44],\n#preview-display-area > div > canvas[data-v-9dfc2e44] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-9dfc2e44] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-9dfc2e44] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-9dfc2e44] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-9dfc2e44] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-9dfc2e44] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$6 = "data-v-22e6292f";
+  const __vue_scope_id__$6 = "data-v-9dfc2e44";
   const __vue_module_identifier__$6 = undefined;
   const __vue_is_functional_template__$6 = false;
   function __vue_normalize__$6(
@@ -3152,6 +3222,10 @@
       integrity: 'sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp',
       crossOrigin: 'anonymous' });
     document.head.appendChild(fontawesome);
+    const zipPlayer = $el('script', {
+      src: 'https://rawgit.com/FlandreDaisuki/zip_player/master/dist/zip_player.iife.min.js'
+    });
+    document.head.appendChild(zipPlayer);
     $('._global-header').classList.add('koakuma-placeholder');
     const Patchouli = new Vue({
       i18n,

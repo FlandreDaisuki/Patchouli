@@ -13,7 +13,7 @@
           {{ $t('contextMenu.download') }}
         </a>
       </li>
-      <li v-show="!isUgoira">
+      <li>
         <a role="button" @click.left="openPreview">
           <i class="fas fa-search-plus"/>
           {{ $t('contextMenu.preview') }}

@@ -120,6 +120,13 @@ class Pixiv {
       }, {});
   }
 
+  async getIllustUgoiraMetaData(illustId) {
+    const url = `/ajax/illust/${illustId}/ugoira_meta`;
+    const data = await this.fetchJSON(url);
+    $print.debug('Pixiv#getIllustUgoiraMetaData: data:', data);
+    return data;
+  }
+
   async getIllustIdsInLegacyPageHTML(url) {
     try {
       const html = await this.fetchHTML(url);
