@@ -39,6 +39,21 @@
         </a>
         <span id="config-user-tooltip-label">{{ $t('config.userTooltip') }}</span>
       </a>
+      <a id="config-hover-play-switch" @click.left="clickSwitch">
+        <a
+          v-show="xc.hoverPlay"
+          id="config-hover-play-switch-on"
+          role="button">
+          <i class="fas fa-toggle-on"/>
+        </a>
+        <a
+          v-show="!xc.hoverPlay"
+          id="config-hover-play-switch-off"
+          role="button">
+          <i class="fas fa-toggle-off"/>
+        </a>
+        <span id="config-hover-play-label">{{ $t('config.hoverPlay') }}</span>
+      </a>
       <a id="config-blacklist-label">
         <i class="far fa-eye-slash"/>{{ $t('config.blacklist') }}
       </a>
@@ -160,6 +175,10 @@ export default {
 
       if (event.currentTarget.id === "config-user-tooltip-switch") {
         this.xc.userTooltip = toInt(!this.xc.userTooltip);
+      }
+
+      if (event.currentTarget.id === "config-hover-play-switch") {
+        this.xc.hoverPlay = toInt(!this.xc.hoverPlay);
       }
     },
     jumpPreview(index) {

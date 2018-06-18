@@ -22,7 +22,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.4
+// @version           4.1.5
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -556,7 +556,8 @@
         sort: 0,
         contextMenu: 1,
         userTooltip: 1,
-        blacklist: []
+        blacklist: [],
+        hoverPlay: 1
       },
     },
     mutations: {
@@ -1202,13 +1203,27 @@
     },
     data() {
       return {
-        selfIsBookmarked: this.isBookmarked
+        selfIsBookmarked: this.isBookmarked,
+        ugoiraPlayed: false,
+        ugoiraPlayer: null,
+        ugoiraMeta: null
       };
     },
     computed: {
       illustPageUrl() {
         return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
+      },
+      canHoverPlay() {
+        return this.$store.state.config.hoverPlay;
       }
+    },
+    mounted() {
+      this.$nextTick(async() => {
+        if (!this.isUgoira && !this.canHoverPlay) {
+          return;
+        }
+        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);
+      });
     },
     methods: {
       oneClickBookmarkAdd() {
@@ -1230,8 +1245,30 @@
           };
           this.$store.commit("activateContextMenu", payload);
         }
+      },
+      controlUgoira(event) {
+        if (!this.ugoiraPlayer) {
+          this.ugoiraPlayer = new ZipImagePlayer({
+            canvas: this.$refs.smallUgoiraPreview,
+            source: this.ugoiraMeta.src,
+            metadata: this.ugoiraMeta,
+            chunkSize: 300000,
+            loop: true,
+            autosize: true
+          });
+        }
+        if (this.canHoverPlay) {
+          if (event.type === 'mouseenter') {
+            this.ugoiraPlayed = true;
+            this.ugoiraPlayer.play();
+          } else {
+            this.ugoiraPlayed = false;
+            this.ugoiraPlayer.pause();
+            this.ugoiraPlayer.rewind();
+          }
+        }
       }
-    }
+    },
   };
   const __vue_script__$1 = script$1;
   var __vue_render__$1 = function() {
@@ -1247,7 +1284,9 @@
           on: {
             contextmenu: function($event) {
               return _vm.activateContextMenu($event)
-            }
+            },
+            mouseenter: _vm.controlUgoira,
+            mouseleave: _vm.controlUgoira
           }
         },
         [
@@ -1260,9 +1299,45 @@
               ])
             : _vm._e(),
           _vm._v(" "),
-          _c("img", { attrs: { "data-src": _vm.imgUrl, src: _vm.imgUrl } }),
+          _c("img", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.ugoiraPlayed,
+                expression: "!ugoiraPlayed"
+              }
+            ],
+            attrs: { "data-src": _vm.imgUrl, src: _vm.imgUrl }
+          }),
           _vm._v(" "),
-          _vm.isUgoira ? _c("div", { staticClass: "ugoira-icon" }) : _vm._e()
+          _vm.isUgoira
+            ? _c("div", {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: !_vm.ugoiraPlayed,
+                    expression: "!ugoiraPlayed"
+                  }
+                ],
+                staticClass: "ugoira-icon"
+              })
+            : _vm._e(),
+          _vm._v(" "),
+          _vm.isUgoira
+            ? _c("canvas", {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.ugoiraPlayed,
+                    expression: "ugoiraPlayed"
+                  }
+                ],
+                ref: "smallUgoiraPreview"
+              })
+            : _vm._e()
         ]
       ),
       _vm._v(" "),
@@ -1312,9 +1387,9 @@
     : {};
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject("data-v-5aebea38_0", { source: "\n.image-item-image[data-v-5aebea38] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-5aebea38] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-5aebea38]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-5aebea38] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-5aebea38] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-5aebea38] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-5aebea38] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-5aebea38] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-5aebea38] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+    inject("data-v-1657d8ac_0", { source: "\n.image-item-image[data-v-1657d8ac] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-1657d8ac] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-1657d8ac]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-1657d8ac] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-1657d8ac] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-1657d8ac],\ncanvas[data-v-1657d8ac] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-1657d8ac] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-1657d8ac] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-1657d8ac] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$1 = "data-v-5aebea38";
+  const __vue_scope_id__$1 = "data-v-1657d8ac";
   const __vue_module_identifier__$1 = undefined;
   const __vue_is_functional_template__$1 = false;
   function __vue_normalize__$1(
@@ -2628,6 +2703,9 @@
         if (event.currentTarget.id === "config-user-tooltip-switch") {
           this.xc.userTooltip = toInt(!this.xc.userTooltip);
         }
+        if (event.currentTarget.id === "config-hover-play-switch") {
+          this.xc.hoverPlay = toInt(!this.xc.hoverPlay);
+        }
       },
       jumpPreview(index) {
         this.previewCurrentIndex = index;
@@ -2837,6 +2915,67 @@
               ]
             ),
             _vm._v(" "),
+            _c(
+              "a",
+              {
+                attrs: { id: "config-hover-play-switch" },
+                on: {
+                  click: function($event) {
+                    if (
+                      !("button" in $event) &&
+                      _vm._k($event.keyCode, "left", 37, $event.key, [
+                        "Left",
+                        "ArrowLeft"
+                      ])
+                    ) {
+                      return null
+                    }
+                    if ("button" in $event && $event.button !== 0) {
+                      return null
+                    }
+                    return _vm.clickSwitch($event)
+                  }
+                }
+              },
+              [
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: _vm.xc.hoverPlay,
+                        expression: "xc.hoverPlay"
+                      }
+                    ],
+                    attrs: { id: "config-hover-play-switch-on", role: "button" }
+                  },
+                  [_c("i", { staticClass: "fas fa-toggle-on" })]
+                ),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    directives: [
+                      {
+                        name: "show",
+                        rawName: "v-show",
+                        value: !_vm.xc.hoverPlay,
+                        expression: "!xc.hoverPlay"
+                      }
+                    ],
+                    attrs: { id: "config-hover-play-switch-off", role: "button" }
+                  },
+                  [_c("i", { staticClass: "fas fa-toggle-off" })]
+                ),
+                _vm._v(" "),
+                _c("span", { attrs: { id: "config-hover-play-label" } }, [
+                  _vm._v(_vm._s(_vm.$t("config.hoverPlay")))
+                ])
+              ]
+            ),
+            _vm._v(" "),
             _c("a", { attrs: { id: "config-blacklist-label" } }, [
               _c("i", { staticClass: "far fa-eye-slash" }),
               _vm._v(_vm._s(_vm.$t("config.blacklist")) + "\n    ")
@@ -2993,9 +3132,9 @@
     : {};
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-9dfc2e44_0", { source: "\n#patchouli-big-component[data-v-9dfc2e44] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-9dfc2e44],\n#preview-mode[data-v-9dfc2e44] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-9dfc2e44] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-9dfc2e44] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-9dfc2e44] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-9dfc2e44]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-9dfc2e44] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-9dfc2e44] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-9dfc2e44] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-9dfc2e44] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-9dfc2e44] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-9dfc2e44],\n#preview-display-area > div[data-v-9dfc2e44] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-9dfc2e44],\n#preview-display-area > div > canvas[data-v-9dfc2e44] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-9dfc2e44] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-9dfc2e44] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-9dfc2e44] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-9dfc2e44] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-9dfc2e44] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+    inject("data-v-6d202e61_0", { source: "\n#patchouli-big-component[data-v-6d202e61] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-6d202e61],\n#preview-mode[data-v-6d202e61] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-6d202e61] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-6d202e61] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-6d202e61] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-6d202e61]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-6d202e61] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-6d202e61] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-6d202e61] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-6d202e61] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-6d202e61] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-6d202e61],\n#preview-display-area > div[data-v-6d202e61] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-6d202e61],\n#preview-display-area > div > canvas[data-v-6d202e61] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-6d202e61] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-6d202e61] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-6d202e61] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-6d202e61] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-6d202e61] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$6 = "data-v-9dfc2e44";
+  const __vue_scope_id__$6 = "data-v-6d202e61";
   const __vue_module_identifier__$6 = undefined;
   const __vue_is_functional_template__$6 = false;
   function __vue_normalize__$6(
@@ -3122,7 +3261,8 @@
         config: {
           contextMenuExtension: 'Right click extension',
           blacklist: 'Blacklist',
-          userTooltip: 'Illustrator tooltip'
+          userTooltip: 'Illustrator tooltip',
+          hoverPlay: 'Mouse hover play ugoira'
         }
       },
       'ja': {
@@ -3150,7 +3290,8 @@
         config: {
           contextMenuExtension: '右クリックの拡張機能',
           blacklist: 'ブラックリスト',
-          userTooltip: 'イラストレーターツールチップ'
+          userTooltip: 'イラストレーターツールチップ',
+          hoverPlay: 'マウスオーバーでうごイラ再生'
         }
       },
       'zh': {
@@ -3178,7 +3319,8 @@
         config: {
           contextMenuExtension: '右键扩展',
           blacklist: '黑名單',
-          userTooltip: '绘师提示框'
+          userTooltip: '绘师提示框',
+          hoverPlay: '鼠标播放动图'
         }
       },
       'zh-tw': {
@@ -3206,7 +3348,8 @@
         config: {
           contextMenuExtension: '擴充右鍵',
           blacklist: '黑名單',
-          userTooltip: '繪師提示框'
+          userTooltip: '繪師提示框',
+          hoverPlay: '滑鼠播放動圖'
         }
       }
     }

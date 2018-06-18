@@ -59,7 +59,8 @@ export default new Vuex.Store({
       sort: 0,
       contextMenu: 1,
       userTooltip: 1,
-      blacklist: []
+      blacklist: [],
+      hoverPlay: 1
     },
   },
   mutations: {

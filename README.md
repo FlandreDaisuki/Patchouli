@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.1.4](https://img.shields.io/badge/latest-v4.1.4-blue.svg)](#)
+[![latest-v4.1.5](https://img.shields.io/badge/latest-v4.1.5-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
@@ -53,7 +53,12 @@ Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
 
-2018-06-16 v4.1.4
+2018-06-18 v4.1.5
+
+- 滑鼠移到動圖自動播放 (可關閉)
+   - **!注意!** 自動播放非常吃網路頻寬，請自行斟酌
+
+2018-06-18 v4.1.4
 
 - 擴充右鍵可預覽動圖 (縮小尺寸、原尺寸)
 

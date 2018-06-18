@@ -4,15 +4,27 @@
       :href="illustPageUrl"
       class="image-flexbox"
       rel="noopener"
-      @click.right="activateContextMenu">
+      @click.right="activateContextMenu"
+      @mouseenter="controlUgoira"
+      @mouseleave="controlUgoira">
 
       <div v-if="illustPageCount > 1" class="top-right-slot">
         <span><i class="far fa-images"/>
           {{ illustPageCount }}</span>
       </div>
 
-      <img :data-src="imgUrl" :src="imgUrl">
-      <div v-if="isUgoira" class="ugoira-icon"/>
+      <img
+        v-show="!ugoiraPlayed"
+        :data-src="imgUrl"
+        :src="imgUrl">
+      <div
+        v-if="isUgoira"
+        v-show="!ugoiraPlayed"
+        class="ugoira-icon"/>
+      <canvas
+        v-if="isUgoira"
+        v-show="ugoiraPlayed"
+        ref="smallUgoiraPreview"/>
     </a>
     <div
       :class="{on:selfIsBookmarked}"
@@ -34,6 +46,7 @@
 
 <script>
 import { $print } from "../lib/utils";
+import { PixivAPI } from '../lib/pixiv';
 
 export default {
   props: {
@@ -64,13 +77,28 @@ export default {
   },
   data() {
     return {
-      selfIsBookmarked: this.isBookmarked
+      selfIsBookmarked: this.isBookmarked,
+      ugoiraPlayed: false,
+      ugoiraPlayer: null,
+      ugoiraMeta: null
     };
   },
   computed: {
     illustPageUrl() {
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
+    },
+    canHoverPlay() {
+      return this.$store.state.config.hoverPlay;
     }
+  },
+  mounted() {
+    this.$nextTick(async() => {
+      if (!this.isUgoira && !this.canHoverPlay) {
+        return;
+      }
+      this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);
+
+    });
   },
   methods: {
     oneClickBookmarkAdd() {
@@ -96,8 +124,30 @@ export default {
 
         this.$store.commit("activateContextMenu", payload);
       }
+    },
+    controlUgoira(event) {
+      if (!this.ugoiraPlayer) {
+        this.ugoiraPlayer = new ZipImagePlayer({
+          canvas: this.$refs.smallUgoiraPreview,
+          source: this.ugoiraMeta.src,
+          metadata: this.ugoiraMeta,
+          chunkSize: 300000,
+          loop: true,
+          autosize: true
+        });
+      }
+      if (this.canHoverPlay) {
+        if (event.type === 'mouseenter') {
+          this.ugoiraPlayed = true;
+          this.ugoiraPlayer.play();
+        } else {
+          this.ugoiraPlayed = false;
+          this.ugoiraPlayer.pause();
+          this.ugoiraPlayer.rewind();
+        }
+      }
     }
-  }
+  },
 };
 </script>
 
@@ -149,7 +199,8 @@ export default {
   left: 50%;
   margin: -20px 0 0 -20px;
 }
-img {
+img,
+canvas {
   max-height: 100%;
   max-width: 100%;
 }

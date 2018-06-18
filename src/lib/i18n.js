@@ -32,7 +32,8 @@ export default new VueI18n({
       config: {
         contextMenuExtension: 'Right click extension',
         blacklist: 'Blacklist',
-        userTooltip: 'Illustrator tooltip'
+        userTooltip: 'Illustrator tooltip',
+        hoverPlay: 'Mouse hover play ugoira'
       }
     },
     'ja': {
@@ -60,7 +61,8 @@ export default new VueI18n({
       config: {
         contextMenuExtension: '右クリックの拡張機能',
         blacklist: 'ブラックリスト',
-        userTooltip: 'イラストレーターツールチップ'
+        userTooltip: 'イラストレーターツールチップ',
+        hoverPlay: 'マウスオーバーでうごイラ再生'
       }
     },
     'zh': {
@@ -88,7 +90,8 @@ export default new VueI18n({
       config: {
         contextMenuExtension: '右键扩展',
         blacklist: '黑名單',
-        userTooltip: '绘师提示框'
+        userTooltip: '绘师提示框',
+        hoverPlay: '鼠标播放动图'
       }
     },
     'zh-tw': {
@@ -116,7 +119,8 @@ export default new VueI18n({
       config: {
         contextMenuExtension: '擴充右鍵',
         blacklist: '黑名單',
-        userTooltip: '繪師提示框'
+        userTooltip: '繪師提示框',
+        hoverPlay: '滑鼠播放動圖'
       }
     }
   }
