@@ -327,12 +327,25 @@ function removeAnnoyings(doc = document) {
   const annoyings = [
     'iframe',
     // Ad
-    '.ad', '.ads_area', '.ad-footer', '.ads_anchor', '.ads-top-info',
-    '.comic-hot-works', '.user-ad-container', '.ads_area_no_margin',
+    '.ad',
+    '.ads_area',
+    '.ad-footer',
+    '.ads_anchor',
+    '.ads-top-info',
+    '.comic-hot-works',
+    '.user-ad-container',
+    '.ads_area_no_margin',
     // Premium
-    '.hover-item', '.ad-printservice', '.bookmark-ranges', '.require-premium',
-    '.showcase-reminder', '.sample-user-search', '.popular-introduction',
-    '._premium-lead-tag-search-bar', '._premium-lead-popular-d-body'
+    '.hover-item',
+    '.ad-printservice',
+    '.bookmark-ranges',
+    '.require-premium',
+    '.showcase-reminder',
+    '.sample-user-search',
+    '.popular-introduction',
+    '._premium-lead-tag-search-bar',
+    '._premium-lead-popular-d-body',
+    '._premium-lead-promotion-banner'
   ];
 
   for (const selector of annoyings) {
