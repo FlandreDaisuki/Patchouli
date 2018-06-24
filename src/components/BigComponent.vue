@@ -130,7 +130,8 @@ export default {
           this.previewSrcList.push(imageItem.urls.thumb);
           this.previewSrcList.push(imageItem.urls.original);
         } else if (imageItem.illustPageCount > 1) {
-          const d = await PixivAPI.getMultipleIllustHTMLDetail(imageItem.illustId);
+          const ext = imageItem.urls.original.replace(/.*\.(\w+)$/, '$1');
+          const d = await PixivAPI.getMultipleIllustHTMLDetail(imageItem.illustId, ext);
           this.previewSrcList.push(...d.imgSrcs);
         } else {
           this.previewSrcList.push(imageItem.urls.original);
