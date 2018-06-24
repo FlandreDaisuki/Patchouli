@@ -22,7 +22,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.5
+// @version           4.1.6
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
@@ -315,8 +315,9 @@
         if (!srcAttrHTML) {
           return failResult;
         }
-        const imgSrcs =
-          srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
+        const imgSrcs = srcAttrHTML
+          .map(attr => attr.replace(/.*"([^"]*)"/, '$1'))
+          .map(src => src.replace('img-master', 'img-original').replace('_master1200', ''));
         $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
         return {
           illustId,

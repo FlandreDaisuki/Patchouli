@@ -213,8 +213,9 @@ class Pixiv {
       if (!srcAttrHTML) {
         return failResult;
       }
-      const imgSrcs =
-        srcAttrHTML.map(attr => attr.replace(/.*"([^"]*)"/, '$1'));
+      const imgSrcs = srcAttrHTML
+        .map(attr => attr.replace(/.*"([^"]*)"/, '$1'))
+        .map(src => src.replace('img-master', 'img-original').replace('_master1200', ''));
       $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
       return {
         illustId,
