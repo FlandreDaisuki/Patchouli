@@ -198,34 +198,6 @@ class Pixiv {
     }
   }
 
-  async getMultipleIllustHTMLDetail(illustId, ext) {
-    const url = `/member_illust.php?mode=manga&illust_id=${illustId}`;
-
-    const failResult = {
-      illustId,
-      imgSrcs: []
-    };
-
-    try {
-      const html = await this.fetchHTML(url);
-      const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
-      $print.debug('Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
-      if (!srcAttrHTML) {
-        return failResult;
-      }
-      const imgSrcs = srcAttrHTML
-        .map(attr => attr.replace(/.*"([^"]*)"/, '$1'))
-        .map(src => src.replace('img-master', 'img-original').replace(/_master1200.*/, `.${ext}`));
-      $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
-      return {
-        illustId,
-        imgSrcs
-      };
-    } catch (error) {
-      $print.error('Pixiv#getMultipleIllustHTMLDetail: error:', error);
-    }
-  }
-
   // new API to like an illust, return true if succeeded
   async postIllustLike(illustId) {
     const url = '/ajax/illusts/like';

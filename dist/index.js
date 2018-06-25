@@ -250,34 +250,6 @@ class Pixiv {
     }
   }
 
-  async getMultipleIllustHTMLDetail(illustId, ext) {
-    const url = `/member_illust.php?mode=manga&illust_id=${illustId}`;
-
-    const failResult = {
-      illustId,
-      imgSrcs: []
-    };
-
-    try {
-      const html = await this.fetchHTML(url);
-      const srcAttrHTML = html.match(/data-src="[^"]*"/ig);
-      $print.debug('Pixiv#getMultipleIllustHTMLDetail: srcAttrHTML:', srcAttrHTML);
-      if (!srcAttrHTML) {
-        return failResult;
-      }
-      const imgSrcs = srcAttrHTML
-        .map(attr => attr.replace(/.*"([^"]*)"/, '$1'))
-        .map(src => src.replace('img-master', 'img-original').replace(/_master1200.*/, `.${ext}`));
-      $print.debug('Pixiv#getMultipleIllustHTMLDetail: imgSrcs:', imgSrcs);
-      return {
-        illustId,
-        imgSrcs
-      };
-    } catch (error) {
-      $print.error('Pixiv#getMultipleIllustHTMLDetail: error:', error);
-    }
-  }
-
   // new API to like an illust, return true if succeeded
   async postIllustLike(illustId) {
     const url = '/ajax/illusts/like';
@@ -2975,9 +2947,9 @@ var script$6 = {
           this.previewSrcList.push(imageItem.urls.thumb);
           this.previewSrcList.push(imageItem.urls.original);
         } else if (imageItem.illustPageCount > 1) {
-          const ext = imageItem.urls.original.replace(/.*\.(\w+)$/, '$1');
-          const d = await PixivAPI.getMultipleIllustHTMLDetail(imageItem.illustId, ext);
-          this.previewSrcList.push(...d.imgSrcs);
+          const indexArray = Array.from(Array(imageItem.illustPageCount).keys());
+          const srcs = indexArray.map(idx => imageItem.urls.original.replace('p0', `p${idx}`));
+          this.previewSrcList.push(...srcs);
         } else {
           this.previewSrcList.push(imageItem.urls.original);
         }
@@ -3459,11 +3431,11 @@ const __vue_template__$6 = typeof __vue_render__$6 !== 'undefined'
 /* style */
 const __vue_inject_styles__$6 = function (inject) {
   if (!inject) return
-  inject("data-v-6d833fd8_0", { source: "\n#patchouli-big-component[data-v-6d833fd8] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-6d833fd8],\n#preview-mode[data-v-6d833fd8] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-6d833fd8] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-6d833fd8] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-6d833fd8] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-6d833fd8]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-6d833fd8] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-6d833fd8] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-6d833fd8] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-6d833fd8] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-6d833fd8] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-6d833fd8],\n#preview-display-area > div[data-v-6d833fd8] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-6d833fd8],\n#preview-display-area > div > canvas[data-v-6d833fd8] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-6d833fd8] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-6d833fd8] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-6d833fd8] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-6d833fd8] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-6d833fd8] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+  inject("data-v-24246ab2_0", { source: "\n#patchouli-big-component[data-v-24246ab2] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-24246ab2],\n#preview-mode[data-v-24246ab2] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-24246ab2] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-24246ab2] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-24246ab2] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-24246ab2]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-24246ab2] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-24246ab2] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-24246ab2] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-24246ab2] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-24246ab2] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-24246ab2],\n#preview-display-area > div[data-v-24246ab2] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-24246ab2],\n#preview-display-area > div > canvas[data-v-24246ab2] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-24246ab2] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-24246ab2] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-24246ab2] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-24246ab2] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-24246ab2] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$6 = "data-v-6d833fd8";
+const __vue_scope_id__$6 = "data-v-24246ab2";
 /* module identifier */
 const __vue_module_identifier__$6 = undefined;
 /* functional template */
