@@ -323,9 +323,9 @@
   function makeNewTag(tag) {
     if (tag.translation) {
       const trs = Object.values(tag.translation);
-      return [tag.tag, ...trs].join(', ');
+      return [tag.tag, ...trs].filter(Boolean).join(', ');
     }
-    return [tag.tag, tag.romaji].join(', ');
+    return [tag.tag, tag.romaji].filter(Boolean).join(', ');
   }
   function makeLibraryData({ pageType, illustDataGroup, userDataGroup }) {
     if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
