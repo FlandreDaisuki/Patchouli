@@ -2,6 +2,9 @@
   <div
     v-show="mode"
     id="patchouli-big-component"
+    ref="patchouliBigComponentRoot"
+    tabindex="0"
+    @keyup="jumpByKeyup"
     @click.left="clickBase"
     @scroll="focusForeground"
     @wheel="focusForeground">
@@ -145,6 +148,11 @@ export default {
       }
     }
   },
+  updated() {
+    if (this.mode === 'preview') {
+      this.$refs.patchouliBigComponentRoot.focus();
+    }
+  },
   methods: {
     clickBase(event) {
       $print.debug("BigComponent#clickBase: event", event);
@@ -209,8 +217,20 @@ export default {
         autoStart: true,
         autosize: true
       }));
+    },
+    jumpByKeyup(event) {
+      $print.debug("BigComponent#jumpByKeyup: event", event);
+
+      if (this.mode === 'preview') {
+        const imageItem = this.xm.data;
+        if (event.key === 'ArrowLeft') {
+          this.jumpPreview(Math.max(this.previewCurrentIndex - 1, 0));
+        } else if (event.key === 'ArrowRight') {
+          this.jumpPreview(Math.min(this.previewCurrentIndex + 1, imageItem.illustPageCount - 1));
+        }
+      }
     }
-  }
+  },
 };
 </script>
 

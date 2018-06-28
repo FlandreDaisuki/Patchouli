@@ -2962,6 +2962,11 @@ var script$6 = {
       }
     }
   },
+  updated() {
+    if (this.mode === 'preview') {
+      this.$refs.patchouliBigComponentRoot.focus();
+    }
+  },
   methods: {
     clickBase(event) {
       $print.debug("BigComponent#clickBase: event", event);
@@ -3026,8 +3031,20 @@ var script$6 = {
         autoStart: true,
         autosize: true
       }));
+    },
+    jumpByKeyup(event) {
+      $print.debug("BigComponent#jumpByKeyup: event", event);
+
+      if (this.mode === 'preview') {
+        const imageItem = this.xm.data;
+        if (event.key === 'ArrowLeft') {
+          this.jumpPreview(Math.max(this.previewCurrentIndex - 1, 0));
+        } else if (event.key === 'ArrowRight') {
+          this.jumpPreview(Math.min(this.previewCurrentIndex + 1, imageItem.illustPageCount - 1));
+        }
+      }
     }
-  }
+  },
 };
 
 const __vue_script__$6 = script$6;
@@ -3043,8 +3060,10 @@ var __vue_render__$6 = function() {
       directives: [
         { name: "show", rawName: "v-show", value: _vm.mode, expression: "mode" }
       ],
-      attrs: { id: "patchouli-big-component" },
+      ref: "patchouliBigComponentRoot",
+      attrs: { id: "patchouli-big-component", tabindex: "0" },
       on: {
+        keyup: _vm.jumpByKeyup,
         click: function($event) {
           if (
             !("button" in $event) &&
@@ -3431,11 +3450,11 @@ const __vue_template__$6 = typeof __vue_render__$6 !== 'undefined'
 /* style */
 const __vue_inject_styles__$6 = function (inject) {
   if (!inject) return
-  inject("data-v-24246ab2_0", { source: "\n#patchouli-big-component[data-v-24246ab2] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-24246ab2],\n#preview-mode[data-v-24246ab2] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-24246ab2] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-24246ab2] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-24246ab2] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-24246ab2]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-24246ab2] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-24246ab2] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-24246ab2] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-24246ab2] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-24246ab2] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-24246ab2],\n#preview-display-area > div[data-v-24246ab2] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-24246ab2],\n#preview-display-area > div > canvas[data-v-24246ab2] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-24246ab2] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-24246ab2] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-24246ab2] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-24246ab2] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-24246ab2] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+  inject("data-v-498dd240_0", { source: "\n#patchouli-big-component[data-v-498dd240] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-498dd240],\n#preview-mode[data-v-498dd240] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-498dd240] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-498dd240] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-498dd240] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-498dd240]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-498dd240] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-498dd240] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-498dd240] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-498dd240] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-498dd240] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-498dd240],\n#preview-display-area > div[data-v-498dd240] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-498dd240],\n#preview-display-area > div > canvas[data-v-498dd240] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-498dd240] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-498dd240] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-498dd240] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-498dd240] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-498dd240] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$6 = "data-v-24246ab2";
+const __vue_scope_id__$6 = "data-v-498dd240";
 /* module identifier */
 const __vue_module_identifier__$6 = undefined;
 /* functional template */
