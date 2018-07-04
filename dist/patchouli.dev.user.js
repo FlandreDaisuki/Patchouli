@@ -22,13 +22,13 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.1.8
+// @version           4.1.9
 // @grant             GM_getValue
 // @grant             GM.getValue
 // @grant             GM_setValue
 // @grant             GM.setValue
 // @grant             GM_xmlhttpRequest
-// @grant             GM.xmlhttpRequest
+// @grant             GM.xmlHttpRequest
 // ==/UserScript==
 
 (function (Vue,Vuex,VueI18n) {
@@ -139,7 +139,8 @@
 
       try {
         if (url) {
-          const resp = await fetch(url, opt);
+          const a = $el('a', { href: url });
+          const resp = await fetch(a.href, opt);
           if (!resp.ok) {
             throw new Error(`${resp.status} ${resp.statusText}`);
           }
@@ -2230,7 +2231,7 @@
         GM.setValue(name, value);
       }
     },
-    async xmlhttpRequest(details) {
+    async XHR(details) {
       const xhr = window.GM_xmlhttpRequest || (GM ? GM.xmlHttpRequest : null);
       if (!xhr) {
         return Promise.reject();
@@ -2323,11 +2324,13 @@
           .pop()
           .toLowerCase();
 
-        const response = await GMC.xmlhttpRequest({
+        const response = await GMC.XHR({
           method: "GET",
           url: imgUrl,
           // greasemonkey maybe no this API
           responseType: "arraybuffer",
+          // for greasemonkey
+          binary: true,
           headers: {
             Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`
           }
@@ -2640,11 +2643,11 @@
   /* style */
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-9d44a274_0", { source: "\n#patchouli-context-menu[data-v-9d44a274] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-9d44a274] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-9d44a274] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-9d44a274]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-9d44a274],\n#patchouli-context-menu > ul i.fas[data-v-9d44a274] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-5f387fb0_0", { source: "\n#patchouli-context-menu[data-v-5f387fb0] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-5f387fb0] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-5f387fb0] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-5f387fb0]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-5f387fb0],\n#patchouli-context-menu > ul i.fas[data-v-5f387fb0] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$4 = "data-v-9d44a274";
+  const __vue_scope_id__$4 = "data-v-5f387fb0";
   /* module identifier */
   const __vue_module_identifier__$4 = undefined;
   /* functional template */

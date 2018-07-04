@@ -1,4 +1,4 @@
-import { $, $$find,  $print } from './utils';
+import { $, $$find, $print, $el } from './utils';
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
 
@@ -38,7 +38,8 @@ class Pixiv {
 
     try {
       if (url) {
-        const resp = await fetch(url, opt);
+        const a = $el('a', { href: url });
+        const resp = await fetch(a.href, opt);
         if (!resp.ok) {
           throw new Error(`${resp.status} ${resp.statusText}`);
         }

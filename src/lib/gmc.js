@@ -15,7 +15,7 @@ const GMC = {
       GM.setValue(name, value);
     }
   },
-  async xmlhttpRequest(details) {
+  async XHR(details) {
     const xhr = window.GM_xmlhttpRequest || (GM ? GM.xmlHttpRequest : null);
     if (!xhr) {
       return Promise.reject();

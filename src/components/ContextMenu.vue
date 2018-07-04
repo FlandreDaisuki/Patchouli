@@ -125,11 +125,13 @@ export default {
         .pop()
         .toLowerCase();
 
-      const response = await GMC.xmlhttpRequest({
+      const response = await GMC.XHR({
         method: "GET",
         url: imgUrl,
-        // greasemonkey maybe no this API
+        // greasemonkey has no this API
         responseType: "arraybuffer",
+        // for greasemonkey
+        binary: true,
         headers: {
           Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`
         }

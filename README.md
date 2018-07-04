@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.1.8](https://img.shields.io/badge/latest-v4.1.8-blue.svg)](#)
+[![latest-v4.1.9](https://img.shields.io/badge/latest-v4.1.9-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
@@ -52,6 +52,10 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
+
+2018-07-04 v4.1.9
+
+- 支援 greasemonkey 右鍵擴充下載原圖
 
 2018-06-28 v4.1.8
 
