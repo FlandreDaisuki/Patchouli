@@ -128,14 +128,18 @@ export default {
         return;
       }
       if (!this.ugoiraPlayer) {
-        this.ugoiraPlayer = new ZipImagePlayer({
-          canvas: this.$refs.smallUgoiraPreview,
-          source: this.ugoiraMeta.src,
-          metadata: this.ugoiraMeta,
-          chunkSize: 300000,
-          loop: true,
-          autosize: true
-        });
+        try {
+          this.ugoiraPlayer = new ZipImagePlayer({
+            canvas: this.$refs.smallUgoiraPreview,
+            source: this.ugoiraMeta.src,
+            metadata: this.ugoiraMeta,
+            chunkSize: 300000,
+            loop: true,
+            autosize: true
+          });
+        } catch (error) {
+          $print.error(error);
+        }
       }
       if (this.canHoverPlay) {
         if (event.type === 'mouseenter') {

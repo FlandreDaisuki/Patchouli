@@ -22,11 +22,9 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     crossOrigin: 'anonymous' });
   document.head.appendChild(fontawesome);
 
-  // Use @require can't find DataView
-  const zipPlayer = $el('script', {
-    src: 'https://rawgit.com/FlandreDaisuki/zip_player/master/dist/zip_player.iife.min.js'
-  });
-  document.head.appendChild(zipPlayer);
+  // Let sandbox can find binary APIs for ZipImagePlayer
+  window.DataView = unsafeWindow.DataView;
+  window.ArrayBuffer = unsafeWindow.ArrayBuffer;
 
   /* setup koamuma placeholder */
   $('._global-header').classList.add('koakuma-placeholder');

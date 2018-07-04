@@ -55,7 +55,7 @@ Copyright (c) 2016-2018 FlandreDaisuki
 
 2018-07-04 v4.1.9
 
-- 支援 greasemonkey 右鍵擴充下載原圖
+- 支援 Greasemonkey 右鍵擴充下載原圖
 
 2018-06-28 v4.1.8
 

@@ -55,7 +55,7 @@ Copyright (c) 2016-2018 FlandreDaisuki
 
 2018-07-04 v4.1.9
 
-- Support greasemonkey download with right click extension
+- Support Greasemonkey download with right click extension
 
 2018-06-28 v4.1.8
 

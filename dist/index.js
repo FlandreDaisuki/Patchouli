@@ -1334,14 +1334,18 @@ var script$1 = {
         return;
       }
       if (!this.ugoiraPlayer) {
-        this.ugoiraPlayer = new ZipImagePlayer({
-          canvas: this.$refs.smallUgoiraPreview,
-          source: this.ugoiraMeta.src,
-          metadata: this.ugoiraMeta,
-          chunkSize: 300000,
-          loop: true,
-          autosize: true
-        });
+        try {
+          this.ugoiraPlayer = new ZipImagePlayer({
+            canvas: this.$refs.smallUgoiraPreview,
+            source: this.ugoiraMeta.src,
+            metadata: this.ugoiraMeta,
+            chunkSize: 300000,
+            loop: true,
+            autosize: true
+          });
+        } catch (error) {
+          $print.error(error);
+        }
       }
       if (this.canHoverPlay) {
         if (event.type === 'mouseenter') {
@@ -1478,11 +1482,11 @@ const __vue_template__$1 = typeof __vue_render__$1 !== 'undefined'
 /* style */
 const __vue_inject_styles__$1 = function (inject) {
   if (!inject) return
-  inject("data-v-b21dd472_0", { source: "\n.image-item-image[data-v-b21dd472] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-b21dd472] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-b21dd472]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-b21dd472] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-b21dd472] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-b21dd472],\ncanvas[data-v-b21dd472] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-b21dd472] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-b21dd472] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-b21dd472] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+  inject("data-v-68012197_0", { source: "\n.image-item-image[data-v-68012197] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-68012197] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-68012197]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-68012197] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-68012197] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-68012197],\ncanvas[data-v-68012197] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-68012197] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-68012197] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-68012197] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$1 = "data-v-b21dd472";
+const __vue_scope_id__$1 = "data-v-68012197";
 /* module identifier */
 const __vue_module_identifier__$1 = undefined;
 /* functional template */
@@ -2278,7 +2282,7 @@ var script$4 = {
       const response = await GMC.XHR({
         method: "GET",
         url: imgUrl,
-        // greasemonkey maybe no this API
+        // greasemonkey has no this API
         responseType: "arraybuffer",
         // for greasemonkey
         binary: true,
@@ -2594,11 +2598,11 @@ const __vue_template__$4 = typeof __vue_render__$4 !== 'undefined'
 /* style */
 const __vue_inject_styles__$4 = function (inject) {
   if (!inject) return
-  inject("data-v-5f387fb0_0", { source: "\n#patchouli-context-menu[data-v-5f387fb0] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-5f387fb0] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-5f387fb0] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-5f387fb0]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-5f387fb0],\n#patchouli-context-menu > ul i.fas[data-v-5f387fb0] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+  inject("data-v-9d93a44c_0", { source: "\n#patchouli-context-menu[data-v-9d93a44c] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-9d93a44c] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-9d93a44c] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-9d93a44c]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-9d93a44c],\n#patchouli-context-menu > ul i.fas[data-v-9d93a44c] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
 
 };
 /* scoped */
-const __vue_scope_id__$4 = "data-v-5f387fb0";
+const __vue_scope_id__$4 = "data-v-9d93a44c";
 /* module identifier */
 const __vue_module_identifier__$4 = undefined;
 /* functional template */
@@ -3721,11 +3725,9 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     crossOrigin: 'anonymous' });
   document.head.appendChild(fontawesome);
 
-  // Use @require can't find DataView
-  const zipPlayer = $el('script', {
-    src: 'https://rawgit.com/FlandreDaisuki/zip_player/master/dist/zip_player.iife.min.js'
-  });
-  document.head.appendChild(zipPlayer);
+  // Let sandbox can find binary APIs for ZipImagePlayer
+  window.DataView = unsafeWindow.DataView;
+  window.ArrayBuffer = unsafeWindow.ArrayBuffer;
 
   /* setup koamuma placeholder */
   $('._global-header').classList.add('koakuma-placeholder');
