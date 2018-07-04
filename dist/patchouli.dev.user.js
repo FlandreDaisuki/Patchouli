@@ -29,7 +29,6 @@
 // @grant             GM.setValue
 // @grant             GM_xmlhttpRequest
 // @grant             GM.xmlhttpRequest
-// @grant             unsafeWindow
 // ==/UserScript==
 
 (function (Vue,Vuex,VueI18n) {
@@ -3848,13 +3847,12 @@
       }
     });
 
-    if (window.unsafeWindow) {
-      Object.assign(unsafeWindow, {
-        Patchouli,
-        Koakuma,
-        BigComponent
-      });
-    }
+    // Expose to global
+    Object.assign(unsafeWindow, {
+      Patchouli,
+      Koakuma,
+      BigComponent
+    });
   }
 
 }(Vue,Vuex,VueI18n));

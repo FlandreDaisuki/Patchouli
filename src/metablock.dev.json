@@ -30,8 +30,7 @@
     "GM_setValue",
     "GM.setValue",
     "GM_xmlhttpRequest",
-    "GM.xmlhttpRequest",
-    "unsafeWindow"
+    "GM.xmlhttpRequest"
   ],
   "connect": [
     "i.pximg.net"

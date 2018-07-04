@@ -3445,13 +3445,11 @@
         store.commit('deactivateContextMenu');
       }
     });
-    if (window.unsafeWindow) {
-      Object.assign(unsafeWindow, {
-        Patchouli,
-        Koakuma,
-        BigComponent
-      });
-    }
+    Object.assign(unsafeWindow, {
+      Patchouli,
+      Koakuma,
+      BigComponent
+    });
   }
 
 }(Vue,Vuex,VueI18n));

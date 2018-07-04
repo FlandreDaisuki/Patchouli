@@ -3798,12 +3798,11 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     }
   });
 
-  if (window.unsafeWindow) {
-    Object.assign(unsafeWindow, {
-      Patchouli,
-      Koakuma,
-      BigComponent
-    });
-  }
+  // Expose to global
+  Object.assign(unsafeWindow, {
+    Patchouli,
+    Koakuma,
+    BigComponent
+  });
 }
 import '../src/pixiv.override.css';
