@@ -9,7 +9,7 @@ export default new VueI18n({
   messages: {
     'en': {
       patchouli: {
-        bookmarkTooltip: '{count} bookmarks'
+        bookmarkTooltip: '{count} bookmarks',
       },
       koakuma: {
         processed: '{count} imgs processed',
@@ -19,7 +19,7 @@ export default new VueI18n({
         buttonEnd: 'End',
         fitWidth: 'fit browser width',
         sortByPopularity: 'sort by popularity',
-        sortByDate: 'sort by date'
+        sortByDate: 'sort by date',
       },
       contextMenu: {
         thumbUp: 'Like',
@@ -27,18 +27,18 @@ export default new VueI18n({
         download: 'Download',
         addToBlacklist: 'Add to Blacklist',
         preview: 'Preview',
-        followUser: 'Follow'
+        followUser: 'Follow',
       },
       config: {
         contextMenuExtension: 'Right click extension',
         blacklist: 'Blacklist',
         userTooltip: 'Illustrator tooltip',
-        hoverPlay: 'Mouse hover play ugoira'
-      }
+        hoverPlay: 'Mouse hover play ugoira',
+      },
     },
     'ja': {
       patchouli: {
-        bookmarkTooltip: '{count} 件のブックマーク'
+        bookmarkTooltip: '{count} 件のブックマーク',
       },
       koakuma: {
         processed: '{count} 件が処理された',
@@ -48,7 +48,7 @@ export default new VueI18n({
         buttonEnd: '終了',
         fitWidth: '全幅',
         sortByPopularity: '人気順',
-        sortByDate: '投稿順'
+        sortByDate: '投稿順',
       },
       contextMenu: {
         thumbUp: 'いいね',
@@ -56,18 +56,18 @@ export default new VueI18n({
         download: 'ダウンロード',
         addToBlacklist: 'ブラックリストへ',
         preview: 'プレビュー',
-        followUser: 'フォローする'
+        followUser: 'フォローする',
       },
       config: {
         contextMenuExtension: '右クリックの拡張機能',
         blacklist: 'ブラックリスト',
         userTooltip: 'イラストレーターツールチップ',
-        hoverPlay: 'マウスオーバーでうごイラ再生'
-      }
+        hoverPlay: 'マウスオーバーでうごイラ再生',
+      },
     },
     'zh': {
       patchouli: {
-        bookmarkTooltip: '{count} 个收藏'
+        bookmarkTooltip: '{count} 个收藏',
       },
       koakuma: {
         processed: '已处理 {count} 张',
@@ -77,7 +77,7 @@ export default new VueI18n({
         buttonEnd: '完',
         fitWidth: '自适应浏览器宽度',
         sortByPopularity: '以人气排序',
-        sortByDate: '以日期排序'
+        sortByDate: '以日期排序',
       },
       contextMenu: {
         thumbUp: '赞',
@@ -85,18 +85,18 @@ export default new VueI18n({
         download: '下载',
         addToBlacklist: '拉黑',
         preview: '原图预览',
-        followUser: '加关注'
+        followUser: '加关注',
       },
       config: {
         contextMenuExtension: '右键扩展',
         blacklist: '黑名單',
         userTooltip: '绘师提示框',
-        hoverPlay: '鼠标播放动图'
-      }
+        hoverPlay: '鼠标播放动图',
+      },
     },
     'zh-tw': {
       patchouli: {
-        bookmarkTooltip: '{count} 個收藏'
+        bookmarkTooltip: '{count} 個收藏',
       },
       koakuma: {
         processed: '已處理 {count} 張',
@@ -106,7 +106,7 @@ export default new VueI18n({
         buttonEnd: '完',
         fitWidth: '自適應瀏覽器寬度',
         sortByPopularity: '以人氣排序',
-        sortByDate: '以日期排序'
+        sortByDate: '以日期排序',
       },
       contextMenu: {
         thumbUp: '讚',
@@ -114,14 +114,14 @@ export default new VueI18n({
         download: '下載',
         addToBlacklist: '加入黑名單',
         preview: '原圖預覽',
-        followUser: '加關注'
+        followUser: '加關注',
       },
       config: {
         contextMenuExtension: '擴充右鍵',
         blacklist: '黑名單',
         userTooltip: '繪師提示框',
-        hoverPlay: '滑鼠播放動圖'
-      }
-    }
-  }
+        hoverPlay: '滑鼠播放動圖',
+      },
+    },
+  },
 });

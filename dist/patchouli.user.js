@@ -379,9 +379,9 @@
         profileImg: userDataGroup[illustData.userId].image,
         urls: {
           original: illustData.urls.original,
-          thumb: illustData.urls.thumb
+          thumb: illustData.urls.thumb,
         },
-        _show: true
+        _show: true,
       };
       if (pageType === 'MY_BOOKMARK') {
         d.bookmarkId = illustData.bookmarkData.id;
@@ -395,7 +395,7 @@
       imgLibrary: [],
       isPaused: true,
       isEnded: false,
-      nextUrl: location.href
+      nextUrl: location.href,
     },
     mutations: {
       pause(state) {
@@ -419,7 +419,7 @@
               i.isFollowed = true;
             });
         }
-      }
+      },
     },
     actions: {
       async start({ state, dispatch, rootState }, { times } = {}) {
@@ -471,7 +471,7 @@
             commit('stop');
           }
         }
-      }
+      },
     },
     getters: {
       filteredLibrary(state, getters, rootState) {
@@ -493,8 +493,8 @@
             const c = bv - av;
             return dateOrder && getters.orderBy === 'illustId' ? -c : c;
           });
-      }
-    }
+      },
+    },
   };
   var contextMenu = {
     state: {
@@ -511,8 +511,8 @@
       deactivateContextMenu(state) {
         state.active = false;
         state.position = { x: -1e7, y: -1e7 };
-      }
-    }
+      },
+    },
   };
   var bigComponent = {
     state: {
@@ -525,8 +525,8 @@
       },
       closeBigComponent(state) {
         state.mode = null;
-      }
-    }
+      },
+    },
   };
   Vue.use(Vuex);
   const pageType = (() => {
@@ -579,7 +579,7 @@
         contextMenu: 1,
         userTooltip: 1,
         blacklist: [],
-        hoverPlay: 1
+        hoverPlay: 1,
       },
     },
     mutations: {
@@ -628,7 +628,7 @@
       loadConfig(state) {
         const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
         Object.assign(state.config, config);
-      }
+      },
     },
     getters: {
       orderBy(state) {
@@ -637,8 +637,8 @@
         } else {
           return 'illustId';
         }
-      }
-    }
+      },
+    },
   });
   var script = {
     data() {
@@ -647,7 +647,7 @@
         debounceId4tagsFilter: null,
         usualSwitchOn: false,
         sortingOrderSwitchOn: false,
-        usualList: [100, 500, 1000, 3000, 5000, 10000]
+        usualList: [100, 500, 1000, 3000, 5000, 10000],
       };
     },
     computed: {
@@ -661,7 +661,7 @@
         return {
           end: this.status.isEnded,
           paused: !this.status.isPaused && !this.status.isEnded,
-          go: this.status.isPaused && !this.status.isEnded
+          go: this.status.isPaused && !this.status.isEnded,
         };
       },
       filters() {
@@ -693,7 +693,7 @@
         } else {
           return xd;
         }
-      }
+      },
     },
     methods: {
       clickMainButton() {
@@ -749,8 +749,8 @@
       },
       openBigComponentInConfigMode() {
         this.$store.commit("openBigComponent", { mode: "config", data: null });
-      }
-    }
+      },
+    },
   };
   const __vue_script__ = script;
   var __vue_render__ = function() {
@@ -1097,9 +1097,9 @@
     : {};
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject("data-v-c7132180_0", { source: "\n@keyframes slidedown-data-v-c7132180 {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-c7132180] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-c7132180] {\n  padding: 2px;\n}\n#koakuma[data-v-c7132180] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-c7132180 0.7s linear;\n}\n#koakuma > div[data-v-c7132180] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-c7132180] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-c7132180],\n#koakuma-sorting-order-block[data-v-c7132180] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-c7132180] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-c7132180] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-c7132180]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-c7132180]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-c7132180] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-c7132180],\n#koakuma-sorting-order-select-switch[data-v-c7132180] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-c7132180] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-c7132180],\n#koakuma-sorting-order-select-list[data-v-c7132180] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-c7132180]::after,\n#koakuma-sorting-order-select-list > li[data-v-c7132180]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-c7132180]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-c7132180]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-c7132180]:hover::before,\n.sorting-order-link[data-v-c7132180]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-c7132180],\n.sorting-order-link[data-v-c7132180] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-c7132180] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-c7132180] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-c7132180] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-c7132180] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-c7132180]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-c7132180]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-c7132180]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-c7132180] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-c7132180] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-c7132180] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-c7132180],\n#koakuma-options-width-expand[data-v-c7132180],\n#koakuma-options-config[data-v-c7132180] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
+    inject("data-v-f506966c_0", { source: "\n@keyframes slidedown-data-v-f506966c {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-f506966c] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-f506966c] {\n  padding: 2px;\n}\n#koakuma[data-v-f506966c] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-f506966c 0.7s linear;\n}\n#koakuma > div[data-v-f506966c] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-f506966c] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-f506966c],\n#koakuma-sorting-order-block[data-v-f506966c] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-f506966c] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-f506966c] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-f506966c]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-f506966c]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-f506966c] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-f506966c],\n#koakuma-sorting-order-select-switch[data-v-f506966c] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-f506966c] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-f506966c],\n#koakuma-sorting-order-select-list[data-v-f506966c] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-f506966c]::after,\n#koakuma-sorting-order-select-list > li[data-v-f506966c]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-f506966c]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-f506966c]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-f506966c]:hover::before,\n.sorting-order-link[data-v-f506966c]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-f506966c],\n.sorting-order-link[data-v-f506966c] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-f506966c] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-f506966c] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-f506966c] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-f506966c] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-f506966c]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-f506966c]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-f506966c]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-f506966c] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-f506966c] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-f506966c] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-f506966c],\n#koakuma-options-width-expand[data-v-f506966c],\n#koakuma-options-config[data-v-f506966c] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__ = "data-v-c7132180";
+  const __vue_scope_id__ = "data-v-f506966c";
   const __vue_module_identifier__ = undefined;
   const __vue_is_functional_template__ = false;
   function __vue_normalize__(
@@ -1525,32 +1525,32 @@
     props: {
       illustId: {
         type: String,
-        default: ""
+        default: "",
       },
       illustTitle: {
         type: String,
-        default: ""
+        default: "",
       },
       userName: {
         type: String,
-        default: ""
+        default: "",
       },
       userId: {
         type: String,
-        default: ""
+        default: "",
       },
       profileImgUrl: {
         type: String,
-        default: ""
+        default: "",
       },
       bookmarkCount: {
         type: Number,
-        default: 0
+        default: 0,
       },
       isFollowed: {
         type: Boolean,
-        default: false
-      }
+        default: false,
+      },
     },
     computed: {
       illustPageUrl() {
@@ -1564,12 +1564,12 @@
       },
       bookmarkTooltipMsg() {
         return this.$t("patchouli.bookmarkTooltip", {
-          count: this.bookmarkCount
+          count: this.bookmarkCount,
         });
       },
       profileImgStyle() {
         return {
-          backgroundImage: `url(${this.profileImgUrl})`
+          backgroundImage: `url(${this.profileImgUrl})`,
         };
       },
       isMemberIllistPage() {
@@ -1577,7 +1577,7 @@
       },
       isEnableUserTooltip() {
         return this.$store.state.config.userTooltip;
-      }
+      },
     },
     methods: {
       activateContextMenu(event) {
@@ -1586,24 +1586,24 @@
           const payload = {};
           payload.position = {
             x: event.clientX,
-            y: event.clientY
+            y: event.clientY,
           };
           const ct = event.currentTarget;
           if (ct.classList.contains("user-info")) {
             payload.data = {
               illustId: this.illustId,
-              type: "image-item-title-user"
+              type: "image-item-title-user",
             };
           } else {
             payload.data = {
               illustId: this.illustId,
-              type: "image-item-image"
+              type: "image-item-image",
             };
           }
           this.$store.commit("activateContextMenu", payload);
         }
-      }
-    }
+      },
+    },
   };
   const __vue_script__$2 = script$2;
   var __vue_render__$2 = function() {
@@ -1709,9 +1709,9 @@
     : {};
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject("data-v-11d33448_0", { source: "\n.image-item-title-user[data-v-11d33448] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-11d33448] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-11d33448] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-11d33448] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-11d33448] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-11d33448] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
+    inject("data-v-2bbfcc7c_0", { source: "\n.image-item-title-user[data-v-2bbfcc7c] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-2bbfcc7c] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-2bbfcc7c] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-2bbfcc7c] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-2bbfcc7c] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-2bbfcc7c] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$2 = "data-v-11d33448";
+  const __vue_scope_id__$2 = "data-v-2bbfcc7c";
   const __vue_module_identifier__$2 = undefined;
   const __vue_is_functional_template__$2 = false;
   function __vue_normalize__$2(
@@ -1813,53 +1813,53 @@
     props: {
       imgUrl: {
         type: String,
-        default: ""
+        default: "",
       },
       illustId: {
         type: String,
-        default: ""
+        default: "",
       },
       illustTitle: {
         type: String,
-        default: ""
+        default: "",
       },
       illustPageCount: {
         type: Number,
-        default: 1
+        default: 1,
       },
       userName: {
         type: String,
-        default: ""
+        default: "",
       },
       userId: {
         type: String,
-        default: ""
+        default: "",
       },
       profileImgUrl: {
         type: String,
-        default: ""
+        default: "",
       },
       isUgoira: {
         type: Boolean,
-        default: false
+        default: false,
       },
       isBookmarked: {
         type: Boolean,
-        default: false
+        default: false,
       },
       isFollowed: {
         type: Boolean,
-        default: false
+        default: false,
       },
       bookmarkId: {
         type: String,
-        default: ""
+        default: "",
       },
       bookmarkCount: {
         type: Number,
-        default: 0
-      }
-    }
+        default: 0,
+      },
+    },
   };
   const __vue_script__$3 = script$3;
   var __vue_render__$3 = function() {
@@ -1905,9 +1905,9 @@
     : {};
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject("data-v-5a57c5d4_0", { source: "\n.image-item[data-v-5a57c5d4] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-5a57c5d4] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-32b7baf0_0", { source: "\n.image-item[data-v-32b7baf0] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-32b7baf0] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$3 = "data-v-5a57c5d4";
+  const __vue_scope_id__$3 = "data-v-32b7baf0";
   const __vue_module_identifier__$3 = undefined;
   const __vue_is_functional_template__$3 = false;
   function __vue_normalize__$3(
@@ -2033,7 +2033,7 @@
         });
         xhr(details);
       });
-    }
+    },
   };
   var script$4 = {
     computed: {
@@ -2087,7 +2087,7 @@
       },
       isUgoira() {
         return this.currentImageItem && this.currentImageItem.isUgoira;
-      }
+      },
     },
     methods: {
       thumbUp() {
@@ -2110,8 +2110,8 @@
           responseType: "arraybuffer",
           binary: true,
           headers: {
-            Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`
-          }
+            Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`,
+          },
         });
         if (ext === "jpg" || ext === "jpeg") {
           saveAs(new File([response.response], filename, { type: "image/jpeg" }));
@@ -2130,7 +2130,7 @@
       openPreview() {
         this.$store.commit("openBigComponent", {
           mode: "preview",
-          data: this.currentImageItem
+          data: this.currentImageItem,
         });
       },
       async followUser() {
@@ -2139,12 +2139,12 @@
           if (await PixivAPI.postFollowUser(userId)) {
             this.$store.commit("editImgItem", {
               type: "follow-user",
-              userId: this.currentImageItem.userId
+              userId: this.currentImageItem.userId,
             });
           }
         }
-      }
-    }
+      },
+    },
   };
   const __vue_script__$4 = script$4;
   var __vue_render__$4 = function() {
@@ -2414,9 +2414,9 @@
     : {};
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-9d93a44c_0", { source: "\n#patchouli-context-menu[data-v-9d93a44c] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-9d93a44c] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-9d93a44c] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-9d93a44c]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-9d93a44c],\n#patchouli-context-menu > ul i.fas[data-v-9d93a44c] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-10ff41e4_0", { source: "\n#patchouli-context-menu[data-v-10ff41e4] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-10ff41e4] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-10ff41e4] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-10ff41e4]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-10ff41e4],\n#patchouli-context-menu > ul i.fas[data-v-10ff41e4] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$4 = "data-v-9d93a44c";
+  const __vue_scope_id__$4 = "data-v-10ff41e4";
   const __vue_module_identifier__$4 = undefined;
   const __vue_is_functional_template__$4 = false;
   function __vue_normalize__$4(
@@ -2518,8 +2518,8 @@
     computed: {
       filteredLibrary() {
         return this.$store.getters.filteredLibrary;
-      }
-    }
+      },
+    },
   };
   const __vue_script__$5 = script$5;
   var __vue_render__$5 = function() {
@@ -2570,9 +2570,9 @@
     : {};
   const __vue_inject_styles__$5 = function (inject) {
     if (!inject) return
-    inject("data-v-5df49a38_0", { source: "\n#patchouli[data-v-5df49a38] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
+    inject("data-v-4c25537e_0", { source: "\n#patchouli[data-v-4c25537e] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$5 = "data-v-5df49a38";
+  const __vue_scope_id__$5 = "data-v-4c25537e";
   const __vue_module_identifier__$5 = undefined;
   const __vue_is_functional_template__$5 = false;
   function __vue_normalize__$5(
@@ -2675,7 +2675,7 @@
         previewSrcList: [],
         previewCurrentIndex: 0,
         previewUgoiraMetaData: null,
-        ugoiraPlayers: []
+        ugoiraPlayers: [],
       };
     },
     computed: {
@@ -2687,20 +2687,26 @@
       },
       mode() {
         return this.xm.mode;
-      }
+      },
     },
     watch: {
       async mode(value) {
         if (value === "preview") {
           const imageItem = this.xm.data;
           if (imageItem.isUgoira) {
-            this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(imageItem.illustId);
+            this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(
+              imageItem.illustId
+            );
             this.initZipImagePlayer();
             this.previewSrcList.push(imageItem.urls.thumb);
             this.previewSrcList.push(imageItem.urls.original);
           } else if (imageItem.illustPageCount > 1) {
-            const indexArray = Array.from(Array(imageItem.illustPageCount).keys());
-            const srcs = indexArray.map(idx => imageItem.urls.original.replace('p0', `p${idx}`));
+            const indexArray = Array.from(
+              Array(imageItem.illustPageCount).keys()
+            );
+            const srcs = indexArray.map(idx =>
+              imageItem.urls.original.replace("p0", `p${idx}`)
+            );
             this.previewSrcList.push(...srcs);
           } else {
             this.previewSrcList.push(imageItem.urls.original);
@@ -2712,10 +2718,10 @@
           this.ugoiraPlayers.forEach(player => player.stop());
           this.ugoiraPlayers.length = 0;
         }
-      }
+      },
     },
     updated() {
-      if (this.mode === 'preview') {
+      if (this.mode === "preview") {
         this.$refs.patchouliBigComponentRoot.focus();
       }
     },
@@ -2728,7 +2734,7 @@
               .value.split("\n")
               .filter(Boolean)
               .map(s => s.trim())
-          )
+          ),
         ];
         this.xc.blacklist.sort((a, b) => a - b);
         this.$store.commit("saveConfig");
@@ -2756,35 +2762,44 @@
         const meta = this.previewUgoiraMetaData;
         this.$refs.previewOriginalUgoiraCanvas.width = 0;
         this.$refs.previewUgoiraCanvas.width = 0;
-        this.ugoiraPlayers.push(new ZipImagePlayer({
-          canvas: this.$refs.previewOriginalUgoiraCanvas,
-          source: meta.originalSrc,
-          metadata: meta,
-          chunkSize: 300000,
-          loop: true,
-          autoStart: true,
-          autosize: true
-        }));
-        this.ugoiraPlayers.push(new ZipImagePlayer({
-          canvas: this.$refs.previewUgoiraCanvas,
-          source: meta.src,
-          metadata: meta,
-          chunkSize: 300000,
-          loop: true,
-          autoStart: true,
-          autosize: true
-        }));
+        this.ugoiraPlayers.push(
+          new ZipImagePlayer({
+            canvas: this.$refs.previewOriginalUgoiraCanvas,
+            source: meta.originalSrc,
+            metadata: meta,
+            chunkSize: 300000,
+            loop: true,
+            autoStart: true,
+            autosize: true,
+          })
+        );
+        this.ugoiraPlayers.push(
+          new ZipImagePlayer({
+            canvas: this.$refs.previewUgoiraCanvas,
+            source: meta.src,
+            metadata: meta,
+            chunkSize: 300000,
+            loop: true,
+            autoStart: true,
+            autosize: true,
+          })
+        );
       },
       jumpByKeyup(event) {
-        if (this.mode === 'preview') {
+        if (this.mode === "preview") {
           const imageItem = this.xm.data;
-          if (event.key === 'ArrowLeft') {
+          if (event.key === "ArrowLeft") {
             this.jumpPreview(Math.max(this.previewCurrentIndex - 1, 0));
-          } else if (event.key === 'ArrowRight') {
-            this.jumpPreview(Math.min(this.previewCurrentIndex + 1, imageItem.illustPageCount - 1));
+          } else if (event.key === "ArrowRight") {
+            this.jumpPreview(
+              Math.min(
+                this.previewCurrentIndex + 1,
+                imageItem.illustPageCount - 1
+              )
+            );
           }
         }
-      }
+      },
     },
   };
   const __vue_script__$6 = script$6;
@@ -3186,9 +3201,9 @@
     : {};
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-498dd240_0", { source: "\n#patchouli-big-component[data-v-498dd240] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-498dd240],\n#preview-mode[data-v-498dd240] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-498dd240] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-498dd240] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-498dd240] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-498dd240]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-498dd240] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-498dd240] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-498dd240] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-498dd240] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-498dd240] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-498dd240],\n#preview-display-area > div[data-v-498dd240] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-498dd240],\n#preview-display-area > div > canvas[data-v-498dd240] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-498dd240] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-498dd240] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-498dd240] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-498dd240] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-498dd240] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+    inject("data-v-9926eea0_0", { source: "\n#patchouli-big-component[data-v-9926eea0] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-9926eea0],\n#preview-mode[data-v-9926eea0] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-9926eea0] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-9926eea0] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-9926eea0] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-9926eea0]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-9926eea0] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-9926eea0] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-9926eea0] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-9926eea0] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-9926eea0] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-9926eea0],\n#preview-display-area > div[data-v-9926eea0] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-9926eea0],\n#preview-display-area > div > canvas[data-v-9926eea0] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-9926eea0] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-9926eea0] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-9926eea0] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-9926eea0] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-9926eea0] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$6 = "data-v-498dd240";
+  const __vue_scope_id__$6 = "data-v-9926eea0";
   const __vue_module_identifier__$6 = undefined;
   const __vue_is_functional_template__$6 = false;
   function __vue_normalize__$6(
@@ -3292,7 +3307,7 @@
     messages: {
       'en': {
         patchouli: {
-          bookmarkTooltip: '{count} bookmarks'
+          bookmarkTooltip: '{count} bookmarks',
         },
         koakuma: {
           processed: '{count} imgs processed',
@@ -3302,7 +3317,7 @@
           buttonEnd: 'End',
           fitWidth: 'fit browser width',
           sortByPopularity: 'sort by popularity',
-          sortByDate: 'sort by date'
+          sortByDate: 'sort by date',
         },
         contextMenu: {
           thumbUp: 'Like',
@@ -3310,18 +3325,18 @@
           download: 'Download',
           addToBlacklist: 'Add to Blacklist',
           preview: 'Preview',
-          followUser: 'Follow'
+          followUser: 'Follow',
         },
         config: {
           contextMenuExtension: 'Right click extension',
           blacklist: 'Blacklist',
           userTooltip: 'Illustrator tooltip',
-          hoverPlay: 'Mouse hover play ugoira'
-        }
+          hoverPlay: 'Mouse hover play ugoira',
+        },
       },
       'ja': {
         patchouli: {
-          bookmarkTooltip: '{count} 件のブックマーク'
+          bookmarkTooltip: '{count} 件のブックマーク',
         },
         koakuma: {
           processed: '{count} 件が処理された',
@@ -3331,7 +3346,7 @@
           buttonEnd: '終了',
           fitWidth: '全幅',
           sortByPopularity: '人気順',
-          sortByDate: '投稿順'
+          sortByDate: '投稿順',
         },
         contextMenu: {
           thumbUp: 'いいね',
@@ -3339,18 +3354,18 @@
           download: 'ダウンロード',
           addToBlacklist: 'ブラックリストへ',
           preview: 'プレビュー',
-          followUser: 'フォローする'
+          followUser: 'フォローする',
         },
         config: {
           contextMenuExtension: '右クリックの拡張機能',
           blacklist: 'ブラックリスト',
           userTooltip: 'イラストレーターツールチップ',
-          hoverPlay: 'マウスオーバーでうごイラ再生'
-        }
+          hoverPlay: 'マウスオーバーでうごイラ再生',
+        },
       },
       'zh': {
         patchouli: {
-          bookmarkTooltip: '{count} 个收藏'
+          bookmarkTooltip: '{count} 个收藏',
         },
         koakuma: {
           processed: '已处理 {count} 张',
@@ -3360,7 +3375,7 @@
           buttonEnd: '完',
           fitWidth: '自适应浏览器宽度',
           sortByPopularity: '以人气排序',
-          sortByDate: '以日期排序'
+          sortByDate: '以日期排序',
         },
         contextMenu: {
           thumbUp: '赞',
@@ -3368,18 +3383,18 @@
           download: '下载',
           addToBlacklist: '拉黑',
           preview: '原图预览',
-          followUser: '加关注'
+          followUser: '加关注',
         },
         config: {
           contextMenuExtension: '右键扩展',
           blacklist: '黑名單',
           userTooltip: '绘师提示框',
-          hoverPlay: '鼠标播放动图'
-        }
+          hoverPlay: '鼠标播放动图',
+        },
       },
       'zh-tw': {
         patchouli: {
-          bookmarkTooltip: '{count} 個收藏'
+          bookmarkTooltip: '{count} 個收藏',
         },
         koakuma: {
           processed: '已處理 {count} 張',
@@ -3389,7 +3404,7 @@
           buttonEnd: '完',
           fitWidth: '自適應瀏覽器寬度',
           sortByPopularity: '以人氣排序',
-          sortByDate: '以日期排序'
+          sortByDate: '以日期排序',
         },
         contextMenu: {
           thumbUp: '讚',
@@ -3397,16 +3412,16 @@
           download: '下載',
           addToBlacklist: '加入黑名單',
           preview: '原圖預覽',
-          followUser: '加關注'
+          followUser: '加關注',
         },
         config: {
           contextMenuExtension: '擴充右鍵',
           blacklist: '黑名單',
           userTooltip: '繪師提示框',
-          hoverPlay: '滑鼠播放動圖'
-        }
-      }
-    }
+          hoverPlay: '滑鼠播放動圖',
+        },
+      },
+    },
   });
   store.commit('prepareMountPoint');
   store.commit('loadConfig');
@@ -3428,14 +3443,14 @@
       computed: {
         currentLocale() {
           return this.$store.state.locale;
-        }
+        },
       },
       watch: {
         currentLocale(newValue) {
           this.$i18n.locale = newValue;
-        }
+        },
       },
-      render: h => h(patchouli)
+      render: h => h(patchouli),
     });
     const Koakuma = new Vue({
       i18n,
@@ -3443,14 +3458,14 @@
       computed: {
         currentLocale() {
           return this.$store.state.locale;
-        }
+        },
       },
       watch: {
         currentLocale(newValue) {
           this.$i18n.locale = newValue;
-        }
+        },
       },
-      render: h => h(koakuma)
+      render: h => h(koakuma),
     });
     const BigComponent = new Vue({
       i18n,
@@ -3458,14 +3473,14 @@
       computed: {
         currentLocale() {
           return this.$store.state.locale;
-        }
+        },
       },
       watch: {
         currentLocale(newValue) {
           this.$i18n.locale = newValue;
-        }
+        },
       },
-      render: h => h(bigComponent$1)
+      render: h => h(bigComponent$1),
     });
     store.dispatch('start', { times: 1 }).then(() => {
       Patchouli.$mount(store.state.patchouliMountPoint);
@@ -3489,7 +3504,7 @@
     Object.assign(unsafeWindow, {
       Patchouli,
       Koakuma,
-      BigComponent
+      BigComponent,
     });
   }
 

@@ -101,7 +101,7 @@ export default {
       debounceId4tagsFilter: null,
       usualSwitchOn: false,
       sortingOrderSwitchOn: false,
-      usualList: [100, 500, 1000, 3000, 5000, 10000]
+      usualList: [100, 500, 1000, 3000, 5000, 10000],
     };
   },
   computed: {
@@ -115,7 +115,7 @@ export default {
       return {
         end: this.status.isEnded,
         paused: !this.status.isPaused && !this.status.isEnded,
-        go: this.status.isPaused && !this.status.isEnded
+        go: this.status.isPaused && !this.status.isEnded,
       };
     },
     filters() {
@@ -147,7 +147,7 @@ export default {
       } else {
         return xd;
       }
-    }
+    },
   },
   methods: {
     clickMainButton() {
@@ -208,8 +208,8 @@ export default {
     },
     openBigComponentInConfigMode() {
       this.$store.commit("openBigComponent", { mode: "config", data: null });
-    }
-  }
+    },
+  },
 };
 </script>
 

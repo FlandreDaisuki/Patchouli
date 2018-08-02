@@ -60,7 +60,7 @@ export default new Vuex.Store({
       contextMenu: 1,
       userTooltip: 1,
       blacklist: [],
-      hoverPlay: 1
+      hoverPlay: 1,
     },
   },
   mutations: {
@@ -112,7 +112,7 @@ export default new Vuex.Store({
     loadConfig(state) {
       const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
       Object.assign(state.config, config);
-    }
+    },
   },
   getters: {
     orderBy(state) {
@@ -121,6 +121,6 @@ export default new Vuex.Store({
       } else {
         return 'illustId';
       }
-    }
-  }
+    },
+  },
 });

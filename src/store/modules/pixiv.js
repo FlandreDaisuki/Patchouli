@@ -32,9 +32,9 @@ function makeLibraryData({ pageType, illustDataGroup, userDataGroup }) {
       profileImg: userDataGroup[illustData.userId].image,
       urls: {
         original: illustData.urls.original,
-        thumb: illustData.urls.thumb
+        thumb: illustData.urls.thumb,
       },
-      _show: true
+      _show: true,
     };
 
     if (pageType === 'MY_BOOKMARK') {
@@ -52,7 +52,7 @@ export default {
     imgLibrary: [],
     isPaused: true,
     isEnded: false,
-    nextUrl: location.href
+    nextUrl: location.href,
   },
   mutations: {
     pause(state) {
@@ -78,7 +78,7 @@ export default {
             i.isFollowed = true;
           });
       }
-    }
+    },
   },
   actions: {
     async start({ state, dispatch, rootState }, { times } = {}) {
@@ -145,7 +145,7 @@ export default {
           commit('stop');
         }
       }
-    }
+    },
   },
   getters: {
     filteredLibrary(state, getters, rootState) {
@@ -168,6 +168,6 @@ export default {
           const c = bv - av;
           return dateOrder && getters.orderBy === 'illustId' ? -c : c;
         });
-    }
-  }
+    },
+  },
 };

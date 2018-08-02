@@ -45,32 +45,32 @@ export default {
   props: {
     illustId: {
       type: String,
-      default: ""
+      default: "",
     },
     illustTitle: {
       type: String,
-      default: ""
+      default: "",
     },
     userName: {
       type: String,
-      default: ""
+      default: "",
     },
     userId: {
       type: String,
-      default: ""
+      default: "",
     },
     profileImgUrl: {
       type: String,
-      default: ""
+      default: "",
     },
     bookmarkCount: {
       type: Number,
-      default: 0
+      default: 0,
     },
     isFollowed: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   computed: {
     illustPageUrl() {
@@ -84,12 +84,12 @@ export default {
     },
     bookmarkTooltipMsg() {
       return this.$t("patchouli.bookmarkTooltip", {
-        count: this.bookmarkCount
+        count: this.bookmarkCount,
       });
     },
     profileImgStyle() {
       return {
-        backgroundImage: `url(${this.profileImgUrl})`
+        backgroundImage: `url(${this.profileImgUrl})`,
       };
     },
     isMemberIllistPage() {
@@ -97,7 +97,7 @@ export default {
     },
     isEnableUserTooltip() {
       return this.$store.state.config.userTooltip;
-    }
+    },
   },
   methods: {
     activateContextMenu(event) {
@@ -108,26 +108,26 @@ export default {
 
         payload.position = {
           x: event.clientX,
-          y: event.clientY
+          y: event.clientY,
         };
         const ct = event.currentTarget;
 
         if (ct.classList.contains("user-info")) {
           payload.data = {
             illustId: this.illustId,
-            type: "image-item-title-user"
+            type: "image-item-title-user",
           };
         } else {
           payload.data = {
             illustId: this.illustId,
-            type: "image-item-image"
+            type: "image-item-image",
           };
         }
 
         this.$store.commit("activateContextMenu", payload);
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

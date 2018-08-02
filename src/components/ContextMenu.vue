@@ -106,7 +106,7 @@ export default {
     },
     isUgoira() {
       return this.currentImageItem && this.currentImageItem.isUgoira;
-    }
+    },
   },
   methods: {
     thumbUp() {
@@ -133,8 +133,8 @@ export default {
         // for greasemonkey
         binary: true,
         headers: {
-          Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`
-        }
+          Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`,
+        },
       });
 
       if (ext === "jpg" || ext === "jpeg") {
@@ -154,7 +154,7 @@ export default {
     openPreview() {
       this.$store.commit("openBigComponent", {
         mode: "preview",
-        data: this.currentImageItem
+        data: this.currentImageItem,
       });
     },
     async followUser() {
@@ -164,12 +164,12 @@ export default {
         if (await PixivAPI.postFollowUser(userId)) {
           this.$store.commit("editImgItem", {
             type: "follow-user",
-            userId: this.currentImageItem.userId
+            userId: this.currentImageItem.userId,
           });
         }
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -9,6 +9,6 @@ export default {
     },
     closeBigComponent(state) {
       state.mode = null;
-    }
-  }
+    },
+  },
 };

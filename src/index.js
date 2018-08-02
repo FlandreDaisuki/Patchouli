@@ -35,14 +35,14 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     computed: {
       currentLocale() {
         return this.$store.state.locale;
-      }
+      },
     },
     watch: {
       currentLocale(newValue) {
         this.$i18n.locale = newValue;
-      }
+      },
     },
-    render: h => h(patchouli)
+    render: h => h(patchouli),
   });
 
   const Koakuma = new Vue({
@@ -51,14 +51,14 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     computed: {
       currentLocale() {
         return this.$store.state.locale;
-      }
+      },
     },
     watch: {
       currentLocale(newValue) {
         this.$i18n.locale = newValue;
-      }
+      },
     },
-    render: h => h(koakuma)
+    render: h => h(koakuma),
   });
 
   const BigComponent = new Vue({
@@ -67,14 +67,14 @@ if (store.state.pageType !== 'NO_SUPPORT') {
     computed: {
       currentLocale() {
         return this.$store.state.locale;
-      }
+      },
     },
     watch: {
       currentLocale(newValue) {
         this.$i18n.locale = newValue;
-      }
+      },
     },
-    render: h => h(bigComponent)
+    render: h => h(bigComponent),
   });
 
   store.dispatch('start', { times: 1 }).then(() => {
@@ -104,6 +104,6 @@ if (store.state.pageType !== 'NO_SUPPORT') {
   Object.assign(unsafeWindow, {
     Patchouli,
     Koakuma,
-    BigComponent
+    BigComponent,
   });
 }

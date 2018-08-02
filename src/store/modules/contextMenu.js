@@ -13,6 +13,6 @@ export default {
     deactivateContextMenu(state) {
       state.active = false;
       state.position = { x: -1e7, y: -1e7 };
-    }
-  }
+    },
+  },
 };

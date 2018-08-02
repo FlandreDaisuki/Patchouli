@@ -29,8 +29,8 @@ export default {
   computed: {
     filteredLibrary() {
       return this.$store.getters.filteredLibrary;
-    }
-  }
+    },
+  },
 };
 </script>
 

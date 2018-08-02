@@ -29,53 +29,53 @@ export default {
   props: {
     imgUrl: {
       type: String,
-      default: ""
+      default: "",
     },
     illustId: {
       type: String,
-      default: ""
+      default: "",
     },
     illustTitle: {
       type: String,
-      default: ""
+      default: "",
     },
     illustPageCount: {
       type: Number,
-      default: 1
+      default: 1,
     },
     userName: {
       type: String,
-      default: ""
+      default: "",
     },
     userId: {
       type: String,
-      default: ""
+      default: "",
     },
     profileImgUrl: {
       type: String,
-      default: ""
+      default: "",
     },
     isUgoira: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isBookmarked: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isFollowed: {
       type: Boolean,
-      default: false
+      default: false,
     },
     bookmarkId: {
       type: String,
-      default: ""
+      default: "",
     },
     bookmarkCount: {
       type: Number,
-      default: 0
-    }
-  }
+      default: 0,
+    },
+  },
 };
 </script>
 

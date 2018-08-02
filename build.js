@@ -21,7 +21,7 @@ async function preBuild() {
   const bundle = await rollup.rollup({
     input: 'src/index.js',
     plugins: [
-      VuePlugin()
+      VuePlugin(),
     ],
     external,
   });
@@ -67,7 +67,7 @@ async function preBuild() {
 function removeDebuggers(code) {
   const ast = acorn.parse(code, {
     ecmaVersion: 9,
-    ranges: true
+    ranges: true,
   });
   const ms = new MagicString(code);
 
@@ -86,7 +86,7 @@ function removeDebuggers(code) {
         node.end += 1; // remove '\n'
         ms.remove(node.start, node.end);
       }
-    }
+    },
   });
 
   return ms.toString();
@@ -100,7 +100,7 @@ async function buildRel() {
       cleanup(),
       metablock({
         file: 'src/metablock.json',
-        version: pkg.version
+        version: pkg.version,
       }),
     ],
     external,
@@ -125,8 +125,8 @@ async function buildDev() {
       userscriptCSS(),
       metablock({
         file: 'src/metablock.dev.json',
-        version: pkg.version
-      })
+        version: pkg.version,
+      }),
     ],
     external,
   });

@@ -105,7 +105,7 @@ export default {
       previewSrcList: [],
       previewCurrentIndex: 0,
       previewUgoiraMetaData: null,
-      ugoiraPlayers: []
+      ugoiraPlayers: [],
     };
   },
   computed: {
@@ -119,7 +119,7 @@ export default {
     },
     mode() {
       return this.xm.mode;
-    }
+    },
   },
   watch: {
     async mode(value) {
@@ -128,13 +128,19 @@ export default {
       if (value === "preview") {
         const imageItem = this.xm.data;
         if (imageItem.isUgoira) {
-          this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(imageItem.illustId);
+          this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(
+            imageItem.illustId
+          );
           this.initZipImagePlayer();
           this.previewSrcList.push(imageItem.urls.thumb);
           this.previewSrcList.push(imageItem.urls.original);
         } else if (imageItem.illustPageCount > 1) {
-          const indexArray = Array.from(Array(imageItem.illustPageCount).keys());
-          const srcs = indexArray.map(idx => imageItem.urls.original.replace('p0', `p${idx}`));
+          const indexArray = Array.from(
+            Array(imageItem.illustPageCount).keys()
+          );
+          const srcs = indexArray.map(idx =>
+            imageItem.urls.original.replace("p0", `p${idx}`)
+          );
           this.previewSrcList.push(...srcs);
         } else {
           this.previewSrcList.push(imageItem.urls.original);
@@ -146,10 +152,10 @@ export default {
         this.ugoiraPlayers.forEach(player => player.stop());
         this.ugoiraPlayers.length = 0;
       }
-    }
+    },
   },
   updated() {
-    if (this.mode === 'preview') {
+    if (this.mode === "preview") {
       this.$refs.patchouliBigComponentRoot.focus();
     }
   },
@@ -164,7 +170,7 @@ export default {
             .value.split("\n")
             .filter(Boolean)
             .map(s => s.trim())
-        )
+        ),
       ];
       this.xc.blacklist.sort((a, b) => a - b);
 
@@ -199,37 +205,46 @@ export default {
       this.$refs.previewOriginalUgoiraCanvas.width = 0;
       this.$refs.previewUgoiraCanvas.width = 0;
 
-      this.ugoiraPlayers.push(new ZipImagePlayer({
-        canvas: this.$refs.previewOriginalUgoiraCanvas,
-        source: meta.originalSrc,
-        metadata: meta,
-        chunkSize: 300000,
-        loop: true,
-        autoStart: true,
-        autosize: true
-      }));
-      this.ugoiraPlayers.push(new ZipImagePlayer({
-        canvas: this.$refs.previewUgoiraCanvas,
-        source: meta.src,
-        metadata: meta,
-        chunkSize: 300000,
-        loop: true,
-        autoStart: true,
-        autosize: true
-      }));
+      this.ugoiraPlayers.push(
+        new ZipImagePlayer({
+          canvas: this.$refs.previewOriginalUgoiraCanvas,
+          source: meta.originalSrc,
+          metadata: meta,
+          chunkSize: 300000,
+          loop: true,
+          autoStart: true,
+          autosize: true,
+        })
+      );
+      this.ugoiraPlayers.push(
+        new ZipImagePlayer({
+          canvas: this.$refs.previewUgoiraCanvas,
+          source: meta.src,
+          metadata: meta,
+          chunkSize: 300000,
+          loop: true,
+          autoStart: true,
+          autosize: true,
+        })
+      );
     },
     jumpByKeyup(event) {
       $print.debug("BigComponent#jumpByKeyup: event", event);
 
-      if (this.mode === 'preview') {
+      if (this.mode === "preview") {
         const imageItem = this.xm.data;
-        if (event.key === 'ArrowLeft') {
+        if (event.key === "ArrowLeft") {
           this.jumpPreview(Math.max(this.previewCurrentIndex - 1, 0));
-        } else if (event.key === 'ArrowRight') {
-          this.jumpPreview(Math.min(this.previewCurrentIndex + 1, imageItem.illustPageCount - 1));
+        } else if (event.key === "ArrowRight") {
+          this.jumpPreview(
+            Math.min(
+              this.previewCurrentIndex + 1,
+              imageItem.illustPageCount - 1
+            )
+          );
         }
       }
-    }
+    },
   },
 };
 </script>

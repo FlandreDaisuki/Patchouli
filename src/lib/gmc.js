@@ -30,7 +30,7 @@ const GMC = {
       });
       xhr(details);
     });
-  }
+  },
 };
 
 export default GMC;
