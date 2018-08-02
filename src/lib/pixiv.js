@@ -1,4 +1,4 @@
-import { $, $$find, $print, $el } from './utils';
+import { $, $$find, $print, $el, qs } from './utils';
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
 
@@ -82,6 +82,14 @@ class Pixiv {
     }
   }
 
+  rpcCall(mode, params = {}) {
+    return this.fetchJSON('/rpc/index.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: qs({ ...params, mode, tt: this.tt })
+    });
+  }
+
   // new API to get an illust data
   async getIllustData(illustId) {
     const url = `/ajax/illust/${illustId}`;
@@ -89,17 +97,22 @@ class Pixiv {
     $print.debug('Pixiv#getIllustData: data:', data);
     return data;
   }
+	
+  async getIllustBookmarkData(illustId) {
+    const url = `/ajax/illust/${illustId}/bookmarkData`;
+    const data = await this.fetchJSON(url);
+    $print.debug('Pixiv#getIllustBookmarkData: data:', data);
+    return data;
+  }
 
   async getIllustDataGroup(illustIds) {
     const uniqIllustIds = [...new Set(illustIds)];
     const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
     $print.debug('Pixiv#getIllustDataGroup: illustDataGroup:', illustDataGroup);
-    return illustDataGroup
-      .filter(Boolean)
-      .reduce((collect, d) => {
-        collect[d.illustId] = d;
-        return collect;
-      }, {});
+    return illustDataGroup.filter(Boolean).reduce((collect, d) => {
+      collect[d.illustId] = d;
+      return collect;
+    }, {});
   }
 
   // new API to get an user data
@@ -113,12 +126,10 @@ class Pixiv {
   async getUserDataGroup(userIds) {
     const uniqUserIds = [...new Set(userIds)];
     const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
-    return userDataGroup
-      .filter(Boolean)
-      .reduce((collect, d) => {
-        collect[d.userId] = d;
-        return collect;
-      }, {});
+    return userDataGroup.filter(Boolean).reduce((collect, d) => {
+      collect[d.userId] = d;
+      return collect;
+    }, {});
   }
 
   async getIllustUgoiraMetaData(illustId) {
@@ -206,11 +217,11 @@ class Pixiv {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-csrf-token': this.tt,
+        'x-csrf-token': this.tt
       },
       body: JSON.stringify({
-        illust_id: illustId,
-      }),
+        illust_id: illustId
+      })
     });
 
     return Boolean(data);
@@ -232,16 +243,30 @@ class Pixiv {
       .map(p => p.join('='))
       .join('&');
 
-
     const data = await this.fetchJSON(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
       },
-      body,
+      body
     });
 
     return Boolean(data);
+  }
+
+  async postAddBookmark(illustId) {
+    await this.rpcCall('save_illust_bookmark', {
+      illust_id: illustId,
+      restrict: 0,
+      comment: '',
+      tags: ''
+    });
+    return true;
+  }
+
+  async postDeleteBookmark(bookmarkId) {
+    await this.rpcCall('delete_illust_bookmark', { bookmark_id: bookmarkId });
+    return true;
   }
 }
 
@@ -279,7 +304,4 @@ function removeAnnoyings(doc = document) {
 
 const PixivAPI = new Pixiv();
 
-export {
-  PixivAPI,
-  removeAnnoyings
-};
+export { PixivAPI, removeAnnoyings };

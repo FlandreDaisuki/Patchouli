@@ -32,9 +32,7 @@
       :data-id="illustId"
       :title="selfIsBookmarked"
       class="_one-click-bookmark"
-      data-type="illust"
-      data-click-action="illust"
-      @click.left="oneClickBookmarkAdd"/>
+      @click.left.prevent.stop="oneClickBookmarkAdd"/>
     <div v-if="bookmarkId" class="bookmark-input-container">
       <input
         :value="bookmarkId"
@@ -99,9 +97,22 @@ export default {
     });
   },
   methods: {
-    oneClickBookmarkAdd() {
+    async oneClickBookmarkAdd() {
       if (!this.selfIsBookmarked) {
-        this.selfIsBookmarked = true;
+        if (await PixivAPI.postAddBookmark(this.illustId)) {
+          this.selfIsBookmarked = true;
+        }
+      }
+      else {
+        // this.bookmarkId might be empty...
+        let bookmarkId = this.bookmarkId;
+        if (!bookmarkId) {
+          const data = await PixivAPI.getIllustBookmarkData(this.illustId);
+          bookmarkId = data.bookmarkData.id;
+        }
+        if (await PixivAPI.postDeleteBookmark(bookmarkId)) {
+          this.selfIsBookmarked = false;
+        }
       }
     },
     activateContextMenu(event) {

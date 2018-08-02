@@ -52,6 +52,11 @@ function $parents(el) {
   return collection;
 }
 
+function qs(o) {
+  // querystring
+  return Object.keys(o).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(o[k])}`).join('&');
+}
+
 export {
   $,
   $$,
@@ -62,4 +67,5 @@ export {
   $after,
   $parents,
   toInt,
+  qs
 };
