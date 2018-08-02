@@ -1,4 +1,4 @@
-import { $, $$find, $print, $el, qs } from './utils';
+import { $, $$find, $print, $el, toFormUrlencoded } from './utils';
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
 
@@ -86,7 +86,7 @@ class Pixiv {
     return this.fetchJSON('/rpc/index.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: qs({ ...params, mode, tt: this.tt })
+      body: toFormUrlencoded({ ...params, mode, tt: this.tt }),
     });
   }
 
@@ -97,7 +97,7 @@ class Pixiv {
     $print.debug('Pixiv#getIllustData: data:', data);
     return data;
   }
-	
+
   async getIllustBookmarkData(illustId) {
     const url = `/ajax/illust/${illustId}/bookmarkData`;
     const data = await this.fetchJSON(url);
@@ -109,10 +109,12 @@ class Pixiv {
     const uniqIllustIds = [...new Set(illustIds)];
     const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
     $print.debug('Pixiv#getIllustDataGroup: illustDataGroup:', illustDataGroup);
-    return illustDataGroup.filter(Boolean).reduce((collect, d) => {
-      collect[d.illustId] = d;
-      return collect;
-    }, {});
+    return illustDataGroup
+      .filter(Boolean)
+      .reduce((collect, d) => {
+        collect[d.illustId] = d;
+        return collect;
+      }, {});
   }
 
   // new API to get an user data
@@ -126,10 +128,12 @@ class Pixiv {
   async getUserDataGroup(userIds) {
     const uniqUserIds = [...new Set(userIds)];
     const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
-    return userDataGroup.filter(Boolean).reduce((collect, d) => {
-      collect[d.userId] = d;
-      return collect;
-    }, {});
+    return userDataGroup
+      .filter(Boolean)
+      .reduce((collect, d) => {
+        collect[d.userId] = d;
+        return collect;
+      }, {});
   }
 
   async getIllustUgoiraMetaData(illustId) {
@@ -165,7 +169,7 @@ class Pixiv {
       }
       const ret = {
         nextUrl,
-        illustIds
+        illustIds,
       };
       return ret;
     } catch (error) {
@@ -202,7 +206,7 @@ class Pixiv {
 
       const ret = {
         nextUrl,
-        illustIds
+        illustIds,
       };
       return ret;
     } catch (error) {
@@ -217,11 +221,11 @@ class Pixiv {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-csrf-token': this.tt
+        'x-csrf-token': this.tt,
       },
       body: JSON.stringify({
-        illust_id: illustId
-      })
+        illust_id: illustId,
+      }),
     });
 
     return Boolean(data);
@@ -236,36 +240,34 @@ class Pixiv {
       format: 'json',
       type: 'user',
       restrict: 0,
-      tt: this.tt
+      tt: this.tt,
     };
-
-    const body = Object.entries(searchParams)
-      .map(p => p.join('='))
-      .join('&');
 
     const data = await this.fetchJSON(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
       },
-      body
+      body: toFormUrlencoded(searchParams),
     });
 
     return Boolean(data);
   }
 
-  async postAddBookmark(illustId) {
-    await this.rpcCall('save_illust_bookmark', {
+  async postRPCAddBookmark(illustId) {
+    const searchParams = {
       illust_id: illustId,
       restrict: 0,
       comment: '',
-      tags: ''
-    });
+      tags: '',
+    };
+    await this.rpcCall('save_illust_bookmark', searchParams);
     return true;
   }
 
-  async postDeleteBookmark(bookmarkId) {
-    await this.rpcCall('delete_illust_bookmark', { bookmark_id: bookmarkId });
+  async postRPCDeleteBookmark(bookmarkId) {
+    const searchParams = { bookmark_id: bookmarkId };
+    await this.rpcCall('delete_illust_bookmark', searchParams);
     return true;
   }
 }
@@ -292,7 +294,7 @@ function removeAnnoyings(doc = document) {
     '.popular-introduction',
     '._premium-lead-tag-search-bar',
     '._premium-lead-popular-d-body',
-    '._premium-lead-promotion-banner'
+    '._premium-lead-promotion-banner',
   ];
 
   for (const selector of annoyings) {

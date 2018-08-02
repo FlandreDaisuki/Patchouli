@@ -28,8 +28,6 @@
     </a>
     <div
       :class="{on:selfIsBookmarked}"
-      :data-click-label="illustId"
-      :data-id="illustId"
       :title="selfIsBookmarked"
       class="_one-click-bookmark"
       @click.left.prevent.stop="oneClickBookmarkAdd"/>
@@ -44,41 +42,41 @@
 
 <script>
 import { $print } from "../lib/utils";
-import { PixivAPI } from '../lib/pixiv';
+import { PixivAPI } from "../lib/pixiv";
 
 export default {
   props: {
     imgUrl: {
       type: String,
-      default: ""
+      default: "",
     },
     illustId: {
       type: String,
-      default: ""
+      default: "",
     },
     illustPageCount: {
       type: Number,
-      default: 1
+      default: 1,
     },
     isUgoira: {
       type: Boolean,
-      default: false
+      default: false,
     },
     isBookmarked: {
       type: Boolean,
-      default: false
+      default: false,
     },
     bookmarkId: {
       type: String,
-      default: ""
-    }
+      default: "",
+    },
   },
   data() {
     return {
       selfIsBookmarked: this.isBookmarked,
       ugoiraPlayed: false,
       ugoiraPlayer: null,
-      ugoiraMeta: null
+      ugoiraMeta: null,
     };
   },
   computed: {
@@ -87,7 +85,7 @@ export default {
     },
     canHoverPlay() {
       return this.$store.state.config.hoverPlay;
-    }
+    },
   },
   mounted() {
     this.$nextTick(async() => {
@@ -99,18 +97,18 @@ export default {
   methods: {
     async oneClickBookmarkAdd() {
       if (!this.selfIsBookmarked) {
-        if (await PixivAPI.postAddBookmark(this.illustId)) {
+        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {
           this.selfIsBookmarked = true;
         }
-      }
-      else {
+      } else {
         // this.bookmarkId might be empty...
+        // Because RPC API has no bookmarkId returned...
         let bookmarkId = this.bookmarkId;
         if (!bookmarkId) {
           const data = await PixivAPI.getIllustBookmarkData(this.illustId);
           bookmarkId = data.bookmarkData.id;
         }
-        if (await PixivAPI.postDeleteBookmark(bookmarkId)) {
+        if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {
           this.selfIsBookmarked = false;
         }
       }
@@ -123,12 +121,12 @@ export default {
 
         payload.position = {
           x: event.clientX,
-          y: event.clientY
+          y: event.clientY,
         };
 
         payload.data = {
           illustId: this.illustId,
-          type: "image-item-image"
+          type: "image-item-image",
         };
 
         this.$store.commit("activateContextMenu", payload);
@@ -146,14 +144,14 @@ export default {
             metadata: this.ugoiraMeta,
             chunkSize: 300000,
             loop: true,
-            autosize: true
+            autosize: true,
           });
         } catch (error) {
           $print.error(error);
         }
       }
       if (this.canHoverPlay) {
-        if (event.type === 'mouseenter') {
+        if (event.type === "mouseenter") {
           this.ugoiraPlayed = true;
           this.ugoiraPlayer.play();
         } else {
@@ -162,7 +160,7 @@ export default {
           this.ugoiraPlayer.rewind();
         }
       }
-    }
+    },
   },
 };
 </script>

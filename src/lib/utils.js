@@ -30,7 +30,7 @@ const $print = {
   },
   debug(...args) {
     console.debug.apply(console, [...args]);
-  }
+  },
 };
 
 const toInt = (x) => {
@@ -52,9 +52,11 @@ function $parents(el) {
   return collection;
 }
 
-function qs(o) {
-  // querystring
-  return Object.keys(o).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(o[k])}`).join('&');
+function toFormUrlencoded(o) {
+  // application/x-www-form-urlencoded
+  return Object.entries(o)
+    .map(p => p.map(encodeURIComponent).join('='))
+    .join('&');
 }
 
 export {
@@ -67,5 +69,5 @@ export {
   $after,
   $parents,
   toInt,
-  qs
+  toFormUrlencoded,
 };

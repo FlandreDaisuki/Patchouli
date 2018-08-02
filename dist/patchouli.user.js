@@ -76,7 +76,7 @@
     },
     debug(...args) {
       console.debug.apply(console, [...args]);
-    }
+    },
   };
   const toInt = (x) => {
     const t = Number(x);
@@ -94,8 +94,10 @@
     }
     return collection;
   }
-  function qs(o) {
-    return Object.keys(o).map(k => `${encodeURIComponent(k)}=${encodeURIComponent(o[k])}`).join('&');
+  function toFormUrlencoded(o) {
+    return Object.entries(o)
+      .map(p => p.map(encodeURIComponent).join('='))
+      .join('&');
   }
   class Pixiv {
     constructor() {
@@ -166,7 +168,7 @@
       return this.fetchJSON('/rpc/index.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: qs({ ...params, mode, tt: this.tt })
+        body: toFormUrlencoded({ ...params, mode, tt: this.tt }),
       });
     }
     async getIllustData(illustId) {
@@ -182,10 +184,12 @@
     async getIllustDataGroup(illustIds) {
       const uniqIllustIds = [...new Set(illustIds)];
       const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
-      return illustDataGroup.filter(Boolean).reduce((collect, d) => {
-        collect[d.illustId] = d;
-        return collect;
-      }, {});
+      return illustDataGroup
+        .filter(Boolean)
+        .reduce((collect, d) => {
+          collect[d.illustId] = d;
+          return collect;
+        }, {});
     }
     async getUserData(userId) {
       const url = `/ajax/user/${userId}`;
@@ -195,10 +199,12 @@
     async getUserDataGroup(userIds) {
       const uniqUserIds = [...new Set(userIds)];
       const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
-      return userDataGroup.filter(Boolean).reduce((collect, d) => {
-        collect[d.userId] = d;
-        return collect;
-      }, {});
+      return userDataGroup
+        .filter(Boolean)
+        .reduce((collect, d) => {
+          collect[d.userId] = d;
+          return collect;
+        }, {});
     }
     async getIllustUgoiraMetaData(illustId) {
       const url = `/ajax/illust/${illustId}/ugoira_meta`;
@@ -229,7 +235,7 @@
         }
         const ret = {
           nextUrl,
-          illustIds
+          illustIds,
         };
         return ret;
       } catch (error) {
@@ -260,7 +266,7 @@
         }
         const ret = {
           nextUrl,
-          illustIds
+          illustIds,
         };
         return ret;
       } catch (error) {
@@ -273,11 +279,11 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-csrf-token': this.tt
+          'x-csrf-token': this.tt,
         },
         body: JSON.stringify({
-          illust_id: illustId
-        })
+          illust_id: illustId,
+        }),
       });
       return Boolean(data);
     }
@@ -289,31 +295,30 @@
         format: 'json',
         type: 'user',
         restrict: 0,
-        tt: this.tt
+        tt: this.tt,
       };
-      const body = Object.entries(searchParams)
-        .map(p => p.join('='))
-        .join('&');
       const data = await this.fetchJSON(url, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+          'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
         },
-        body
+        body: toFormUrlencoded(searchParams),
       });
       return Boolean(data);
     }
-    async postAddBookmark(illustId) {
-      await this.rpcCall('save_illust_bookmark', {
+    async postRPCAddBookmark(illustId) {
+      const searchParams = {
         illust_id: illustId,
         restrict: 0,
         comment: '',
-        tags: ''
-      });
+        tags: '',
+      };
+      await this.rpcCall('save_illust_bookmark', searchParams);
       return true;
     }
-    async postDeleteBookmark(bookmarkId) {
-      await this.rpcCall('delete_illust_bookmark', { bookmark_id: bookmarkId });
+    async postRPCDeleteBookmark(bookmarkId) {
+      const searchParams = { bookmark_id: bookmarkId };
+      await this.rpcCall('delete_illust_bookmark', searchParams);
       return true;
     }
   }
@@ -337,7 +342,7 @@
       '.popular-introduction',
       '._premium-lead-tag-search-bar',
       '._premium-lead-popular-d-body',
-      '._premium-lead-promotion-banner'
+      '._premium-lead-promotion-banner',
     ];
     for (const selector of annoyings) {
       for (const el of $$find(doc, selector)) {
@@ -1092,9 +1097,9 @@
     : {};
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject("data-v-43b61934_0", { source: "\n@keyframes slidedown-data-v-43b61934 {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-43b61934] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-43b61934] {\n  padding: 2px;\n}\n#koakuma[data-v-43b61934] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-43b61934 0.7s linear;\n}\n#koakuma > div[data-v-43b61934] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-43b61934] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-43b61934],\n#koakuma-sorting-order-block[data-v-43b61934] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-43b61934] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-43b61934] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-43b61934]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-43b61934]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-43b61934] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-43b61934],\n#koakuma-sorting-order-select-switch[data-v-43b61934] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-43b61934] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-43b61934],\n#koakuma-sorting-order-select-list[data-v-43b61934] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-43b61934]::after,\n#koakuma-sorting-order-select-list > li[data-v-43b61934]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-43b61934]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-43b61934]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-43b61934]:hover::before,\n.sorting-order-link[data-v-43b61934]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-43b61934],\n.sorting-order-link[data-v-43b61934] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-43b61934] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-43b61934] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-43b61934] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-43b61934] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-43b61934]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-43b61934]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-43b61934]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-43b61934] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-43b61934] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-43b61934] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-43b61934],\n#koakuma-options-width-expand[data-v-43b61934],\n#koakuma-options-config[data-v-43b61934] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
+    inject("data-v-c7132180_0", { source: "\n@keyframes slidedown-data-v-c7132180 {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-c7132180] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-c7132180] {\n  padding: 2px;\n}\n#koakuma[data-v-c7132180] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #e5e4ff;\n  box-shadow: 0 2px 2px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  animation: slidedown-data-v-c7132180 0.7s linear;\n}\n#koakuma > div[data-v-c7132180] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n.bookmark-count[data-v-c7132180] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n}\n#koakuma-bookmark-sort-block[data-v-c7132180],\n#koakuma-sorting-order-block[data-v-c7132180] {\n  position: relative;\n  height: 20px;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-c7132180] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-c7132180] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-c7132180]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-c7132180]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-c7132180] {\n  min-width: 300px;\n}\n#koakuma-bookmark-input-usual-switch[data-v-c7132180],\n#koakuma-sorting-order-select-switch[data-v-c7132180] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-c7132180] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-c7132180],\n#koakuma-sorting-order-select-list[data-v-c7132180] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-c7132180]::after,\n#koakuma-sorting-order-select-list > li[data-v-c7132180]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-c7132180]:last-child::after,\n#koakuma-sorting-order-select-list > li[data-v-c7132180]:last-child::after {\n  box-shadow: none;\n}\n.usual-list-link[data-v-c7132180]:hover::before,\n.sorting-order-link[data-v-c7132180]:hover::before {\n  content: \"⮬\";\n  position: absolute;\n  left: 6px;\n  font-weight: bolder;\n}\n.usual-list-link[data-v-c7132180],\n.sorting-order-link[data-v-c7132180] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n}\n#koakuma-sorting-order-select-output[data-v-c7132180] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-c7132180] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-c7132180] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-c7132180] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-c7132180]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-c7132180]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-c7132180]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-c7132180] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-c7132180] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-c7132180] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-c7132180],\n#koakuma-options-width-expand[data-v-c7132180],\n#koakuma-options-config[data-v-c7132180] {\n  cursor: pointer;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__ = "data-v-43b61934";
+  const __vue_scope_id__ = "data-v-c7132180";
   const __vue_module_identifier__ = undefined;
   const __vue_is_functional_template__ = false;
   function __vue_normalize__(
@@ -1104,7 +1109,7 @@
   ) {
     const component = (typeof script$$1 === 'function' ? script$$1.options : script$$1) || {};
     {
-      component.__file = "C:\\Users\\Administrator\\Documents\\GitHub\\Patchouli\\src\\components\\Koakuma.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/Koakuma.vue";
     }
     if (!component.render) {
       component.render = template.render;
@@ -1195,35 +1200,35 @@
     props: {
       imgUrl: {
         type: String,
-        default: ""
+        default: "",
       },
       illustId: {
         type: String,
-        default: ""
+        default: "",
       },
       illustPageCount: {
         type: Number,
-        default: 1
+        default: 1,
       },
       isUgoira: {
         type: Boolean,
-        default: false
+        default: false,
       },
       isBookmarked: {
         type: Boolean,
-        default: false
+        default: false,
       },
       bookmarkId: {
         type: String,
-        default: ""
-      }
+        default: "",
+      },
     },
     data() {
       return {
         selfIsBookmarked: this.isBookmarked,
         ugoiraPlayed: false,
         ugoiraPlayer: null,
-        ugoiraMeta: null
+        ugoiraMeta: null,
       };
     },
     computed: {
@@ -1232,7 +1237,7 @@
       },
       canHoverPlay() {
         return this.$store.state.config.hoverPlay;
-      }
+      },
     },
     mounted() {
       this.$nextTick(async() => {
@@ -1244,17 +1249,16 @@
     methods: {
       async oneClickBookmarkAdd() {
         if (!this.selfIsBookmarked) {
-          if (await PixivAPI.postAddBookmark(this.illustId)) {
+          if (await PixivAPI.postRPCAddBookmark(this.illustId)) {
             this.selfIsBookmarked = true;
           }
-        }
-        else {
+        } else {
           let bookmarkId = this.bookmarkId;
           if (!bookmarkId) {
             const data = await PixivAPI.getIllustBookmarkData(this.illustId);
             bookmarkId = data.bookmarkData.id;
           }
-          if (await PixivAPI.postDeleteBookmark(bookmarkId)) {
+          if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {
             this.selfIsBookmarked = false;
           }
         }
@@ -1265,11 +1269,11 @@
           const payload = {};
           payload.position = {
             x: event.clientX,
-            y: event.clientY
+            y: event.clientY,
           };
           payload.data = {
             illustId: this.illustId,
-            type: "image-item-image"
+            type: "image-item-image",
           };
           this.$store.commit("activateContextMenu", payload);
         }
@@ -1286,14 +1290,14 @@
               metadata: this.ugoiraMeta,
               chunkSize: 300000,
               loop: true,
-              autosize: true
+              autosize: true,
             });
           } catch (error) {
             $print.error(error);
           }
         }
         if (this.canHoverPlay) {
-          if (event.type === 'mouseenter') {
+          if (event.type === "mouseenter") {
             this.ugoiraPlayed = true;
             this.ugoiraPlayer.play();
           } else {
@@ -1302,7 +1306,7 @@
             this.ugoiraPlayer.rewind();
           }
         }
-      }
+      },
     },
   };
   const __vue_script__$1 = script$1;
@@ -1379,11 +1383,7 @@
       _c("div", {
         staticClass: "_one-click-bookmark",
         class: { on: _vm.selfIsBookmarked },
-        attrs: {
-          "data-click-label": _vm.illustId,
-          "data-id": _vm.illustId,
-          title: _vm.selfIsBookmarked
-        },
+        attrs: { title: _vm.selfIsBookmarked },
         on: {
           click: function($event) {
             if (
@@ -1422,9 +1422,9 @@
     : {};
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject("data-v-1dff805c_0", { source: "\n.image-item-image[data-v-1dff805c] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-1dff805c] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-1dff805c]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-1dff805c] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-1dff805c] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-1dff805c],\ncanvas[data-v-1dff805c] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-1dff805c] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-1dff805c] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-1dff805c] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
+    inject("data-v-249ec48c_0", { source: "\n.image-item-image[data-v-249ec48c] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-249ec48c] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-249ec48c]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-249ec48c] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-249ec48c] {\n  position: absolute;\n  flex: none;\n  width: 40px;\n  height: 40px;\n  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%\n    no-repeat;\n  top: 50%;\n  left: 50%;\n  margin: -20px 0 0 -20px;\n}\nimg[data-v-249ec48c],\ncanvas[data-v-249ec48c] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-249ec48c] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-249ec48c] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-249ec48c] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$1 = "data-v-1dff805c";
+  const __vue_scope_id__$1 = "data-v-249ec48c";
   const __vue_module_identifier__$1 = undefined;
   const __vue_is_functional_template__$1 = false;
   function __vue_normalize__$1(
@@ -1434,7 +1434,7 @@
   ) {
     const component = (typeof script === 'function' ? script.options : script) || {};
     {
-      component.__file = "C:\\Users\\Administrator\\Documents\\GitHub\\Patchouli\\src\\components\\DefaultImageItemImage.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue";
     }
     if (!component.render) {
       component.render = template.render;
@@ -1709,9 +1709,9 @@
     : {};
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject("data-v-534a3658_0", { source: "\n.image-item-title-user[data-v-534a3658] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-534a3658] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-534a3658] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-534a3658] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-534a3658] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-534a3658] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
+    inject("data-v-11d33448_0", { source: "\n.image-item-title-user[data-v-11d33448] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-11d33448] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-11d33448] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-11d33448] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-11d33448] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-11d33448] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$2 = "data-v-534a3658";
+  const __vue_scope_id__$2 = "data-v-11d33448";
   const __vue_module_identifier__$2 = undefined;
   const __vue_is_functional_template__$2 = false;
   function __vue_normalize__$2(
@@ -1721,7 +1721,7 @@
   ) {
     const component = (typeof script === 'function' ? script.options : script) || {};
     {
-      component.__file = "C:\\Users\\Administrator\\Documents\\GitHub\\Patchouli\\src\\components\\DefaultImageItemTitle.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemTitle.vue";
     }
     if (!component.render) {
       component.render = template.render;
@@ -1905,9 +1905,9 @@
     : {};
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject("data-v-c644e2bc_0", { source: "\n.image-item[data-v-c644e2bc] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-c644e2bc] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-5a57c5d4_0", { source: "\n.image-item[data-v-5a57c5d4] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-5a57c5d4] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$3 = "data-v-c644e2bc";
+  const __vue_scope_id__$3 = "data-v-5a57c5d4";
   const __vue_module_identifier__$3 = undefined;
   const __vue_is_functional_template__$3 = false;
   function __vue_normalize__$3(
@@ -1917,7 +1917,7 @@
   ) {
     const component = (typeof script === 'function' ? script.options : script) || {};
     {
-      component.__file = "C:\\Users\\Administrator\\Documents\\GitHub\\Patchouli\\src\\components\\DefaultImageItem.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItem.vue";
     }
     if (!component.render) {
       component.render = template.render;
@@ -2414,9 +2414,9 @@
     : {};
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-4cafddce_0", { source: "\n#patchouli-context-menu[data-v-4cafddce] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-4cafddce] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-4cafddce] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-4cafddce]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-4cafddce],\n#patchouli-context-menu > ul i.fas[data-v-4cafddce] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
+    inject("data-v-9d93a44c_0", { source: "\n#patchouli-context-menu[data-v-9d93a44c] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 6px;\n}\n#patchouli-context-menu > ul > li[data-v-9d93a44c] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-9d93a44c] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  border-radius: 5px;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-9d93a44c]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-9d93a44c],\n#patchouli-context-menu > ul i.fas[data-v-9d93a44c] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$4 = "data-v-4cafddce";
+  const __vue_scope_id__$4 = "data-v-9d93a44c";
   const __vue_module_identifier__$4 = undefined;
   const __vue_is_functional_template__$4 = false;
   function __vue_normalize__$4(
@@ -2426,7 +2426,7 @@
   ) {
     const component = (typeof script === 'function' ? script.options : script) || {};
     {
-      component.__file = "C:\\Users\\Administrator\\Documents\\GitHub\\Patchouli\\src\\components\\ContextMenu.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/ContextMenu.vue";
     }
     if (!component.render) {
       component.render = template.render;
@@ -2570,9 +2570,9 @@
     : {};
   const __vue_inject_styles__$5 = function (inject) {
     if (!inject) return
-    inject("data-v-04d33678_0", { source: "\n#patchouli[data-v-04d33678] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
+    inject("data-v-5df49a38_0", { source: "\n#patchouli[data-v-5df49a38] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$5 = "data-v-04d33678";
+  const __vue_scope_id__$5 = "data-v-5df49a38";
   const __vue_module_identifier__$5 = undefined;
   const __vue_is_functional_template__$5 = false;
   function __vue_normalize__$5(
@@ -2582,7 +2582,7 @@
   ) {
     const component = (typeof script === 'function' ? script.options : script) || {};
     {
-      component.__file = "C:\\Users\\Administrator\\Documents\\GitHub\\Patchouli\\src\\components\\Patchouli.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/Patchouli.vue";
     }
     if (!component.render) {
       component.render = template.render;
@@ -3186,9 +3186,9 @@
     : {};
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-a5b05258_0", { source: "\n#patchouli-big-component[data-v-a5b05258] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-a5b05258],\n#preview-mode[data-v-a5b05258] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-a5b05258] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-a5b05258] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-a5b05258] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-a5b05258]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-a5b05258] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-a5b05258] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-a5b05258] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-a5b05258] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-a5b05258] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-a5b05258],\n#preview-display-area > div[data-v-a5b05258] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-a5b05258],\n#preview-display-area > div > canvas[data-v-a5b05258] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-a5b05258] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-a5b05258] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-a5b05258] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-a5b05258] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-a5b05258] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
+    inject("data-v-498dd240_0", { source: "\n#patchouli-big-component[data-v-498dd240] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#config-mode[data-v-498dd240],\n#preview-mode[data-v-498dd240] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#config-mode[data-v-498dd240] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#config-mode a[data-v-498dd240] {\n  color: #00186c;\n  text-decoration: none;\n}\n#config-mode [id$=\"switch\"][data-v-498dd240] {\n  text-align: center;\n}\n#config-mode [id$=\"switch\"][data-v-498dd240]:hover {\n  cursor: pointer;\n}\n#config-mode [id$=\"label\"][data-v-498dd240] {\n  text-align: center;\n  margin: 0 5px;\n}\n#config-blacklist-label > .fa-eye-slash[data-v-498dd240] {\n  margin: 0 4px;\n}\n#config-blacklist-textarea[data-v-498dd240] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#preview-mode[data-v-498dd240] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#preview-display-area[data-v-498dd240] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#preview-display-area > a[data-v-498dd240],\n#preview-display-area > div[data-v-498dd240] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#preview-display-area > a > img[data-v-498dd240],\n#preview-display-area > div > canvas[data-v-498dd240] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#preview-thumbnails-area[data-v-498dd240] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n}\n#preview-thumbnails-area > li[data-v-498dd240] {\n  padding: 0 10px;\n}\n#preview-thumbnails-area > li > a[data-v-498dd240] {\n  cursor: pointer;\n  display: inline-block;\n}\n.current-preview[data-v-498dd240] {\n  border: 3px solid palevioletred;\n}\n#preview-thumbnails-area > li > a > img[data-v-498dd240] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: undefined, media: undefined });
   };
-  const __vue_scope_id__$6 = "data-v-a5b05258";
+  const __vue_scope_id__$6 = "data-v-498dd240";
   const __vue_module_identifier__$6 = undefined;
   const __vue_is_functional_template__$6 = false;
   function __vue_normalize__$6(
@@ -3198,7 +3198,7 @@
   ) {
     const component = (typeof script === 'function' ? script.options : script) || {};
     {
-      component.__file = "C:\\Users\\Administrator\\Documents\\GitHub\\Patchouli\\src\\components\\BigComponent.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/BigComponent.vue";
     }
     if (!component.render) {
       component.render = template.render;
