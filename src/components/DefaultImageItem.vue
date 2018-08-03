@@ -21,23 +21,23 @@
 </template>
 
 <script>
-import DefaultImageItemImage from "./DefaultImageItemImage.vue";
-import DefaultImageItemTitle from "./DefaultImageItemTitle.vue";
+import DefaultImageItemImage from './DefaultImageItemImage.vue';
+import DefaultImageItemTitle from './DefaultImageItemTitle.vue';
 
 export default {
   components: { DefaultImageItemImage, DefaultImageItemTitle },
   props: {
     imgUrl: {
       type: String,
-      default: "",
+      default: '',
     },
     illustId: {
       type: String,
-      default: "",
+      default: '',
     },
     illustTitle: {
       type: String,
-      default: "",
+      default: '',
     },
     illustPageCount: {
       type: Number,
@@ -45,15 +45,15 @@ export default {
     },
     userName: {
       type: String,
-      default: "",
+      default: '',
     },
     userId: {
       type: String,
-      default: "",
+      default: '',
     },
     profileImgUrl: {
       type: String,
-      default: "",
+      default: '',
     },
     isUgoira: {
       type: Boolean,
@@ -69,7 +69,7 @@ export default {
     },
     bookmarkId: {
       type: String,
-      default: "",
+      default: '',
     },
     bookmarkCount: {
       type: Number,

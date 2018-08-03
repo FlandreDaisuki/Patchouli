@@ -39,29 +39,29 @@
 </template>
 
 <script>
-import { $print } from "../lib/utils";
+import { $print } from '../lib/utils';
 
 export default {
   props: {
     illustId: {
       type: String,
-      default: "",
+      default: '',
     },
     illustTitle: {
       type: String,
-      default: "",
+      default: '',
     },
     userName: {
       type: String,
-      default: "",
+      default: '',
     },
     userId: {
       type: String,
-      default: "",
+      default: '',
     },
     profileImgUrl: {
       type: String,
-      default: "",
+      default: '',
     },
     bookmarkCount: {
       type: Number,
@@ -83,7 +83,7 @@ export default {
       return `/bookmark_detail.php?illust_id=${this.illustId}`;
     },
     bookmarkTooltipMsg() {
-      return this.$t("patchouli.bookmarkTooltip", {
+      return this.$t('patchouli.bookmarkTooltip', {
         count: this.bookmarkCount,
       });
     },
@@ -93,7 +93,7 @@ export default {
       };
     },
     isMemberIllistPage() {
-      return this.$store.state.pageType === "MEMBER_ILLIST";
+      return this.$store.state.pageType === 'MEMBER_ILLIST';
     },
     isEnableUserTooltip() {
       return this.$store.state.config.userTooltip;
@@ -101,7 +101,7 @@ export default {
   },
   methods: {
     activateContextMenu(event) {
-      $print.debug("DefaultImageItemTitle#activateContextMenu", event);
+      $print.debug('DefaultImageItemTitle#activateContextMenu', event);
       if (this.$store.state.config.contextMenu) {
         event.preventDefault();
         const payload = {};
@@ -112,19 +112,19 @@ export default {
         };
         const ct = event.currentTarget;
 
-        if (ct.classList.contains("user-info")) {
+        if (ct.classList.contains('user-info')) {
           payload.data = {
             illustId: this.illustId,
-            type: "image-item-title-user",
+            type: 'image-item-title-user',
           };
         } else {
           payload.data = {
             illustId: this.illustId,
-            type: "image-item-image",
+            type: 'image-item-image',
           };
         }
 
-        this.$store.commit("activateContextMenu", payload);
+        this.$store.commit('activateContextMenu', payload);
       }
     },
   },

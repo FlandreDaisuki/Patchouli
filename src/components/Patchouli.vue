@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import DefaultImageItem from "./DefaultImageItem.vue";
-import ContextMenu from "./ContextMenu.vue";
+import DefaultImageItem from './DefaultImageItem.vue';
+import ContextMenu from './ContextMenu.vue';
 
 export default {
   components: { DefaultImageItem, ContextMenu },

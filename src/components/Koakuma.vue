@@ -93,7 +93,7 @@
 </template>
 
 <script>
-import { $print, toInt } from "../lib/utils";
+import { $print, toInt } from '../lib/utils';
 export default {
   data() {
     return {
@@ -123,22 +123,22 @@ export default {
     },
     buttonMsg() {
       if (this.status.isEnded) {
-        return this.$t("koakuma.buttonEnd");
+        return this.$t('koakuma.buttonEnd');
       } else if (this.status.isPaused) {
-        return this.$t("koakuma.buttonGo");
+        return this.$t('koakuma.buttonGo');
       } else {
-        return this.$t("koakuma.buttonPause");
+        return this.$t('koakuma.buttonPause');
       }
     },
     sortingOrderMsg() {
-      const p = this.$t("koakuma.sortByPopularity");
-      const d = this.$t("koakuma.sortByDate");
+      const p = this.$t('koakuma.sortByPopularity');
+      const d = this.$t('koakuma.sortByDate');
       const ml = Math.max(p.length, d.length);
       const [xp, xd] = [p, d].map(s => {
         if (s.length < ml) {
           const ps = ml - s.length; // padding space
           const hps = Math.floor(ps / 2);
-          return "&nbsp;".repeat(hps) + s + "&nbsp;".repeat(ps - hps);
+          return '&nbsp;'.repeat(hps) + s + '&nbsp;'.repeat(ps - hps);
         }
         return s;
       });
@@ -152,9 +152,9 @@ export default {
   methods: {
     clickMainButton() {
       if (this.status.isPaused) {
-        this.$store.dispatch("start");
+        this.$store.dispatch('start');
       } else {
-        this.$store.commit("pause");
+        this.$store.commit('pause');
       }
     },
     sortInputWheel(event) {
@@ -174,14 +174,14 @@ export default {
       }, 500);
     },
     optionsChange(event) {
-      $print.debug("Koakuma#optionsChange: event", event);
-      if (event.target.id === "koakuma-options-width-compress") {
+      $print.debug('Koakuma#optionsChange: event', event);
+      if (event.target.id === 'koakuma-options-width-compress') {
         this.config.fitwidth = false;
-      } else if (event.target.id === "koakuma-options-width-expand") {
+      } else if (event.target.id === 'koakuma-options-width-expand') {
         this.config.fitwidth = true;
       }
-      this.$store.commit("saveConfig");
-      this.$store.commit("applyConfig");
+      this.$store.commit('saveConfig');
+      this.$store.commit('applyConfig');
     },
     tagsFilterInput(event) {
       if (this.debounceId4tagsFilter) {
@@ -189,25 +189,25 @@ export default {
       }
       this.debounceId4tagsFilter = setTimeout(() => {
         this.debounceId4tagsFilter = null;
-        this.filters.tag = new RegExp(event.target.value, "ig");
+        this.filters.tag = new RegExp(event.target.value, 'ig');
       }, 1500);
     },
     clickSortingOrder(event) {
-      $print.debug("Koakuma#clickSortingOrder: event", event);
+      $print.debug('Koakuma#clickSortingOrder: event', event);
 
-      if (event.target.id === "koakuma-sorting-order-by-popularity") {
+      if (event.target.id === 'koakuma-sorting-order-by-popularity') {
         this.config.sort = 1;
       } else {
         this.config.sort = 0;
       }
 
-      this.$store.commit("saveConfig");
-      this.$store.commit("applyConfig");
+      this.$store.commit('saveConfig');
+      this.$store.commit('applyConfig');
 
       this.sortingOrderSwitchOn = false;
     },
     openBigComponentInConfigMode() {
-      this.$store.commit("openBigComponent", { mode: "config", data: null });
+      this.$store.commit('openBigComponent', { mode: 'config', data: null });
     },
   },
 };

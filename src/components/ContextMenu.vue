@@ -48,9 +48,9 @@
 
 
 <script>
-import { PixivAPI } from "../lib/pixiv";
-import { $el } from "../lib/utils";
-import GMC from "../lib/gmc";
+import { PixivAPI } from '../lib/pixiv';
+import { $el } from '../lib/utils';
+import GMC from '../lib/gmc';
 
 export default {
   computed: {
@@ -63,7 +63,7 @@ export default {
     },
     currentType() {
       if (!this.xmd) {
-        return "";
+        return '';
       }
       return this.xmd.type;
     },
@@ -92,7 +92,7 @@ export default {
     },
     bookmarkPageLink() {
       if (!this.xmd) {
-        return "#";
+        return '#';
       }
       const illustId = this.xmd.illustId;
       return `bookmark_add.php?type=illust&illust_id=${illustId}`;
@@ -117,19 +117,19 @@ export default {
     async downloadOne() {
       const imgUrl = this.currentImageItem.urls.original;
       const illustId = this.currentImageItem.illustId;
-      const a = $el("a", { href: imgUrl });
+      const a = $el('a', { href: imgUrl });
 
-      const filename = a.pathname.split("/").pop();
+      const filename = a.pathname.split('/').pop();
       const ext = filename
-        .split(".")
+        .split('.')
         .pop()
         .toLowerCase();
 
       const response = await GMC.XHR({
-        method: "GET",
+        method: 'GET',
         url: imgUrl,
         // greasemonkey has no this API
-        responseType: "arraybuffer",
+        responseType: 'arraybuffer',
         // for greasemonkey
         binary: true,
         headers: {
@@ -137,10 +137,10 @@ export default {
         },
       });
 
-      if (ext === "jpg" || ext === "jpeg") {
-        saveAs(new File([response.response], filename, { type: "image/jpeg" }));
-      } else if (ext === "png") {
-        saveAs(new File([response.response], filename, { type: "image/png" }));
+      if (ext === 'jpg' || ext === 'jpeg') {
+        saveAs(new File([response.response], filename, { type: 'image/jpeg' }));
+      } else if (ext === 'png') {
+        saveAs(new File([response.response], filename, { type: 'image/png' }));
       }
     },
     addToBlacklist() {
@@ -148,12 +148,12 @@ export default {
         const userId = this.currentImageItem.userId;
         this.$store.state.config.blacklist.push(userId);
         this.$store.state.config.blacklist.sort((a, b) => a - b);
-        this.$store.commit("saveConfig");
+        this.$store.commit('saveConfig');
       }
     },
     openPreview() {
-      this.$store.commit("openBigComponent", {
-        mode: "preview",
+      this.$store.commit('openBigComponent', {
+        mode: 'preview',
         data: this.currentImageItem,
       });
     },
@@ -162,8 +162,8 @@ export default {
         const userId = this.currentImageItem.userId;
 
         if (await PixivAPI.postFollowUser(userId)) {
-          this.$store.commit("editImgItem", {
-            type: "follow-user",
+          this.$store.commit('editImgItem', {
+            type: 'follow-user',
             userId: this.currentImageItem.userId,
           });
         }

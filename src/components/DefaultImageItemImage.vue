@@ -41,18 +41,18 @@
 </template>
 
 <script>
-import { $print } from "../lib/utils";
-import { PixivAPI } from "../lib/pixiv";
+import { $print } from '../lib/utils';
+import { PixivAPI } from '../lib/pixiv';
 
 export default {
   props: {
     imgUrl: {
       type: String,
-      default: "",
+      default: '',
     },
     illustId: {
       type: String,
-      default: "",
+      default: '',
     },
     illustPageCount: {
       type: Number,
@@ -68,7 +68,7 @@ export default {
     },
     bookmarkId: {
       type: String,
-      default: "",
+      default: '',
     },
   },
   data() {
@@ -114,7 +114,7 @@ export default {
       }
     },
     activateContextMenu(event) {
-      $print.debug("DefaultImageItemImage#activateContextMenu", event);
+      $print.debug('DefaultImageItemImage#activateContextMenu', event);
       if (this.$store.state.config.contextMenu) {
         event.preventDefault();
         const payload = {};
@@ -126,10 +126,10 @@ export default {
 
         payload.data = {
           illustId: this.illustId,
-          type: "image-item-image",
+          type: 'image-item-image',
         };
 
-        this.$store.commit("activateContextMenu", payload);
+        this.$store.commit('activateContextMenu', payload);
       }
     },
     controlUgoira(event) {
@@ -151,7 +151,7 @@ export default {
         }
       }
       if (this.canHoverPlay) {
-        if (event.type === "mouseenter") {
+        if (event.type === 'mouseenter') {
           this.ugoiraPlayed = true;
           this.ugoiraPlayer.play();
         } else {

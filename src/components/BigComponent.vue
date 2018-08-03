@@ -96,8 +96,8 @@
 </template>
 
 <script>
-import { PixivAPI } from "../lib/pixiv";
-import { $, $print, toInt } from "../lib/utils";
+import { PixivAPI } from '../lib/pixiv';
+import { $, $print, toInt } from '../lib/utils';
 
 export default {
   data() {
@@ -123,9 +123,9 @@ export default {
   },
   watch: {
     async mode(value) {
-      $print.debug("watch mode change:", value);
+      $print.debug('watch mode change:', value);
 
-      if (value === "preview") {
+      if (value === 'preview') {
         const imageItem = this.xm.data;
         if (imageItem.isUgoira) {
           this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(
@@ -139,7 +139,7 @@ export default {
             Array(imageItem.illustPageCount).keys()
           );
           const srcs = indexArray.map(idx =>
-            imageItem.urls.original.replace("p0", `p${idx}`)
+            imageItem.urls.original.replace('p0', `p${idx}`)
           );
           this.previewSrcList.push(...srcs);
         } else {
@@ -155,44 +155,44 @@ export default {
     },
   },
   updated() {
-    if (this.mode === "preview") {
+    if (this.mode === 'preview') {
       this.$refs.patchouliBigComponentRoot.focus();
     }
   },
   methods: {
     clickBase(event) {
-      $print.debug("BigComponent#clickBase: event", event);
-      this.$store.commit("closeBigComponent");
+      $print.debug('BigComponent#clickBase: event', event);
+      this.$store.commit('closeBigComponent');
 
       this.xc.blacklist = [
         ...new Set(
-          $("#config-blacklist-textarea")
-            .value.split("\n")
+          $('#config-blacklist-textarea')
+            .value.split('\n')
             .filter(Boolean)
             .map(s => s.trim())
         ),
       ];
       this.xc.blacklist.sort((a, b) => a - b);
 
-      this.$store.commit("saveConfig");
+      this.$store.commit('saveConfig');
     },
     focusForeground(event) {
-      if (event.target.id === "patchouli-big-component") {
+      if (event.target.id === 'patchouli-big-component') {
         event.preventDefault();
       }
     },
     clickSwitch(event) {
-      $print.debug("BigComponent#clickSwitch: event", event);
+      $print.debug('BigComponent#clickSwitch: event', event);
 
-      if (event.currentTarget.id === "config-context-menu-switch") {
+      if (event.currentTarget.id === 'config-context-menu-switch') {
         this.xc.contextMenu = toInt(!this.xc.contextMenu);
       }
 
-      if (event.currentTarget.id === "config-user-tooltip-switch") {
+      if (event.currentTarget.id === 'config-user-tooltip-switch') {
         this.xc.userTooltip = toInt(!this.xc.userTooltip);
       }
 
-      if (event.currentTarget.id === "config-hover-play-switch") {
+      if (event.currentTarget.id === 'config-hover-play-switch') {
         this.xc.hoverPlay = toInt(!this.xc.hoverPlay);
       }
     },
@@ -229,13 +229,13 @@ export default {
       );
     },
     jumpByKeyup(event) {
-      $print.debug("BigComponent#jumpByKeyup: event", event);
+      $print.debug('BigComponent#jumpByKeyup: event', event);
 
-      if (this.mode === "preview") {
+      if (this.mode === 'preview') {
         const imageItem = this.xm.data;
-        if (event.key === "ArrowLeft") {
+        if (event.key === 'ArrowLeft') {
           this.jumpPreview(Math.max(this.previewCurrentIndex - 1, 0));
-        } else if (event.key === "ArrowRight") {
+        } else if (event.key === 'ArrowRight') {
           this.jumpPreview(
             Math.min(
               this.previewCurrentIndex + 1,

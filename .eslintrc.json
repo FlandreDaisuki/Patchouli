@@ -18,6 +18,10 @@
     "plugin:vue/recommended"
   ],
   "rules": {
+    "quotes": [
+      "error",
+      "single"
+    ],
     "no-console": "off",
     "key-spacing": "error",
     "indent": [
