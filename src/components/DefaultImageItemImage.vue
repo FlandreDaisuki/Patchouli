@@ -46,45 +46,47 @@ import { PixivAPI } from '../lib/pixiv';
 
 export default {
   props: {
-    imgUrl: {
-      type: String,
+    bookmarkId: {
       default: '',
+      type: String,
     },
     illustId: {
-      type: String,
       default: '',
+      type: String,
     },
     illustPageCount: {
-      type: Number,
       default: 1,
+      type: Number,
     },
-    isUgoira: {
-      type: Boolean,
-      default: false,
+    imgUrl: {
+      default: '',
+      type: String,
     },
     isBookmarked: {
-      type: Boolean,
       default: false,
+      type: Boolean,
     },
-    bookmarkId: {
-      type: String,
-      default: '',
+    isUgoira: {
+      default: false,
+      type: Boolean,
     },
   },
+  // eslint-disable-next-line sort-keys
   data() {
     return {
       selfIsBookmarked: this.isBookmarked,
+      ugoiraMeta: null,
       ugoiraPlayed: false,
       ugoiraPlayer: null,
-      ugoiraMeta: null,
     };
   },
+  // eslint-disable-next-line sort-keys
   computed: {
+    canHoverPlay() {
+      return this.$store.getters.config.hoverPlay;
+    },
     illustPageUrl() {
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
-    },
-    canHoverPlay() {
-      return this.$store.state.config.hoverPlay;
     },
   },
   mounted() {
@@ -94,7 +96,56 @@ export default {
       }
     });
   },
+  // eslint-disable-next-line sort-keys
   methods: {
+    activateContextMenu(event) {
+      $print.debug('DefaultImageItemImage#activateContextMenu', event);
+      if (this.$store.state.config.contextMenu) {
+        event.preventDefault();
+
+        const payload = {
+          data: {
+            illustId: this.illustId,
+            type: 'image-item-image',
+          },
+          position: {
+            x: event.clientX,
+            y: event.clientY,
+          },
+        };
+
+        this.$store.commit('contextMenu/activate', payload);
+      }
+    },
+    controlUgoira(event) {
+      if (!this.ugoiraMeta) {
+        return;
+      }
+      if (!this.ugoiraPlayer) {
+        try {
+          this.ugoiraPlayer = new ZipImagePlayer({
+            autosize: true,
+            canvas: this.$refs.smallUgoiraPreview,
+            chunkSize: 300000,
+            loop: true,
+            metadata: this.ugoiraMeta,
+            source: this.ugoiraMeta.src,
+          });
+        } catch (error) {
+          $print.error(error);
+        }
+      }
+      if (this.canHoverPlay) {
+        if (event.type === 'mouseenter') {
+          this.ugoiraPlayed = true;
+          this.ugoiraPlayer.play();
+        } else {
+          this.ugoiraPlayed = false;
+          this.ugoiraPlayer.pause();
+          this.ugoiraPlayer.rewind();
+        }
+      }
+    },
     async oneClickBookmarkAdd() {
       if (!this.selfIsBookmarked) {
         if (await PixivAPI.postRPCAddBookmark(this.illustId)) {
@@ -110,54 +161,6 @@ export default {
         }
         if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {
           this.selfIsBookmarked = false;
-        }
-      }
-    },
-    activateContextMenu(event) {
-      $print.debug('DefaultImageItemImage#activateContextMenu', event);
-      if (this.$store.state.config.contextMenu) {
-        event.preventDefault();
-        const payload = {};
-
-        payload.position = {
-          x: event.clientX,
-          y: event.clientY,
-        };
-
-        payload.data = {
-          illustId: this.illustId,
-          type: 'image-item-image',
-        };
-
-        this.$store.commit('activateContextMenu', payload);
-      }
-    },
-    controlUgoira(event) {
-      if (!this.ugoiraMeta) {
-        return;
-      }
-      if (!this.ugoiraPlayer) {
-        try {
-          this.ugoiraPlayer = new ZipImagePlayer({
-            canvas: this.$refs.smallUgoiraPreview,
-            source: this.ugoiraMeta.src,
-            metadata: this.ugoiraMeta,
-            chunkSize: 300000,
-            loop: true,
-            autosize: true,
-          });
-        } catch (error) {
-          $print.error(error);
-        }
-      }
-      if (this.canHoverPlay) {
-        if (event.type === 'mouseenter') {
-          this.ugoiraPlayed = true;
-          this.ugoiraPlayer.play();
-        } else {
-          this.ugoiraPlayed = false;
-          this.ugoiraPlayer.pause();
-          this.ugoiraPlayer.rewind();
         }
       }
     },

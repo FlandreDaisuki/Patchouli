@@ -26,6 +26,7 @@
   ],
   "icon": "http://i.imgur.com/VwoYc5w.png",
   "grant": [
+    "unsafeWindow",
     "GM_getValue",
     "GM.getValue",
     "GM_setValue",

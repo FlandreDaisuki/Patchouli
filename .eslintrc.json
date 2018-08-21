@@ -49,6 +49,14 @@
       "error",
       "never"
     ],
+    "sort-keys": [
+      "error",
+      "asc",
+      {
+        "caseSensitive": true,
+        "natural": false
+      }
+    ],
     "vue/max-attributes-per-line": [
       2,
       {

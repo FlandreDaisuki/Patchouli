@@ -27,53 +27,53 @@ import DefaultImageItemTitle from './DefaultImageItemTitle.vue';
 export default {
   components: { DefaultImageItemImage, DefaultImageItemTitle },
   props: {
-    imgUrl: {
-      type: String,
-      default: '',
-    },
-    illustId: {
-      type: String,
-      default: '',
-    },
-    illustTitle: {
-      type: String,
-      default: '',
-    },
-    illustPageCount: {
+    bookmarkCount: {
+      default: 0,
       type: Number,
-      default: 1,
-    },
-    userName: {
-      type: String,
-      default: '',
-    },
-    userId: {
-      type: String,
-      default: '',
-    },
-    profileImgUrl: {
-      type: String,
-      default: '',
-    },
-    isUgoira: {
-      type: Boolean,
-      default: false,
-    },
-    isBookmarked: {
-      type: Boolean,
-      default: false,
-    },
-    isFollowed: {
-      type: Boolean,
-      default: false,
     },
     bookmarkId: {
-      type: String,
       default: '',
+      type: String,
     },
-    bookmarkCount: {
+    illustId: {
+      default: '',
+      type: String,
+    },
+    illustPageCount: {
+      default: 1,
       type: Number,
-      default: 0,
+    },
+    illustTitle: {
+      default: '',
+      type: String,
+    },
+    imgUrl: {
+      default: '',
+      type: String,
+    },
+    isBookmarked: {
+      default: false,
+      type: Boolean,
+    },
+    isFollowed: {
+      default: false,
+      type: Boolean,
+    },
+    isUgoira: {
+      default: false,
+      type: Boolean,
+    },
+    profileImgUrl: {
+      default: '',
+      type: String,
+    },
+    userId: {
+      default: '',
+      type: String,
+    },
+    userName: {
+      default: '',
+      type: String,
     },
   },
 };

@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.1.10](https://img.shields.io/badge/latest-v4.1.10-blue.svg)](#)
+[![latest-v4.2.0](https://img.shields.io/badge/latest-v4.2.0-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
@@ -31,11 +31,12 @@
    - 圖片上右鍵
       - 點讚
       - 原圖下載 (只支援單張圖片)
-      - 預覽原圖 (支援單張、多張、動圖)
+      - 預覽原圖 (支援單張、多張、動圖，並可用鍵盤方向鍵、滑鼠滾輪操作)
       - 開啟加入書籤頁 (可加標籤，若無此需求可使用 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> 快速添加)
    - 繪師名稱上右鍵
       - 加關注
       - 加黑單 (類似高級會員靜音功能)
+- 可自動播放動圖 ⚠️ 請斟酌自己的電腦效能及頻寬 ⚠️
 
 ## Usage 使用說明
 
@@ -43,7 +44,10 @@
 
 ## Contribution 貢獻
 
-有問題或建議發 [issue](https://github.com/FlandreDaisuki/Patchouli/issues) :coffee:
+- 找到問題請告訴我：[問題回報](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Bug_report.md)
+- 有任何建議也歡迎告訴我：[許願池](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Feature_request.md)
+- 或是歡迎直接貢獻原始碼：[pull request](https://github.com/FlandreDaisuki/Patchouli/pulls)
+- 分享並點個 ⭐️ 讓我有動力繼續無償維護下去，並感謝曾經給予幫助的[貢獻者們](https://github.com/FlandreDaisuki/Patchouli/graphs/contributors) 👍👍
 
 ## Lisence 授權
 
@@ -52,6 +56,13 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog 更新訊息
+
+2018-99-99 v4.2.0
+
+- 內部程式碼重構
+- 支援新版作者頁
+- 原圖預覽支援滾輪翻頁
+- 部份樣式調整
 
 2018-08-03 v4.1.10
 

@@ -1,126 +1,254 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { $, $el, $$, $after } from '../lib/utils';
+import { InitError } from '../lib/errors';
+import { MAIN_PAGE_TYPE as MPT, SORT_TYPE as ST } from '../lib/enums';
+import { $, $el, $$, $after, $print, $ready, $sp } from '../lib/utils';
 import pixiv from './modules/pixiv';
 import contextMenu from './modules/contextMenu';
-import bigComponent from './modules/bigComponent';
+import coverLayer from './modules/coverLayer';
 
 Vue.use(Vuex);
 
-const pageType = (() => {
-  const path = location.pathname;
-  const searchParam = new URLSearchParams(location.search);
-  const spId = searchParam.get('id');
-  const spType = searchParam.get('type');
+const _isSelfBookmarkPage = (mpt, loginId, uid) => {
+  return (
+    mpt === MPT.SELF_BOOKMARK ||
+    (mpt === MPT.NEW_PROFILE_BOOKMARK &&
+      loginId === uid)
+  );
+};
 
-  switch (path) {
-  case '/search.php':
-    return 'SEARCH';
-  case '/bookmark_new_illust_r18.php':
-  case '/bookmark_new_illust.php':
-    return 'NEW_ILLUST';
-  case '/new_illust.php':
-  case '/mypixiv_new_illust.php':
-  case '/new_illust_r18.php':
-    return 'ANCIENT_NEW_ILLUST';
-  case '/member_illust.php':
-    return spId ? 'MEMBER_ILLIST' : 'NO_SUPPORT';
-  case '/bookmark.php': {
-    if (spId && spType !== 'user') {
-      return 'MEMBER_BOOKMARK';
-    } else if (!spType || spType === 'illust_all') {
-      return 'MY_BOOKMARK';
-    } else {
-      // e.g. http://www.pixiv.net/bookmark.php?type=reg_user
-      return 'NO_SUPPORT';
+const modules = { contextMenu, coverLayer, pixiv };
+
+const state = {
+  NAME: GM_info.script.name,
+  VERSION: GM_info.script.version,
+  config: {
+    blacklist: [],
+    contextMenu: 1,
+    fitwidth: 1,
+    hoverPlay: 1,
+    sort: ST.ILLUST_ID,
+    userTooltip: 1,
+  },
+  ctrlPanelOffsetY: 0,
+  filters: {
+    limit: 0,
+    tag: new RegExp('', 'i'),
+  },
+  locale: document.documentElement.lang.toLowerCase(),
+  loginData: null,
+  mainPageType: MPT.NO_SUPPORT,
+  mountPointCoverLayer: null,
+  mountPointCtrlPanel: null,
+  mountPointMainView: null,
+};
+
+const getters = {
+  MPT: (state) => state.mainPageType,
+  config: (state) => state.config,
+  ctrlPanelOffsetY: (state) => state.ctrlPanelOffsetY,
+  filters: (state) => state.filters,
+  isNewProfilePage: (state) => {
+    return [
+      MPT.NEW_PROFILE,
+      MPT.NEW_PROFILE_BOOKMARK,
+      MPT.NEW_PROFILE_ILLUST,
+      MPT.NEW_PROFILE_MANGA,
+    ].includes(state.mainPageType);
+  },
+  isSelfBookmarkPage: (state) => _isSelfBookmarkPage(state.mainPageType, state.loginData.id, $sp().id),
+  locale: (state) => state.locale,
+  loginData: (state) => state.loginData,
+  mountPointCoverLayer: (state) => state.mountPointCoverLayer,
+  mountPointCtrlPanel: (state) => state.mountPointCtrlPanel,
+  mountPointMainView: (state) => state.mountPointMainView,
+  orderBy: (state) => {
+    switch (state.config.sort) {
+    case ST.ILLUST_ID:
+      return 'illustId';
+    case ST.BOOKMARK_ID:
+      return 'bookmarkId';
+    case ST.BOOKMARK_COUNT:
+      return 'bookmarkCount';
+    default:
+      $print.error('VuexStore#getters.orderBy:', state.config.sort);
+      return 'illustId';
     }
-  }
-  default:
-    return 'NO_SUPPORT';
-  }
-})();
+  },
+};
+
+const mutations = {
+  afterInit: (state) => {
+    if (state.mainPageType === MPT.SELF_BOOKMARK) {
+      for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
+        marker.addEventListener('click', () => {
+          $$('input[name="book_id[]"]').forEach(el => {
+            el.checked = marker.classList.contains('js-legacy-mark-all');
+          });
+        });
+      }
+    }
+    const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, $sp().id);
+    if (!_sbp && state.config.sort === ST.BOOKMARK_ID) {
+      state.config.sort = ST.ILLUST_ID;
+    }
+  },
+  applyConfig: (state) => {
+    if (state.mainPageType !== MPT.NO_SUPPORT) {
+      if (state.config.fitwidth) {
+        $$('.ω').forEach(el => el.classList.add('↔'));
+      } else {
+        $$('.ω').forEach(el => el.classList.remove('↔'));
+      }
+    }
+  },
+  loadConfig: (state) => {
+    const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
+    Object.assign(state.config, config);
+  },
+  saveConfig: (state) => {
+    const storable = JSON.stringify(state.config);
+    localStorage.setItem(state.NAME, storable);
+  },
+  setConfig: (state, payload) => {
+    Object.assign(state.config, payload);
+  },
+  setFilters: (state, payload) => {
+    Object.assign(state.filters, payload);
+  },
+  setMainPageType: (state, payload = {}) => {
+    if (payload.forceSet) {
+      $print.debug('vuexStore#setMainPageType: payload:', payload);
+      state.mainPageType = payload.forceSet;
+      return;
+    }
+
+    const path = location.pathname;
+    const _sp = $sp();
+    const _id = _sp.id;
+    const _type = _sp.type;
+    const _mode = _sp.mode;
+
+    switch (path) {
+    case '/search.php':
+      state.mainPageType = MPT.SEARCH;
+      break;
+    case '/bookmark_new_illust_r18.php':
+    case '/bookmark_new_illust.php':
+      state.mainPageType = MPT.FOLLOWED_NEWS;
+      break;
+    case '/new_illust.php':
+    case '/mypixiv_new_illust.php':
+    case '/new_illust_r18.php':
+      state.mainPageType = MPT.ANCIENT_FOLLOWED_NEWS;
+      break;
+    case '/member.php':
+      state.mainPageType = MPT.NEW_PROFILE;
+      break;
+    case '/member_illust.php':
+      if (_mode) {
+        state.mainPageType = MPT.NO_SUPPORT;
+        break;
+      }
+      // MPT.NEW_PROFILE_ILLUST: (_type === 'illust') || (!_type)
+      if (_type === 'manga') {
+        state.mainPageType = MPT.NEW_PROFILE_MANGA; // pool = manga
+      } else if (_type === 'illust') {
+        state.mainPageType = MPT.NEW_PROFILE_ILLUST; // pool = illusts
+      } else { // !_type
+        state.mainPageType = MPT.NEW_PROFILE; // pool = all (illusts + manga)
+      }
+      break;
+    case '/bookmark.php': {
+      state.mainPageType = (!_id) ? MPT.SELF_BOOKMARK : MPT.NEW_PROFILE_BOOKMARK;
+      break;
+    }
+    default:
+      state.mainPageType = MPT.NO_SUPPORT;
+      break;
+    }
+  },
+};
+
+const actions = {
+  init: async({ state, commit, dispatch }) => {
+    // init loginData
+    if (window.globalInitData && window.globalInitData.userData) {
+      const u = window.globalInitData.userData;
+      state.loginData = { id: u.id };
+    } else if (window.pixiv && window.pixiv.user) {
+      const u = window.pixiv.user;
+      state.loginData = { id: u.id };
+    } else {
+      throw new InitError('The page has no any login user data.');
+    }
+
+    // determine mainPageType
+    commit('setMainPageType');
+
+    commit('loadConfig');
+
+    // set mount points by mainPageType
+    await dispatch('setMountPoints');
+
+    // others
+    commit('afterInit');
+    commit('applyConfig');
+    commit('saveConfig');
+  },
+  setMountPoints: async({ state, getters }) => {
+    const mpt = state.mainPageType;
+    if (mpt !== MPT.NO_SUPPORT) {
+
+      $$('#wrapper').forEach(el => el.classList.add('ω'));
+
+      state.mountPointCoverLayer = $el('div', null, (el) => {
+        document.body.appendChild(el);
+      });
+
+      state.mountPointCtrlPanel = $el('div', null, async(el) => {
+        if (getters.isNewProfilePage) {
+          await $ready(() => $('.sLHPYEz'));
+          $after($('.sLHPYEz'), el);
+        } else {
+          $after($('header._global-header'), el);
+        }
+        state.ctrlPanelOffsetY = el.getBoundingClientRect().y;
+      });
+
+      switch (mpt) {
+      case MPT.SEARCH:
+        state.mountPointMainView = $('#js-react-search-mid');
+        break;
+      case MPT.FOLLOWED_NEWS:
+        state.mountPointMainView = $('#js-mount-point-latest-following');
+        break;
+      case MPT.ANCIENT_FOLLOWED_NEWS:
+        state.mountPointMainView = $('ul._image-items');
+        break;
+      case MPT.NEW_PROFILE:
+      case MPT.NEW_PROFILE_BOOKMARK:
+      case MPT.NEW_PROFILE_ILLUST:
+      case MPT.NEW_PROFILE_MANGA:
+        await $ready(() => $('.g4R-bsH'));
+        state.mountPointMainView = $('.g4R-bsH');
+        break;
+      case MPT.SELF_BOOKMARK:
+        state.mountPointMainView = $('.display_editable_works');
+        break;
+      default:
+        break;
+      }
+    }
+  },
+};
+
+
 
 export default new Vuex.Store({
-  modules: { pixiv, contextMenu, bigComponent },
-  state: {
-    locale: document.documentElement.lang,
-    pageType,
-    koakumaMountPoint: null,
-    patchouliMountPoint: null,
-    bigComponentMountPoint: null,
-    VERSION: GM_info.script.version,
-    NAME: GM_info.script.name,
-    filters: {
-      limit: 0,
-      tag: new RegExp('', 'i'),
-    },
-    config: {
-      fitwidth: 1,
-      sort: 0,
-      contextMenu: 1,
-      userTooltip: 1,
-      blacklist: [],
-      hoverPlay: 1,
-    },
-  },
-  mutations: {
-    prepareMountPoint(state) {
-      if (pageType !== 'NO_SUPPORT') {
-        $('#wrapper').classList.add('ω');
-
-        state.koakumaMountPoint = $el('div', { className: 'koakumaMountPoint' }, (el) => {
-          $after($('header._global-header'), el);
-        });
-
-        if (pageType === 'SEARCH') {
-          state.patchouliMountPoint = $('#js-react-search-mid');
-        } else if (pageType === 'NEW_ILLUST') {
-          state.patchouliMountPoint = $('#js-mount-point-latest-following');
-        } else {
-          const li = $('li.image-item');
-          const ul = $('ul._image-items');
-          state.patchouliMountPoint = li ? li.parentElement : ul;
-        }
-
-        state.bigComponentMountPoint = $el('div', null, (el) => {
-          document.body.appendChild(el);
-        });
-      }
-    },
-    applyConfig(state) {
-      if (state.pageType !== 'NO_SUPPORT') {
-        if (state.config.fitwidth) {
-          $('.ω').classList.add('↔');
-        } else {
-          $('.ω').classList.remove('↔');
-        }
-        if (state.pageType === 'MY_BOOKMARK') {
-          for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
-            marker.addEventListener('click', () => {
-              $$('input[name="book_id[]"]').forEach(el => {
-                el.checked = marker.classList.contains('js-legacy-mark-all');
-              });
-            });
-          }
-        }
-      }
-    },
-    saveConfig(state) {
-      const storable = JSON.stringify(state.config);
-      localStorage.setItem(state.NAME, storable);
-    },
-    loadConfig(state) {
-      const config = JSON.parse(localStorage.getItem(state.NAME) || '{}');
-      Object.assign(state.config, config);
-    },
-  },
-  getters: {
-    orderBy(state) {
-      if (state.config.sort) {
-        return 'bookmarkCount';
-      } else {
-        return 'illustId';
-      }
-    },
-  },
+  actions,
+  getters,
+  modules,
+  mutations,
+  state,
 });

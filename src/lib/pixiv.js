@@ -1,4 +1,5 @@
 import { $, $$find, $print, $el, toFormUrlencoded } from './utils';
+import { ConnectionError } from './errors';
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
 
@@ -41,7 +42,7 @@ class Pixiv {
         const a = $el('a', { href: url });
         const resp = await fetch(a.href, opt);
         if (!resp.ok) {
-          throw new Error(`${resp.status} ${resp.statusText}`);
+          throw new ConnectionError(`${resp.status} ${resp.statusText}`);
         }
         return resp;
       } else {
@@ -82,12 +83,15 @@ class Pixiv {
     }
   }
 
-  rpcCall(mode, params = {}) {
+  async rpcCall(mode, params = {}) {
+    /* eslint-disable sort-keys */
     return this.fetchJSON('/rpc/index.php', {
       method: 'POST',
+
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: toFormUrlencoded({ ...params, mode, tt: this.tt }),
     });
+    /* eslint-enable sort-keys */
   }
 
   // new API to get an illust data
@@ -122,6 +126,26 @@ class Pixiv {
     const url = `/ajax/user/${userId}`;
     const data = await this.fetchJSON(url);
     $print.debug('Pixiv#getUserData: data:', data);
+    return data;
+  }
+
+  async getUserProfileData(userId) {
+    const url = `/ajax/user/${userId}/profile/all`;
+    const data = await this.fetchJSON(url);
+    $print.debug('Pixiv#getUserProfileData: data:', data);
+    return data;
+  }
+
+  async getUserBookmarkData(userId, optSearchParams = {}) {
+    const searchParams = Object.assign({
+      limit: 24,
+      offset: 0,
+      rest: 'show',
+      tag: '',
+    }, optSearchParams);
+    const url = `/ajax/user/${userId}/illusts/bookmarks?${toFormUrlencoded(searchParams)}`;
+    const data = await this.fetchJSON(url);
+    $print.debug('Pixiv#getUserBookmarkData: data:', data);
     return data;
   }
 
@@ -168,8 +192,8 @@ class Pixiv {
         }
       }
       const ret = {
-        nextUrl,
         illustIds,
+        nextUrl,
       };
       return ret;
     } catch (error) {
@@ -205,8 +229,8 @@ class Pixiv {
       }
 
       const ret = {
-        nextUrl,
         illustIds,
+        nextUrl,
       };
       return ret;
     } catch (error) {
@@ -217,6 +241,7 @@ class Pixiv {
   // new API to like an illust, return true if succeeded
   async postIllustLike(illustId) {
     const url = '/ajax/illusts/like';
+    /* eslint-disable sort-keys */
     const data = await this.fetchJSON(url, {
       method: 'POST',
       headers: {
@@ -227,7 +252,7 @@ class Pixiv {
         illust_id: illustId,
       }),
     });
-
+    /* eslint-enable sort-keys */
     return Boolean(data);
   }
 
@@ -235,14 +260,15 @@ class Pixiv {
     const url = '/bookmark_add.php';
 
     const searchParams = {
-      mode: 'add',
-      user_id: userId,
       format: 'json',
-      type: 'user',
+      mode: 'add',
       restrict: 0,
       tt: this.tt,
+      type: 'user',
+      user_id: userId,
     };
 
+    /* eslint-disable sort-keys */
     const data = await this.fetchJSON(url, {
       method: 'POST',
       headers: {
@@ -250,15 +276,15 @@ class Pixiv {
       },
       body: toFormUrlencoded(searchParams),
     });
-
+    /* eslint-enable sort-keys */
     return Boolean(data);
   }
 
   async postRPCAddBookmark(illustId) {
     const searchParams = {
+      comment: '',
       illust_id: illustId,
       restrict: 0,
-      comment: '',
       tags: '',
     };
     await this.rpcCall('save_illust_bookmark', searchParams);
@@ -272,7 +298,9 @@ class Pixiv {
   }
 }
 
-function removeAnnoyings(doc = document) {
+export const PixivAPI = new Pixiv();
+
+export function removeAnnoyings(doc = document) {
   const annoyings = [
     'iframe',
     // Ad
@@ -304,6 +332,3 @@ function removeAnnoyings(doc = document) {
   }
 }
 
-const PixivAPI = new Pixiv();
-
-export { PixivAPI, removeAnnoyings };

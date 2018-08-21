@@ -1,5 +1,5 @@
 <template>
-  <div id="patchouli">
+  <div id="patchouli-default-image-item-page">
     <DefaultImageItem
       v-for="d in filteredLibrary"
       v-show="d._show"
@@ -16,28 +16,28 @@
       :is-bookmarked="d.isBookmarked"
       :is-followed="d.isFollowed"
       :bookmark-id="d.bookmarkId" />
-    <ContextMenu/>
   </div>
 </template>
 
 <script>
 import DefaultImageItem from './DefaultImageItem.vue';
-import ContextMenu from './ContextMenu.vue';
 
 export default {
-  components: { DefaultImageItem, ContextMenu },
+  components: { DefaultImageItem },
   computed: {
     filteredLibrary() {
-      return this.$store.getters.filteredLibrary;
+      return this.$store.getters['pixiv/filteredLibrary'];
     },
   },
 };
 </script>
 
 <style scoped>
-#patchouli {
+#patchouli-default-image-item-page {
   display: flex;
   flex-flow: wrap;
   justify-content: space-around;
 }
 </style>
+
+

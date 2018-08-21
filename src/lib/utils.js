@@ -1,48 +1,48 @@
-function $(selector) {
+export const $ = (selector) => {
   return document.querySelector(selector);
-}
+};
 
-function $$(selector) {
+export const $$ = (selector) => {
   return [...document.querySelectorAll(selector)];
-}
+};
 
-function $find(doc, selector) {
+export const $find = (doc, selector) => {
   return doc.querySelector(selector);
-}
+};
 
-function $$find(doc, selector) {
+export const $$find = (doc, selector) => {
   return [...doc.querySelectorAll(selector)];
-}
+};
 
-function $el(tag, attr = {}, cb = () => {}) {
+export const $el = (tag, attr = {}, cb = () => {}) => {
   const el = document.createElement(tag);
   Object.assign(el, attr);
   cb(el);
   return el;
-}
+};
 
-const $print = {
-  log(...args) {
-    console.log.apply(console, [...args]);
+export const $print = {
+  debug(...args) {
+    console.debug.apply(console, [...args]);
   },
   error(...args) {
     console.error.apply(console, [...args]);
   },
-  debug(...args) {
-    console.debug.apply(console, [...args]);
+  log(...args) {
+    console.log.apply(console, [...args]);
   },
 };
 
-const toInt = (x) => {
+export const toInt = (x) => {
   const t = Number(x);
   return isNaN(t) ? 0 : Math.floor(t);
 };
 
-function $after(el, target) {
+export const $after = (el, target) => {
   el.parentNode.insertBefore(target, el.nextSibling);
-}
+};
 
-function $parents(el) {
+export const $parents = (el) => {
   let cur = el;
   const collection = [];
   while (cur.parentElement) {
@@ -50,24 +50,45 @@ function $parents(el) {
     cur = cur.parentElement;
   }
   return collection;
-}
+};
 
-function toFormUrlencoded(o) {
+export const toFormUrlencoded = (o) => {
   // application/x-www-form-urlencoded
   return Object.entries(o)
     .map(p => p.map(encodeURIComponent).join('='))
     .join('&');
+};
+
+export async function waitUntil(func, { ms = 100, maxCount = 20 } = {}) {
+  return new Promise((resolve, reject) => {
+    let c = maxCount;
+    const i = setInterval(() => {
+      const r = func();
+      $print.debug('utils#waitUntil: r, countdown', [r, c]);
+      if (r) {
+        clearInterval(i);
+        resolve(r);
+      } else if (c <= 0) {
+        clearInterval(i);
+        reject();
+      } else {
+        c -= 1;
+      }
+    }, ms);
+  });
 }
 
-export {
-  $,
-  $$,
-  $find,
-  $$find,
-  $el,
-  $print,
-  $after,
-  $parents,
-  toInt,
-  toFormUrlencoded,
+export async function $ready(func) {
+  return waitUntil(func, { maxCount: Infinity })
+    .catch($print.error);
+}
+
+export const $sp = () => {
+  const s = new URLSearchParams(location.search);
+  const ret = {};
+  [...s.entries()].reduce((collect, [k, v]) => {
+    collect[k] = v;
+    return collect;
+  }, ret);
+  return ret;
 };

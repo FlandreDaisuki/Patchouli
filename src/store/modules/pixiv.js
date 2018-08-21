@@ -1,173 +1,373 @@
 import { PixivAPI } from '../../lib/pixiv';
-import { $print, toInt } from '../../lib/utils';
+import { $sp, $print, toInt } from '../../lib/utils';
+import { MAIN_PAGE_TYPE as MPT } from '../../lib/enums';
 
 function makeNewTag(tag) {
   if (tag.translation) {
     const trs = Object.values(tag.translation);
-    return [tag.tag, ...trs].filter(Boolean).join(', ');
+    return [tag.tag, ...trs].filter(Boolean).join('\x00');
   }
-  return [tag.tag, tag.romaji].filter(Boolean).join(', ');
+  return [tag.tag, tag.romaji].filter(Boolean).join('\x00');
 }
 
-function makeLibraryData({ pageType, illustDataGroup, userDataGroup }) {
+function makeLibraryData({ isSelfBookmarkPage = false, illustDataGroup, userDataGroup }) {
   if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
-    throw new Error('makeLibraryData: illustDataGroup is falsy.');
+    return [];
   }
 
-  const vLibrary = [];
+  const library = [];
 
   for (const [illustId, illustData] of Object.entries(illustDataGroup)) {
-    const allTags = illustData.tags.tags.map(makeNewTag).join(', ');
+    const allTags = illustData.tags.tags.map(makeNewTag).join('\x00');
     const d = {
-      illustId,
+      _show: true,
       bookmarkCount: illustData.bookmarkCount,
-      tags: allTags,
-      illustTitle: illustData.illustTitle,
+      bookmarkId: '',
+      illustId,
       illustPageCount: toInt(illustData.pageCount),
-      userId: illustData.userId,
-      userName: illustData.userName,
-      isFollowed: userDataGroup[illustData.userId].isFollowed,
+      illustTitle: illustData.illustTitle,
       isBookmarked: Boolean(illustData.bookmarkData),
+      isFollowed: userDataGroup[illustData.userId].isFollowed,
+      isManga: illustData.illustType === 1,
+      isPrivateBookmark: false,
       isUgoira: illustData.illustType === 2,
       profileImg: userDataGroup[illustData.userId].image,
+      tags: allTags,
       urls: {
         original: illustData.urls.original,
         thumb: illustData.urls.thumb,
       },
-      _show: true,
+      userId: illustData.userId,
+      userName: illustData.userName,
     };
 
-    if (pageType === 'MY_BOOKMARK') {
+    if (isSelfBookmarkPage) {
       d.bookmarkId = illustData.bookmarkData.id;
+      d.isPrivateBookmark = illustData.bookmarkData.private;
     }
 
-    vLibrary.push(d);
+    library.push(d);
   }
 
-  return vLibrary;
+  return library;
 }
 
-export default {
-  state: {
-    imgLibrary: [],
-    isPaused: true,
-    isEnded: false,
-    nextUrl: location.href,
+const state = {
+  batchSize: 40,
+  imageItemLibrary: [],
+  isEnded: false,
+  isPaused: true,
+  moveWindowIndex: 0,
+  moveWindowPrivateBookmarkIndex: 0,
+  nextUrl: location.href,
+  prefetchPool: {
+    illusts: [],
+    manga: [],
   },
-  mutations: {
-    pause(state) {
-      state.isPaused = true;
-    },
-    stop(state) {
-      state.isPaused = true;
-      state.isEnded = true;
-    },
-    editImgItem(state, options = {}) {
-      const DEFAULT_OPT = {
-        type: null,
-        illustId: '',
-        userId: '',
-      };
+};
 
-      const opt = Object.assign({}, DEFAULT_OPT, options);
+const getters = {
+  filteredLibrary(state, getters, rootState, rootGetters) {
+    const clonedLib = state.imageItemLibrary.slice();
+    const _sp = $sp();
+    const dateOldFirst = _sp.order === 'date';
+    const bookmarkEarlyFirst = _sp.order === 'asc';
 
-      if (opt.type === 'follow-user' && opt.userId) {
-        state.imgLibrary
-          .filter(i => i.userId === opt.userId)
-          .forEach(i => {
-            i.isFollowed = true;
-          });
-      }
-    },
-  },
-  actions: {
-    async start({ state, dispatch, rootState }, { times } = {}) {
-      times = times || Infinity;
+    const imgToShow = (el) => {
+      return el.bookmarkCount >= rootGetters.filters.limit &&
+        el.tags.match(rootGetters.filters.tag) &&
+        !rootGetters.config.blacklist.includes(el.userId);
+    };
 
-      if (state.isEnded || times <= 0) {
-        return;
-      }
-
-      switch (rootState.pageType) {
-      case 'SEARCH':
-      case 'NEW_ILLUST':
-      case 'MY_BOOKMARK':
-      case 'MEMBER_ILLIST':
-      case 'MEMBER_BOOKMARK':
-      case 'ANCIENT_NEW_ILLUST':
-        await dispatch('startNextUrlBased', { times });
-        break;
+    const filtered = clonedLib.map(el => {
+      el._show = imgToShow(el);
+      return el;
+    });
+    const shows = filtered.filter(e => e._show);
+    shows.sort((a, b) => {
+      const av = toInt(a[rootGetters.orderBy]);
+      const bv = toInt(b[rootGetters.orderBy]);
+      const c = bv - av;
+      switch (rootGetters.orderBy) {
+      case 'illustId':
+        return dateOldFirst ? -c : c;
+      case 'bookmarkCount':
+        return c;
+      case 'bookmarkId':
+        return bookmarkEarlyFirst ? -c : c;
       default:
-        break;
+        return 0;
       }
-    },
-    async startNextUrlBased({ state, commit, rootState }, { times } = {}) {
-      state.isPaused = false;
+    });
+    const hides = filtered.filter(e => !e._show);
 
-      while (!state.isPaused && !state.isEnded && times) {
-        let page = null;
-        if (['SEARCH', 'NEW_ILLUST'].includes(rootState.pageType)) {
-          page = await PixivAPI.getIllustIdsInPageHTML(state.nextUrl);
-        } else {
-          page = await PixivAPI.getIllustIdsInLegacyPageHTML(state.nextUrl);
-        }
-        $print.debug('PixivModule#startNextUrlBased: page:', page);
+    return shows.concat(hides);
+  },
+  imageItemLibrary: (state) => state.imageItemLibrary,
+  status: (state) => {
+    const { isEnded, isPaused } = state;
+    return { isEnded, isPaused };
+  },
+};
 
-        state.nextUrl = page.nextUrl;
+const mutations = {
+  editImgItem(state, options = {}) {
+    const DEFAULT_OPT = {
+      illustId: '',
+      type: null,
+      userId: '',
+    };
 
-        const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
-        $print.debug('PixivModule#startNextUrlBased: illustDataGroup:', illustDataGroup);
+    const opt = Object.assign({}, DEFAULT_OPT, options);
 
-        const userIds = Object.values(illustDataGroup).map(d => d.userId);
-        const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
-        $print.debug('PixivModule#startNextUrlBased: userDataGroup:', userDataGroup);
-
-        const libraryData = makeLibraryData({
-          pageType: rootState.pageType,
-          illustDataGroup,
-          userDataGroup,
+    if (opt.type === 'follow-user' && opt.userId) {
+      state.imageItemLibrary
+        .filter(i => i.userId === opt.userId)
+        .forEach(i => {
+          i.isFollowed = true;
         });
+    }
+  },
+  pause(state) {
+    state.isPaused = true;
+  },
+  relive(state) {
+    state.isEnded = false;
+  },
+  resume(state) {
+    state.isPaused = false;
+  },
+  stop(state) {
+    state.isPaused = true;
+    state.isEnded = true;
+  },
+};
 
-        // prevent duplicate illustId
-        for (const d of libraryData) {
-          if (!state.imgLibrary.find(x => x.illustId === d.illustId)) {
-            state.imgLibrary.push(d);
-          }
-        }
+const actions = {
+  async delayFirstStart({ commit, dispatch }, { actionName, options }) {
+    commit('resume');
+    commit('relive');
+    await dispatch(actionName, options);
+  },
+  async start({ state, commit, dispatch, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) {
+    commit('resume');
 
-        times -= 1;
+    if (force) {
+      commit('relive');
+    }
 
-        if (!times) {
-          commit('pause');
-        }
+    if (state.isEnded || times <= 0) {
+      return;
+    }
 
-        if (!state.nextUrl) {
+    if (rootGetters.isNewProfilePage && isFirst) {
+      const profile = await PixivAPI.getUserProfileData($sp().id);
+      state.prefetchPool.illusts.push(...Object.keys(profile.illusts));
+      state.prefetchPool.manga.push(...Object.keys(profile.manga));
+
+      // from new → old
+      state.prefetchPool.illusts.sort((i, j) => j - i);
+      state.prefetchPool.manga.sort((i, j) => j - i);
+
+      $print.debug('vuexMudule/pixiv#start: prefetchPool.illusts:', state.prefetchPool.illusts);
+      $print.debug('vuexMudule/pixiv#start: prefetchPool.manga:', state.prefetchPool.manga);
+    }
+
+    $print.debug('vuexMudule/pixiv#start: MPT:', rootGetters.MPT);
+
+    switch (rootGetters.MPT) {
+    case MPT.SEARCH:
+    case MPT.FOLLOWED_NEWS:
+    case MPT.ANCIENT_FOLLOWED_NEWS:
+    case MPT.SELF_BOOKMARK:
+      await dispatch('startNextUrlBased', { times });
+      break;
+    case MPT.NEW_PROFILE:
+      await dispatch('startPrefetchBased', { pool: 'all', times  });
+      break;
+    case MPT.NEW_PROFILE_ILLUST:
+      await dispatch('startPrefetchBased', { pool: 'illusts', times });
+      break;
+    case MPT.NEW_PROFILE_MANGA:
+
+      await dispatch('startPrefetchBased', { pool: 'manga', times });
+      break;
+    case MPT.NEW_PROFILE_BOOKMARK:
+      await dispatch('startMovingWindowBased', { times });
+      break;
+    default:
+      $print.error('Unknown main page type', rootGetters.MPT);
+      break;
+    }
+  },
+  async startMovingWindowBased({ state, commit, rootGetters }, { times = Infinity, rest = null } = {}) {
+    while (!state.isPaused && !state.isEnded && times) {
+      let illustIds = [], maxTotal = Infinity;
+      const _rest = rest || $sp().rest;
+      const _uid = $sp().id;
+      let cIndex = (_rest === 'show') ? state.moveWindowIndex : state.moveWindowPrivateBookmarkIndex;
+      if (rootGetters.isNewProfilePage) {
+        const opt = { limit: state.batchSize, offset: cIndex, rest: _rest };
+        const { works, total } = await PixivAPI.getUserBookmarkData(_uid, opt);
+        $print.debug('vuexMudule/pixiv#startMovingWindowBased: works:', works);
+        if (!works) {
           commit('stop');
+          break;
+        }
+        maxTotal = total;
+        illustIds.push(...works.map((d) => d.id));
+      }
+
+      cIndex += state.batchSize;
+
+      if (rootGetters.isNewProfilePage && _rest === 'hide') {
+        state.moveWindowPrivateBookmarkIndex = cIndex;
+      } else {
+        state.moveWindowIndex = cIndex;
+      }
+
+      const illustDataGroup = await PixivAPI.getIllustDataGroup(illustIds);
+      $print.debug('vuexMudule/pixiv#startMovingWindowBased: illustDataGroup:', illustDataGroup);
+
+      const userIds = Object.values(illustDataGroup).map(d => d.userId);
+      const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
+      $print.debug('vuexMudule/pixiv#startMovingWindowBased: userDataGroup:', userDataGroup);
+
+      const libraryData = makeLibraryData({
+        illustDataGroup,
+        isSelfBookmarkPage: rootGetters.isSelfBookmarkPage,
+        userDataGroup,
+      });
+
+      // prevent duplicate illustId
+      for (const d of libraryData) {
+        if (!state.imageItemLibrary.find(x => x.illustId === d.illustId)) {
+          state.imageItemLibrary.push(d);
         }
       }
-    },
-  },
-  getters: {
-    filteredLibrary(state, getters, rootState) {
-      const cloneLibrary = state.imgLibrary.slice();
-      const dateOrder = (new URLSearchParams(location.href)).get('order') === 'date';
-      const imgToShow = (el) => {
-        return el.bookmarkCount >= rootState.filters.limit &&
-          el.tags.match(rootState.filters.tag) &&
-          !rootState.config.blacklist.includes(el.userId);
-      };
 
-      return cloneLibrary
-        .map(el => {
-          el._show = imgToShow(el);
-          return el;
-        })
-        .sort((a, b) => {
-          const av = toInt(a[getters.orderBy]);
-          const bv = toInt(b[getters.orderBy]);
-          const c = bv - av;
-          return dateOrder && getters.orderBy === 'illustId' ? -c : c;
-        });
-    },
+      times -= 1;
+
+      if (!times) {
+        commit('pause');
+      }
+
+      if (cIndex > maxTotal) {
+        commit('stop');
+      }
+    }
   },
+  async startNextUrlBased({ state, commit, rootGetters }, { times = Infinity } = {}) {
+    while (!state.isPaused && !state.isEnded && times) {
+      let page = null;
+
+      if ([MPT.SEARCH, MPT.FOLLOWED_NEWS].includes(rootGetters.MPT)) {
+        page = await PixivAPI.getIllustIdsInPageHTML(state.nextUrl);
+      } else {
+        page = await PixivAPI.getIllustIdsInLegacyPageHTML(state.nextUrl);
+      }
+      $print.debug('vuexMudule/pixiv#startNextUrlBased: page:', page);
+
+      state.nextUrl = page.nextUrl;
+
+      const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
+      $print.debug('vuexMudule/pixiv#startNextUrlBased: illustDataGroup:', illustDataGroup);
+
+      const userIds = Object.values(illustDataGroup).map(d => d.userId);
+      const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
+      $print.debug('vuexMudule/pixiv#startNextUrlBased: userDataGroup:', userDataGroup);
+
+      const libraryData = makeLibraryData({
+        illustDataGroup,
+        userDataGroup,
+      });
+
+      // prevent duplicate illustId
+      for (const d of libraryData) {
+        if (!state.imageItemLibrary.find(x => x.illustId === d.illustId)) {
+          state.imageItemLibrary.push(d);
+        }
+      }
+
+      times -= 1;
+
+      if (!times) {
+        commit('pause');
+      }
+
+      if (!state.nextUrl) {
+        commit('stop');
+      }
+    }
+  },
+  async startPrefetchBased({ state, commit }, { times = Infinity, pool = 'all' } = {}) {
+    const pPool = state.prefetchPool;
+    let todoPool = [];
+    if (pool === 'all') {
+      todoPool.push(...pPool.illusts);
+      todoPool.push(...pPool.manga);
+    } else {
+      todoPool.push(...pPool[pool]);
+    }
+    $print.debug('vuexMudule/pixiv#startPrefetchBased: todoPool:', todoPool);
+
+    while (!state.isPaused && !state.isEnded && times) {
+      if (!todoPool.length) {
+        commit('stop');
+      }
+
+      const illustIds = todoPool.splice(0, state.batchSize);
+
+      if (pool === 'all') {
+        illustIds.forEach((id) => {
+          const ii = pPool.illusts.indexOf(id);
+          if (ii >= 0) {
+            pPool.illusts.splice(ii, 1);
+          }
+          const mi = pPool.manga.indexOf(id);
+          if (mi >= 0) {
+            pPool.manga.splice(mi, 1);
+          }
+        });
+      }
+
+      const illustDataGroup = await PixivAPI.getIllustDataGroup(illustIds);
+      $print.debug('vuexMudule/pixiv#startPrefetchBased: illustDataGroup:', illustDataGroup);
+
+      const userIds = Object.values(illustDataGroup).map(d => d.userId);
+      const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
+      $print.debug('vuexMudule/pixiv#startPrefetchBased: userDataGroup:', userDataGroup);
+
+      const libraryData = makeLibraryData({
+        illustDataGroup,
+        userDataGroup,
+      });
+
+      // prevent duplicate illustId
+      for (const d of libraryData) {
+        if (!state.imageItemLibrary.find(x => x.illustId === d.illustId)) {
+          state.imageItemLibrary.push(d);
+        }
+      }
+
+      times -= 1;
+
+      if (!times) {
+        commit('pause');
+      }
+
+      if (!todoPool.length) {
+        commit('stop');
+      }
+    }
+  },
+
+};
+
+export default {
+  actions,
+  getters,
+  mutations,
+  namespaced: true,
+  state,
 };

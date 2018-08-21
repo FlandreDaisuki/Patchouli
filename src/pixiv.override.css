@@ -41,3 +41,41 @@
 .ω.↔ .layout-a {
   margin: 10px 20px;
 }
+
+/* annoyings, ref: lib/pixiv.js */
+
+iframe,
+/* Ad */
+.ad,
+.ads_area,
+.ad-footer,
+.ads_anchor,
+.ads-top-info,
+.comic-hot-works,
+.user-ad-container,
+.ads_area_no_margin,
+/* Premium */
+.hover-item,
+.ad-printservice,
+.bookmark-ranges,
+.require-premium,
+.showcase-reminder,
+.sample-user-search,
+.popular-introduction,
+._premium-lead-tag-search-bar,
+._premium-lead-popular-d-body,
+._premium-lead-promotion-banner {
+  display: none !important;
+}
+
+:root {
+  --new-default-image-item-square-size: 184px;
+}
+
+/* dotted focus */
+:focus {
+  outline:none;
+}
+::-moz-focus-inner {
+  border:0;
+}

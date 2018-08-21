@@ -1,8 +1,10 @@
 <template>
-  <div id="koakuma" >
-    <div class="processed">{{ $t('koakuma.processed', { count: $store.state.pixiv.imgLibrary.length }) }}</div>
+  <div
+    :id="id"
+    :ref="id">
+    <div class="processed">{{ $t('ctrlPanel.processed', { count: processedCount }) }}</div>
     <div id="koakuma-bookmark-sort-block">
-      <label for="koakuma-bookmark-sort-input" class="bookmark-count">
+      <label id="koakuma-bookmark-sort-label" for="koakuma-bookmark-sort-input">
         <i class="_icon _bookmark-icon-inline"/>
         <input
           id="koakuma-bookmark-sort-input"
@@ -21,17 +23,18 @@
       </a>
       <ul v-show="usualSwitchOn" id="koakuma-bookmark-input-usual-list">
         <li v-for="usual in usualList" :key="usual">
+          <span class="sort-order-apply-indicator">⮬</span>
           <a
             role="button"
             class="usual-list-link"
-            @click.left="filters.limit = usual; usualSwitchOn = false">{{ usual }}</a>
+            @click.left="clickUsual">{{ usual }}</a>
         </li>
       </ul>
     </div>
     <div>
       <input
         id="koakuma-bookmark-tags-filter-input"
-        :placeholder="$t('koakuma.tagsPlaceholder')"
+        :placeholder="$t('ctrlPanel.tagsPlaceholder')"
         type="text"
         @input="tagsFilterInput">
     </div>
@@ -40,7 +43,7 @@
         id="koakuma-main-button"
         :disabled="status.isEnded"
         :class="statusClass"
-        @mouseup="clickMainButton">
+        @mouseup.left="clickMainButton">
         {{ buttonMsg }}
       </button>
     </div>
@@ -54,30 +57,40 @@
       </a>
       <ul v-show="sortingOrderSwitchOn" id="koakuma-sorting-order-select-list">
         <li>
+          <span class="sort-order-apply-indicator">⮬</span>
           <a
             id="koakuma-sorting-order-by-popularity"
             class="sorting-order-link"
             role="button"
-            @click.left="clickSortingOrder">{{ $t("koakuma.sortByPopularity") }}</a>
+            @click.left="clickSortingOrder">{{ $t('ctrlPanel.sortByPopularity') }}</a>
         </li>
         <li>
+          <span class="sort-order-apply-indicator">⮬</span>
           <a
             id="koakuma-sorting-order-by-date"
             class="sorting-order-link"
             role="button"
-            @click.left="clickSortingOrder">{{ $t("koakuma.sortByDate") }}</a>
+            @click.left="clickSortingOrder">{{ $t('ctrlPanel.sortByDate') }}</a>
+        </li>
+        <li v-if="isSelfBookmarkPage">
+          <span class="sort-order-apply-indicator">⮬</span>
+          <a
+            id="koakuma-sorting-order-by-bookmark-id"
+            class="sorting-order-link"
+            role="button"
+            @click.left="clickSortingOrder">{{ $t('ctrlPanel.sortByBookmarkId') }}</a>
         </li>
       </ul>
     </div>
     <div id="koakuma-options-block">
       <div>
         <i
-          v-show="config.fitwidth"
+          v-show="xc.fitwidth"
           id="koakuma-options-width-compress"
           class="fas fa-compress"
           @click.left="optionsChange"/>
         <i
-          v-show="!config.fitwidth"
+          v-show="!xc.fitwidth"
           id="koakuma-options-width-expand"
           class="fas fa-expand"
           @click.left="optionsChange"/>
@@ -86,7 +99,7 @@
         <i
           id="koakuma-options-config"
           class="fas fa-cog"
-          @click.left="openBigComponentInConfigMode"/>
+          @click.left="openCoverLayerInConfigMode"/>
       </div>
     </div>
   </div>
@@ -94,111 +107,92 @@
 
 <script>
 import { $print, toInt } from '../lib/utils';
+import { SORT_TYPE as ST } from '../lib/enums';
 export default {
+  props: {
+    id: {
+      default: '',
+      type: String,
+    },
+  },
+  // eslint-disable-next-line sort-keys
   data() {
     return {
       debounceId4sortInput: null,
       debounceId4tagsFilter: null,
-      usualSwitchOn: false,
       sortingOrderSwitchOn: false,
       usualList: [100, 500, 1000, 3000, 5000, 10000],
+      usualSwitchOn: false,
     };
   },
+  // eslint-disable-next-line sort-keys
   computed: {
-    status() {
-      return this.$store.state.pixiv;
-    },
-    config() {
-      return this.$store.state.config;
-    },
-    statusClass() {
-      return {
-        end: this.status.isEnded,
-        paused: !this.status.isPaused && !this.status.isEnded,
-        go: this.status.isPaused && !this.status.isEnded,
-      };
-    },
-    filters() {
-      return this.$store.state.filters;
-    },
     buttonMsg() {
       if (this.status.isEnded) {
-        return this.$t('koakuma.buttonEnd');
+        return this.$t('ctrlPanel.buttonEnd');
       } else if (this.status.isPaused) {
-        return this.$t('koakuma.buttonGo');
+        return this.$t('ctrlPanel.buttonGo');
       } else {
-        return this.$t('koakuma.buttonPause');
+        return this.$t('ctrlPanel.buttonPause');
       }
     },
+    filters() {
+      return this.$store.getters.filters;
+    },
+    isSelfBookmarkPage() {
+      return this.$store.getters.isSelfBookmarkPage;
+    },
+    processedCount() {
+      return this.$store.getters['pixiv/imageItemLibrary'].length;
+    },
     sortingOrderMsg() {
-      const p = this.$t('koakuma.sortByPopularity');
-      const d = this.$t('koakuma.sortByDate');
-      const ml = Math.max(p.length, d.length);
-      const [xp, xd] = [p, d].map(s => {
-        if (s.length < ml) {
-          const ps = ml - s.length; // padding space
-          const hps = Math.floor(ps / 2);
-          return '&nbsp;'.repeat(hps) + s + '&nbsp;'.repeat(ps - hps);
-        }
-        return s;
-      });
-      if (this.config.sort) {
-        return xp;
-      } else {
-        return xd;
+      switch (this.xc.sort) {
+      case ST.BOOKMARK_COUNT:
+        return this.$t('ctrlPanel.sortByPopularity');
+      case ST.ILLUST_ID:
+        return this.$t('ctrlPanel.sortByDate');
+      default:
+        //ST.BOOKMARK_ID
+        return this.$t('ctrlPanel.sortByBookmarkId');
       }
+    },
+    status() {
+      return this.$store.getters['pixiv/status'];
+    },
+    statusClass() {
+      const _s = this.status;
+      return {
+        end: _s.isEnded,
+        go: _s.isPaused && !_s.isEnded,
+        paused: !_s.isPaused && !_s.isEnded,
+      };
+    },
+    xc() {
+      return this.$store.getters.config;
     },
   },
   methods: {
     clickMainButton() {
       if (this.status.isPaused) {
-        this.$store.dispatch('start');
+        this.$store.dispatch('pixiv/start');
       } else {
-        this.$store.commit('pause');
+        this.$store.commit('pixiv/pause');
       }
-    },
-    sortInputWheel(event) {
-      if (event.deltaY < 0) {
-        this.filters.limit = toInt(event.target.value) + 20;
-      } else {
-        this.filters.limit = Math.max(0, toInt(event.target.value) - 20);
-      }
-    },
-    sortInputInput(event) {
-      if (this.debounceId4sortInput) {
-        clearTimeout(this.debounceId4sortInput);
-      }
-      this.debounceId4sortInput = setTimeout(() => {
-        this.debounceId4sortInput = null;
-        this.filters.limit = Math.max(0, toInt(event.target.value));
-      }, 500);
-    },
-    optionsChange(event) {
-      $print.debug('Koakuma#optionsChange: event', event);
-      if (event.target.id === 'koakuma-options-width-compress') {
-        this.config.fitwidth = false;
-      } else if (event.target.id === 'koakuma-options-width-expand') {
-        this.config.fitwidth = true;
-      }
-      this.$store.commit('saveConfig');
-      this.$store.commit('applyConfig');
-    },
-    tagsFilterInput(event) {
-      if (this.debounceId4tagsFilter) {
-        clearTimeout(this.debounceId4tagsFilter);
-      }
-      this.debounceId4tagsFilter = setTimeout(() => {
-        this.debounceId4tagsFilter = null;
-        this.filters.tag = new RegExp(event.target.value, 'ig');
-      }, 1500);
     },
     clickSortingOrder(event) {
       $print.debug('Koakuma#clickSortingOrder: event', event);
 
-      if (event.target.id === 'koakuma-sorting-order-by-popularity') {
-        this.config.sort = 1;
-      } else {
-        this.config.sort = 0;
+      const ct = event.currentTarget;
+      switch (ct.id) {
+      case 'koakuma-sorting-order-by-popularity':
+        this.$store.commit('setConfig', { sort: ST.BOOKMARK_COUNT });
+        break;
+      case 'koakuma-sorting-order-by-bookmark-id':
+        this.$store.commit('setConfig', { sort: ST.BOOKMARK_ID });
+        break;
+      default:
+        this.$store.commit('setConfig', { sort: ST.ILLUST_ID });
+        break;
       }
 
       this.$store.commit('saveConfig');
@@ -206,8 +200,57 @@ export default {
 
       this.sortingOrderSwitchOn = false;
     },
-    openBigComponentInConfigMode() {
-      this.$store.commit('openBigComponent', { mode: 'config', data: null });
+    clickUsual(event) {
+      this.$store.commit('setFilters', {
+        limit: toInt(event.currentTarget.textContent),
+      });
+      this.usualSwitchOn = false;
+    },
+    openCoverLayerInConfigMode() {
+      this.$store.commit('coverLayer/open', { data: null, mode: 'config' });
+    },
+    optionsChange(event) {
+      $print.debug('Koakuma#optionsChange: event', event);
+      if (event.target.id === 'koakuma-options-width-compress') {
+        this.$store.commit('setConfig', { fitwidth: false });
+      } else if (event.target.id === 'koakuma-options-width-expand') {
+        this.$store.commit('setConfig', { fitwidth: true });
+      }
+      this.$store.commit('saveConfig');
+      this.$store.commit('applyConfig');
+    },
+    sortInputInput(event) {
+      if (this.debounceId4sortInput) {
+        clearTimeout(this.debounceId4sortInput);
+      }
+      this.debounceId4sortInput = setTimeout(() => {
+        this.debounceId4sortInput = null;
+        this.$store.commit('setFilters', {
+          limit: Math.max(0, toInt(event.target.value)),
+        });
+      }, 500);
+    },
+    sortInputWheel(event) {
+      if (event.deltaY < 0) {
+        this.$store.commit('setFilters', {
+          limit: toInt(event.target.value) + 20,
+        });
+      } else {
+        this.$store.commit('setFilters', {
+          limit: Math.max(0, toInt(event.target.value) - 20),
+        });
+      }
+    },
+    tagsFilterInput(event) {
+      if (this.debounceId4tagsFilter) {
+        clearTimeout(this.debounceId4tagsFilter);
+      }
+      this.debounceId4tagsFilter = setTimeout(() => {
+        this.debounceId4tagsFilter = null;
+        this.$store.commit('setFilters', {
+          tag: new RegExp(event.target.value, 'ig'),
+        });
+      }, 1500);
     },
   },
 };
@@ -228,34 +271,40 @@ a[role="button"] {
 a[role="button"] > .fa-angle-down {
   padding: 2px;
 }
-#koakuma {
+a {
+  color: #258fb8;
+}
+#Koakuma {
   display: flex;
   justify-content: center;
   align-items: center;
   position: sticky;
   top: 0;
   z-index: 3;
-  background-color: #e5e4ff;
-  box-shadow: 0 2px 2px #777;
+  background-color: #eef;
+  box-shadow: 0 1px 1px #777;
   padding: 4px;
   color: #00186c;
   font-size: 16px;
-  animation: slidedown 0.7s linear;
+  width: 100%;
 }
-#koakuma > div {
+#Koakuma > div {
   margin: 0 10px;
   display: inline-flex;
 }
-.bookmark-count {
+#koakuma-bookmark-sort-label {
   display: inline-flex !important;
   align-items: center;
   margin-right: 0;
   border-radius: 3px 0 0 3px;
+  background-color: #cef;
+  color: rgb(0, 105, 177);
+  margin: 0 1px;
+  padding: 0 6px;
 }
 #koakuma-bookmark-sort-block,
 #koakuma-sorting-order-block {
   position: relative;
-  height: 20px;
   box-shadow: 0 0 1px #069;
   border-radius: 4px;
 }
@@ -281,7 +330,17 @@ a[role="button"] > .fa-angle-down {
   margin: 0;
 }
 #koakuma-bookmark-tags-filter-input {
+  margin: 0;
+  padding: 0 4px;
+  color: #333;
+  font-size: 12px;
+  border: 1px solid #becad7;
+  height: 20px;
   min-width: 300px;
+}
+#koakuma-bookmark-tags-filter-input:focus {
+  background: #ffffcc;
+  outline: none;
 }
 #koakuma-bookmark-input-usual-switch,
 #koakuma-sorting-order-select-switch {
@@ -306,6 +365,19 @@ a[role="button"] > .fa-angle-down {
   top: 100%;
   width: 100%;
   margin-top: 1px;
+  list-style: none;
+  padding: 0;
+}
+#koakuma-sorting-order-select-list {
+  display: grid;
+  grid-auto-columns: max-content;
+  width: initial;
+}
+#koakuma-bookmark-input-usual-list > li,
+#koakuma-sorting-order-select-list > li {
+  display: flex;
+  position: relative;
+  line-height: 24px;
 }
 #koakuma-bookmark-input-usual-list > li::after,
 #koakuma-sorting-order-select-list > li::after {
@@ -317,25 +389,43 @@ a[role="button"] > .fa-angle-down {
   line-height: 0;
   font-size: 0;
   position: absolute;
+  left: 0;
+  right: 0;
   width: 100%;
   transform: scaleX(0.8);
+  bottom: 0;
 }
 #koakuma-bookmark-input-usual-list > li:last-child::after,
 #koakuma-sorting-order-select-list > li:last-child::after {
   box-shadow: none;
 }
-.usual-list-link:hover::before,
-.sorting-order-link:hover::before {
-  content: "⮬";
+#koakuma-bookmark-input-usual-list .sort-order-apply-indicator,
+#koakuma-sorting-order-select-list .sort-order-apply-indicator {
+  visibility: hidden;
+}
+#koakuma-bookmark-input-usual-list .sort-order-apply-indicator {
   position: absolute;
-  left: 6px;
+}
+#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator,
+#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator {
+  visibility: visible;
+}
+.sort-order-apply-indicator {
+  display: block;
+  justify-content: center;
+  align-items: center;
   font-weight: bolder;
+  padding: 0 4px;
 }
 .usual-list-link,
 .sorting-order-link {
   display: block;
   cursor: pointer;
   text-align: center;
+  flex: 1;
+}
+.sorting-order-link {
+  padding-right: 18px;
 }
 #koakuma-sorting-order-select-output {
   padding: 0 16px;
@@ -382,5 +472,17 @@ a[role="button"] > .fa-angle-down {
 #koakuma-options-width-expand,
 #koakuma-options-config {
   cursor: pointer;
+}
+._bookmark-icon-inline {
+  display: inline-block;
+  overflow: hidden;
+  text-indent: -999px;
+  white-space: nowrap;
+  height: 10px;
+  width: 10px;
+  background-size: cover;
+  background-image: url("https://s.pximg.net/www/images/bookmark-heart-inline.svg?1");
+  background-position: center;
+  background-repeat: no-repeat;
 }
 </style>
