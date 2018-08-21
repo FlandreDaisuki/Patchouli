@@ -73,9 +73,12 @@ iframe,
 }
 
 /* dotted focus */
-:focus {
-  outline:none;
+a::-moz-focus-inner,
+button::-moz-focus-inner {
+  border: 0 !important;
+  outline: 0 !important;
 }
-::-moz-focus-inner {
-  border:0;
+a:focus,
+button:focus {
+  outline: 0 !important;
 }
