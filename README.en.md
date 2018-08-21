@@ -16,7 +16,7 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 ## Functions
 
 - Find pictures automatically
-- The UI with i18n (en, ja, zh, zh-tw)
+- The UI with i18n (en, ja, zh-cn, zh-tw)
 - Filter by **bookmarks count**<br>
   ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
 - Filter by **tags with regexp**<br>
@@ -31,11 +31,12 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
    - Click on image
       - Like
       - Download original size image (only support single image)
-      - Preview  original size images
+      - Preview  original size images (can browse with mouse wheel and arrow key)
       - Open add bookmark page (Just click <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
    - Click on illustrator name
       - Follow
-      - Blacklist (fake mute)
+      - Blacklist (simulate mute function)
+- Autoplay ugoira when mouse over ⚠️ This feature uses network bandwith quite heavily ⚠️
 
 ## Usage
 
@@ -43,7 +44,10 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 
 ## Contribution
 
-Questions or suggestions, post [issue](https://github.com/FlandreDaisuki/Patchouli/issues) :coffee:
+- Please tell me if you found bugs: [Bug report](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Bug_report.md) 🐛🐛
+- Also, welcome feature request: [Feature request](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Feature_request.md) 💡💡
+- And also welcome source contribution: [pull request](https://github.com/FlandreDaisuki/Patchouli/pulls) ⌨️⌨️
+- Share and give me a ⭐️ to encourage me to maintain this project, and thanks [contributors](https://github.com/FlandreDaisuki/Patchouli/graphs/contributors) 👍👍
 
 ## Lisence
 
@@ -52,6 +56,13 @@ The MIT License (MIT)
 Copyright (c) 2016-2018 FlandreDaisuki
 
 ## Changelog
+
+2018-99-99 v4.2.0
+
+- Refactoring code
+- Support new profile page
+- Support mouse wheel in showing original images
+- Adjust styles
 
 2018-08-03 v4.1.10
 

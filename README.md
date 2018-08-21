@@ -16,7 +16,7 @@
 ## Functions 功能
 
 - 自動找圖
-- 部份 i18n 界面 (en, ja, zh, zh-tw)
+- 部份 i18n 界面 (en, ja, zh-cn, zh-tw)
 - 以 **收藏數** 過濾結果<br>
   ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
 - 以 **標籤正規表達式** 過濾結果<br>
@@ -44,9 +44,9 @@
 
 ## Contribution 貢獻
 
-- 找到問題請告訴我：[問題回報](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Bug_report.md)
-- 有任何建議也歡迎告訴我：[許願池](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Feature_request.md)
-- 或是歡迎直接貢獻原始碼：[pull request](https://github.com/FlandreDaisuki/Patchouli/pulls)
+- 找到問題請告訴我：[問題回報](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Bug_report.md) 🐛🐛
+- 有任何建議也歡迎告訴我：[許願池](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Feature_request.md) 💡💡
+- 或是歡迎直接貢獻原始碼：[pull request](https://github.com/FlandreDaisuki/Patchouli/pulls) ⌨️⌨️
 - 分享並點個 ⭐️ 讓我有動力繼續無償維護下去，並感謝曾經給予幫助的[貢獻者們](https://github.com/FlandreDaisuki/Patchouli/graphs/contributors) 👍👍
 
 ## Lisence 授權
