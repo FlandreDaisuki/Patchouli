@@ -3850,6 +3850,7 @@ __vue_render__$6._withStripped = true;
 //
 //
 //
+//
 
 var script$7 = {};
 
@@ -3865,7 +3866,10 @@ var __vue_render__$7 = function() {
     "svg",
     { staticClass: "ugoira-icon", attrs: { viewBox: "0 0 24 24" } },
     [
-      _c("circle", { attrs: { cx: "12", cy: "12", r: "10" } }),
+      _c("circle", {
+        staticClass: "ugoira-icon-circle",
+        attrs: { cx: "12", cy: "12", r: "10" }
+      }),
       _vm._v(" "),
       _c("path", {
         attrs: {
@@ -3882,11 +3886,11 @@ __vue_render__$7._withStripped = true;
   /* style */
   const __vue_inject_styles__$7 = function (inject) {
     if (!inject) return
-    inject("data-v-6b981083_0", { source: "\n.ugoira-icon[data-v-6b981083] {\n  fill: #fff;\n  font-size: 0;\n  height: 48px;\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n  width: 48px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconUgoiraPlay.vue"],"names":[],"mappings":";AAiBA;EACA,WAAA;EACA,aAAA;EACA,aAAA;EACA,eAAA;EACA,aAAA;EACA,uBAAA;EACA,YAAA;CACA","file":"IconUgoiraPlay.vue","sourcesContent":["<template>\n  <svg\n    viewBox=\"0 0 24 24\"\n    class=\"ugoira-icon\">\n    <circle\n      cx=\"12\"\n      cy=\"12\"\n      r=\"10\"/>\n    <path d=\"M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z\"/>\n  </svg>\n</template>\n\n<script>\nexport default {};\n</script>\n\n<style scoped>\n.ugoira-icon {\n  fill: #fff;\n  font-size: 0;\n  height: 48px;\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n  width: 48px;\n}\n</style>\n\n\n\n"]}, media: undefined });
+    inject("data-v-6a9b0343_0", { source: "\n.ugoira-icon-circle[data-v-6a9b0343] {\n  fill: #000;\n  fill-opacity: 0.4;\n}\n.ugoira-icon[data-v-6a9b0343] {\n  fill: #fff;\n  font-size: 0;\n  height: 48px;\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n  width: 48px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconUgoiraPlay.vue"],"names":[],"mappings":";AAkBA;EACA,WAAA;EACA,kBAAA;CACA;AACA;EACA,WAAA;EACA,aAAA;EACA,aAAA;EACA,eAAA;EACA,aAAA;EACA,uBAAA;EACA,YAAA;CACA","file":"IconUgoiraPlay.vue","sourcesContent":["<template>\n  <svg\n    viewBox=\"0 0 24 24\"\n    class=\"ugoira-icon\">\n    <circle\n      class=\"ugoira-icon-circle\"\n      cx=\"12\"\n      cy=\"12\"\n      r=\"10\"/>\n    <path d=\"M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z\"/>\n  </svg>\n</template>\n\n<script>\nexport default {};\n</script>\n\n<style scoped>\n.ugoira-icon-circle {\n  fill: #000;\n  fill-opacity: 0.4;\n}\n.ugoira-icon {\n  fill: #fff;\n  font-size: 0;\n  height: 48px;\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n  width: 48px;\n}\n</style>\n\n\n\n"]}, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$7 = "data-v-6b981083";
+  const __vue_scope_id__$7 = "data-v-6a9b0343";
   /* module identifier */
   const __vue_module_identifier__$7 = undefined;
   /* functional template */
