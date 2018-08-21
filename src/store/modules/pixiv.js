@@ -10,7 +10,7 @@ function makeNewTag(tag) {
   return [tag.tag, tag.romaji].filter(Boolean).join('\x00');
 }
 
-function makeLibraryData({ isSelfBookmarkPage = false, illustDataGroup, userDataGroup }) {
+function makeLibraryData({ illustDataGroup, userDataGroup }) {
   if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
     return [];
   }
@@ -41,7 +41,7 @@ function makeLibraryData({ isSelfBookmarkPage = false, illustDataGroup, userData
       userName: illustData.userName,
     };
 
-    if (isSelfBookmarkPage) {
+    if (illustData.bookmarkData) {
       d.bookmarkId = illustData.bookmarkData.id;
       d.isPrivateBookmark = illustData.bookmarkData.private;
     }
@@ -235,7 +235,6 @@ const actions = {
 
       const libraryData = makeLibraryData({
         illustDataGroup,
-        isSelfBookmarkPage: rootGetters.isSelfBookmarkPage,
         userDataGroup,
       });
 

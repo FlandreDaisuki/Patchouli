@@ -72,7 +72,7 @@
             role="button"
             @click.left="clickSortingOrder">{{ $t('ctrlPanel.sortByDate') }}</a>
         </li>
-        <li v-if="isSelfBookmarkPage">
+        <li v-show="isSelfBookmarkPage">
           <span class="sort-order-apply-indicator">⮬</span>
           <a
             id="koakuma-sorting-order-by-bookmark-id"

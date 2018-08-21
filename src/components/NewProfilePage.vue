@@ -94,26 +94,39 @@ export default {
     },
     navLibrary() {
       const lib = this.$store.getters['pixiv/filteredLibrary'];
+      const shows = lib.filter(d => d._show);
       switch (this.navType) {
       case 0:
-        return lib.filter(d => d.userId === this.uid);
+        shows
+          .filter(d => !(d.userId === this.uid))
+          .forEach(d => (d._show = false));
+        break;
       case 1:
-        return lib.filter(d => d.userId === this.uid && !d.isManga);
+        shows
+          .filter(d => !(d.userId === this.uid && !d.isManga))
+          .forEach(d => (d._show = false));
+        break;
       case 2:
-        return lib.filter(d => d.userId === this.uid && d.isManga);
+        shows
+          .filter(d => !(d.userId === this.uid && d.isManga))
+          .forEach(d => (d._show = false));
+        break;
       case 3:
         if (this.rest === 'show') {
-          return lib.filter(
-            d => d.userId !== this.uid && !d.isPrivateBookmark
-          );
+          shows
+            .filter(d => !(d.userId !== this.uid && !d.isPrivateBookmark))
+            .forEach(d => (d._show = false));
         } else {
-          return lib.filter(
-            d => d.userId !== this.uid && d.isPrivateBookmark
-          );
+          shows
+            .filter(d => !(d.userId !== this.uid && d.isPrivateBookmark))
+            .forEach(d => (d._show = false));
         }
+        break;
       default:
         break;
       }
+      const hides = lib.filter(d => !d._show);
+      return shows.concat(hides);
     },
     navType() {
       const types = [
