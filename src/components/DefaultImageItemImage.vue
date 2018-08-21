@@ -31,7 +31,7 @@
       :title="selfIsBookmarked"
       class="_one-click-bookmark"
       @click.left.prevent.stop="oneClickBookmarkAdd"/>
-    <div v-if="bookmarkId" class="bookmark-input-container">
+    <div v-if="isSelfBookmarkPage" class="bookmark-input-container">
       <input
         :value="bookmarkId"
         type="checkbox"
@@ -87,6 +87,9 @@ export default {
     },
     illustPageUrl() {
       return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
+    },
+    isSelfBookmarkPage() {
+      return this.$store.getters.isSelfBookmarkPage;
     },
   },
   mounted() {
