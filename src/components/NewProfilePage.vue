@@ -94,7 +94,10 @@ export default {
     },
     navLibrary() {
       const lib = this.$store.getters['pixiv/filteredLibrary'];
-      const shows = lib.filter(d => d._show);
+      const [shows, hides] = [
+        lib.filter(d => d._show),
+        lib.filter(d => !d._show),
+      ];
       switch (this.navType) {
       case 0:
         shows
@@ -125,7 +128,6 @@ export default {
       default:
         break;
       }
-      const hides = lib.filter(d => !d._show);
       return shows.concat(hides);
     },
     navType() {
