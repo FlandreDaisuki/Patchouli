@@ -3,22 +3,22 @@
     <nav id="patchouli-npp-nav">
       <a
         id="patchouli-npp-all"
-        :class="{'current': navType === 0}"
+        :class="{'current': nppType === 0}"
         :href="`/member.php?id=${uid}`"
         @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.contents') }}</a>
       <a
         id="patchouli-npp-illust"
-        :class="{'current': navType === 1}"
+        :class="{'current': nppType === 1}"
         :href="`/member_illust.php?id=${uid}&type=illust`"
         @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.illustrations') }}</a>
       <a
         id="patchouli-npp-manga"
-        :class="{'current': navType === 2}"
+        :class="{'current': nppType === 2}"
         :href="`/member_illust.php?id=${uid}&type=manga`"
         @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.manga') }}</a>
       <a
         id="patchouli-npp-bookmark"
-        :class="{'current': navType === 3}"
+        :class="{'current': nppType === 3}"
         :href="`/bookmark.php?id=${uid}&rest=show`"
         @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.bookmarks') }}</a>
     </nav>
@@ -43,7 +43,7 @@
       <div id="patchouli-npp-view-header"/>
       <ul id="patchouli-npp-view-image-item-list" class="ω">
         <NewDefaultImageItem
-          v-for="d in navLibrary"
+          v-for="d in nppProcessedLibrary"
           v-show="d._show"
           :key="d.illustId"
           :illust-id="d.illustId"
@@ -58,7 +58,6 @@
           :profile-img-url="d.profileImg"
           :user-id="d.userId"
           :user-name="d.userName"
-          :nav-type="navType"
           :show-user-profile="uid !== d.userId"/>
         <span v-show="hasNoResult" id="patchouli-npp-view-no-result">
           {{ $t('mainView.newProfilePage.noResult') }}
@@ -70,21 +69,14 @@
 
 <script>
 import { MAIN_PAGE_TYPE as MPT } from '../lib/enums';
-import { $el, $sp } from '../lib/utils';
+import { $el } from '../lib/utils';
 import NewDefaultImageItem from './NewDefaultImageItem.vue';
 
 export default {
   components: { NewDefaultImageItem },
-  data() {
-    return {
-      rest: $sp().rest,
-      uid: $sp().id,
-    };
-  },
-  // eslint-disable-next-line sort-keys
   computed: {
     hasNoResult() {
-      return !this.navLibrary.filter(d => d._show).length;
+      return !this.nppProcessedLibrary.filter(d => d._show).length;
     },
     isSelfBookmarkPage() {
       return this.$store.getters.isSelfBookmarkPage;
@@ -92,52 +84,17 @@ export default {
     isSelfPrivateBookmarkPage() {
       return this.isSelfBookmarkPage && this.rest === 'hide';
     },
-    navLibrary() {
-      const lib = this.$store.getters['pixiv/filteredLibrary'];
-      const [shows, hides] = [
-        lib.filter(d => d._show),
-        lib.filter(d => !d._show),
-      ];
-      switch (this.navType) {
-      case 0:
-        shows
-          .filter(d => !(d.userId === this.uid))
-          .forEach(d => (d._show = false));
-        break;
-      case 1:
-        shows
-          .filter(d => !(d.userId === this.uid && !d.isManga))
-          .forEach(d => (d._show = false));
-        break;
-      case 2:
-        shows
-          .filter(d => !(d.userId === this.uid && d.isManga))
-          .forEach(d => (d._show = false));
-        break;
-      case 3:
-        if (this.rest === 'show') {
-          shows
-            .filter(d => !(d.userId !== this.uid && !d.isPrivateBookmark))
-            .forEach(d => (d._show = false));
-        } else {
-          shows
-            .filter(d => !(d.userId !== this.uid && d.isPrivateBookmark))
-            .forEach(d => (d._show = false));
-        }
-        break;
-      default:
-        break;
-      }
-      return shows.concat(hides);
+    nppProcessedLibrary() {
+      return this.$store.getters['pixiv/nppProcessedLibrary'];
     },
-    navType() {
-      const types = [
-        MPT.NEW_PROFILE,
-        MPT.NEW_PROFILE_ILLUST,
-        MPT.NEW_PROFILE_MANGA,
-        MPT.NEW_PROFILE_BOOKMARK,
-      ];
-      return types.indexOf(this.$store.getters.MPT);
+    nppType() {
+      return this.$store.getters['pixiv/nppType'];
+    },
+    rest() {
+      return this.$store.getters.sp.rest;
+    },
+    uid() {
+      return this.$store.getters.sp.id;
     },
   },
   methods: {
@@ -171,7 +128,7 @@ export default {
       case 'patchouli-npp-bookmark':
       case 'patchouli-npp-view-bookmark-switch-public':
       case 'patchouli-npp-view-bookmark-switch-private':
-        this.rest = $sp().rest;
+        this.$store.commit('updateSearchParam');
         this.$store.commit('setMainPageType', {
           forceSet: MPT.NEW_PROFILE_BOOKMARK,
         });

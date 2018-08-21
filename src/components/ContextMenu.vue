@@ -58,16 +58,14 @@ export default {
       if (!this.xdata) {
         return '#';
       }
-      const illustId = this.xdata.illustId;
-      return `bookmark_add.php?type=illust&illust_id=${illustId}`;
+      return `bookmark_add.php?type=illust&illust_id=${this.xdata.illustId}`;
     },
     currentImageItem() {
       if (!this.xdata) {
         return null;
       }
-      const illustId = this.xdata.illustId;
-      const lib = this.$store.getters['pixiv/filteredLibrary'];
-      const found = lib.find(i => i.illustId === illustId);
+      const lib = this.$store.getters['pixiv/defaultProcessedLibrary'];
+      const found = lib.find(i => i.illustId === this.xdata.illustId);
       return found ? found : null;
     },
     currentType() {

@@ -82,13 +82,3 @@ export async function $ready(func) {
   return waitUntil(func, { maxCount: Infinity })
     .catch($print.error);
 }
-
-export const $sp = () => {
-  const s = new URLSearchParams(location.search);
-  const ret = {};
-  [...s.entries()].reduce((collect, [k, v]) => {
-    collect[k] = v;
-    return collect;
-  }, ret);
-  return ret;
-};

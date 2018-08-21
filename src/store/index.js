@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { InitError } from '../lib/errors';
 import { MAIN_PAGE_TYPE as MPT, SORT_TYPE as ST } from '../lib/enums';
-import { $, $el, $$, $after, $print, $ready, $sp } from '../lib/utils';
+import { $, $el, $$, $after, $print, $ready } from '../lib/utils';
 import pixiv from './modules/pixiv';
 import contextMenu from './modules/contextMenu';
 import coverLayer from './modules/coverLayer';
@@ -15,6 +15,16 @@ const _isSelfBookmarkPage = (mpt, loginId, uid) => {
     (mpt === MPT.NEW_PROFILE_BOOKMARK &&
       loginId === uid)
   );
+};
+
+const _getSearchParam = () => {
+  const s = new URLSearchParams(location.search);
+  const ret = {};
+  [...s.entries()].reduce((collect, [k, v]) => {
+    collect[k] = v;
+    return collect;
+  }, ret);
+  return ret;
 };
 
 const modules = { contextMenu, coverLayer, pixiv };
@@ -41,6 +51,7 @@ const state = {
   mountPointCoverLayer: null,
   mountPointCtrlPanel: null,
   mountPointMainView: null,
+  searchParam: {},
 };
 
 const getters = {
@@ -56,7 +67,7 @@ const getters = {
       MPT.NEW_PROFILE_MANGA,
     ].includes(state.mainPageType);
   },
-  isSelfBookmarkPage: (state) => _isSelfBookmarkPage(state.mainPageType, state.loginData.id, $sp().id),
+  isSelfBookmarkPage: (state) => _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id),
   locale: (state) => state.locale,
   loginData: (state) => state.loginData,
   mountPointCoverLayer: (state) => state.mountPointCoverLayer,
@@ -75,6 +86,7 @@ const getters = {
       return 'illustId';
     }
   },
+  sp: (state) => state.searchParam,
 };
 
 const mutations = {
@@ -88,7 +100,7 @@ const mutations = {
         });
       }
     }
-    const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, $sp().id);
+    const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
     if (!_sbp && state.config.sort === ST.BOOKMARK_ID) {
       state.config.sort = ST.ILLUST_ID;
     }
@@ -124,10 +136,9 @@ const mutations = {
     }
 
     const path = location.pathname;
-    const _sp = $sp();
-    const _id = _sp.id;
-    const _type = _sp.type;
-    const _mode = _sp.mode;
+    const _id = state.searchParam.id;
+    const _type = state.searchParam.type;
+    const _mode = state.searchParam.mode;
 
     switch (path) {
     case '/search.php':
@@ -168,6 +179,9 @@ const mutations = {
       break;
     }
   },
+  updateSearchParam: (state) => {
+    state.searchParam = _getSearchParam();
+  },
 };
 
 const actions = {
@@ -182,6 +196,8 @@ const actions = {
     } else {
       throw new InitError('The page has no any login user data.');
     }
+
+    commit('updateSearchParam');
 
     // determine mainPageType
     commit('setMainPageType');
@@ -242,8 +258,6 @@ const actions = {
     }
   },
 };
-
-
 
 export default new Vuex.Store({
   actions,

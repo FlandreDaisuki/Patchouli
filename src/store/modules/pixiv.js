@@ -1,5 +1,5 @@
 import { PixivAPI } from '../../lib/pixiv';
-import { $sp, $print, toInt } from '../../lib/utils';
+import { $print, toInt } from '../../lib/utils';
 import { MAIN_PAGE_TYPE as MPT } from '../../lib/enums';
 
 function makeNewTag(tag) {
@@ -67,28 +67,34 @@ const state = {
 };
 
 const getters = {
-  filteredLibrary(state, getters, rootState, rootGetters) {
+  defaultProcessedLibrary: (state, getters, rootState, rootGetters) => {
     const clonedLib = state.imageItemLibrary.slice();
-    const _sp = $sp();
-    const dateOldFirst = _sp.order === 'date';
-    const bookmarkEarlyFirst = _sp.order === 'asc';
+    const { sp, filters, config, orderBy } = rootGetters;
+    const dateOldFirst = sp.order === 'date';
+    const bookmarkEarlyFirst = sp.order === 'asc';
 
-    const imgToShow = (el) => {
-      return el.bookmarkCount >= rootGetters.filters.limit &&
-        el.tags.match(rootGetters.filters.tag) &&
-        !rootGetters.config.blacklist.includes(el.userId);
+    const isToShow = (d) => {
+      return d.bookmarkCount >= filters.limit &&
+        d.tags.match(filters.tag) &&
+        !config.blacklist.includes(d.userId);
     };
 
-    const filtered = clonedLib.map(el => {
-      el._show = imgToShow(el);
-      return el;
-    });
-    const shows = filtered.filter(e => e._show);
+    const shows = [], hides = [];
+    for (const d of clonedLib) {
+      const s = isToShow(d);
+      d._show = s;
+      if (s) {
+        shows.push(d);
+      } else {
+        hides.push(d);
+      }
+    }
+
     shows.sort((a, b) => {
-      const av = toInt(a[rootGetters.orderBy]);
-      const bv = toInt(b[rootGetters.orderBy]);
+      const av = toInt(a[orderBy]);
+      const bv = toInt(b[orderBy]);
       const c = bv - av;
-      switch (rootGetters.orderBy) {
+      switch (orderBy) {
       case 'illustId':
         return dateOldFirst ? -c : c;
       case 'bookmarkCount':
@@ -99,11 +105,74 @@ const getters = {
         return 0;
       }
     });
-    const hides = filtered.filter(e => !e._show);
 
     return shows.concat(hides);
   },
   imageItemLibrary: (state) => state.imageItemLibrary,
+  nppProcessedLibrary: (state, getters, rootState, rootGetters) => {
+    const clonedLib = state.imageItemLibrary.slice();
+    const { filters, config, orderBy, sp } = rootGetters;
+    const { nppType } = getters;
+    const isToShow = (d) => {
+      const conds = [
+        d.bookmarkCount >= filters.limit,
+        d.tags.match(filters.tag),
+        !config.blacklist.includes(d.userId),
+      ];
+
+      switch (nppType) {
+      case 0:
+        conds.push(d.userId === sp.id);
+        break;
+      case 1:
+        conds.push(d.userId === sp.id && !d.isManga);
+        break;
+      case 2:
+        conds.push(d.userId === sp.id && d.isManga);
+        break;
+      case 3:
+        conds.push(d.userId !== sp.id);
+        if (sp.rest === 'show') {
+          conds.push(!d.isPrivateBookmark);
+        } else {
+          conds.push(d.isPrivateBookmark);
+        }
+        break;
+      default:
+        break;
+      }
+
+      return conds.every(Boolean);
+    };
+
+    const shows = [], hides = [];
+    for (const d of clonedLib) {
+      const s = isToShow(d);
+      d._show = s;
+      if (s) {
+        shows.push(d);
+      } else {
+        hides.push(d);
+      }
+    }
+
+    shows.sort((a, b) => {
+      const av = toInt(a[orderBy]);
+      const bv = toInt(b[orderBy]);
+      return bv - av;
+    });
+
+    return shows.concat(hides);
+  },
+  nppType: (state, getters, rootState, rootGetters) => {
+    const types = [
+      MPT.NEW_PROFILE,
+      MPT.NEW_PROFILE_ILLUST,
+      MPT.NEW_PROFILE_MANGA,
+      MPT.NEW_PROFILE_BOOKMARK,
+    ];
+    return types.indexOf(rootGetters.MPT);
+  },
   status: (state) => {
     const { isEnded, isPaused } = state;
     return { isEnded, isPaused };
@@ -161,7 +230,7 @@ const actions = {
     }
 
     if (rootGetters.isNewProfilePage && isFirst) {
-      const profile = await PixivAPI.getUserProfileData($sp().id);
+      const profile = await PixivAPI.getUserProfileData(rootGetters.sp.id);
       state.prefetchPool.illusts.push(...Object.keys(profile.illusts));
       state.prefetchPool.manga.push(...Object.keys(profile.manga));
 
@@ -203,8 +272,8 @@ const actions = {
   async startMovingWindowBased({ state, commit, rootGetters }, { times = Infinity, rest = null } = {}) {
     while (!state.isPaused && !state.isEnded && times) {
       let illustIds = [], maxTotal = Infinity;
-      const _rest = rest || $sp().rest;
-      const _uid = $sp().id;
+      const _rest = rest || rootGetters.sp.rest;
+      const _uid = rootGetters.sp.id;
       let cIndex = (_rest === 'show') ? state.moveWindowIndex : state.moveWindowPrivateBookmarkIndex;
       if (rootGetters.isNewProfilePage) {
         const opt = { limit: state.batchSize, offset: cIndex, rest: _rest };

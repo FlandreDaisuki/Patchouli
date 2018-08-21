@@ -40,7 +40,6 @@
       </div>
       <a
         :href="userPageUrl"
-        :class="navType === 3"
         class="user-profile-name"
         @click.right="activateContextMenu">{{ userName }}</a>
       <i v-if="isFollowed" class="fas fa-rss user-followed-indicator"/>
@@ -92,10 +91,6 @@ export default {
     isUgoira: {
       default: false,
       type: Boolean,
-    },
-    navType: {
-      default: 0,
-      type: Number,
     },
     profileImgUrl: {
       default: '',

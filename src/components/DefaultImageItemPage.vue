@@ -1,7 +1,7 @@
 <template>
   <div id="patchouli-default-image-item-page">
     <DefaultImageItem
-      v-for="d in filteredLibrary"
+      v-for="d in defaultProcessedLibrary"
       v-show="d._show"
       :key="d.illustId"
       :img-url="d.urls.thumb"
@@ -25,8 +25,8 @@ import DefaultImageItem from './DefaultImageItem.vue';
 export default {
   components: { DefaultImageItem },
   computed: {
-    filteredLibrary() {
-      return this.$store.getters['pixiv/filteredLibrary'];
+    defaultProcessedLibrary() {
+      return this.$store.getters['pixiv/defaultProcessedLibrary'];
     },
   },
 };
