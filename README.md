@@ -60,7 +60,7 @@ Copyright (c) 2016-2018 FlandreDaisuki
 2018-99-99 v4.2.0
 
 - 內部程式碼重構
-- 支援新版作者頁
+- 支援[新版作者頁](https://www.pixiv.net/info.php?id=4704)
 - 原圖預覽支援滾輪翻頁
 - 部份樣式調整
 

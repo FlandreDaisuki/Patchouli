@@ -60,7 +60,7 @@ Copyright (c) 2016-2018 FlandreDaisuki
 2018-99-99 v4.2.0
 
 - Refactoring code
-- Support new profile page
+- Support [new profile page](https://www.pixiv.net/info.php?id=4704)
 - Support mouse wheel in showing original images
 - Adjust styles
 
