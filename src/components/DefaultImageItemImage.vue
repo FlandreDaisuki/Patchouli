@@ -26,11 +26,7 @@
         v-show="ugoiraPlayed"
         ref="smallUgoiraPreview"/>
     </a>
-    <div
-      :class="{on:selfIsBookmarked}"
-      :title="selfIsBookmarked"
-      class="_one-click-bookmark"
-      @click.left.prevent.stop="oneClickBookmarkAdd"/>
+    <IconBookmarkHeart :active="selfIsBookmarked" @click.left.prevent.stop="oneClickBookmarkAdd"/>
     <div v-if="isSelfBookmarkPage" class="bookmark-input-container">
       <input
         :value="bookmarkId"
@@ -44,9 +40,10 @@
 import { $print } from '../lib/utils';
 import { PixivAPI } from '../lib/pixiv';
 import IconUgoiraPlay from './IconUgoiraPlay.vue';
+import IconBookmarkHeart from './IconBookmarkHeart.vue';
 
 export default {
-  components: { IconUgoiraPlay },
+  components: { IconBookmarkHeart, IconUgoiraPlay },
   props: {
     bookmarkId: {
       default: '',
@@ -224,25 +221,6 @@ img,
 canvas {
   max-height: 100%;
   max-width: 100%;
-}
-._one-click-bookmark {
-  right: 0;
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
-  z-index: 2;
-  text-align: center;
-  cursor: pointer;
-  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center
-    transparent;
-  background-repeat: no-repeat;
-  background-size: cover;
-  opacity: 0.8;
-  filter: alpha(opacity=80);
-  transition: opacity 0.2s ease-in-out;
-}
-._one-click-bookmark.on {
-  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);
 }
 .bookmark-input-container {
   position: absolute;

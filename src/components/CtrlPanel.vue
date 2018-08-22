@@ -5,7 +5,7 @@
     <div class="processed">{{ $t('ctrlPanel.processed', { count: processedCount }) }}</div>
     <div id="koakuma-bookmark-sort-block">
       <label id="koakuma-bookmark-sort-label" for="koakuma-bookmark-sort-input">
-        <i class="_icon _bookmark-icon-inline"/>
+        <span>❤️</span>
         <input
           id="koakuma-bookmark-sort-input"
           :value="filters.limit"
@@ -257,22 +257,12 @@ export default {
 </script>
 
 <style scoped>
-@keyframes slidedown {
-  from {
-    transform: translateY(-100%);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-a[role="button"] {
+a {
+  color: #258fb8;
   text-decoration: none;
 }
 a[role="button"] > .fa-angle-down {
   padding: 2px;
-}
-a {
-  color: #258fb8;
 }
 #Koakuma {
   display: flex;
@@ -286,7 +276,6 @@ a {
   padding: 4px;
   color: #00186c;
   font-size: 16px;
-  width: 100%;
 }
 #Koakuma > div {
   margin: 0 10px;
@@ -471,17 +460,5 @@ a {
 #koakuma-options-width-expand,
 #koakuma-options-config {
   cursor: pointer;
-}
-._bookmark-icon-inline {
-  display: inline-block;
-  overflow: hidden;
-  text-indent: -999px;
-  white-space: nowrap;
-  height: 10px;
-  width: 10px;
-  background-size: cover;
-  background-image: url("https://s.pximg.net/www/images/bookmark-heart-inline.svg?1");
-  background-position: center;
-  background-repeat: no-repeat;
 }
 </style>

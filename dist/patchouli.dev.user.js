@@ -1605,7 +1605,7 @@
             }
           },
           [
-            _c("i", { staticClass: "_icon _bookmark-icon-inline" }),
+            _c("span", [_vm._v("❤️")]),
             _vm._v(" "),
             _c("input", {
               attrs: {
@@ -2000,11 +2000,11 @@
     /* style */
     const __vue_inject_styles__ = function (inject) {
       if (!inject) return
-      inject("data-v-33dda245_0", { source: "\n@keyframes slidedown-data-v-33dda245 {\nfrom {\n    transform: translateY(-100%);\n}\nto {\n    transform: translateY(0);\n}\n}\na[role=\"button\"][data-v-33dda245] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-33dda245] {\n  padding: 2px;\n}\na[data-v-33dda245] {\n  color: #258fb8;\n}\n#Koakuma[data-v-33dda245] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  width: 100%;\n}\n#Koakuma > div[data-v-33dda245] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-bookmark-sort-label[data-v-33dda245] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block[data-v-33dda245],\n#koakuma-sorting-order-block[data-v-33dda245] {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-33dda245] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-33dda245] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-33dda245]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-33dda245]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-33dda245] {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input[data-v-33dda245]:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch[data-v-33dda245],\n#koakuma-sorting-order-select-switch[data-v-33dda245] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-33dda245] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-33dda245],\n#koakuma-sorting-order-select-list[data-v-33dda245] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list[data-v-33dda245] {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-33dda245],\n#koakuma-sorting-order-select-list > li[data-v-33dda245] {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-33dda245]::after,\n#koakuma-sorting-order-select-list > li[data-v-33dda245]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-33dda245]:first-child::after,\n#koakuma-sorting-order-select-list > li[data-v-33dda245]:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-33dda245],\n#koakuma-sorting-order-select-list .sort-order-apply-indicator[data-v-33dda245] {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-33dda245] {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator[data-v-33dda245],\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator[data-v-33dda245] {\n  visibility: visible;\n}\n.sort-order-apply-indicator[data-v-33dda245] {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link[data-v-33dda245],\n.sorting-order-link[data-v-33dda245] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link[data-v-33dda245] {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output[data-v-33dda245] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-33dda245] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-33dda245] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-33dda245] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-33dda245]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-33dda245]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-33dda245]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-33dda245] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-33dda245] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-33dda245] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-33dda245],\n#koakuma-options-width-expand[data-v-33dda245],\n#koakuma-options-config[data-v-33dda245] {\n  cursor: pointer;\n}\n._bookmark-icon-inline[data-v-33dda245] {\n  display: inline-block;\n  overflow: hidden;\n  text-indent: -999px;\n  white-space: nowrap;\n  height: 10px;\n  width: 10px;\n  background-size: cover;\n  background-image: url(\"https://s.pximg.net/www/images/bookmark-heart-inline.svg?1\");\n  background-position: center;\n  background-repeat: no-repeat;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/CtrlPanel.vue"],"names":[],"mappings":";AAmQA;AACA;IACA,6BAAA;CACA;AACA;IACA,yBAAA;CACA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,aAAA;CACA;AACA;EACA,eAAA;CACA;AACA;EACA,cAAA;EACA,wBAAA;EACA,oBAAA;EACA,iBAAA;EACA,OAAA;EACA,WAAA;EACA,uBAAA;EACA,2BAAA;EACA,aAAA;EACA,eAAA;EACA,gBAAA;EACA,YAAA;CACA;AACA;EACA,eAAA;EACA,qBAAA;CACA;AACA;EACA,gCAAA;EACA,oBAAA;EACA,gBAAA;EACA,2BAAA;EACA,uBAAA;EACA,wBAAA;EACA,cAAA;EACA,eAAA;CACA;AACA;;EAEA,mBAAA;EACA,yBAAA;EACA,mBAAA;CACA;AACA;EACA,uBAAA;CACA;AACA;EACA,2BAAA;EACA,aAAA;EACA,8BAAA;EACA,WAAA;EACA,eAAA;EACA,gBAAA;EACA,sBAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;;EAEA,6EAAA;EACA,yBAAA;EACA,UAAA;CACA;AACA;EACA,UAAA;EACA,eAAA;EACA,YAAA;EACA,gBAAA;EACA,0BAAA;EACA,aAAA;EACA,iBAAA;CACA;AACA;EACA,oBAAA;EACA,cAAA;CACA;AACA;;EAEA,uBAAA;EACA,aAAA;EACA,4BAAA;EACA,2BAAA;EACA,gBAAA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,aAAA;EACA,mBAAA;CACA;AACA;;EAEA,mBAAA;EACA,uBAAA;EACA,yBAAA;EACA,mBAAA;EACA,UAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,WAAA;CACA;AACA;EACA,cAAA;EACA,+BAAA;EACA,eAAA;CACA;AACA;;EAEA,cAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;;EAEA,YAAA;EACA,8BAAA;EACA,sBAAA;EACA,UAAA;EACA,UAAA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,QAAA;EACA,SAAA;EACA,YAAA;EACA,uBAAA;CACA;AACA;;EAEA,iBAAA;CACA;AACA;;EAEA,mBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,oBAAA;CACA;AACA;EACA,eAAA;EACA,wBAAA;EACA,oBAAA;EACA,oBAAA;EACA,eAAA;CACA;AACA;;EAEA,eAAA;EACA,gBAAA;EACA,mBAAA;EACA,QAAA;CACA;AACA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;EACA,cAAA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,cAAA;CACA;AACA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;EACA,iCAAA;EACA,yCAAA;EACA,gBAAA;CACA;AACA;EACA,wBAAA;EACA,iBAAA;CACA;AACA;EACA,+BAAA;EACA,2CAAA;CACA;AACA;EACA,sCAAA;CACA;AACA;EACA,qCAAA;CACA;AACA;EACA,0BAAA;EACA,YAAA;EACA,cAAA;CACA;AACA;;;EAGA,gBAAA;CACA;AACA;EACA,sBAAA;EACA,iBAAA;EACA,oBAAA;EACA,oBAAA;EACA,aAAA;EACA,YAAA;EACA,uBAAA;EACA,oFAAA;EACA,4BAAA;EACA,6BAAA;CACA","file":"CtrlPanel.vue","sourcesContent":["<template>\n  <div\n    :id=\"id\"\n    :ref=\"id\">\n    <div class=\"processed\">{{ $t('ctrlPanel.processed', { count: processedCount }) }}</div>\n    <div id=\"koakuma-bookmark-sort-block\">\n      <label id=\"koakuma-bookmark-sort-label\" for=\"koakuma-bookmark-sort-input\">\n        <i class=\"_icon _bookmark-icon-inline\"/>\n        <input\n          id=\"koakuma-bookmark-sort-input\"\n          :value=\"filters.limit\"\n          type=\"number\"\n          min=\"0\"\n          step=\"1\"\n          @wheel.stop.prevent=\"sortInputWheel\"\n          @input=\"sortInputInput\">\n      </label>\n      <a\n        id=\"koakuma-bookmark-input-usual-switch\"\n        role=\"button\"\n        @click.left=\"usualSwitchOn = !usualSwitchOn\">\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"usualSwitchOn\" id=\"koakuma-bookmark-input-usual-list\">\n        <li v-for=\"usual in usualList\" :key=\"usual\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            role=\"button\"\n            class=\"usual-list-link\"\n            @click.left=\"clickUsual\">{{ usual }}</a>\n        </li>\n      </ul>\n    </div>\n    <div>\n      <input\n        id=\"koakuma-bookmark-tags-filter-input\"\n        :placeholder=\"$t('ctrlPanel.tagsPlaceholder')\"\n        type=\"text\"\n        @input=\"tagsFilterInput\">\n    </div>\n    <div>\n      <button\n        id=\"koakuma-main-button\"\n        :disabled=\"status.isEnded\"\n        :class=\"statusClass\"\n        @mouseup.left=\"clickMainButton\">\n        {{ buttonMsg }}\n      </button>\n    </div>\n    <div id=\"koakuma-sorting-order-block\">\n      <a\n        id=\"koakuma-sorting-order-select-switch\"\n        role=\"button\"\n        @click.left=\"sortingOrderSwitchOn = !sortingOrderSwitchOn\">\n        <output id=\"koakuma-sorting-order-select-output\" v-html=\"sortingOrderMsg\"/>\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"sortingOrderSwitchOn\" id=\"koakuma-sorting-order-select-list\">\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-popularity\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByPopularity') }}</a>\n        </li>\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-date\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByDate') }}</a>\n        </li>\n        <li v-show=\"isSelfBookmarkPage\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-bookmark-id\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByBookmarkId') }}</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"koakuma-options-block\">\n      <div>\n        <i\n          v-show=\"xc.fitwidth\"\n          id=\"koakuma-options-width-compress\"\n          class=\"fas fa-compress\"\n          @click.left=\"optionsChange\"/>\n        <i\n          v-show=\"!xc.fitwidth\"\n          id=\"koakuma-options-width-expand\"\n          class=\"fas fa-expand\"\n          @click.left=\"optionsChange\"/>\n      </div>\n      <div>\n        <i\n          id=\"koakuma-options-config\"\n          class=\"fas fa-cog\"\n          @click.left=\"openCoverLayerInConfigMode\"/>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print, toInt } from '../lib/utils';\nimport { SORT_TYPE as ST } from '../lib/enums';\nexport default {\n  props: {\n    id: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      debounceId4sortInput: null,\n      debounceId4tagsFilter: null,\n      sortingOrderSwitchOn: false,\n      usualList: [100, 500, 1000, 3000, 5000, 10000],\n      usualSwitchOn: false,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    buttonMsg() {\n      if (this.status.isEnded) {\n        return this.$t('ctrlPanel.buttonEnd');\n      } else if (this.status.isPaused) {\n        return this.$t('ctrlPanel.buttonGo');\n      } else {\n        return this.$t('ctrlPanel.buttonPause');\n      }\n    },\n    filters() {\n      return this.$store.getters.filters;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    processedCount() {\n      return this.$store.getters['pixiv/imageItemLibrary'].length;\n    },\n    sortingOrderMsg() {\n      switch (this.xc.sort) {\n      case ST.BOOKMARK_COUNT:\n        return this.$t('ctrlPanel.sortByPopularity');\n      case ST.ILLUST_ID:\n        return this.$t('ctrlPanel.sortByDate');\n      default:\n        //ST.BOOKMARK_ID\n        return this.$t('ctrlPanel.sortByBookmarkId');\n      }\n    },\n    status() {\n      return this.$store.getters['pixiv/status'];\n    },\n    statusClass() {\n      const _s = this.status;\n      return {\n        end: _s.isEnded,\n        go: _s.isPaused && !_s.isEnded,\n        paused: !_s.isPaused && !_s.isEnded,\n      };\n    },\n    xc() {\n      return this.$store.getters.config;\n    },\n  },\n  methods: {\n    clickMainButton() {\n      if (this.status.isPaused) {\n        this.$store.dispatch('pixiv/start');\n      } else {\n        this.$store.commit('pixiv/pause');\n      }\n    },\n    clickSortingOrder(event) {\n      $print.debug('Koakuma#clickSortingOrder: event', event);\n\n      const ct = event.currentTarget;\n      switch (ct.id) {\n      case 'koakuma-sorting-order-by-popularity':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_COUNT });\n        break;\n      case 'koakuma-sorting-order-by-bookmark-id':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_ID });\n        break;\n      default:\n        this.$store.commit('setConfig', { sort: ST.ILLUST_ID });\n        break;\n      }\n\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n\n      this.sortingOrderSwitchOn = false;\n    },\n    clickUsual(event) {\n      this.$store.commit('setFilters', {\n        limit: toInt(event.currentTarget.textContent),\n      });\n      this.usualSwitchOn = false;\n    },\n    openCoverLayerInConfigMode() {\n      this.$store.commit('coverLayer/open', { data: null, mode: 'config' });\n    },\n    optionsChange(event) {\n      $print.debug('Koakuma#optionsChange: event', event);\n      if (event.target.id === 'koakuma-options-width-compress') {\n        this.$store.commit('setConfig', { fitwidth: false });\n      } else if (event.target.id === 'koakuma-options-width-expand') {\n        this.$store.commit('setConfig', { fitwidth: true });\n      }\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n    },\n    sortInputInput(event) {\n      if (this.debounceId4sortInput) {\n        clearTimeout(this.debounceId4sortInput);\n      }\n      this.debounceId4sortInput = setTimeout(() => {\n        this.debounceId4sortInput = null;\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value)),\n        });\n      }, 500);\n    },\n    sortInputWheel(event) {\n      if (event.deltaY < 0) {\n        this.$store.commit('setFilters', {\n          limit: toInt(event.target.value) + 20,\n        });\n      } else {\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value) - 20),\n        });\n      }\n    },\n    tagsFilterInput(event) {\n      if (this.debounceId4tagsFilter) {\n        clearTimeout(this.debounceId4tagsFilter);\n      }\n      this.debounceId4tagsFilter = setTimeout(() => {\n        this.debounceId4tagsFilter = null;\n        this.$store.commit('setFilters', {\n          tag: new RegExp(event.target.value, 'ig'),\n        });\n      }, 1500);\n    },\n  },\n};\n</script>\n\n<style scoped>\n@keyframes slidedown {\n  from {\n    transform: translateY(-100%);\n  }\n  to {\n    transform: translateY(0);\n  }\n}\na[role=\"button\"] {\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down {\n  padding: 2px;\n}\na {\n  color: #258fb8;\n}\n#Koakuma {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n  width: 100%;\n}\n#Koakuma > div {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-bookmark-sort-label {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block,\n#koakuma-sorting-order-block {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch,\n#koakuma-sorting-order-select-switch {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list,\n#koakuma-sorting-order-select-list {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li,\n#koakuma-sorting-order-select-list > li {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li::after,\n#koakuma-sorting-order-select-list > li::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li:first-child::after,\n#koakuma-sorting-order-select-list > li:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list .sort-order-apply-indicator {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator {\n  visibility: visible;\n}\n.sort-order-apply-indicator {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link,\n.sorting-order-link {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select {\n  font-size: 14px;\n}\n#koakuma-options-block > * {\n  margin: 0 5px;\n}\n#koakuma-main-button {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress,\n#koakuma-options-width-expand,\n#koakuma-options-config {\n  cursor: pointer;\n}\n._bookmark-icon-inline {\n  display: inline-block;\n  overflow: hidden;\n  text-indent: -999px;\n  white-space: nowrap;\n  height: 10px;\n  width: 10px;\n  background-size: cover;\n  background-image: url(\"https://s.pximg.net/www/images/bookmark-heart-inline.svg?1\");\n  background-position: center;\n  background-repeat: no-repeat;\n}\n</style>\n"]}, media: undefined });
+      inject("data-v-127f466a_0", { source: "\na[data-v-127f466a] {\n  color: #258fb8;\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-127f466a] {\n  padding: 2px;\n}\n#Koakuma[data-v-127f466a] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n}\n#Koakuma > div[data-v-127f466a] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-bookmark-sort-label[data-v-127f466a] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block[data-v-127f466a],\n#koakuma-sorting-order-block[data-v-127f466a] {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-127f466a] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-127f466a] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-127f466a]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-127f466a]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-127f466a] {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input[data-v-127f466a]:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch[data-v-127f466a],\n#koakuma-sorting-order-select-switch[data-v-127f466a] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-127f466a] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-127f466a],\n#koakuma-sorting-order-select-list[data-v-127f466a] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list[data-v-127f466a] {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-127f466a],\n#koakuma-sorting-order-select-list > li[data-v-127f466a] {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-127f466a]::after,\n#koakuma-sorting-order-select-list > li[data-v-127f466a]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-127f466a]:first-child::after,\n#koakuma-sorting-order-select-list > li[data-v-127f466a]:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-127f466a],\n#koakuma-sorting-order-select-list .sort-order-apply-indicator[data-v-127f466a] {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-127f466a] {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator[data-v-127f466a],\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator[data-v-127f466a] {\n  visibility: visible;\n}\n.sort-order-apply-indicator[data-v-127f466a] {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link[data-v-127f466a],\n.sorting-order-link[data-v-127f466a] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link[data-v-127f466a] {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output[data-v-127f466a] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-127f466a] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-127f466a] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-127f466a] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-127f466a]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-127f466a]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-127f466a]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-127f466a] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-127f466a] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-127f466a] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-127f466a],\n#koakuma-options-width-expand[data-v-127f466a],\n#koakuma-options-config[data-v-127f466a] {\n  cursor: pointer;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/CtrlPanel.vue"],"names":[],"mappings":";AAmQA;EACA,eAAA;EACA,sBAAA;CACA;AACA;EACA,aAAA;CACA;AACA;EACA,cAAA;EACA,wBAAA;EACA,oBAAA;EACA,iBAAA;EACA,OAAA;EACA,WAAA;EACA,uBAAA;EACA,2BAAA;EACA,aAAA;EACA,eAAA;EACA,gBAAA;CACA;AACA;EACA,eAAA;EACA,qBAAA;CACA;AACA;EACA,gCAAA;EACA,oBAAA;EACA,gBAAA;EACA,2BAAA;EACA,uBAAA;EACA,wBAAA;EACA,cAAA;EACA,eAAA;CACA;AACA;;EAEA,mBAAA;EACA,yBAAA;EACA,mBAAA;CACA;AACA;EACA,uBAAA;CACA;AACA;EACA,2BAAA;EACA,aAAA;EACA,8BAAA;EACA,WAAA;EACA,eAAA;EACA,gBAAA;EACA,sBAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;;EAEA,6EAAA;EACA,yBAAA;EACA,UAAA;CACA;AACA;EACA,UAAA;EACA,eAAA;EACA,YAAA;EACA,gBAAA;EACA,0BAAA;EACA,aAAA;EACA,iBAAA;CACA;AACA;EACA,oBAAA;EACA,cAAA;CACA;AACA;;EAEA,uBAAA;EACA,aAAA;EACA,4BAAA;EACA,2BAAA;EACA,gBAAA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,aAAA;EACA,mBAAA;CACA;AACA;;EAEA,mBAAA;EACA,uBAAA;EACA,yBAAA;EACA,mBAAA;EACA,UAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,WAAA;CACA;AACA;EACA,cAAA;EACA,+BAAA;EACA,eAAA;CACA;AACA;;EAEA,cAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;;EAEA,YAAA;EACA,8BAAA;EACA,sBAAA;EACA,UAAA;EACA,UAAA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,QAAA;EACA,SAAA;EACA,YAAA;EACA,uBAAA;CACA;AACA;;EAEA,iBAAA;CACA;AACA;;EAEA,mBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,oBAAA;CACA;AACA;EACA,eAAA;EACA,wBAAA;EACA,oBAAA;EACA,oBAAA;EACA,eAAA;CACA;AACA;;EAEA,eAAA;EACA,gBAAA;EACA,mBAAA;EACA,QAAA;CACA;AACA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;EACA,cAAA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,cAAA;CACA;AACA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;EACA,iCAAA;EACA,yCAAA;EACA,gBAAA;CACA;AACA;EACA,wBAAA;EACA,iBAAA;CACA;AACA;EACA,+BAAA;EACA,2CAAA;CACA;AACA;EACA,sCAAA;CACA;AACA;EACA,qCAAA;CACA;AACA;EACA,0BAAA;EACA,YAAA;EACA,cAAA;CACA;AACA;;;EAGA,gBAAA;CACA","file":"CtrlPanel.vue","sourcesContent":["<template>\n  <div\n    :id=\"id\"\n    :ref=\"id\">\n    <div class=\"processed\">{{ $t('ctrlPanel.processed', { count: processedCount }) }}</div>\n    <div id=\"koakuma-bookmark-sort-block\">\n      <label id=\"koakuma-bookmark-sort-label\" for=\"koakuma-bookmark-sort-input\">\n        <span>❤️</span>\n        <input\n          id=\"koakuma-bookmark-sort-input\"\n          :value=\"filters.limit\"\n          type=\"number\"\n          min=\"0\"\n          step=\"1\"\n          @wheel.stop.prevent=\"sortInputWheel\"\n          @input=\"sortInputInput\">\n      </label>\n      <a\n        id=\"koakuma-bookmark-input-usual-switch\"\n        role=\"button\"\n        @click.left=\"usualSwitchOn = !usualSwitchOn\">\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"usualSwitchOn\" id=\"koakuma-bookmark-input-usual-list\">\n        <li v-for=\"usual in usualList\" :key=\"usual\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            role=\"button\"\n            class=\"usual-list-link\"\n            @click.left=\"clickUsual\">{{ usual }}</a>\n        </li>\n      </ul>\n    </div>\n    <div>\n      <input\n        id=\"koakuma-bookmark-tags-filter-input\"\n        :placeholder=\"$t('ctrlPanel.tagsPlaceholder')\"\n        type=\"text\"\n        @input=\"tagsFilterInput\">\n    </div>\n    <div>\n      <button\n        id=\"koakuma-main-button\"\n        :disabled=\"status.isEnded\"\n        :class=\"statusClass\"\n        @mouseup.left=\"clickMainButton\">\n        {{ buttonMsg }}\n      </button>\n    </div>\n    <div id=\"koakuma-sorting-order-block\">\n      <a\n        id=\"koakuma-sorting-order-select-switch\"\n        role=\"button\"\n        @click.left=\"sortingOrderSwitchOn = !sortingOrderSwitchOn\">\n        <output id=\"koakuma-sorting-order-select-output\" v-html=\"sortingOrderMsg\"/>\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"sortingOrderSwitchOn\" id=\"koakuma-sorting-order-select-list\">\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-popularity\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByPopularity') }}</a>\n        </li>\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-date\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByDate') }}</a>\n        </li>\n        <li v-show=\"isSelfBookmarkPage\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-bookmark-id\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByBookmarkId') }}</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"koakuma-options-block\">\n      <div>\n        <i\n          v-show=\"xc.fitwidth\"\n          id=\"koakuma-options-width-compress\"\n          class=\"fas fa-compress\"\n          @click.left=\"optionsChange\"/>\n        <i\n          v-show=\"!xc.fitwidth\"\n          id=\"koakuma-options-width-expand\"\n          class=\"fas fa-expand\"\n          @click.left=\"optionsChange\"/>\n      </div>\n      <div>\n        <i\n          id=\"koakuma-options-config\"\n          class=\"fas fa-cog\"\n          @click.left=\"openCoverLayerInConfigMode\"/>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print, toInt } from '../lib/utils';\nimport { SORT_TYPE as ST } from '../lib/enums';\nexport default {\n  props: {\n    id: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      debounceId4sortInput: null,\n      debounceId4tagsFilter: null,\n      sortingOrderSwitchOn: false,\n      usualList: [100, 500, 1000, 3000, 5000, 10000],\n      usualSwitchOn: false,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    buttonMsg() {\n      if (this.status.isEnded) {\n        return this.$t('ctrlPanel.buttonEnd');\n      } else if (this.status.isPaused) {\n        return this.$t('ctrlPanel.buttonGo');\n      } else {\n        return this.$t('ctrlPanel.buttonPause');\n      }\n    },\n    filters() {\n      return this.$store.getters.filters;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    processedCount() {\n      return this.$store.getters['pixiv/imageItemLibrary'].length;\n    },\n    sortingOrderMsg() {\n      switch (this.xc.sort) {\n      case ST.BOOKMARK_COUNT:\n        return this.$t('ctrlPanel.sortByPopularity');\n      case ST.ILLUST_ID:\n        return this.$t('ctrlPanel.sortByDate');\n      default:\n        //ST.BOOKMARK_ID\n        return this.$t('ctrlPanel.sortByBookmarkId');\n      }\n    },\n    status() {\n      return this.$store.getters['pixiv/status'];\n    },\n    statusClass() {\n      const _s = this.status;\n      return {\n        end: _s.isEnded,\n        go: _s.isPaused && !_s.isEnded,\n        paused: !_s.isPaused && !_s.isEnded,\n      };\n    },\n    xc() {\n      return this.$store.getters.config;\n    },\n  },\n  methods: {\n    clickMainButton() {\n      if (this.status.isPaused) {\n        this.$store.dispatch('pixiv/start');\n      } else {\n        this.$store.commit('pixiv/pause');\n      }\n    },\n    clickSortingOrder(event) {\n      $print.debug('Koakuma#clickSortingOrder: event', event);\n\n      const ct = event.currentTarget;\n      switch (ct.id) {\n      case 'koakuma-sorting-order-by-popularity':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_COUNT });\n        break;\n      case 'koakuma-sorting-order-by-bookmark-id':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_ID });\n        break;\n      default:\n        this.$store.commit('setConfig', { sort: ST.ILLUST_ID });\n        break;\n      }\n\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n\n      this.sortingOrderSwitchOn = false;\n    },\n    clickUsual(event) {\n      this.$store.commit('setFilters', {\n        limit: toInt(event.currentTarget.textContent),\n      });\n      this.usualSwitchOn = false;\n    },\n    openCoverLayerInConfigMode() {\n      this.$store.commit('coverLayer/open', { data: null, mode: 'config' });\n    },\n    optionsChange(event) {\n      $print.debug('Koakuma#optionsChange: event', event);\n      if (event.target.id === 'koakuma-options-width-compress') {\n        this.$store.commit('setConfig', { fitwidth: false });\n      } else if (event.target.id === 'koakuma-options-width-expand') {\n        this.$store.commit('setConfig', { fitwidth: true });\n      }\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n    },\n    sortInputInput(event) {\n      if (this.debounceId4sortInput) {\n        clearTimeout(this.debounceId4sortInput);\n      }\n      this.debounceId4sortInput = setTimeout(() => {\n        this.debounceId4sortInput = null;\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value)),\n        });\n      }, 500);\n    },\n    sortInputWheel(event) {\n      if (event.deltaY < 0) {\n        this.$store.commit('setFilters', {\n          limit: toInt(event.target.value) + 20,\n        });\n      } else {\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value) - 20),\n        });\n      }\n    },\n    tagsFilterInput(event) {\n      if (this.debounceId4tagsFilter) {\n        clearTimeout(this.debounceId4tagsFilter);\n      }\n      this.debounceId4tagsFilter = setTimeout(() => {\n        this.debounceId4tagsFilter = null;\n        this.$store.commit('setFilters', {\n          tag: new RegExp(event.target.value, 'ig'),\n        });\n      }, 1500);\n    },\n  },\n};\n</script>\n\n<style scoped>\na {\n  color: #258fb8;\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down {\n  padding: 2px;\n}\n#Koakuma {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n}\n#Koakuma > div {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-bookmark-sort-label {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block,\n#koakuma-sorting-order-block {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch,\n#koakuma-sorting-order-select-switch {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list,\n#koakuma-sorting-order-select-list {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li,\n#koakuma-sorting-order-select-list > li {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li::after,\n#koakuma-sorting-order-select-list > li::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li:first-child::after,\n#koakuma-sorting-order-select-list > li:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list .sort-order-apply-indicator {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator {\n  visibility: visible;\n}\n.sort-order-apply-indicator {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link,\n.sorting-order-link {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select {\n  font-size: 14px;\n}\n#koakuma-options-block > * {\n  margin: 0 5px;\n}\n#koakuma-main-button {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress,\n#koakuma-options-width-expand,\n#koakuma-options-config {\n  cursor: pointer;\n}\n</style>\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__ = "data-v-33dda245";
+    const __vue_scope_id__ = "data-v-127f466a";
     /* module identifier */
     const __vue_module_identifier__ = undefined;
     /* functional template */
@@ -2873,9 +2873,197 @@
     );
 
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
   var script$3 = {
-    components: { IconUgoiraPlay },
+    props: {
+      actived: {
+        default: false,
+        type: Boolean,
+      },
+    },
+  };
+
+  /* script */
+              const __vue_script__$3 = script$3;
+              
+  /* template */
+  var __vue_render__$3 = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "svg",
+      {
+        staticClass: "i-effect",
+        class: _vm.actived ? "f-active" : "f-inactive",
+        attrs: { viewBox: "0 0 32 32", width: "32", height: "32" }
+      },
+      [
+        _c("path", {
+          attrs: {
+            d:
+              "M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z"
+          }
+        }),
+        _vm._v(" "),
+        _c("path", {
+          attrs: {
+            d:
+              "M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5 C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z"
+          }
+        })
+      ]
+    )
+  };
+  var __vue_staticRenderFns__$3 = [];
+  __vue_render__$3._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$3 = function (inject) {
+      if (!inject) return
+      inject("data-v-2a37bd30_0", { source: "\n.f-active[data-v-2a37bd30] {\n  fill: #ff4060;\n}\n.f-inactive[data-v-2a37bd30] {\n  fill: #fff;\n}\n.f-inactive > path[data-v-2a37bd30]:first-child {\n  fill: #333;\n}\n.i-effect[data-v-2a37bd30] {\n  box-sizing: border-box;\n  font-size: 0;\n  line-height: 0;\n  -webkit-transition: fill 0.2s, stroke 0.2s;\n  transition: fill 0.2s, stroke 0.2s;\n  vertical-align: top;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconBookmarkHeart.vue"],"names":[],"mappings":";AAwBA;EACA,cAAA;CACA;AACA;EACA,WAAA;CACA;AACA;EACA,WAAA;CACA;AACA;EACA,uBAAA;EACA,aAAA;EACA,eAAA;EACA,2CAAA;EACA,mCAAA;EACA,oBAAA;CACA","file":"IconBookmarkHeart.vue","sourcesContent":["<template>\n  <svg\n    :class=\"actived?'f-active':'f-inactive'\"\n    class=\"i-effect\"\n    viewBox=\"0 0 32 32\"\n    width=\"32\"\n    height=\"32\">\n    <path d=\"M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z\"/>\n    <path d=\"M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5 C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z\"/>\n  </svg>\n</template>\n\n<script>\nexport default {\n  props: {\n    actived: {\n      default: false,\n      type: Boolean,\n    },\n  },\n};\n</script>\n\n<style scoped>\n.f-active {\n  fill: #ff4060;\n}\n.f-inactive {\n  fill: #fff;\n}\n.f-inactive > path:first-child {\n  fill: #333;\n}\n.i-effect {\n  box-sizing: border-box;\n  font-size: 0;\n  line-height: 0;\n  -webkit-transition: fill 0.2s, stroke 0.2s;\n  transition: fill 0.2s, stroke 0.2s;\n  vertical-align: top;\n}\n</style>\n\n\n\n"]}, media: undefined });
+
+    };
+    /* scoped */
+    const __vue_scope_id__$3 = "data-v-2a37bd30";
+    /* module identifier */
+    const __vue_module_identifier__$3 = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$3 = false;
+    /* component normalizer */
+    function __vue_normalize__$3(
+      template, style, script,
+      scope, functional, moduleIdentifier,
+      createInjector, createInjectorSSR
+    ) {
+      const component = (typeof script === 'function' ? script.options : script) || {};
+
+      // For security concerns, we use only base name in production mode.
+      component.__file = "/home/flandre/dev/Patchouli/src/components/IconBookmarkHeart.vue";
+
+      if (!component.render) {
+        component.render = template.render;
+        component.staticRenderFns = template.staticRenderFns;
+        component._compiled = true;
+
+        if (functional) component.functional = true;
+      }
+
+      component._scopeId = scope;
+
+      {
+        let hook;
+        if (style) {
+          hook = function(context) {
+            style.call(this, createInjector(context));
+          };
+        }
+
+        if (hook !== undefined) {
+          if (component.functional) {
+            // register for functional component in vue file
+            const originalRender = component.render;
+            component.render = function renderWithStyleInjection(h, context) {
+              hook.call(context);
+              return originalRender(h, context)
+            };
+          } else {
+            // inject component registration as beforeCreate hook
+            const existing = component.beforeCreate;
+            component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+          }
+        }
+      }
+
+      return component
+    }
+    /* style inject */
+    function __vue_create_injector__$3() {
+      const head = document.head || document.getElementsByTagName('head')[0];
+      const styles = __vue_create_injector__$3.styles || (__vue_create_injector__$3.styles = {});
+      const isOldIE =
+        typeof navigator !== 'undefined' &&
+        /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+      return function addStyle(id, css) {
+        if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return // SSR styles are present.
+
+        const group = isOldIE ? css.media || 'default' : id;
+        const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+        if (!style.ids.includes(id)) {
+          let code = css.source;
+          let index = style.ids.length;
+
+          style.ids.push(id);
+
+          if (isOldIE) {
+            style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+          }
+
+          if (!style.element) {
+            const el = style.element = document.createElement('style');
+            el.type = 'text/css';
+
+            if (css.media) el.setAttribute('media', css.media);
+            if (isOldIE) {
+              el.setAttribute('data-group', group);
+              el.setAttribute('data-next-index', '0');
+            }
+
+            head.appendChild(el);
+          }
+
+          if (isOldIE) {
+            index = parseInt(style.element.getAttribute('data-next-index'));
+            style.element.setAttribute('data-next-index', index + 1);
+          }
+
+          if (style.element.styleSheet) {
+            style.parts.push(code);
+            style.element.styleSheet.cssText = style.parts
+              .filter(Boolean)
+              .join('\n');
+          } else {
+            const textNode = document.createTextNode(code);
+            const nodes = style.element.childNodes;
+            if (nodes[index]) style.element.removeChild(nodes[index]);
+            if (nodes.length) style.element.insertBefore(textNode, nodes[index]);
+            else style.element.appendChild(textNode);
+          }
+        }
+      }
+    }
+    /* style inject SSR */
+    
+
+    
+    var IconBookmarkHeart = __vue_normalize__$3(
+      { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
+      __vue_inject_styles__$3,
+      __vue_script__$3,
+      __vue_scope_id__$3,
+      __vue_is_functional_template__$3,
+      __vue_module_identifier__$3,
+      __vue_create_injector__$3,
+      undefined
+    );
+
+  //
+
+  var script$4 = {
+    components: { IconBookmarkHeart, IconUgoiraPlay },
     props: {
       bookmarkId: {
         default: '',
@@ -3002,340 +3190,6 @@
   };
 
   /* script */
-              const __vue_script__$3 = script$3;
-              
-  /* template */
-  var __vue_render__$3 = function() {
-    var _vm = this;
-    var _h = _vm.$createElement;
-    var _c = _vm._self._c || _h;
-    return _c("div", { staticClass: "image-item-image" }, [
-      _c(
-        "a",
-        {
-          staticClass: "image-flexbox",
-          attrs: { href: _vm.illustPageUrl, rel: "noopener" },
-          on: {
-            contextmenu: function($event) {
-              return _vm.activateContextMenu($event)
-            },
-            mouseenter: _vm.controlUgoira,
-            mouseleave: _vm.controlUgoira
-          }
-        },
-        [
-          _vm.illustPageCount > 1
-            ? _c("div", { staticClass: "top-right-slot" }, [
-                _c("span", [
-                  _c("i", { staticClass: "far fa-images" }),
-                  _vm._v("\n        " + _vm._s(_vm.illustPageCount))
-                ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("img", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: !_vm.ugoiraPlayed,
-                expression: "!ugoiraPlayed"
-              }
-            ],
-            attrs: { "data-src": _vm.imgUrl, src: _vm.imgUrl }
-          }),
-          _vm._v(" "),
-          _vm.isUgoira
-            ? _c("IconUgoiraPlay", {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.ugoiraPlayed,
-                    expression: "!ugoiraPlayed"
-                  }
-                ],
-                attrs: { size: 60 }
-              })
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.isUgoira
-            ? _c("canvas", {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.ugoiraPlayed,
-                    expression: "ugoiraPlayed"
-                  }
-                ],
-                ref: "smallUgoiraPreview"
-              })
-            : _vm._e()
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", {
-        staticClass: "_one-click-bookmark",
-        class: { on: _vm.selfIsBookmarked },
-        attrs: { title: _vm.selfIsBookmarked },
-        on: {
-          click: function($event) {
-            if (
-              !("button" in $event) &&
-              _vm._k($event.keyCode, "left", 37, $event.key, [
-                "Left",
-                "ArrowLeft"
-              ])
-            ) {
-              return null
-            }
-            if ("button" in $event && $event.button !== 0) {
-              return null
-            }
-            $event.preventDefault();
-            $event.stopPropagation();
-            return _vm.oneClickBookmarkAdd($event)
-          }
-        }
-      }),
-      _vm._v(" "),
-      _vm.isSelfBookmarkPage
-        ? _c("div", { staticClass: "bookmark-input-container" }, [
-            _c("input", {
-              attrs: { type: "checkbox", name: "book_id[]" },
-              domProps: { value: _vm.bookmarkId }
-            })
-          ])
-        : _vm._e()
-    ])
-  };
-  var __vue_staticRenderFns__$3 = [];
-  __vue_render__$3._withStripped = true;
-
-    /* style */
-    const __vue_inject_styles__$3 = function (inject) {
-      if (!inject) return
-      inject("data-v-192566ae_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image[data-v-192566ae] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-192566ae] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox[data-v-192566ae]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-192566ae] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-192566ae] {\n  position: absolute;\n}\nimg[data-v-192566ae],\ncanvas[data-v-192566ae] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-192566ae] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-192566ae] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-192566ae] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAgLA;;;;;EAKA;AACA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;EACA,mBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,wBAAA;EACA,oBAAA;EACA,WAAA;EACA,sCAAA;EACA,mBAAA;EACA,oDAAA;EACA,mDAAA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,WAAA;EACA,cAAA;EACA,oBAAA;EACA,WAAA;EACA,uBAAA;EACA,uBAAA;EACA,aAAA;EACA,aAAA;EACA,iBAAA;EACA,+BAAA;EACA,yBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,iBAAA;EACA,gBAAA;CACA;AACA;EACA,SAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,mBAAA;EACA,gBAAA;EACA;gBACA;EACA,6BAAA;EACA,uBAAA;EACA,aAAA;EACA,0BAAA;EACA,qCAAA;CACA;AACA;EACA,4EAAA;CACA;AACA;EACA,mBAAA;EACA,QAAA;EACA,OAAA;EACA,+BAAA;EACA,aAAA;EACA,yBAAA;CACA","file":"DefaultImageItemImage.vue","sourcesContent":["<template>\n  <div class=\"image-item-image\">\n    <a\n      :href=\"illustPageUrl\"\n      class=\"image-flexbox\"\n      rel=\"noopener\"\n      @click.right=\"activateContextMenu\"\n      @mouseenter=\"controlUgoira\"\n      @mouseleave=\"controlUgoira\">\n\n      <div v-if=\"illustPageCount > 1\" class=\"top-right-slot\">\n        <span><i class=\"far fa-images\"/>\n          {{ illustPageCount }}</span>\n      </div>\n\n      <img\n        v-show=\"!ugoiraPlayed\"\n        :data-src=\"imgUrl\"\n        :src=\"imgUrl\">\n      <IconUgoiraPlay\n        v-if=\"isUgoira\"\n        v-show=\"!ugoiraPlayed\"\n        :size=\"60\"/>\n      <canvas\n        v-if=\"isUgoira\"\n        v-show=\"ugoiraPlayed\"\n        ref=\"smallUgoiraPreview\"/>\n    </a>\n    <div\n      :class=\"{on:selfIsBookmarked}\"\n      :title=\"selfIsBookmarked\"\n      class=\"_one-click-bookmark\"\n      @click.left.prevent.stop=\"oneClickBookmarkAdd\"/>\n    <div v-if=\"isSelfBookmarkPage\" class=\"bookmark-input-container\">\n      <input\n        :value=\"bookmarkId\"\n        type=\"checkbox\"\n        name=\"book_id[]\">\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\nimport { PixivAPI } from '../lib/pixiv';\nimport IconUgoiraPlay from './IconUgoiraPlay.vue';\n\nexport default {\n  components: { IconUgoiraPlay },\n  props: {\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      selfIsBookmarked: this.isBookmarked,\n      ugoiraMeta: null,\n      ugoiraPlayed: false,\n      ugoiraPlayer: null,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    canHoverPlay() {\n      return this.$store.getters.config.hoverPlay;\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n  },\n  mounted() {\n    this.$nextTick(async() => {\n      if (this.isUgoira && this.canHoverPlay) {\n        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);\n      }\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemImage#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          data: {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          },\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n    controlUgoira(event) {\n      if (!this.ugoiraMeta) {\n        return;\n      }\n      if (!this.ugoiraPlayer) {\n        try {\n          this.ugoiraPlayer = new ZipImagePlayer({\n            autosize: true,\n            canvas: this.$refs.smallUgoiraPreview,\n            chunkSize: 300000,\n            loop: true,\n            metadata: this.ugoiraMeta,\n            source: this.ugoiraMeta.src,\n          });\n        } catch (error) {\n          $print.error(error);\n        }\n      }\n      if (this.canHoverPlay) {\n        if (event.type === 'mouseenter') {\n          this.ugoiraPlayed = true;\n          this.ugoiraPlayer.play();\n        } else {\n          this.ugoiraPlayed = false;\n          this.ugoiraPlayer.pause();\n          this.ugoiraPlayer.rewind();\n        }\n      }\n    },\n    async oneClickBookmarkAdd() {\n      if (!this.selfIsBookmarked) {\n        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {\n          this.selfIsBookmarked = true;\n        }\n      } else {\n        // this.bookmarkId might be empty...\n        // Because RPC API has no bookmarkId returned...\n        let bookmarkId = this.bookmarkId;\n        if (!bookmarkId) {\n          const data = await PixivAPI.getIllustBookmarkData(this.illustId);\n          bookmarkId = data.bookmarkData.id;\n        }\n        if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {\n          this.selfIsBookmarked = false;\n        }\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox:hover {\n  text-decoration: none;\n}\n.top-right-slot {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon {\n  position: absolute;\n}\nimg,\ncanvas {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n</style>\n"]}, media: undefined });
-
-    };
-    /* scoped */
-    const __vue_scope_id__$3 = "data-v-192566ae";
-    /* module identifier */
-    const __vue_module_identifier__$3 = undefined;
-    /* functional template */
-    const __vue_is_functional_template__$3 = false;
-    /* component normalizer */
-    function __vue_normalize__$3(
-      template, style, script,
-      scope, functional, moduleIdentifier,
-      createInjector, createInjectorSSR
-    ) {
-      const component = (typeof script === 'function' ? script.options : script) || {};
-
-      // For security concerns, we use only base name in production mode.
-      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue";
-
-      if (!component.render) {
-        component.render = template.render;
-        component.staticRenderFns = template.staticRenderFns;
-        component._compiled = true;
-
-        if (functional) component.functional = true;
-      }
-
-      component._scopeId = scope;
-
-      {
-        let hook;
-        if (style) {
-          hook = function(context) {
-            style.call(this, createInjector(context));
-          };
-        }
-
-        if (hook !== undefined) {
-          if (component.functional) {
-            // register for functional component in vue file
-            const originalRender = component.render;
-            component.render = function renderWithStyleInjection(h, context) {
-              hook.call(context);
-              return originalRender(h, context)
-            };
-          } else {
-            // inject component registration as beforeCreate hook
-            const existing = component.beforeCreate;
-            component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
-          }
-        }
-      }
-
-      return component
-    }
-    /* style inject */
-    function __vue_create_injector__$3() {
-      const head = document.head || document.getElementsByTagName('head')[0];
-      const styles = __vue_create_injector__$3.styles || (__vue_create_injector__$3.styles = {});
-      const isOldIE =
-        typeof navigator !== 'undefined' &&
-        /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-
-      return function addStyle(id, css) {
-        if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return // SSR styles are present.
-
-        const group = isOldIE ? css.media || 'default' : id;
-        const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
-
-        if (!style.ids.includes(id)) {
-          let code = css.source;
-          let index = style.ids.length;
-
-          style.ids.push(id);
-
-          if (isOldIE) {
-            style.element = style.element || document.querySelector('style[data-group=' + group + ']');
-          }
-
-          if (!style.element) {
-            const el = style.element = document.createElement('style');
-            el.type = 'text/css';
-
-            if (css.media) el.setAttribute('media', css.media);
-            if (isOldIE) {
-              el.setAttribute('data-group', group);
-              el.setAttribute('data-next-index', '0');
-            }
-
-            head.appendChild(el);
-          }
-
-          if (isOldIE) {
-            index = parseInt(style.element.getAttribute('data-next-index'));
-            style.element.setAttribute('data-next-index', index + 1);
-          }
-
-          if (style.element.styleSheet) {
-            style.parts.push(code);
-            style.element.styleSheet.cssText = style.parts
-              .filter(Boolean)
-              .join('\n');
-          } else {
-            const textNode = document.createTextNode(code);
-            const nodes = style.element.childNodes;
-            if (nodes[index]) style.element.removeChild(nodes[index]);
-            if (nodes.length) style.element.insertBefore(textNode, nodes[index]);
-            else style.element.appendChild(textNode);
-          }
-        }
-      }
-    }
-    /* style inject SSR */
-    
-
-    
-    var DefaultImageItemImage = __vue_normalize__$3(
-      { render: __vue_render__$3, staticRenderFns: __vue_staticRenderFns__$3 },
-      __vue_inject_styles__$3,
-      __vue_script__$3,
-      __vue_scope_id__$3,
-      __vue_is_functional_template__$3,
-      __vue_module_identifier__$3,
-      __vue_create_injector__$3,
-      undefined
-    );
-
-  //
-
-  var script$4 = {
-    props: {
-      bookmarkCount: {
-        default: 0,
-        type: Number,
-      },
-      illustId: {
-        default: '',
-        type: String,
-      },
-      illustTitle: {
-        default: '',
-        type: String,
-      },
-      isFollowed: {
-        default: false,
-        type: Boolean,
-      },
-      profileImgUrl: {
-        default: '',
-        type: String,
-      },
-      userId: {
-        default: '',
-        type: String,
-      },
-      userName: {
-        default: '',
-        type: String,
-      },
-    },
-    // eslint-disable-next-line sort-keys
-    computed: {
-      bookmarkDetailUrl() {
-        return `/bookmark_detail.php?illust_id=${this.illustId}`;
-      },
-      bookmarkTooltipMsg() {
-        return this.$t('mainView.bookmarkTooltip', {
-          count: this.bookmarkCount,
-        });
-      },
-      illustPageUrl() {
-        return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
-      },
-      isEnableUserTooltip() {
-        return this.$store.state.config.userTooltip;
-      },
-      profileImgStyle() {
-        return {
-          backgroundImage: `url(${this.profileImgUrl})`,
-        };
-      },
-      userPageUrl() {
-        return `/member_illust.php?id=${this.userId}`;
-      },
-    },
-    methods: {
-      activateContextMenu(event) {
-        $print.debug('DefaultImageItemTitle#activateContextMenu', event);
-        if (this.$store.state.config.contextMenu) {
-          event.preventDefault();
-
-          const payload = {
-            position: {
-              x: event.clientX,
-              y: event.clientY,
-            },
-          };
-
-          const ct = event.currentTarget;
-          if (ct.classList.contains('user-info')) {
-            payload.data = {
-              illustId: this.illustId,
-              type: 'image-item-title-user',
-            };
-          } else {
-            payload.data = {
-              illustId: this.illustId,
-              type: 'image-item-image',
-            };
-          }
-
-          this.$store.commit('contextMenu/activate', payload);
-        }
-      },
-    },
-  };
-
-  /* script */
               const __vue_script__$4 = script$4;
               
   /* template */
@@ -3343,95 +3197,110 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("figcaption", { staticClass: "image-item-title-user" }, [
-      _c("ul", [
+    return _c(
+      "div",
+      { staticClass: "image-item-image" },
+      [
         _c(
-          "li",
+          "a",
           {
-            staticClass: "title-text",
+            staticClass: "image-flexbox",
+            attrs: { href: _vm.illustPageUrl, rel: "noopener" },
             on: {
               contextmenu: function($event) {
                 return _vm.activateContextMenu($event)
-              }
-            }
-          },
-          [
-            _c(
-              "a",
-              { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
-              [_vm._v(_vm._s(_vm.illustTitle))]
-            )
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "li",
-          {
-            staticClass: "user-info",
-            on: {
-              contextmenu: function($event) {
-                return _vm.activateContextMenu($event)
-              }
-            }
-          },
-          [
-            _c(
-              "a",
-              {
-                staticClass: "user-link",
-                class: _vm.isEnableUserTooltip ? "ui-profile-popup" : "",
-                attrs: {
-                  href: _vm.userPageUrl,
-                  title: _vm.userName,
-                  "data-user_id": _vm.userId,
-                  "data-user_name": _vm.userName,
-                  target: "_blank"
-                }
               },
-              [
-                _c("span", {
-                  staticClass: "user-img",
-                  style: _vm.profileImgStyle
-                }),
-                _vm._v(" "),
-                _c("span", [_vm._v(_vm._s(_vm.userName))])
-              ]
-            ),
+              mouseenter: _vm.controlUgoira,
+              mouseleave: _vm.controlUgoira
+            }
+          },
+          [
+            _vm.illustPageCount > 1
+              ? _c("div", { staticClass: "top-right-slot" }, [
+                  _c("span", [
+                    _c("i", { staticClass: "far fa-images" }),
+                    _vm._v("\n        " + _vm._s(_vm.illustPageCount))
+                  ])
+                ])
+              : _vm._e(),
             _vm._v(" "),
-            _vm.isFollowed ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
-          ]
+            _c("img", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: !_vm.ugoiraPlayed,
+                  expression: "!ugoiraPlayed"
+                }
+              ],
+              attrs: { "data-src": _vm.imgUrl, src: _vm.imgUrl }
+            }),
+            _vm._v(" "),
+            _vm.isUgoira
+              ? _c("IconUgoiraPlay", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: !_vm.ugoiraPlayed,
+                      expression: "!ugoiraPlayed"
+                    }
+                  ],
+                  attrs: { size: 60 }
+                })
+              : _vm._e(),
+            _vm._v(" "),
+            _vm.isUgoira
+              ? _c("canvas", {
+                  directives: [
+                    {
+                      name: "show",
+                      rawName: "v-show",
+                      value: _vm.ugoiraPlayed,
+                      expression: "ugoiraPlayed"
+                    }
+                  ],
+                  ref: "smallUgoiraPreview"
+                })
+              : _vm._e()
+          ],
+          1
         ),
         _vm._v(" "),
-        _vm.bookmarkCount > 0
-          ? _c("li", [
-              _c("ul", { staticClass: "count-list" }, [
-                _c("li", [
-                  _c(
-                    "a",
-                    {
-                      staticClass: "_ui-tooltip bookmark-count",
-                      attrs: {
-                        href: _vm.bookmarkDetailUrl,
-                        "data-tooltip": _vm.$t("mainView.bookmarkTooltip", {
-                          count: _vm.bookmarkCount
-                        })
-                      }
-                    },
-                    [
-                      _c("i", { staticClass: "_icon _bookmark-icon-inline" }),
-                      _vm._v(
-                        "\n            " +
-                          _vm._s(_vm.bookmarkCount) +
-                          "\n          "
-                      )
-                    ]
-                  )
+        _c("IconBookmarkHeart", {
+          attrs: { active: _vm.selfIsBookmarked },
+          on: {
+            click: function($event) {
+              if (
+                !("button" in $event) &&
+                _vm._k($event.keyCode, "left", 37, $event.key, [
+                  "Left",
+                  "ArrowLeft"
                 ])
-              ])
+              ) {
+                return null
+              }
+              if ("button" in $event && $event.button !== 0) {
+                return null
+              }
+              $event.preventDefault();
+              $event.stopPropagation();
+              return _vm.oneClickBookmarkAdd($event)
+            }
+          }
+        }),
+        _vm._v(" "),
+        _vm.isSelfBookmarkPage
+          ? _c("div", { staticClass: "bookmark-input-container" }, [
+              _c("input", {
+                attrs: { type: "checkbox", name: "book_id[]" },
+                domProps: { value: _vm.bookmarkId }
+              })
             ])
           : _vm._e()
-      ])
-    ])
+      ],
+      1
+    )
   };
   var __vue_staticRenderFns__$4 = [];
   __vue_render__$4._withStripped = true;
@@ -3439,11 +3308,11 @@
     /* style */
     const __vue_inject_styles__$4 = function (inject) {
       if (!inject) return
-      inject("data-v-6cfe9952_0", { source: "\n.image-item-title-user[data-v-6cfe9952] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-6cfe9952] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-6cfe9952] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-6cfe9952] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-6cfe9952] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-6cfe9952] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemTitle.vue"],"names":[],"mappings":";AAoIA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;CACA;AACA;EACA,cAAA;EACA,iBAAA;EACA,wBAAA;EACA,oBAAA;EACA,iBAAA;CACA;AACA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,YAAA;EACA,aAAA;EACA,sBAAA;EACA,uBAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;EACA,sBAAA;EACA,iBAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;CACA","file":"DefaultImageItemTitle.vue","sourcesContent":["<template>\n  <figcaption class=\"image-item-title-user\">\n    <ul>\n      <li class=\"title-text\" @click.right=\"activateContextMenu\">\n        <a :href=\"illustPageUrl\" :title=\"illustTitle\">{{ illustTitle }}</a>\n      </li>\n      <li\n        class=\"user-info\"\n        @click.right=\"activateContextMenu\">\n        <a\n          :href=\"userPageUrl\"\n          :title=\"userName\"\n          :data-user_id=\"userId\"\n          :data-user_name=\"userName\"\n          :class=\"isEnableUserTooltip ? 'ui-profile-popup' : ''\"\n          class=\"user-link\"\n          target=\"_blank\">\n          <span :style=\"profileImgStyle\" class=\"user-img\"/>\n          <span>{{ userName }}</span>\n        </a>\n        <i v-if=\"isFollowed\" class=\"fas fa-rss\"/>\n      </li>\n      <li v-if=\"bookmarkCount > 0\">\n        <ul class=\"count-list\">\n          <li>\n            <a\n              :href=\"bookmarkDetailUrl\"\n              :data-tooltip=\"$t('mainView.bookmarkTooltip', { count: bookmarkCount })\"\n              class=\"_ui-tooltip bookmark-count\">\n              <i class=\"_icon _bookmark-icon-inline\"/>\n              {{ bookmarkCount }}\n            </a>\n          </li>\n        </ul>\n      </li>\n    </ul>\n  </figcaption>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\n\nexport default {\n  props: {\n    bookmarkCount: {\n      default: 0,\n      type: Number,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustTitle: {\n      default: '',\n      type: String,\n    },\n    isFollowed: {\n      default: false,\n      type: Boolean,\n    },\n    profileImgUrl: {\n      default: '',\n      type: String,\n    },\n    userId: {\n      default: '',\n      type: String,\n    },\n    userName: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    bookmarkDetailUrl() {\n      return `/bookmark_detail.php?illust_id=${this.illustId}`;\n    },\n    bookmarkTooltipMsg() {\n      return this.$t('mainView.bookmarkTooltip', {\n        count: this.bookmarkCount,\n      });\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isEnableUserTooltip() {\n      return this.$store.state.config.userTooltip;\n    },\n    profileImgStyle() {\n      return {\n        backgroundImage: `url(${this.profileImgUrl})`,\n      };\n    },\n    userPageUrl() {\n      return `/member_illust.php?id=${this.userId}`;\n    },\n  },\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemTitle#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        const ct = event.currentTarget;\n        if (ct.classList.contains('user-info')) {\n          payload.data = {\n            illustId: this.illustId,\n            type: 'image-item-title-user',\n          };\n        } else {\n          payload.data = {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          };\n        }\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n.image-item-title-user {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n</style>\n"]}, media: undefined });
+      inject("data-v-0f68cd50_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image[data-v-0f68cd50] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-0f68cd50] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox[data-v-0f68cd50]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-0f68cd50] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-0f68cd50] {\n  position: absolute;\n}\nimg[data-v-0f68cd50],\ncanvas[data-v-0f68cd50] {\n  max-height: 100%;\n  max-width: 100%;\n}\n.bookmark-input-container[data-v-0f68cd50] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AA6KA;;;;;EAKA;AACA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;EACA,mBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,wBAAA;EACA,oBAAA;EACA,WAAA;EACA,sCAAA;EACA,mBAAA;EACA,oDAAA;EACA,mDAAA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,WAAA;EACA,cAAA;EACA,oBAAA;EACA,WAAA;EACA,uBAAA;EACA,uBAAA;EACA,aAAA;EACA,aAAA;EACA,iBAAA;EACA,+BAAA;EACA,yBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,iBAAA;EACA,gBAAA;CACA;AACA;EACA,mBAAA;EACA,QAAA;EACA,OAAA;EACA,+BAAA;EACA,aAAA;EACA,yBAAA;CACA","file":"DefaultImageItemImage.vue","sourcesContent":["<template>\n  <div class=\"image-item-image\">\n    <a\n      :href=\"illustPageUrl\"\n      class=\"image-flexbox\"\n      rel=\"noopener\"\n      @click.right=\"activateContextMenu\"\n      @mouseenter=\"controlUgoira\"\n      @mouseleave=\"controlUgoira\">\n\n      <div v-if=\"illustPageCount > 1\" class=\"top-right-slot\">\n        <span><i class=\"far fa-images\"/>\n          {{ illustPageCount }}</span>\n      </div>\n\n      <img\n        v-show=\"!ugoiraPlayed\"\n        :data-src=\"imgUrl\"\n        :src=\"imgUrl\">\n      <IconUgoiraPlay\n        v-if=\"isUgoira\"\n        v-show=\"!ugoiraPlayed\"\n        :size=\"60\"/>\n      <canvas\n        v-if=\"isUgoira\"\n        v-show=\"ugoiraPlayed\"\n        ref=\"smallUgoiraPreview\"/>\n    </a>\n    <IconBookmarkHeart :active=\"selfIsBookmarked\" @click.left.prevent.stop=\"oneClickBookmarkAdd\"/>\n    <div v-if=\"isSelfBookmarkPage\" class=\"bookmark-input-container\">\n      <input\n        :value=\"bookmarkId\"\n        type=\"checkbox\"\n        name=\"book_id[]\">\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\nimport { PixivAPI } from '../lib/pixiv';\nimport IconUgoiraPlay from './IconUgoiraPlay.vue';\nimport IconBookmarkHeart from './IconBookmarkHeart.vue';\n\nexport default {\n  components: { IconBookmarkHeart, IconUgoiraPlay },\n  props: {\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      selfIsBookmarked: this.isBookmarked,\n      ugoiraMeta: null,\n      ugoiraPlayed: false,\n      ugoiraPlayer: null,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    canHoverPlay() {\n      return this.$store.getters.config.hoverPlay;\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n  },\n  mounted() {\n    this.$nextTick(async() => {\n      if (this.isUgoira && this.canHoverPlay) {\n        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);\n      }\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemImage#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          data: {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          },\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n    controlUgoira(event) {\n      if (!this.ugoiraMeta) {\n        return;\n      }\n      if (!this.ugoiraPlayer) {\n        try {\n          this.ugoiraPlayer = new ZipImagePlayer({\n            autosize: true,\n            canvas: this.$refs.smallUgoiraPreview,\n            chunkSize: 300000,\n            loop: true,\n            metadata: this.ugoiraMeta,\n            source: this.ugoiraMeta.src,\n          });\n        } catch (error) {\n          $print.error(error);\n        }\n      }\n      if (this.canHoverPlay) {\n        if (event.type === 'mouseenter') {\n          this.ugoiraPlayed = true;\n          this.ugoiraPlayer.play();\n        } else {\n          this.ugoiraPlayed = false;\n          this.ugoiraPlayer.pause();\n          this.ugoiraPlayer.rewind();\n        }\n      }\n    },\n    async oneClickBookmarkAdd() {\n      if (!this.selfIsBookmarked) {\n        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {\n          this.selfIsBookmarked = true;\n        }\n      } else {\n        // this.bookmarkId might be empty...\n        // Because RPC API has no bookmarkId returned...\n        let bookmarkId = this.bookmarkId;\n        if (!bookmarkId) {\n          const data = await PixivAPI.getIllustBookmarkData(this.illustId);\n          bookmarkId = data.bookmarkData.id;\n        }\n        if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {\n          this.selfIsBookmarked = false;\n        }\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox:hover {\n  text-decoration: none;\n}\n.top-right-slot {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon {\n  position: absolute;\n}\nimg,\ncanvas {\n  max-height: 100%;\n  max-width: 100%;\n}\n.bookmark-input-container {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n</style>\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$4 = "data-v-6cfe9952";
+    const __vue_scope_id__$4 = "data-v-0f68cd50";
     /* module identifier */
     const __vue_module_identifier__$4 = undefined;
     /* functional template */
@@ -3457,7 +3326,7 @@
       const component = (typeof script === 'function' ? script.options : script) || {};
 
       // For security concerns, we use only base name in production mode.
-      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemTitle.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue";
 
       if (!component.render) {
         component.render = template.render;
@@ -3556,7 +3425,7 @@
     
 
     
-    var DefaultImageItemTitle = __vue_normalize__$4(
+    var DefaultImageItemImage = __vue_normalize__$4(
       { render: __vue_render__$4, staticRenderFns: __vue_staticRenderFns__$4 },
       __vue_inject_styles__$4,
       __vue_script__$4,
@@ -3570,41 +3439,20 @@
   //
 
   var script$5 = {
-    components: { DefaultImageItemImage, DefaultImageItemTitle },
     props: {
       bookmarkCount: {
         default: 0,
         type: Number,
       },
-      bookmarkId: {
-        default: '',
-        type: String,
-      },
       illustId: {
         default: '',
         type: String,
-      },
-      illustPageCount: {
-        default: 1,
-        type: Number,
       },
       illustTitle: {
         default: '',
         type: String,
       },
-      imgUrl: {
-        default: '',
-        type: String,
-      },
-      isBookmarked: {
-        default: false,
-        type: Boolean,
-      },
       isFollowed: {
-        default: false,
-        type: Boolean,
-      },
-      isUgoira: {
         default: false,
         type: Boolean,
       },
@@ -3621,6 +3469,61 @@
         type: String,
       },
     },
+    // eslint-disable-next-line sort-keys
+    computed: {
+      bookmarkDetailUrl() {
+        return `/bookmark_detail.php?illust_id=${this.illustId}`;
+      },
+      bookmarkTooltipMsg() {
+        return this.$t('mainView.bookmarkTooltip', {
+          count: this.bookmarkCount,
+        });
+      },
+      illustPageUrl() {
+        return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
+      },
+      isEnableUserTooltip() {
+        return this.$store.state.config.userTooltip;
+      },
+      profileImgStyle() {
+        return {
+          backgroundImage: `url(${this.profileImgUrl})`,
+        };
+      },
+      userPageUrl() {
+        return `/member_illust.php?id=${this.userId}`;
+      },
+    },
+    methods: {
+      activateContextMenu(event) {
+        $print.debug('DefaultImageItemTitle#activateContextMenu', event);
+        if (this.$store.state.config.contextMenu) {
+          event.preventDefault();
+
+          const payload = {
+            position: {
+              x: event.clientX,
+              y: event.clientY,
+            },
+          };
+
+          const ct = event.currentTarget;
+          if (ct.classList.contains('user-info')) {
+            payload.data = {
+              illustId: this.illustId,
+              type: 'image-item-title-user',
+            };
+          } else {
+            payload.data = {
+              illustId: this.illustId,
+              type: 'image-item-image',
+            };
+          }
+
+          this.$store.commit('contextMenu/activate', payload);
+        }
+      },
+    },
   };
 
   /* script */
@@ -3631,36 +3534,94 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c("div", { staticClass: "image-item" }, [
-      _c(
-        "figure",
-        { staticClass: "image-item-inner" },
-        [
-          _c("DefaultImageItemImage", {
-            attrs: {
-              "img-url": _vm.imgUrl,
-              "illust-id": _vm.illustId,
-              "illust-page-count": _vm.illustPageCount,
-              "is-ugoira": _vm.isUgoira,
-              "is-bookmarked": _vm.isBookmarked,
-              "bookmark-id": _vm.bookmarkId
+    return _c("figcaption", { staticClass: "image-item-title-user" }, [
+      _c("ul", [
+        _c(
+          "li",
+          {
+            staticClass: "title-text",
+            on: {
+              contextmenu: function($event) {
+                return _vm.activateContextMenu($event)
+              }
             }
-          }),
-          _vm._v(" "),
-          _c("DefaultImageItemTitle", {
-            attrs: {
-              "illust-id": _vm.illustId,
-              "illust-title": _vm.illustTitle,
-              "user-name": _vm.userName,
-              "user-id": _vm.userId,
-              "is-followed": _vm.isFollowed,
-              "profile-img-url": _vm.profileImgUrl,
-              "bookmark-count": _vm.bookmarkCount
+          },
+          [
+            _c(
+              "a",
+              { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
+              [_vm._v(_vm._s(_vm.illustTitle))]
+            )
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "li",
+          {
+            staticClass: "user-info",
+            on: {
+              contextmenu: function($event) {
+                return _vm.activateContextMenu($event)
+              }
             }
-          })
-        ],
-        1
-      )
+          },
+          [
+            _c(
+              "a",
+              {
+                staticClass: "user-link",
+                class: _vm.isEnableUserTooltip ? "ui-profile-popup" : "",
+                attrs: {
+                  href: _vm.userPageUrl,
+                  title: _vm.userName,
+                  "data-user_id": _vm.userId,
+                  "data-user_name": _vm.userName,
+                  target: "_blank"
+                }
+              },
+              [
+                _c("span", {
+                  staticClass: "user-img",
+                  style: _vm.profileImgStyle
+                }),
+                _vm._v(" "),
+                _c("span", [_vm._v(_vm._s(_vm.userName))])
+              ]
+            ),
+            _vm._v(" "),
+            _vm.isFollowed ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
+          ]
+        ),
+        _vm._v(" "),
+        _vm.bookmarkCount > 0
+          ? _c("li", [
+              _c("ul", { staticClass: "count-list" }, [
+                _c("li", [
+                  _c(
+                    "a",
+                    {
+                      staticClass: "_ui-tooltip bookmark-count",
+                      attrs: {
+                        href: _vm.bookmarkDetailUrl,
+                        "data-tooltip": _vm.$t("mainView.bookmarkTooltip", {
+                          count: _vm.bookmarkCount
+                        })
+                      }
+                    },
+                    [
+                      _c("i", { staticClass: "_icon _bookmark-icon-inline" }),
+                      _vm._v(
+                        "\n            " +
+                          _vm._s(_vm.bookmarkCount) +
+                          "\n          "
+                      )
+                    ]
+                  )
+                ])
+              ])
+            ])
+          : _vm._e()
+      ])
     ])
   };
   var __vue_staticRenderFns__$5 = [];
@@ -3669,11 +3630,11 @@
     /* style */
     const __vue_inject_styles__$5 = function (inject) {
       if (!inject) return
-      inject("data-v-2ff3eadc_0", { source: "\n.image-item[data-v-2ff3eadc] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-2ff3eadc] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItem.vue"],"names":[],"mappings":";AAkFA;EACA,cAAA;EACA,wBAAA;EACA,mBAAA;EACA,cAAA;EACA,aAAA;EACA,aAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,gBAAA;EACA,kBAAA;CACA","file":"DefaultImageItem.vue","sourcesContent":["<template>\n  <div class=\"image-item\">\n    <figure class=\"image-item-inner\">\n      <DefaultImageItemImage\n        :img-url=\"imgUrl\"\n        :illust-id=\"illustId\"\n        :illust-page-count=\"illustPageCount\"\n        :is-ugoira=\"isUgoira\"\n        :is-bookmarked=\"isBookmarked\"\n        :bookmark-id=\"bookmarkId\"/>\n      <DefaultImageItemTitle\n        :illust-id=\"illustId\"\n        :illust-title=\"illustTitle\"\n        :user-name=\"userName\"\n        :user-id=\"userId\"\n        :is-followed=\"isFollowed\"\n        :profile-img-url=\"profileImgUrl\"\n        :bookmark-count=\"bookmarkCount\"/>\n    </figure>\n  </div>\n</template>\n\n<script>\nimport DefaultImageItemImage from './DefaultImageItemImage.vue';\nimport DefaultImageItemTitle from './DefaultImageItemTitle.vue';\n\nexport default {\n  components: { DefaultImageItemImage, DefaultImageItemTitle },\n  props: {\n    bookmarkCount: {\n      default: 0,\n      type: Number,\n    },\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    illustTitle: {\n      default: '',\n      type: String,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isFollowed: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n    profileImgUrl: {\n      default: '',\n      type: String,\n    },\n    userId: {\n      default: '',\n      type: String,\n    },\n    userName: {\n      default: '',\n      type: String,\n    },\n  },\n};\n</script>\n\n<style scoped>\n.image-item {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n</style>\n"]}, media: undefined });
+      inject("data-v-6cfe9952_0", { source: "\n.image-item-title-user[data-v-6cfe9952] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-6cfe9952] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-6cfe9952] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-6cfe9952] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-6cfe9952] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-6cfe9952] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemTitle.vue"],"names":[],"mappings":";AAoIA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;CACA;AACA;EACA,cAAA;EACA,iBAAA;EACA,wBAAA;EACA,oBAAA;EACA,iBAAA;CACA;AACA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,YAAA;EACA,aAAA;EACA,sBAAA;EACA,uBAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;EACA,sBAAA;EACA,iBAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;CACA","file":"DefaultImageItemTitle.vue","sourcesContent":["<template>\n  <figcaption class=\"image-item-title-user\">\n    <ul>\n      <li class=\"title-text\" @click.right=\"activateContextMenu\">\n        <a :href=\"illustPageUrl\" :title=\"illustTitle\">{{ illustTitle }}</a>\n      </li>\n      <li\n        class=\"user-info\"\n        @click.right=\"activateContextMenu\">\n        <a\n          :href=\"userPageUrl\"\n          :title=\"userName\"\n          :data-user_id=\"userId\"\n          :data-user_name=\"userName\"\n          :class=\"isEnableUserTooltip ? 'ui-profile-popup' : ''\"\n          class=\"user-link\"\n          target=\"_blank\">\n          <span :style=\"profileImgStyle\" class=\"user-img\"/>\n          <span>{{ userName }}</span>\n        </a>\n        <i v-if=\"isFollowed\" class=\"fas fa-rss\"/>\n      </li>\n      <li v-if=\"bookmarkCount > 0\">\n        <ul class=\"count-list\">\n          <li>\n            <a\n              :href=\"bookmarkDetailUrl\"\n              :data-tooltip=\"$t('mainView.bookmarkTooltip', { count: bookmarkCount })\"\n              class=\"_ui-tooltip bookmark-count\">\n              <i class=\"_icon _bookmark-icon-inline\"/>\n              {{ bookmarkCount }}\n            </a>\n          </li>\n        </ul>\n      </li>\n    </ul>\n  </figcaption>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\n\nexport default {\n  props: {\n    bookmarkCount: {\n      default: 0,\n      type: Number,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustTitle: {\n      default: '',\n      type: String,\n    },\n    isFollowed: {\n      default: false,\n      type: Boolean,\n    },\n    profileImgUrl: {\n      default: '',\n      type: String,\n    },\n    userId: {\n      default: '',\n      type: String,\n    },\n    userName: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    bookmarkDetailUrl() {\n      return `/bookmark_detail.php?illust_id=${this.illustId}`;\n    },\n    bookmarkTooltipMsg() {\n      return this.$t('mainView.bookmarkTooltip', {\n        count: this.bookmarkCount,\n      });\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isEnableUserTooltip() {\n      return this.$store.state.config.userTooltip;\n    },\n    profileImgStyle() {\n      return {\n        backgroundImage: `url(${this.profileImgUrl})`,\n      };\n    },\n    userPageUrl() {\n      return `/member_illust.php?id=${this.userId}`;\n    },\n  },\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemTitle#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        const ct = event.currentTarget;\n        if (ct.classList.contains('user-info')) {\n          payload.data = {\n            illustId: this.illustId,\n            type: 'image-item-title-user',\n          };\n        } else {\n          payload.data = {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          };\n        }\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n.image-item-title-user {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n</style>\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$5 = "data-v-2ff3eadc";
+    const __vue_scope_id__$5 = "data-v-6cfe9952";
     /* module identifier */
     const __vue_module_identifier__$5 = undefined;
     /* functional template */
@@ -3687,7 +3648,7 @@
       const component = (typeof script === 'function' ? script.options : script) || {};
 
       // For security concerns, we use only base name in production mode.
-      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItem.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemTitle.vue";
 
       if (!component.render) {
         component.render = template.render;
@@ -3786,7 +3747,7 @@
     
 
     
-    var DefaultImageItem = __vue_normalize__$5(
+    var DefaultImageItemTitle = __vue_normalize__$5(
       { render: __vue_render__$5, staticRenderFns: __vue_staticRenderFns__$5 },
       __vue_inject_styles__$5,
       __vue_script__$5,
@@ -3800,10 +3761,55 @@
   //
 
   var script$6 = {
-    components: { DefaultImageItem },
-    computed: {
-      defaultProcessedLibrary() {
-        return this.$store.getters['pixiv/defaultProcessedLibrary'];
+    components: { DefaultImageItemImage, DefaultImageItemTitle },
+    props: {
+      bookmarkCount: {
+        default: 0,
+        type: Number,
+      },
+      bookmarkId: {
+        default: '',
+        type: String,
+      },
+      illustId: {
+        default: '',
+        type: String,
+      },
+      illustPageCount: {
+        default: 1,
+        type: Number,
+      },
+      illustTitle: {
+        default: '',
+        type: String,
+      },
+      imgUrl: {
+        default: '',
+        type: String,
+      },
+      isBookmarked: {
+        default: false,
+        type: Boolean,
+      },
+      isFollowed: {
+        default: false,
+        type: Boolean,
+      },
+      isUgoira: {
+        default: false,
+        type: Boolean,
+      },
+      profileImgUrl: {
+        default: '',
+        type: String,
+      },
+      userId: {
+        default: '',
+        type: String,
+      },
+      userName: {
+        default: '',
+        type: String,
       },
     },
   };
@@ -3816,37 +3822,37 @@
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
-    return _c(
-      "div",
-      { attrs: { id: "patchouli-default-image-item-page" } },
-      _vm._l(_vm.defaultProcessedLibrary, function(d) {
-        return _c("DefaultImageItem", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: d._show,
-              expression: "d._show"
+    return _c("div", { staticClass: "image-item" }, [
+      _c(
+        "figure",
+        { staticClass: "image-item-inner" },
+        [
+          _c("DefaultImageItemImage", {
+            attrs: {
+              "img-url": _vm.imgUrl,
+              "illust-id": _vm.illustId,
+              "illust-page-count": _vm.illustPageCount,
+              "is-ugoira": _vm.isUgoira,
+              "is-bookmarked": _vm.isBookmarked,
+              "bookmark-id": _vm.bookmarkId
             }
-          ],
-          key: d.illustId,
-          attrs: {
-            "img-url": d.urls.thumb,
-            "illust-id": d.illustId,
-            "illust-title": d.illustTitle,
-            "illust-page-count": d.illustPageCount,
-            "is-ugoira": d.isUgoira,
-            "user-name": d.userName,
-            "user-id": d.userId,
-            "profile-img-url": d.profileImg,
-            "bookmark-count": d.bookmarkCount,
-            "is-bookmarked": d.isBookmarked,
-            "is-followed": d.isFollowed,
-            "bookmark-id": d.bookmarkId
-          }
-        })
-      })
-    )
+          }),
+          _vm._v(" "),
+          _c("DefaultImageItemTitle", {
+            attrs: {
+              "illust-id": _vm.illustId,
+              "illust-title": _vm.illustTitle,
+              "user-name": _vm.userName,
+              "user-id": _vm.userId,
+              "is-followed": _vm.isFollowed,
+              "profile-img-url": _vm.profileImgUrl,
+              "bookmark-count": _vm.bookmarkCount
+            }
+          })
+        ],
+        1
+      )
+    ])
   };
   var __vue_staticRenderFns__$6 = [];
   __vue_render__$6._withStripped = true;
@@ -3854,11 +3860,11 @@
     /* style */
     const __vue_inject_styles__$6 = function (inject) {
       if (!inject) return
-      inject("data-v-547fce94_0", { source: "\n#patchouli-default-image-item-page[data-v-547fce94] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemPage.vue"],"names":[],"mappings":";AAmCA;EACA,cAAA;EACA,gBAAA;EACA,8BAAA;CACA","file":"DefaultImageItemPage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-default-image-item-page\">\n    <DefaultImageItem\n      v-for=\"d in defaultProcessedLibrary\"\n      v-show=\"d._show\"\n      :key=\"d.illustId\"\n      :img-url=\"d.urls.thumb\"\n      :illust-id=\"d.illustId\"\n      :illust-title=\"d.illustTitle\"\n      :illust-page-count=\"d.illustPageCount\"\n      :is-ugoira=\"d.isUgoira\"\n      :user-name=\"d.userName\"\n      :user-id=\"d.userId\"\n      :profile-img-url=\"d.profileImg\"\n      :bookmark-count=\"d.bookmarkCount\"\n      :is-bookmarked=\"d.isBookmarked\"\n      :is-followed=\"d.isFollowed\"\n      :bookmark-id=\"d.bookmarkId\" />\n  </div>\n</template>\n\n<script>\nimport DefaultImageItem from './DefaultImageItem.vue';\n\nexport default {\n  components: { DefaultImageItem },\n  computed: {\n    defaultProcessedLibrary() {\n      return this.$store.getters['pixiv/defaultProcessedLibrary'];\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-default-image-item-page {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n</style>\n\n\n"]}, media: undefined });
+      inject("data-v-2ff3eadc_0", { source: "\n.image-item[data-v-2ff3eadc] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-2ff3eadc] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItem.vue"],"names":[],"mappings":";AAkFA;EACA,cAAA;EACA,wBAAA;EACA,mBAAA;EACA,cAAA;EACA,aAAA;EACA,aAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,gBAAA;EACA,kBAAA;CACA","file":"DefaultImageItem.vue","sourcesContent":["<template>\n  <div class=\"image-item\">\n    <figure class=\"image-item-inner\">\n      <DefaultImageItemImage\n        :img-url=\"imgUrl\"\n        :illust-id=\"illustId\"\n        :illust-page-count=\"illustPageCount\"\n        :is-ugoira=\"isUgoira\"\n        :is-bookmarked=\"isBookmarked\"\n        :bookmark-id=\"bookmarkId\"/>\n      <DefaultImageItemTitle\n        :illust-id=\"illustId\"\n        :illust-title=\"illustTitle\"\n        :user-name=\"userName\"\n        :user-id=\"userId\"\n        :is-followed=\"isFollowed\"\n        :profile-img-url=\"profileImgUrl\"\n        :bookmark-count=\"bookmarkCount\"/>\n    </figure>\n  </div>\n</template>\n\n<script>\nimport DefaultImageItemImage from './DefaultImageItemImage.vue';\nimport DefaultImageItemTitle from './DefaultImageItemTitle.vue';\n\nexport default {\n  components: { DefaultImageItemImage, DefaultImageItemTitle },\n  props: {\n    bookmarkCount: {\n      default: 0,\n      type: Number,\n    },\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    illustTitle: {\n      default: '',\n      type: String,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isFollowed: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n    profileImgUrl: {\n      default: '',\n      type: String,\n    },\n    userId: {\n      default: '',\n      type: String,\n    },\n    userName: {\n      default: '',\n      type: String,\n    },\n  },\n};\n</script>\n\n<style scoped>\n.image-item {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n</style>\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$6 = "data-v-547fce94";
+    const __vue_scope_id__$6 = "data-v-2ff3eadc";
     /* module identifier */
     const __vue_module_identifier__$6 = undefined;
     /* functional template */
@@ -3872,7 +3878,7 @@
       const component = (typeof script === 'function' ? script.options : script) || {};
 
       // For security concerns, we use only base name in production mode.
-      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemPage.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItem.vue";
 
       if (!component.render) {
         component.render = template.render;
@@ -3971,7 +3977,7 @@
     
 
     
-    var DefaultImageItemPage = __vue_normalize__$6(
+    var DefaultImageItem = __vue_normalize__$6(
       { render: __vue_render__$6, staticRenderFns: __vue_staticRenderFns__$6 },
       __vue_inject_styles__$6,
       __vue_script__$6,
@@ -3983,23 +3989,12 @@
     );
 
   //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
-  //
 
   var script$7 = {
-    props: {
-      actived: {
-        default: false,
-        type: Boolean,
+    components: { DefaultImageItem },
+    computed: {
+      defaultProcessedLibrary() {
+        return this.$store.getters['pixiv/defaultProcessedLibrary'];
       },
     },
   };
@@ -4013,27 +4008,35 @@
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
     return _c(
-      "svg",
-      {
-        staticClass: "i-effect",
-        class: _vm.actived ? "f-active" : "f-inactive",
-        attrs: { viewBox: "0 0 32 32", width: "32", height: "32" }
-      },
-      [
-        _c("path", {
+      "div",
+      { attrs: { id: "patchouli-default-image-item-page" } },
+      _vm._l(_vm.defaultProcessedLibrary, function(d) {
+        return _c("DefaultImageItem", {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: d._show,
+              expression: "d._show"
+            }
+          ],
+          key: d.illustId,
           attrs: {
-            d:
-              "M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z"
-          }
-        }),
-        _vm._v(" "),
-        _c("path", {
-          attrs: {
-            d:
-              "M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5 C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z"
+            "img-url": d.urls.thumb,
+            "illust-id": d.illustId,
+            "illust-title": d.illustTitle,
+            "illust-page-count": d.illustPageCount,
+            "is-ugoira": d.isUgoira,
+            "user-name": d.userName,
+            "user-id": d.userId,
+            "profile-img-url": d.profileImg,
+            "bookmark-count": d.bookmarkCount,
+            "is-bookmarked": d.isBookmarked,
+            "is-followed": d.isFollowed,
+            "bookmark-id": d.bookmarkId
           }
         })
-      ]
+      })
     )
   };
   var __vue_staticRenderFns__$7 = [];
@@ -4042,11 +4045,11 @@
     /* style */
     const __vue_inject_styles__$7 = function (inject) {
       if (!inject) return
-      inject("data-v-2a37bd30_0", { source: "\n.f-active[data-v-2a37bd30] {\n  fill: #ff4060;\n}\n.f-inactive[data-v-2a37bd30] {\n  fill: #fff;\n}\n.f-inactive > path[data-v-2a37bd30]:first-child {\n  fill: #333;\n}\n.i-effect[data-v-2a37bd30] {\n  box-sizing: border-box;\n  font-size: 0;\n  line-height: 0;\n  -webkit-transition: fill 0.2s, stroke 0.2s;\n  transition: fill 0.2s, stroke 0.2s;\n  vertical-align: top;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconBookmarkHeart.vue"],"names":[],"mappings":";AAwBA;EACA,cAAA;CACA;AACA;EACA,WAAA;CACA;AACA;EACA,WAAA;CACA;AACA;EACA,uBAAA;EACA,aAAA;EACA,eAAA;EACA,2CAAA;EACA,mCAAA;EACA,oBAAA;CACA","file":"IconBookmarkHeart.vue","sourcesContent":["<template>\n  <svg\n    :class=\"actived?'f-active':'f-inactive'\"\n    class=\"i-effect\"\n    viewBox=\"0 0 32 32\"\n    width=\"32\"\n    height=\"32\">\n    <path d=\"M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z\"/>\n    <path d=\"M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5 C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z\"/>\n  </svg>\n</template>\n\n<script>\nexport default {\n  props: {\n    actived: {\n      default: false,\n      type: Boolean,\n    },\n  },\n};\n</script>\n\n<style scoped>\n.f-active {\n  fill: #ff4060;\n}\n.f-inactive {\n  fill: #fff;\n}\n.f-inactive > path:first-child {\n  fill: #333;\n}\n.i-effect {\n  box-sizing: border-box;\n  font-size: 0;\n  line-height: 0;\n  -webkit-transition: fill 0.2s, stroke 0.2s;\n  transition: fill 0.2s, stroke 0.2s;\n  vertical-align: top;\n}\n</style>\n\n\n\n"]}, media: undefined });
+      inject("data-v-547fce94_0", { source: "\n#patchouli-default-image-item-page[data-v-547fce94] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemPage.vue"],"names":[],"mappings":";AAmCA;EACA,cAAA;EACA,gBAAA;EACA,8BAAA;CACA","file":"DefaultImageItemPage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-default-image-item-page\">\n    <DefaultImageItem\n      v-for=\"d in defaultProcessedLibrary\"\n      v-show=\"d._show\"\n      :key=\"d.illustId\"\n      :img-url=\"d.urls.thumb\"\n      :illust-id=\"d.illustId\"\n      :illust-title=\"d.illustTitle\"\n      :illust-page-count=\"d.illustPageCount\"\n      :is-ugoira=\"d.isUgoira\"\n      :user-name=\"d.userName\"\n      :user-id=\"d.userId\"\n      :profile-img-url=\"d.profileImg\"\n      :bookmark-count=\"d.bookmarkCount\"\n      :is-bookmarked=\"d.isBookmarked\"\n      :is-followed=\"d.isFollowed\"\n      :bookmark-id=\"d.bookmarkId\" />\n  </div>\n</template>\n\n<script>\nimport DefaultImageItem from './DefaultImageItem.vue';\n\nexport default {\n  components: { DefaultImageItem },\n  computed: {\n    defaultProcessedLibrary() {\n      return this.$store.getters['pixiv/defaultProcessedLibrary'];\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-default-image-item-page {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n</style>\n\n\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$7 = "data-v-2a37bd30";
+    const __vue_scope_id__$7 = "data-v-547fce94";
     /* module identifier */
     const __vue_module_identifier__$7 = undefined;
     /* functional template */
@@ -4060,7 +4063,7 @@
       const component = (typeof script === 'function' ? script.options : script) || {};
 
       // For security concerns, we use only base name in production mode.
-      component.__file = "/home/flandre/dev/Patchouli/src/components/IconBookmarkHeart.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemPage.vue";
 
       if (!component.render) {
         component.render = template.render;
@@ -4159,7 +4162,7 @@
     
 
     
-    var IconBookmarkHeart = __vue_normalize__$7(
+    var DefaultImageItemPage = __vue_normalize__$7(
       { render: __vue_render__$7, staticRenderFns: __vue_staticRenderFns__$7 },
       __vue_inject_styles__$7,
       __vue_script__$7,
