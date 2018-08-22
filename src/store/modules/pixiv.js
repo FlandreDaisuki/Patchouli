@@ -2,15 +2,15 @@ import { PixivAPI } from '../../lib/pixiv';
 import { $print, toInt } from '../../lib/utils';
 import { MAIN_PAGE_TYPE as MPT } from '../../lib/enums';
 
-function makeNewTag(tag) {
+const makeNewTag = (tag) => {
   if (tag.translation) {
     const trs = Object.values(tag.translation);
     return [tag.tag, ...trs].filter(Boolean).join('\x00');
   }
   return [tag.tag, tag.romaji].filter(Boolean).join('\x00');
-}
+};
 
-function makeLibraryData({ illustDataGroup, userDataGroup }) {
+const makeLibraryData = ({ illustDataGroup, userDataGroup }) => {
   if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
     return [];
   }
@@ -50,7 +50,7 @@ function makeLibraryData({ illustDataGroup, userDataGroup }) {
   }
 
   return library;
-}
+};
 
 const state = {
   batchSize: 40,
@@ -180,7 +180,7 @@ const getters = {
 };
 
 const mutations = {
-  editImgItem(state, options = {}) {
+  editImgItem: (state, options = {}) => {
     const DEFAULT_OPT = {
       illustId: '',
       type: null,
@@ -197,28 +197,28 @@ const mutations = {
         });
     }
   },
-  pause(state) {
+  pause: (state) => {
     state.isPaused = true;
   },
-  relive(state) {
+  relive: (state) => {
     state.isEnded = false;
   },
-  resume(state) {
+  resume: (state) => {
     state.isPaused = false;
   },
-  stop(state) {
+  stop: (state) => {
     state.isPaused = true;
     state.isEnded = true;
   },
 };
 
 const actions = {
-  async delayFirstStart({ commit, dispatch }, { actionName, options }) {
+  delayFirstStart: async({ commit, dispatch }, { actionName, options }) => {
     commit('resume');
     commit('relive');
     await dispatch(actionName, options);
   },
-  async start({ state, commit, dispatch, getters, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) {
+  start: async({ state, commit, dispatch, getters, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) => {
     commit('resume');
 
     if (force) {
@@ -269,7 +269,7 @@ const actions = {
       break;
     }
   },
-  async startMovingWindowBased({ state, commit, getters, rootGetters }, { times = Infinity, rest = null } = {}) {
+  startMovingWindowBased: async({ state, commit, getters, rootGetters }, { times = Infinity, rest = null } = {}) => {
     while (!state.isPaused && !state.isEnded && times) {
       let illustIds = [], maxTotal = Infinity;
       const _rest = rest || rootGetters.sp.rest;
@@ -325,7 +325,7 @@ const actions = {
       }
     }
   },
-  async startNextUrlBased({ state, commit, rootGetters }, { times = Infinity } = {}) {
+  startNextUrlBased: async({ state, commit, rootGetters }, { times = Infinity } = {}) => {
     while (!state.isPaused && !state.isEnded && times) {
       let page = null;
 
@@ -368,7 +368,7 @@ const actions = {
       }
     }
   },
-  async startPrefetchBased({ state, commit }, { times = Infinity, pool = 'all' } = {}) {
+  startPrefetchBased: async({ state, commit }, { times = Infinity, pool = 'all' } = {}) => {
     const pPool = state.prefetchPool;
     let todoPool = [];
     if (pool === 'all') {
@@ -429,7 +429,6 @@ const actions = {
       }
     }
   },
-
 };
 
 export default {

@@ -676,15 +676,15 @@
     },
   });
 
-  function makeNewTag(tag) {
+  const makeNewTag = (tag) => {
     if (tag.translation) {
       const trs = Object.values(tag.translation);
       return [tag.tag, ...trs].filter(Boolean).join('\x00');
     }
     return [tag.tag, tag.romaji].filter(Boolean).join('\x00');
-  }
+  };
 
-  function makeLibraryData({ illustDataGroup, userDataGroup }) {
+  const makeLibraryData = ({ illustDataGroup, userDataGroup }) => {
     if (!illustDataGroup || !Object.keys(illustDataGroup).length) {
       return [];
     }
@@ -724,7 +724,7 @@
     }
 
     return library;
-  }
+  };
 
   const state = {
     batchSize: 40,
@@ -854,7 +854,7 @@
   };
 
   const mutations = {
-    editImgItem(state, options = {}) {
+    editImgItem: (state, options = {}) => {
       const DEFAULT_OPT = {
         illustId: '',
         type: null,
@@ -871,28 +871,28 @@
           });
       }
     },
-    pause(state) {
+    pause: (state) => {
       state.isPaused = true;
     },
-    relive(state) {
+    relive: (state) => {
       state.isEnded = false;
     },
-    resume(state) {
+    resume: (state) => {
       state.isPaused = false;
     },
-    stop(state) {
+    stop: (state) => {
       state.isPaused = true;
       state.isEnded = true;
     },
   };
 
   const actions = {
-    async delayFirstStart({ commit, dispatch }, { actionName, options }) {
+    delayFirstStart: async({ commit, dispatch }, { actionName, options }) => {
       commit('resume');
       commit('relive');
       await dispatch(actionName, options);
     },
-    async start({ state, commit, dispatch, getters, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) {
+    start: async({ state, commit, dispatch, getters, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) => {
       commit('resume');
 
       if (force) {
@@ -943,7 +943,7 @@
         break;
       }
     },
-    async startMovingWindowBased({ state, commit, getters, rootGetters }, { times = Infinity, rest = null } = {}) {
+    startMovingWindowBased: async({ state, commit, getters, rootGetters }, { times = Infinity, rest = null } = {}) => {
       while (!state.isPaused && !state.isEnded && times) {
         let illustIds = [], maxTotal = Infinity;
         const _rest = rest || rootGetters.sp.rest;
@@ -999,7 +999,7 @@
         }
       }
     },
-    async startNextUrlBased({ state, commit, rootGetters }, { times = Infinity } = {}) {
+    startNextUrlBased: async({ state, commit, rootGetters }, { times = Infinity } = {}) => {
       while (!state.isPaused && !state.isEnded && times) {
         let page = null;
 
@@ -1042,7 +1042,7 @@
         }
       }
     },
-    async startPrefetchBased({ state, commit }, { times = Infinity, pool = 'all' } = {}) {
+    startPrefetchBased: async({ state, commit }, { times = Infinity, pool = 'all' } = {}) => {
       const pPool = state.prefetchPool;
       let todoPool = [];
       if (pool === 'all') {
@@ -1103,7 +1103,6 @@
         }
       }
     },
-
   };
 
   var pixiv = {
@@ -1127,12 +1126,12 @@
   };
 
   const mutations$1 =  {
-    activate(state, payload) {
+    activate: (state, payload) => {
       state.active = true;
       state.position = payload.position;
       state.data = payload.data;
     },
-    deactivate(state) {
+    deactivate: (state) => {
       state.active = false;
       state.position = { x: -1e7, y: -1e7 };
     },
@@ -2168,7 +2167,7 @@
     computed: {
       bookmarkPageLink() {
         if (!this.xdata) {
-          return "#";
+          return '#';
         }
         return `bookmark_add.php?type=illust&illust_id=${this.xdata.illustId}`;
       },
@@ -2176,13 +2175,13 @@
         if (!this.xdata) {
           return null;
         }
-        const lib = this.$store.getters["pixiv/defaultProcessedLibrary"];
+        const lib = this.$store.getters['pixiv/defaultProcessedLibrary'];
         const found = lib.find(i => i.illustId === this.xdata.illustId);
         return found ? found : null;
       },
       currentType() {
         if (!this.xdata) {
-          return "";
+          return '';
         }
         return this.xdata.type;
       },
@@ -2210,11 +2209,11 @@
         return this.currentImageItem && this.currentImageItem.isUgoira;
       },
       xdata() {
-        return this.$store.getters["contextMenu/data"];
+        return this.$store.getters['contextMenu/data'];
       },
       xpos() {
-        return this.$store.getters["contextMenu/pos"];
-      }
+        return this.$store.getters['contextMenu/pos'];
+      },
     },
     methods: {
       addToBlacklist() {
@@ -2223,38 +2222,38 @@
           const blacklist = this.$store.getters.config.blacklist;
           blacklist.push(userId);
           blacklist.sort((a, b) => a - b);
-          this.$store.commit("setConfig", { blacklist });
-          this.$store.commit("saveConfig");
+          this.$store.commit('setConfig', { blacklist });
+          this.$store.commit('saveConfig');
         }
       },
       async downloadOne() {
         const imgUrl = this.currentImageItem.urls.original;
         const illustId = this.currentImageItem.illustId;
-        const a = $el("a", { href: imgUrl });
+        const a = $el('a', { href: imgUrl });
 
-        const filename = a.pathname.split("/").pop();
+        const filename = a.pathname.split('/').pop();
         const ext = filename
-          .split(".")
+          .split('.')
           .pop()
           .toLowerCase();
         /* eslint-disable sort-keys */
         const response = await GMC.XHR({
-          method: "GET",
+          method: 'GET',
           url: imgUrl,
           // greasemonkey has no this API
-          responseType: "arraybuffer",
+          responseType: 'arraybuffer',
           // for greasemonkey
           binary: true,
           headers: {
-            Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`
-          }
+            Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`,
+          },
         });
         /* eslint-enable sort-keys */
 
-        if (ext === "jpg" || ext === "jpeg") {
-          saveAs(new File([response.response], filename, { type: "image/jpeg" }));
-        } else if (ext === "png") {
-          saveAs(new File([response.response], filename, { type: "image/png" }));
+        if (ext === 'jpg' || ext === 'jpeg') {
+          saveAs(new File([response.response], filename, { type: 'image/jpeg' }));
+        } else if (ext === 'png') {
+          saveAs(new File([response.response], filename, { type: 'image/png' }));
         }
       },
       async followUser() {
@@ -2262,25 +2261,25 @@
           const userId = this.currentImageItem.userId;
 
           if (await PixivAPI.postFollowUser(userId)) {
-            this.$store.commit("editImgItem", {
-              type: "follow-user",
-              userId: this.currentImageItem.userId
+            this.$store.commit('editImgItem', {
+              type: 'follow-user',
+              userId: this.currentImageItem.userId,
             });
           }
         }
       },
       openPreview() {
-        this.$store.commit("coverLayer/open", {
+        this.$store.commit('coverLayer/open', {
           data: this.currentImageItem,
-          mode: "preview"
+          mode: 'preview',
         });
       },
       thumbUp() {
         if (this.currentImageItem) {
           PixivAPI.postIllustLike(this.currentImageItem.illustId);
         }
-      }
-    }
+      },
+    },
   };
 
   /* script */
@@ -2551,11 +2550,11 @@
     /* style */
     const __vue_inject_styles__$1 = function (inject) {
       if (!inject) return
-      inject("data-v-3cdb3ecd_0", { source: "\n#patchouli-context-menu[data-v-3cdb3ecd] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 5px;\n}\n#patchouli-context-menu > ul[data-v-3cdb3ecd] {\n  margin: 0;\n  padding: 0;\n  line-height: 20px;\n}\n#patchouli-context-menu > ul > li[data-v-3cdb3ecd] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-3cdb3ecd] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-3cdb3ecd]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-3cdb3ecd],\n#patchouli-context-menu > ul i.fas[data-v-3cdb3ecd] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/ContextMenu.vue"],"names":[],"mappings":";AA+KA;EACA,uBAAA;EACA,0BAAA;EACA,gBAAA;EACA,YAAA;EACA,uBAAA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;CACA;AACA;EACA,UAAA;EACA,WAAA;EACA,kBAAA;CACA;AACA;EACA,cAAA;EACA,oBAAA;CACA;AACA;EACA,YAAA;EACA,aAAA;EACA,QAAA;EACA,sBAAA;EACA,oBAAA;EACA,qBAAA;EACA,oBAAA;EACA,mBAAA;CACA;AACA;EACA,0BAAA;EACA,YAAA;EACA,gBAAA;CACA;AACA;;EAEA,aAAA;EACA,YAAA;EACA,cAAA;CACA","file":"ContextMenu.vue","sourcesContent":["<template>\n  <div id=\"patchouli-context-menu\" :style=\"inlineStyle\">\n    <ul v-show=\"currentType === 'image-item-image'\">\n      <li>\n        <a role=\"button\" @click.left=\"thumbUp\">\n          <i class=\"far fa-thumbs-up\"/>\n          {{ $t('contextMenu.thumbUp') }}\n        </a>\n      </li>\n      <li v-show=\"isDownloadable\">\n        <a role=\"button\" @click.left=\"downloadOne\">\n          <i class=\"fas fa-download\"/>\n          {{ $t('contextMenu.download') }}\n        </a>\n      </li>\n      <li>\n        <a role=\"button\" @click.left=\"openPreview\">\n          <i class=\"fas fa-search-plus\"/>\n          {{ $t('contextMenu.preview') }}\n        </a>\n      </li>\n      <li>\n        <a\n          :href=\"bookmarkPageLink\"\n          role=\"button\"\n          target=\"_blank\">\n          <i class=\"far fa-bookmark\"/>\n          {{ $t('contextMenu.openBookmarkPage') }}\n        </a>\n      </li>\n    </ul>\n    <ul v-show=\"currentType === 'image-item-title-user'\">\n      <li>\n        <a role=\"button\" @click.left=\"addToBlacklist\">\n          <i class=\"far fa-eye-slash\"/>\n          {{ $t('contextMenu.addToBlacklist') }}\n        </a>\n      </li>\n      <li v-show=\"currentImageItem && !currentImageItem.isFollowed\">\n        <a role=\"button\" @click.left=\"followUser\">\n          <i class=\"fas fa-rss\"/>\n          {{ $t('contextMenu.followUser') }}\n        </a>\n      </li>\n    </ul>\n  </div>\n</template>\n\n\n<script>\nimport { PixivAPI } from \"../lib/pixiv\";\nimport { $el } from \"../lib/utils\";\nimport GMC from \"../lib/gmc\";\n\nexport default {\n  computed: {\n    bookmarkPageLink() {\n      if (!this.xdata) {\n        return \"#\";\n      }\n      return `bookmark_add.php?type=illust&illust_id=${this.xdata.illustId}`;\n    },\n    currentImageItem() {\n      if (!this.xdata) {\n        return null;\n      }\n      const lib = this.$store.getters[\"pixiv/defaultProcessedLibrary\"];\n      const found = lib.find(i => i.illustId === this.xdata.illustId);\n      return found ? found : null;\n    },\n    currentType() {\n      if (!this.xdata) {\n        return \"\";\n      }\n      return this.xdata.type;\n    },\n    inlineStyle() {\n      const RIGHT_BOUND = 200; // magic number\n      const position = this.xpos;\n      const ow = document.body.offsetWidth;\n\n      let style = `top: ${position.y}px;`;\n      if (ow - position.x < RIGHT_BOUND) {\n        style += `right: ${ow - position.x}px;`;\n      } else {\n        style += `left: ${position.x}px;`;\n      }\n      return style;\n    },\n    isDownloadable() {\n      return (\n        this.currentImageItem &&\n        this.currentImageItem.illustPageCount === 1 &&\n        !this.currentImageItem.isUgoira // unsupport ugoira currently\n      );\n    },\n    isUgoira() {\n      return this.currentImageItem && this.currentImageItem.isUgoira;\n    },\n    xdata() {\n      return this.$store.getters[\"contextMenu/data\"];\n    },\n    xpos() {\n      return this.$store.getters[\"contextMenu/pos\"];\n    }\n  },\n  methods: {\n    addToBlacklist() {\n      if (this.currentImageItem) {\n        const userId = this.currentImageItem.userId;\n        const blacklist = this.$store.getters.config.blacklist;\n        blacklist.push(userId);\n        blacklist.sort((a, b) => a - b);\n        this.$store.commit(\"setConfig\", { blacklist });\n        this.$store.commit(\"saveConfig\");\n      }\n    },\n    async downloadOne() {\n      const imgUrl = this.currentImageItem.urls.original;\n      const illustId = this.currentImageItem.illustId;\n      const a = $el(\"a\", { href: imgUrl });\n\n      const filename = a.pathname.split(\"/\").pop();\n      const ext = filename\n        .split(\".\")\n        .pop()\n        .toLowerCase();\n      /* eslint-disable sort-keys */\n      const response = await GMC.XHR({\n        method: \"GET\",\n        url: imgUrl,\n        // greasemonkey has no this API\n        responseType: \"arraybuffer\",\n        // for greasemonkey\n        binary: true,\n        headers: {\n          Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`\n        }\n      });\n      /* eslint-enable sort-keys */\n\n      if (ext === \"jpg\" || ext === \"jpeg\") {\n        saveAs(new File([response.response], filename, { type: \"image/jpeg\" }));\n      } else if (ext === \"png\") {\n        saveAs(new File([response.response], filename, { type: \"image/png\" }));\n      }\n    },\n    async followUser() {\n      if (this.currentImageItem) {\n        const userId = this.currentImageItem.userId;\n\n        if (await PixivAPI.postFollowUser(userId)) {\n          this.$store.commit(\"editImgItem\", {\n            type: \"follow-user\",\n            userId: this.currentImageItem.userId\n          });\n        }\n      }\n    },\n    openPreview() {\n      this.$store.commit(\"coverLayer/open\", {\n        data: this.currentImageItem,\n        mode: \"preview\"\n      });\n    },\n    thumbUp() {\n      if (this.currentImageItem) {\n        PixivAPI.postIllustLike(this.currentImageItem.illustId);\n      }\n    }\n  }\n};\n</script>\n\n<style scoped>\n#patchouli-context-menu {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 5px;\n}\n#patchouli-context-menu > ul {\n  margin: 0;\n  padding: 0;\n  line-height: 20px;\n}\n#patchouli-context-menu > ul > li {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far,\n#patchouli-context-menu > ul i.fas {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n</style>\n"]}, media: undefined });
+      inject("data-v-77840c79_0", { source: "\n#patchouli-context-menu[data-v-77840c79] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 5px;\n}\n#patchouli-context-menu > ul[data-v-77840c79] {\n  margin: 0;\n  padding: 0;\n  line-height: 20px;\n}\n#patchouli-context-menu > ul > li[data-v-77840c79] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-77840c79] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-77840c79]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-77840c79],\n#patchouli-context-menu > ul i.fas[data-v-77840c79] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/ContextMenu.vue"],"names":[],"mappings":";AA+KA;EACA,uBAAA;EACA,0BAAA;EACA,gBAAA;EACA,YAAA;EACA,uBAAA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;CACA;AACA;EACA,UAAA;EACA,WAAA;EACA,kBAAA;CACA;AACA;EACA,cAAA;EACA,oBAAA;CACA;AACA;EACA,YAAA;EACA,aAAA;EACA,QAAA;EACA,sBAAA;EACA,oBAAA;EACA,qBAAA;EACA,oBAAA;EACA,mBAAA;CACA;AACA;EACA,0BAAA;EACA,YAAA;EACA,gBAAA;CACA;AACA;;EAEA,aAAA;EACA,YAAA;EACA,cAAA;CACA","file":"ContextMenu.vue","sourcesContent":["<template>\n  <div id=\"patchouli-context-menu\" :style=\"inlineStyle\">\n    <ul v-show=\"currentType === 'image-item-image'\">\n      <li>\n        <a role=\"button\" @click.left=\"thumbUp\">\n          <i class=\"far fa-thumbs-up\"/>\n          {{ $t('contextMenu.thumbUp') }}\n        </a>\n      </li>\n      <li v-show=\"isDownloadable\">\n        <a role=\"button\" @click.left=\"downloadOne\">\n          <i class=\"fas fa-download\"/>\n          {{ $t('contextMenu.download') }}\n        </a>\n      </li>\n      <li>\n        <a role=\"button\" @click.left=\"openPreview\">\n          <i class=\"fas fa-search-plus\"/>\n          {{ $t('contextMenu.preview') }}\n        </a>\n      </li>\n      <li>\n        <a\n          :href=\"bookmarkPageLink\"\n          role=\"button\"\n          target=\"_blank\">\n          <i class=\"far fa-bookmark\"/>\n          {{ $t('contextMenu.openBookmarkPage') }}\n        </a>\n      </li>\n    </ul>\n    <ul v-show=\"currentType === 'image-item-title-user'\">\n      <li>\n        <a role=\"button\" @click.left=\"addToBlacklist\">\n          <i class=\"far fa-eye-slash\"/>\n          {{ $t('contextMenu.addToBlacklist') }}\n        </a>\n      </li>\n      <li v-show=\"currentImageItem && !currentImageItem.isFollowed\">\n        <a role=\"button\" @click.left=\"followUser\">\n          <i class=\"fas fa-rss\"/>\n          {{ $t('contextMenu.followUser') }}\n        </a>\n      </li>\n    </ul>\n  </div>\n</template>\n\n\n<script>\nimport { PixivAPI } from '../lib/pixiv';\nimport { $el } from '../lib/utils';\nimport GMC from '../lib/gmc';\n\nexport default {\n  computed: {\n    bookmarkPageLink() {\n      if (!this.xdata) {\n        return '#';\n      }\n      return `bookmark_add.php?type=illust&illust_id=${this.xdata.illustId}`;\n    },\n    currentImageItem() {\n      if (!this.xdata) {\n        return null;\n      }\n      const lib = this.$store.getters['pixiv/defaultProcessedLibrary'];\n      const found = lib.find(i => i.illustId === this.xdata.illustId);\n      return found ? found : null;\n    },\n    currentType() {\n      if (!this.xdata) {\n        return '';\n      }\n      return this.xdata.type;\n    },\n    inlineStyle() {\n      const RIGHT_BOUND = 200; // magic number\n      const position = this.xpos;\n      const ow = document.body.offsetWidth;\n\n      let style = `top: ${position.y}px;`;\n      if (ow - position.x < RIGHT_BOUND) {\n        style += `right: ${ow - position.x}px;`;\n      } else {\n        style += `left: ${position.x}px;`;\n      }\n      return style;\n    },\n    isDownloadable() {\n      return (\n        this.currentImageItem &&\n        this.currentImageItem.illustPageCount === 1 &&\n        !this.currentImageItem.isUgoira // unsupport ugoira currently\n      );\n    },\n    isUgoira() {\n      return this.currentImageItem && this.currentImageItem.isUgoira;\n    },\n    xdata() {\n      return this.$store.getters['contextMenu/data'];\n    },\n    xpos() {\n      return this.$store.getters['contextMenu/pos'];\n    },\n  },\n  methods: {\n    addToBlacklist() {\n      if (this.currentImageItem) {\n        const userId = this.currentImageItem.userId;\n        const blacklist = this.$store.getters.config.blacklist;\n        blacklist.push(userId);\n        blacklist.sort((a, b) => a - b);\n        this.$store.commit('setConfig', { blacklist });\n        this.$store.commit('saveConfig');\n      }\n    },\n    async downloadOne() {\n      const imgUrl = this.currentImageItem.urls.original;\n      const illustId = this.currentImageItem.illustId;\n      const a = $el('a', { href: imgUrl });\n\n      const filename = a.pathname.split('/').pop();\n      const ext = filename\n        .split('.')\n        .pop()\n        .toLowerCase();\n      /* eslint-disable sort-keys */\n      const response = await GMC.XHR({\n        method: 'GET',\n        url: imgUrl,\n        // greasemonkey has no this API\n        responseType: 'arraybuffer',\n        // for greasemonkey\n        binary: true,\n        headers: {\n          Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`,\n        },\n      });\n      /* eslint-enable sort-keys */\n\n      if (ext === 'jpg' || ext === 'jpeg') {\n        saveAs(new File([response.response], filename, { type: 'image/jpeg' }));\n      } else if (ext === 'png') {\n        saveAs(new File([response.response], filename, { type: 'image/png' }));\n      }\n    },\n    async followUser() {\n      if (this.currentImageItem) {\n        const userId = this.currentImageItem.userId;\n\n        if (await PixivAPI.postFollowUser(userId)) {\n          this.$store.commit('editImgItem', {\n            type: 'follow-user',\n            userId: this.currentImageItem.userId,\n          });\n        }\n      }\n    },\n    openPreview() {\n      this.$store.commit('coverLayer/open', {\n        data: this.currentImageItem,\n        mode: 'preview',\n      });\n    },\n    thumbUp() {\n      if (this.currentImageItem) {\n        PixivAPI.postIllustLike(this.currentImageItem.illustId);\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-context-menu {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 5px;\n}\n#patchouli-context-menu > ul {\n  margin: 0;\n  padding: 0;\n  line-height: 20px;\n}\n#patchouli-context-menu > ul > li {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far,\n#patchouli-context-menu > ul i.fas {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n</style>\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$1 = "data-v-3cdb3ecd";
+    const __vue_scope_id__$1 = "data-v-77840c79";
     /* module identifier */
     const __vue_module_identifier__$1 = undefined;
     /* functional template */
