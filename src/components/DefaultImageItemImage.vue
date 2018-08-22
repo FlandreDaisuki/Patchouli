@@ -17,10 +17,10 @@
         v-show="!ugoiraPlayed"
         :data-src="imgUrl"
         :src="imgUrl">
-      <div
+      <IconUgoiraPlay
         v-if="isUgoira"
         v-show="!ugoiraPlayed"
-        class="ugoira-icon"/>
+        :size="60"/>
       <canvas
         v-if="isUgoira"
         v-show="ugoiraPlayed"
@@ -43,8 +43,10 @@
 <script>
 import { $print } from '../lib/utils';
 import { PixivAPI } from '../lib/pixiv';
+import IconUgoiraPlay from './IconUgoiraPlay.vue';
 
 export default {
+  components: { IconUgoiraPlay },
   props: {
     bookmarkId: {
       default: '',
@@ -210,14 +212,6 @@ export default {
 }
 .ugoira-icon {
   position: absolute;
-  flex: none;
-  width: 40px;
-  height: 40px;
-  background: url(https://s.pximg.net/www/images/icon/playable-icon.svg) 50%
-    no-repeat;
-  top: 50%;
-  left: 50%;
-  margin: -20px 0 0 -20px;
 }
 img,
 canvas {

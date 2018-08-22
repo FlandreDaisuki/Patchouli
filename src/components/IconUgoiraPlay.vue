@@ -1,5 +1,6 @@
 <template>
   <svg
+    :style="inlineStyle"
     viewBox="0 0 24 24"
     class="ugoira-icon">
     <circle
@@ -12,7 +13,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    size: {
+      default: 48,
+      type: Number,
+    },
+  },
+  // eslint-disable-next-line sort-keys
+  computed: {
+    inlineStyle() {
+      return `height: ${this.size}px; width: ${this.size}px;`;
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -23,11 +37,9 @@ export default {};
 .ugoira-icon {
   fill: #fff;
   font-size: 0;
-  height: 48px;
   line-height: 0;
   stroke: none;
   vertical-align: middle;
-  width: 48px;
 }
 </style>
 
