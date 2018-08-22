@@ -218,7 +218,7 @@ const actions = {
     commit('relive');
     await dispatch(actionName, options);
   },
-  async start({ state, commit, dispatch, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) {
+  async start({ state, commit, dispatch, getters, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) {
     commit('resume');
 
     if (force) {
@@ -229,7 +229,7 @@ const actions = {
       return;
     }
 
-    if (rootGetters.isNewProfilePage && isFirst) {
+    if (getters.nppType >= 0 && isFirst) {
       const profile = await PixivAPI.getUserProfileData(rootGetters.sp.id);
       state.prefetchPool.illusts.push(...Object.keys(profile.illusts));
       state.prefetchPool.manga.push(...Object.keys(profile.manga));
@@ -269,13 +269,13 @@ const actions = {
       break;
     }
   },
-  async startMovingWindowBased({ state, commit, rootGetters }, { times = Infinity, rest = null } = {}) {
+  async startMovingWindowBased({ state, commit, getters, rootGetters }, { times = Infinity, rest = null } = {}) {
     while (!state.isPaused && !state.isEnded && times) {
       let illustIds = [], maxTotal = Infinity;
       const _rest = rest || rootGetters.sp.rest;
       const _uid = rootGetters.sp.id;
       let cIndex = (_rest === 'show') ? state.moveWindowIndex : state.moveWindowPrivateBookmarkIndex;
-      if (rootGetters.isNewProfilePage) {
+      if (getters.nppType >= 0) {
         const opt = { limit: state.batchSize, offset: cIndex, rest: _rest };
         const { works, total } = await PixivAPI.getUserBookmarkData(_uid, opt);
         $print.debug('vuexMudule/pixiv#startMovingWindowBased: works:', works);
@@ -289,7 +289,7 @@ const actions = {
 
       cIndex += state.batchSize;
 
-      if (rootGetters.isNewProfilePage && _rest === 'hide') {
+      if (getters.nppType >= 0 && _rest === 'hide') {
         state.moveWindowPrivateBookmarkIndex = cIndex;
       } else {
         state.moveWindowIndex = cIndex;

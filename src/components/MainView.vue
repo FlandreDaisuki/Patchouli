@@ -22,7 +22,7 @@ export default {
   // eslint-disable-next-line sort-keys
   computed: {
     isNewProfilePage() {
-      return this.$store.getters.isNewProfilePage;
+      return this.$store.getters['pixiv/nppType'] >= 0;
     },
   },
 };

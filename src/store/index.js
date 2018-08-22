@@ -59,14 +59,6 @@ const getters = {
   config: (state) => state.config,
   ctrlPanelOffsetY: (state) => state.ctrlPanelOffsetY,
   filters: (state) => state.filters,
-  isNewProfilePage: (state) => {
-    return [
-      MPT.NEW_PROFILE,
-      MPT.NEW_PROFILE_BOOKMARK,
-      MPT.NEW_PROFILE_ILLUST,
-      MPT.NEW_PROFILE_MANGA,
-    ].includes(state.mainPageType);
-  },
   isSelfBookmarkPage: (state) => _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id),
   locale: (state) => state.locale,
   loginData: (state) => state.loginData,
@@ -223,7 +215,7 @@ const actions = {
       });
 
       state.mountPointCtrlPanel = $el('div', null, async(el) => {
-        if (getters.isNewProfilePage) {
+        if (getters['pixiv/nppType'] >= 0) {
           await $ready(() => $('.sLHPYEz'));
           $after($('.sLHPYEz'), el);
         } else {

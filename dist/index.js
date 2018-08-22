@@ -841,7 +841,7 @@ const actions = {
     commit('relive');
     await dispatch(actionName, options);
   },
-  async start({ state, commit, dispatch, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) {
+  async start({ state, commit, dispatch, getters, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) {
     commit('resume');
 
     if (force) {
@@ -852,7 +852,7 @@ const actions = {
       return;
     }
 
-    if (rootGetters.isNewProfilePage && isFirst) {
+    if (getters.nppType >= 0 && isFirst) {
       const profile = await PixivAPI.getUserProfileData(rootGetters.sp.id);
       state.prefetchPool.illusts.push(...Object.keys(profile.illusts));
       state.prefetchPool.manga.push(...Object.keys(profile.manga));
@@ -892,13 +892,13 @@ const actions = {
       break;
     }
   },
-  async startMovingWindowBased({ state, commit, rootGetters }, { times = Infinity, rest = null } = {}) {
+  async startMovingWindowBased({ state, commit, getters, rootGetters }, { times = Infinity, rest = null } = {}) {
     while (!state.isPaused && !state.isEnded && times) {
       let illustIds = [], maxTotal = Infinity;
       const _rest = rest || rootGetters.sp.rest;
       const _uid = rootGetters.sp.id;
       let cIndex = (_rest === 'show') ? state.moveWindowIndex : state.moveWindowPrivateBookmarkIndex;
-      if (rootGetters.isNewProfilePage) {
+      if (getters.nppType >= 0) {
         const opt = { limit: state.batchSize, offset: cIndex, rest: _rest };
         const { works, total } = await PixivAPI.getUserBookmarkData(_uid, opt);
         $print.debug('vuexMudule/pixiv#startMovingWindowBased: works:', works);
@@ -912,7 +912,7 @@ const actions = {
 
       cIndex += state.batchSize;
 
-      if (rootGetters.isNewProfilePage && _rest === 'hide') {
+      if (getters.nppType >= 0 && _rest === 'hide') {
         state.moveWindowPrivateBookmarkIndex = cIndex;
       } else {
         state.moveWindowIndex = cIndex;
@@ -1172,14 +1172,14 @@ const getters$3 = {
   config: (state) => state.config,
   ctrlPanelOffsetY: (state) => state.ctrlPanelOffsetY,
   filters: (state) => state.filters,
-  isNewProfilePage: (state) => {
-    return [
-      MAIN_PAGE_TYPE.NEW_PROFILE,
-      MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK,
-      MAIN_PAGE_TYPE.NEW_PROFILE_ILLUST,
-      MAIN_PAGE_TYPE.NEW_PROFILE_MANGA,
-    ].includes(state.mainPageType);
-  },
+  // isNewProfilePage: (state) => {
+  //   return [
+  //     MPT.NEW_PROFILE,
+  //     MPT.NEW_PROFILE_BOOKMARK,
+  //     MPT.NEW_PROFILE_ILLUST,
+  //     MPT.NEW_PROFILE_MANGA,
+  //   ].includes(state.mainPageType);
+  // },
   isSelfBookmarkPage: (state) => _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id),
   locale: (state) => state.locale,
   loginData: (state) => state.loginData,
@@ -1336,7 +1336,7 @@ const actions$1 = {
       });
 
       state.mountPointCtrlPanel = $el('div', null, async(el) => {
-        if (getters.isNewProfilePage) {
+        if (getters['pixiv/nppType'] >= 0) {
           await $ready(() => $('.sLHPYEz'));
           $after($('.sLHPYEz'), el);
         } else {
@@ -5282,7 +5282,7 @@ var script$b = {
   // eslint-disable-next-line sort-keys
   computed: {
     isNewProfilePage() {
-      return this.$store.getters.isNewProfilePage;
+      return this.$store.getters['pixiv/nppType'] >= 0;
     },
   },
 };
@@ -5312,11 +5312,11 @@ __vue_render__$b._withStripped = true;
   /* style */
   const __vue_inject_styles__$b = function (inject) {
     if (!inject) return
-    inject("data-v-66b67cf3_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", map: {"version":3,"sources":[],"names":[],"mappings":"","file":"MainView.vue"}, media: undefined });
+    inject("data-v-4ab1002e_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", map: {"version":3,"sources":[],"names":[],"mappings":"","file":"MainView.vue"}, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$b = "data-v-66b67cf3";
+  const __vue_scope_id__$b = "data-v-4ab1002e";
   /* module identifier */
   const __vue_module_identifier__$b = undefined;
   /* functional template */
@@ -6184,7 +6184,7 @@ vuexStore.dispatch('init')
     document.head.appendChild(fontawesome);
 
     // setup koamuma placeholder
-    if (!vuexStore.getters.isNewProfilePage) {
+    if (vuexStore.getters['pixiv/nppType'] < 0) {
       $('._global-header').classList.add('koakuma-placeholder');
     }
 
@@ -6262,7 +6262,7 @@ vuexStore.dispatch('init')
         vuexStore.commit('applyConfig');
 
         // unset koamuma placeholder
-        if (!vuexStore.getters.isNewProfilePage) {
+        if (vuexStore.getters['pixiv/nppType'] < 0) {
           $('._global-header').classList.remove('koakuma-placeholder');
         }
 
@@ -6274,19 +6274,24 @@ vuexStore.dispatch('init')
       })
       .then(async(status) => {
         // This can solve slow mounting issue
-        const mpt = vuexStore.getters.MPT;
-        if (mpt === MAIN_PAGE_TYPE.NEW_PROFILE_MANGA) {
-          await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'illusts', times: 1 } });
-          await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'show', times: 1 } });
+        // FIXME: too ugly
+        const nppType = vuexStore.getters['pixiv/nppType'];
+        if (nppType >= 0) {
           await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'hide', times: 1 } });
-        } else if (mpt === MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK) {
-          await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'illusts', times: 1 } });
-          await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'manga', times: 1 } });
-        } else if (mpt === MAIN_PAGE_TYPE.NEW_PROFILE || mpt === MAIN_PAGE_TYPE.NEW_PROFILE_ILLUST) {
-          await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'manga', times: 1 } });
-          await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'show', times: 1 } });
-          await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'hide', times: 1 } });
+
+          if (nppType === 2) {
+            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'illusts', times: 1 } });
+            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'show', times: 1 } });
+          } else if (nppType === 3) {
+            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'illusts', times: 1 } });
+            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'manga', times: 1 } });
+          } else {
+            // nppType === 0 || nppType === 1
+            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'manga', times: 1 } });
+            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'show', times: 1 } });
+          }
         }
+
         if (status.isEnded) {
           vuexStore.commit('pixiv/stop');
         } else {
