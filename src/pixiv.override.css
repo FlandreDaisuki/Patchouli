@@ -70,6 +70,7 @@ iframe,
 
 :root {
   --new-default-image-item-square-size: 184px;
+  --default-image-item-image-square-size: 200px;
 }
 
 /* dotted focus */

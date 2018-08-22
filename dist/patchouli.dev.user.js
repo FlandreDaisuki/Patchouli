@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.2.0-alpha.7
+// @version           4.2.0-alpha.8
 // @grant             unsafeWindow
 // @grant             GM_getValue
 // @grant             GM.getValue
@@ -51,7 +51,7 @@
   VueI18n = VueI18n && VueI18n.hasOwnProperty('default') ? VueI18n['default'] : VueI18n;
   Vuex = Vuex && Vuex.hasOwnProperty('default') ? Vuex['default'] : Vuex;
 
-  __$styleInject("._global-header {\n  z-index: 4;\n  position: relative;\n}\n._global-header .ui-search {\n  z-index: auto;\n}\n._global-header.koakuma-placeholder {\n  /* I don't know why #koakuma just 32px\n     but it should preserve 42px to keep all spacing correct */\n  margin-bottom: 42px;\n}\n#toolbar-items {\n  z-index: 5;\n}\n.ω {\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: center;\n  position: relative;\n}\n.ω,\n.ω .layout-a,\n.ω .layout-body {\n  transition: width 0.2s;\n}\n.ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n  width: 100% !important;\n}\n.ω.↔ .layout-a {\n  display: flex;\n  flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2 {\n  flex: 1;\n  margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n  margin: 10px 20px;\n}\n\n/* annoyings, ref: lib/pixiv.js */\n\niframe,\n/* Ad */\n.ad,\n.ads_area,\n.ad-footer,\n.ads_anchor,\n.ads-top-info,\n.comic-hot-works,\n.user-ad-container,\n.ads_area_no_margin,\n/* Premium */\n.hover-item,\n.ad-printservice,\n.bookmark-ranges,\n.require-premium,\n.showcase-reminder,\n.sample-user-search,\n.popular-introduction,\n._premium-lead-tag-search-bar,\n._premium-lead-popular-d-body,\n._premium-lead-promotion-banner {\n  display: none !important;\n}\n\n:root {\n  --new-default-image-item-square-size: 184px;\n}\n\n/* dotted focus */\na::-moz-focus-inner,\nbutton::-moz-focus-inner {\n  border: 0 !important;\n  outline: 0 !important;\n}\na:focus,\nbutton:focus {\n  outline: 0 !important;\n}\n");
+  __$styleInject("._global-header {\n  z-index: 4;\n  position: relative;\n}\n._global-header .ui-search {\n  z-index: auto;\n}\n._global-header.koakuma-placeholder {\n  /* I don't know why #koakuma just 32px\n     but it should preserve 42px to keep all spacing correct */\n  margin-bottom: 42px;\n}\n#toolbar-items {\n  z-index: 5;\n}\n.ω {\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: center;\n  position: relative;\n}\n.ω,\n.ω .layout-a,\n.ω .layout-body {\n  transition: width 0.2s;\n}\n.ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n  width: 100% !important;\n}\n.ω.↔ .layout-a {\n  display: flex;\n  flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2 {\n  flex: 1;\n  margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n  margin: 10px 20px;\n}\n\n/* annoyings, ref: lib/pixiv.js */\n\niframe,\n/* Ad */\n.ad,\n.ads_area,\n.ad-footer,\n.ads_anchor,\n.ads-top-info,\n.comic-hot-works,\n.user-ad-container,\n.ads_area_no_margin,\n/* Premium */\n.hover-item,\n.ad-printservice,\n.bookmark-ranges,\n.require-premium,\n.showcase-reminder,\n.sample-user-search,\n.popular-introduction,\n._premium-lead-tag-search-bar,\n._premium-lead-popular-d-body,\n._premium-lead-promotion-banner {\n  display: none !important;\n}\n\n:root {\n  --new-default-image-item-square-size: 184px;\n  --default-image-item-image-square-size: 200px;\n}\n\n/* dotted focus */\na::-moz-focus-inner,\nbutton::-moz-focus-inner {\n  border: 0 !important;\n  outline: 0 !important;\n}\na:focus,\nbutton:focus {\n  outline: 0 !important;\n}\n");
 
   /**
    * The differents between FOLLOWED_NEWS and ANCIENT_FOLLOWED_NEWS:
@@ -2745,11 +2745,11 @@
     /* style */
     const __vue_inject_styles__$2 = function (inject) {
       if (!inject) return
-      inject("data-v-6d43d2c4_0", { source: "\n.ugoira-icon-circle[data-v-6d43d2c4] {\n  fill: #000;\n  fill-opacity: 0.4;\n}\n.ugoira-icon[data-v-6d43d2c4] {\n  fill: #fff;\n  font-size: 0;\n  /* height: 48px; */\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n  /* width: 48px; */\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconUgoiraPlay.vue"],"names":[],"mappings":";AAgCA;EACA,WAAA;EACA,kBAAA;CACA;AACA;EACA,WAAA;EACA,aAAA;EACA,mBAAA;EACA,eAAA;EACA,aAAA;EACA,uBAAA;EACA,kBAAA;CACA","file":"IconUgoiraPlay.vue","sourcesContent":["<template>\n  <svg\n    :style=\"inlineStyle\"\n    viewBox=\"0 0 24 24\"\n    class=\"ugoira-icon\">\n    <circle\n      class=\"ugoira-icon-circle\"\n      cx=\"12\"\n      cy=\"12\"\n      r=\"10\"/>\n    <path d=\"M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z\"/>\n  </svg>\n</template>\n\n<script>\nexport default {\n  props: {\n    size: {\n      default: 48,\n      type: Number,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    inlineStyle() {\n      return `height: ${this.size}px; width: ${this.size}px;`;\n    },\n  },\n};\n</script>\n\n<style scoped>\n.ugoira-icon-circle {\n  fill: #000;\n  fill-opacity: 0.4;\n}\n.ugoira-icon {\n  fill: #fff;\n  font-size: 0;\n  /* height: 48px; */\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n  /* width: 48px; */\n}\n</style>\n\n\n\n"]}, media: undefined });
+      inject("data-v-f6964bfe_0", { source: "\n.ugoira-icon-circle[data-v-f6964bfe] {\n  fill: #000;\n  fill-opacity: 0.4;\n}\n.ugoira-icon[data-v-f6964bfe] {\n  fill: #fff;\n  font-size: 0;\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconUgoiraPlay.vue"],"names":[],"mappings":";AAgCA;EACA,WAAA;EACA,kBAAA;CACA;AACA;EACA,WAAA;EACA,aAAA;EACA,eAAA;EACA,aAAA;EACA,uBAAA;CACA","file":"IconUgoiraPlay.vue","sourcesContent":["<template>\n  <svg\n    :style=\"inlineStyle\"\n    viewBox=\"0 0 24 24\"\n    class=\"ugoira-icon\">\n    <circle\n      class=\"ugoira-icon-circle\"\n      cx=\"12\"\n      cy=\"12\"\n      r=\"10\"/>\n    <path d=\"M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z\"/>\n  </svg>\n</template>\n\n<script>\nexport default {\n  props: {\n    size: {\n      default: 48,\n      type: Number,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    inlineStyle() {\n      return `height: ${this.size}px; width: ${this.size}px;`;\n    },\n  },\n};\n</script>\n\n<style scoped>\n.ugoira-icon-circle {\n  fill: #000;\n  fill-opacity: 0.4;\n}\n.ugoira-icon {\n  fill: #fff;\n  font-size: 0;\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n}\n</style>\n\n\n\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$2 = "data-v-6d43d2c4";
+    const __vue_scope_id__$2 = "data-v-f6964bfe";
     /* module identifier */
     const __vue_module_identifier__$2 = undefined;
     /* functional template */
@@ -2879,29 +2879,29 @@
     components: { IconUgoiraPlay },
     props: {
       bookmarkId: {
-        default: "",
-        type: String
+        default: '',
+        type: String,
       },
       illustId: {
-        default: "",
-        type: String
+        default: '',
+        type: String,
       },
       illustPageCount: {
         default: 1,
-        type: Number
+        type: Number,
       },
       imgUrl: {
-        default: "",
-        type: String
+        default: '',
+        type: String,
       },
       isBookmarked: {
         default: false,
-        type: Boolean
+        type: Boolean,
       },
       isUgoira: {
         default: false,
-        type: Boolean
-      }
+        type: Boolean,
+      },
     },
     // eslint-disable-next-line sort-keys
     data() {
@@ -2909,7 +2909,7 @@
         selfIsBookmarked: this.isBookmarked,
         ugoiraMeta: null,
         ugoiraPlayed: false,
-        ugoiraPlayer: null
+        ugoiraPlayer: null,
       };
     },
     // eslint-disable-next-line sort-keys
@@ -2922,10 +2922,10 @@
       },
       isSelfBookmarkPage() {
         return this.$store.getters.isSelfBookmarkPage;
-      }
+      },
     },
     mounted() {
-      this.$nextTick(async () => {
+      this.$nextTick(async() => {
         if (this.isUgoira && this.canHoverPlay) {
           this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);
         }
@@ -2934,22 +2934,22 @@
     // eslint-disable-next-line sort-keys
     methods: {
       activateContextMenu(event) {
-        $print.debug("DefaultImageItemImage#activateContextMenu", event);
+        $print.debug('DefaultImageItemImage#activateContextMenu', event);
         if (this.$store.state.config.contextMenu) {
           event.preventDefault();
 
           const payload = {
             data: {
               illustId: this.illustId,
-              type: "image-item-image"
+              type: 'image-item-image',
             },
             position: {
               x: event.clientX,
-              y: event.clientY
-            }
+              y: event.clientY,
+            },
           };
 
-          this.$store.commit("contextMenu/activate", payload);
+          this.$store.commit('contextMenu/activate', payload);
         }
       },
       controlUgoira(event) {
@@ -2964,14 +2964,14 @@
               chunkSize: 300000,
               loop: true,
               metadata: this.ugoiraMeta,
-              source: this.ugoiraMeta.src
+              source: this.ugoiraMeta.src,
             });
           } catch (error) {
             $print.error(error);
           }
         }
         if (this.canHoverPlay) {
-          if (event.type === "mouseenter") {
+          if (event.type === 'mouseenter') {
             this.ugoiraPlayed = true;
             this.ugoiraPlayer.play();
           } else {
@@ -2998,8 +2998,8 @@
             this.selfIsBookmarked = false;
           }
         }
-      }
-    }
+      },
+    },
   };
 
   /* script */
@@ -3118,11 +3118,11 @@
     /* style */
     const __vue_inject_styles__$3 = function (inject) {
       if (!inject) return
-      inject("data-v-5bd6a931_0", { source: "\n.image-item-image[data-v-5bd6a931] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-5bd6a931] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox[data-v-5bd6a931]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-5bd6a931] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-5bd6a931] {\n  position: absolute;\n}\nimg[data-v-5bd6a931],\ncanvas[data-v-5bd6a931] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-5bd6a931] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-5bd6a931] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-5bd6a931] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue"],"names":[],"mappings":";AAgLA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;EACA,mBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,wBAAA;EACA,oBAAA;EACA,WAAA;EACA,sCAAA;EACA,mBAAA;EACA,cAAA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,WAAA;EACA,cAAA;EACA,oBAAA;EACA,WAAA;EACA,uBAAA;EACA,uBAAA;EACA,aAAA;EACA,aAAA;EACA,iBAAA;EACA,+BAAA;EACA,yBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,iBAAA;EACA,gBAAA;CACA;AACA;EACA,SAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,mBAAA;EACA,gBAAA;EACA;gBACA;EACA,6BAAA;EACA,uBAAA;EACA,aAAA;EACA,0BAAA;EACA,qCAAA;CACA;AACA;EACA,4EAAA;CACA;AACA;EACA,mBAAA;EACA,QAAA;EACA,OAAA;EACA,+BAAA;EACA,aAAA;EACA,yBAAA;CACA","file":"DefaultImageItemImage.vue","sourcesContent":["<template>\n  <div class=\"image-item-image\">\n    <a\n      :href=\"illustPageUrl\"\n      class=\"image-flexbox\"\n      rel=\"noopener\"\n      @click.right=\"activateContextMenu\"\n      @mouseenter=\"controlUgoira\"\n      @mouseleave=\"controlUgoira\">\n\n      <div v-if=\"illustPageCount > 1\" class=\"top-right-slot\">\n        <span><i class=\"far fa-images\"/>\n          {{ illustPageCount }}</span>\n      </div>\n\n      <img\n        v-show=\"!ugoiraPlayed\"\n        :data-src=\"imgUrl\"\n        :src=\"imgUrl\">\n      <IconUgoiraPlay\n        v-if=\"isUgoira\"\n        v-show=\"!ugoiraPlayed\"\n        :size=\"60\"/>\n      <canvas\n        v-if=\"isUgoira\"\n        v-show=\"ugoiraPlayed\"\n        ref=\"smallUgoiraPreview\"/>\n    </a>\n    <div\n      :class=\"{on:selfIsBookmarked}\"\n      :title=\"selfIsBookmarked\"\n      class=\"_one-click-bookmark\"\n      @click.left.prevent.stop=\"oneClickBookmarkAdd\"/>\n    <div v-if=\"isSelfBookmarkPage\" class=\"bookmark-input-container\">\n      <input\n        :value=\"bookmarkId\"\n        type=\"checkbox\"\n        name=\"book_id[]\">\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print } from \"../lib/utils\";\nimport { PixivAPI } from \"../lib/pixiv\";\nimport IconUgoiraPlay from \"./IconUgoiraPlay.vue\";\n\nexport default {\n  components: { IconUgoiraPlay },\n  props: {\n    bookmarkId: {\n      default: \"\",\n      type: String\n    },\n    illustId: {\n      default: \"\",\n      type: String\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number\n    },\n    imgUrl: {\n      default: \"\",\n      type: String\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean\n    }\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      selfIsBookmarked: this.isBookmarked,\n      ugoiraMeta: null,\n      ugoiraPlayed: false,\n      ugoiraPlayer: null\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    canHoverPlay() {\n      return this.$store.getters.config.hoverPlay;\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    }\n  },\n  mounted() {\n    this.$nextTick(async () => {\n      if (this.isUgoira && this.canHoverPlay) {\n        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);\n      }\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    activateContextMenu(event) {\n      $print.debug(\"DefaultImageItemImage#activateContextMenu\", event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          data: {\n            illustId: this.illustId,\n            type: \"image-item-image\"\n          },\n          position: {\n            x: event.clientX,\n            y: event.clientY\n          }\n        };\n\n        this.$store.commit(\"contextMenu/activate\", payload);\n      }\n    },\n    controlUgoira(event) {\n      if (!this.ugoiraMeta) {\n        return;\n      }\n      if (!this.ugoiraPlayer) {\n        try {\n          this.ugoiraPlayer = new ZipImagePlayer({\n            autosize: true,\n            canvas: this.$refs.smallUgoiraPreview,\n            chunkSize: 300000,\n            loop: true,\n            metadata: this.ugoiraMeta,\n            source: this.ugoiraMeta.src\n          });\n        } catch (error) {\n          $print.error(error);\n        }\n      }\n      if (this.canHoverPlay) {\n        if (event.type === \"mouseenter\") {\n          this.ugoiraPlayed = true;\n          this.ugoiraPlayer.play();\n        } else {\n          this.ugoiraPlayed = false;\n          this.ugoiraPlayer.pause();\n          this.ugoiraPlayer.rewind();\n        }\n      }\n    },\n    async oneClickBookmarkAdd() {\n      if (!this.selfIsBookmarked) {\n        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {\n          this.selfIsBookmarked = true;\n        }\n      } else {\n        // this.bookmarkId might be empty...\n        // Because RPC API has no bookmarkId returned...\n        let bookmarkId = this.bookmarkId;\n        if (!bookmarkId) {\n          const data = await PixivAPI.getIllustBookmarkData(this.illustId);\n          bookmarkId = data.bookmarkData.id;\n        }\n        if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {\n          this.selfIsBookmarked = false;\n        }\n      }\n    }\n  }\n};\n</script>\n\n<style scoped>\n.image-item-image {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: 200px;\n}\n.image-flexbox:hover {\n  text-decoration: none;\n}\n.top-right-slot {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon {\n  position: absolute;\n}\nimg,\ncanvas {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n</style>\n"]}, media: undefined });
+      inject("data-v-192566ae_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image[data-v-192566ae] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-192566ae] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox[data-v-192566ae]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-192566ae] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-192566ae] {\n  position: absolute;\n}\nimg[data-v-192566ae],\ncanvas[data-v-192566ae] {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark[data-v-192566ae] {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on[data-v-192566ae] {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container[data-v-192566ae] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AAgLA;;;;;EAKA;AACA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;EACA,mBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,wBAAA;EACA,oBAAA;EACA,WAAA;EACA,sCAAA;EACA,mBAAA;EACA,oDAAA;EACA,mDAAA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,WAAA;EACA,cAAA;EACA,oBAAA;EACA,WAAA;EACA,uBAAA;EACA,uBAAA;EACA,aAAA;EACA,aAAA;EACA,iBAAA;EACA,+BAAA;EACA,yBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,iBAAA;EACA,gBAAA;CACA;AACA;EACA,SAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;EACA,WAAA;EACA,mBAAA;EACA,gBAAA;EACA;gBACA;EACA,6BAAA;EACA,uBAAA;EACA,aAAA;EACA,0BAAA;EACA,qCAAA;CACA;AACA;EACA,4EAAA;CACA;AACA;EACA,mBAAA;EACA,QAAA;EACA,OAAA;EACA,+BAAA;EACA,aAAA;EACA,yBAAA;CACA","file":"DefaultImageItemImage.vue","sourcesContent":["<template>\n  <div class=\"image-item-image\">\n    <a\n      :href=\"illustPageUrl\"\n      class=\"image-flexbox\"\n      rel=\"noopener\"\n      @click.right=\"activateContextMenu\"\n      @mouseenter=\"controlUgoira\"\n      @mouseleave=\"controlUgoira\">\n\n      <div v-if=\"illustPageCount > 1\" class=\"top-right-slot\">\n        <span><i class=\"far fa-images\"/>\n          {{ illustPageCount }}</span>\n      </div>\n\n      <img\n        v-show=\"!ugoiraPlayed\"\n        :data-src=\"imgUrl\"\n        :src=\"imgUrl\">\n      <IconUgoiraPlay\n        v-if=\"isUgoira\"\n        v-show=\"!ugoiraPlayed\"\n        :size=\"60\"/>\n      <canvas\n        v-if=\"isUgoira\"\n        v-show=\"ugoiraPlayed\"\n        ref=\"smallUgoiraPreview\"/>\n    </a>\n    <div\n      :class=\"{on:selfIsBookmarked}\"\n      :title=\"selfIsBookmarked\"\n      class=\"_one-click-bookmark\"\n      @click.left.prevent.stop=\"oneClickBookmarkAdd\"/>\n    <div v-if=\"isSelfBookmarkPage\" class=\"bookmark-input-container\">\n      <input\n        :value=\"bookmarkId\"\n        type=\"checkbox\"\n        name=\"book_id[]\">\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\nimport { PixivAPI } from '../lib/pixiv';\nimport IconUgoiraPlay from './IconUgoiraPlay.vue';\n\nexport default {\n  components: { IconUgoiraPlay },\n  props: {\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      selfIsBookmarked: this.isBookmarked,\n      ugoiraMeta: null,\n      ugoiraPlayed: false,\n      ugoiraPlayer: null,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    canHoverPlay() {\n      return this.$store.getters.config.hoverPlay;\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n  },\n  mounted() {\n    this.$nextTick(async() => {\n      if (this.isUgoira && this.canHoverPlay) {\n        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);\n      }\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemImage#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          data: {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          },\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n    controlUgoira(event) {\n      if (!this.ugoiraMeta) {\n        return;\n      }\n      if (!this.ugoiraPlayer) {\n        try {\n          this.ugoiraPlayer = new ZipImagePlayer({\n            autosize: true,\n            canvas: this.$refs.smallUgoiraPreview,\n            chunkSize: 300000,\n            loop: true,\n            metadata: this.ugoiraMeta,\n            source: this.ugoiraMeta.src,\n          });\n        } catch (error) {\n          $print.error(error);\n        }\n      }\n      if (this.canHoverPlay) {\n        if (event.type === 'mouseenter') {\n          this.ugoiraPlayed = true;\n          this.ugoiraPlayer.play();\n        } else {\n          this.ugoiraPlayed = false;\n          this.ugoiraPlayer.pause();\n          this.ugoiraPlayer.rewind();\n        }\n      }\n    },\n    async oneClickBookmarkAdd() {\n      if (!this.selfIsBookmarked) {\n        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {\n          this.selfIsBookmarked = true;\n        }\n      } else {\n        // this.bookmarkId might be empty...\n        // Because RPC API has no bookmarkId returned...\n        let bookmarkId = this.bookmarkId;\n        if (!bookmarkId) {\n          const data = await PixivAPI.getIllustBookmarkData(this.illustId);\n          bookmarkId = data.bookmarkData.id;\n        }\n        if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {\n          this.selfIsBookmarked = false;\n        }\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox:hover {\n  text-decoration: none;\n}\n.top-right-slot {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon {\n  position: absolute;\n}\nimg,\ncanvas {\n  max-height: 100%;\n  max-width: 100%;\n}\n._one-click-bookmark {\n  right: 0;\n  width: 24px;\n  height: 24px;\n  line-height: 24px;\n  z-index: 2;\n  text-align: center;\n  cursor: pointer;\n  background: url(https://s.pximg.net/www/images/bookmark-heart-off.svg) center\n    transparent;\n  background-repeat: no-repeat;\n  background-size: cover;\n  opacity: 0.8;\n  filter: alpha(opacity=80);\n  transition: opacity 0.2s ease-in-out;\n}\n._one-click-bookmark.on {\n  background-image: url(https://s.pximg.net/www/images/bookmark-heart-on.svg);\n}\n.bookmark-input-container {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n</style>\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$3 = "data-v-5bd6a931";
+    const __vue_scope_id__$3 = "data-v-192566ae";
     /* module identifier */
     const __vue_module_identifier__$3 = undefined;
     /* functional template */

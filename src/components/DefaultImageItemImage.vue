@@ -174,6 +174,12 @@ export default {
 </script>
 
 <style scoped>
+/*
+@pixiv.override.css
+:root {
+  --default-image-item-image-square-size: 184px;
+}
+*/
 .image-item-image {
   display: flex;
   align-items: center;
@@ -188,7 +194,8 @@ export default {
   z-index: 0;
   border: 1px solid rgba(0, 0, 0, 0.04);
   position: relative;
-  height: 200px;
+  height: var(--default-image-item-image-square-size);
+  width: var(--default-image-item-image-square-size);
 }
 .image-flexbox:hover {
   text-decoration: none;
