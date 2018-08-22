@@ -181,7 +181,7 @@ export default {
   background-color: #fff;
   font-size: 16px;
   overflow: hidden;
-  border-radius: 6px;
+  border-radius: 5px;
 }
 #patchouli-context-menu > ul {
   margin: 0;
@@ -196,7 +196,6 @@ export default {
   color: #85a;
   padding: 3px;
   flex: 1;
-  border-radius: 5px;
   text-decoration: none;
   white-space: nowrap;
   display: inline-flex;
