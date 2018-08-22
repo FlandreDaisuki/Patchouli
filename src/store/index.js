@@ -124,6 +124,11 @@ const mutations = {
     if (payload.forceSet) {
       $print.debug('vuexStore#setMainPageType: payload:', payload);
       state.mainPageType = payload.forceSet;
+
+      const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
+      if (!_sbp && state.config.sort === ST.BOOKMARK_ID) {
+        state.config.sort = ST.ILLUST_ID;
+      }
       return;
     }
 
@@ -169,6 +174,11 @@ const mutations = {
     default:
       state.mainPageType = MPT.NO_SUPPORT;
       break;
+    }
+
+    const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
+    if (!_sbp && state.config.sort === ST.BOOKMARK_ID) {
+      state.config.sort = ST.ILLUST_ID;
     }
   },
   updateSearchParam: (state) => {

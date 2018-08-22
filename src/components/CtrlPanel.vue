@@ -393,10 +393,9 @@ a {
   right: 0;
   width: 100%;
   transform: scaleX(0.8);
-  bottom: 0;
 }
-#koakuma-bookmark-input-usual-list > li:last-child::after,
-#koakuma-sorting-order-select-list > li:last-child::after {
+#koakuma-bookmark-input-usual-list > li:first-child::after,
+#koakuma-sorting-order-select-list > li:first-child::after {
   box-shadow: none;
 }
 #koakuma-bookmark-input-usual-list .sort-order-apply-indicator,
