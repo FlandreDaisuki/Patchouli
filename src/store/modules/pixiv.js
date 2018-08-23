@@ -230,11 +230,6 @@ const mutations = {
 };
 
 const actions = {
-  delayFirstStart: async({ commit, dispatch }, { actionName, options }) => {
-    commit('resume');
-    commit('relive');
-    await dispatch(actionName, options);
-  },
   pause: ({ commit, getters }) => {
     commit('setStatus', { isPaused: true,  nppType: getters.nppType });
   },
