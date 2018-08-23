@@ -26,7 +26,9 @@
         v-show="ugoiraPlayed"
         ref="smallUgoiraPreview"/>
     </a>
-    <IconBookmarkHeart :active="selfIsBookmarked" @click.left.prevent.stop="oneClickBookmarkAdd"/>
+    <div class="bookmark-heart-block">
+      <IconBookmarkHeart :active="selfIsBookmarked" @click.left.prevent.stop="oneClickBookmarkAdd"/>
+    </div>
     <div v-if="isSelfBookmarkPage" class="bookmark-input-container">
       <input
         :value="bookmarkId"
@@ -229,5 +231,10 @@ canvas {
   background: rgba(0, 0, 0, 0.4);
   padding: 6px;
   border-radius: 0 0 4px 0;
+}
+.bookmark-heart-block {
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }
 </style>

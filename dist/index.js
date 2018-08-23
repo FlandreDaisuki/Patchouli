@@ -3146,110 +3146,112 @@ var __vue_render__$4 = function() {
   var _vm = this;
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { staticClass: "image-item-image" },
-    [
-      _c(
-        "a",
-        {
-          staticClass: "image-flexbox",
-          attrs: { href: _vm.illustPageUrl, rel: "noopener" },
-          on: {
-            contextmenu: function($event) {
-              return _vm.activateContextMenu($event)
-            },
-            mouseenter: _vm.controlUgoira,
-            mouseleave: _vm.controlUgoira
-          }
-        },
-        [
-          _vm.illustPageCount > 1
-            ? _c("div", { staticClass: "top-right-slot" }, [
-                _c("span", [
-                  _c("i", { staticClass: "far fa-images" }),
-                  _vm._v("\n        " + _vm._s(_vm.illustPageCount))
-                ])
-              ])
-            : _vm._e(),
-          _vm._v(" "),
-          _c("img", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: !_vm.ugoiraPlayed,
-                expression: "!ugoiraPlayed"
-              }
-            ],
-            attrs: { "data-src": _vm.imgUrl, src: _vm.imgUrl }
-          }),
-          _vm._v(" "),
-          _vm.isUgoira
-            ? _c("IconUgoiraPlay", {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.ugoiraPlayed,
-                    expression: "!ugoiraPlayed"
-                  }
-                ],
-                attrs: { size: 60 }
-              })
-            : _vm._e(),
-          _vm._v(" "),
-          _vm.isUgoira
-            ? _c("canvas", {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.ugoiraPlayed,
-                    expression: "ugoiraPlayed"
-                  }
-                ],
-                ref: "smallUgoiraPreview"
-              })
-            : _vm._e()
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("IconBookmarkHeart", {
-        attrs: { active: _vm.selfIsBookmarked },
+  return _c("div", { staticClass: "image-item-image" }, [
+    _c(
+      "a",
+      {
+        staticClass: "image-flexbox",
+        attrs: { href: _vm.illustPageUrl, rel: "noopener" },
         on: {
-          click: function($event) {
-            if (
-              !("button" in $event) &&
-              _vm._k($event.keyCode, "left", 37, $event.key, [
-                "Left",
-                "ArrowLeft"
-              ])
-            ) {
-              return null
-            }
-            if ("button" in $event && $event.button !== 0) {
-              return null
-            }
-            $event.preventDefault();
-            $event.stopPropagation();
-            return _vm.oneClickBookmarkAdd($event)
-          }
+          contextmenu: function($event) {
+            return _vm.activateContextMenu($event)
+          },
+          mouseenter: _vm.controlUgoira,
+          mouseleave: _vm.controlUgoira
         }
-      }),
-      _vm._v(" "),
-      _vm.isSelfBookmarkPage
-        ? _c("div", { staticClass: "bookmark-input-container" }, [
-            _c("input", {
-              attrs: { type: "checkbox", name: "book_id[]" },
-              domProps: { value: _vm.bookmarkId }
+      },
+      [
+        _vm.illustPageCount > 1
+          ? _c("div", { staticClass: "top-right-slot" }, [
+              _c("span", [
+                _c("i", { staticClass: "far fa-images" }),
+                _vm._v("\n        " + _vm._s(_vm.illustPageCount))
+              ])
+            ])
+          : _vm._e(),
+        _vm._v(" "),
+        _c("img", {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: !_vm.ugoiraPlayed,
+              expression: "!ugoiraPlayed"
+            }
+          ],
+          attrs: { "data-src": _vm.imgUrl, src: _vm.imgUrl }
+        }),
+        _vm._v(" "),
+        _vm.isUgoira
+          ? _c("IconUgoiraPlay", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: !_vm.ugoiraPlayed,
+                  expression: "!ugoiraPlayed"
+                }
+              ],
+              attrs: { size: 60 }
             })
-          ])
-        : _vm._e()
-    ],
-    1
-  )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.isUgoira
+          ? _c("canvas", {
+              directives: [
+                {
+                  name: "show",
+                  rawName: "v-show",
+                  value: _vm.ugoiraPlayed,
+                  expression: "ugoiraPlayed"
+                }
+              ],
+              ref: "smallUgoiraPreview"
+            })
+          : _vm._e()
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "bookmark-heart-block" },
+      [
+        _c("IconBookmarkHeart", {
+          attrs: { active: _vm.selfIsBookmarked },
+          on: {
+            click: function($event) {
+              if (
+                !("button" in $event) &&
+                _vm._k($event.keyCode, "left", 37, $event.key, [
+                  "Left",
+                  "ArrowLeft"
+                ])
+              ) {
+                return null
+              }
+              if ("button" in $event && $event.button !== 0) {
+                return null
+              }
+              $event.preventDefault();
+              $event.stopPropagation();
+              return _vm.oneClickBookmarkAdd($event)
+            }
+          }
+        })
+      ],
+      1
+    ),
+    _vm._v(" "),
+    _vm.isSelfBookmarkPage
+      ? _c("div", { staticClass: "bookmark-input-container" }, [
+          _c("input", {
+            attrs: { type: "checkbox", name: "book_id[]" },
+            domProps: { value: _vm.bookmarkId }
+          })
+        ])
+      : _vm._e()
+  ])
 };
 var __vue_staticRenderFns__$4 = [];
 __vue_render__$4._withStripped = true;
@@ -3257,11 +3259,11 @@ __vue_render__$4._withStripped = true;
   /* style */
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-0f68cd50_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image[data-v-0f68cd50] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-0f68cd50] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox[data-v-0f68cd50]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-0f68cd50] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-0f68cd50] {\n  position: absolute;\n}\nimg[data-v-0f68cd50],\ncanvas[data-v-0f68cd50] {\n  max-height: 100%;\n  max-width: 100%;\n}\n.bookmark-input-container[data-v-0f68cd50] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AA6KA;;;;;EAKA;AACA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;EACA,mBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,wBAAA;EACA,oBAAA;EACA,WAAA;EACA,sCAAA;EACA,mBAAA;EACA,oDAAA;EACA,mDAAA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,WAAA;EACA,cAAA;EACA,oBAAA;EACA,WAAA;EACA,uBAAA;EACA,uBAAA;EACA,aAAA;EACA,aAAA;EACA,iBAAA;EACA,+BAAA;EACA,yBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,iBAAA;EACA,gBAAA;CACA;AACA;EACA,mBAAA;EACA,QAAA;EACA,OAAA;EACA,+BAAA;EACA,aAAA;EACA,yBAAA;CACA","file":"DefaultImageItemImage.vue","sourcesContent":["<template>\n  <div class=\"image-item-image\">\n    <a\n      :href=\"illustPageUrl\"\n      class=\"image-flexbox\"\n      rel=\"noopener\"\n      @click.right=\"activateContextMenu\"\n      @mouseenter=\"controlUgoira\"\n      @mouseleave=\"controlUgoira\">\n\n      <div v-if=\"illustPageCount > 1\" class=\"top-right-slot\">\n        <span><i class=\"far fa-images\"/>\n          {{ illustPageCount }}</span>\n      </div>\n\n      <img\n        v-show=\"!ugoiraPlayed\"\n        :data-src=\"imgUrl\"\n        :src=\"imgUrl\">\n      <IconUgoiraPlay\n        v-if=\"isUgoira\"\n        v-show=\"!ugoiraPlayed\"\n        :size=\"60\"/>\n      <canvas\n        v-if=\"isUgoira\"\n        v-show=\"ugoiraPlayed\"\n        ref=\"smallUgoiraPreview\"/>\n    </a>\n    <IconBookmarkHeart :active=\"selfIsBookmarked\" @click.left.prevent.stop=\"oneClickBookmarkAdd\"/>\n    <div v-if=\"isSelfBookmarkPage\" class=\"bookmark-input-container\">\n      <input\n        :value=\"bookmarkId\"\n        type=\"checkbox\"\n        name=\"book_id[]\">\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\nimport { PixivAPI } from '../lib/pixiv';\nimport IconUgoiraPlay from './IconUgoiraPlay.vue';\nimport IconBookmarkHeart from './IconBookmarkHeart.vue';\n\nexport default {\n  components: { IconBookmarkHeart, IconUgoiraPlay },\n  props: {\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      selfIsBookmarked: this.isBookmarked,\n      ugoiraMeta: null,\n      ugoiraPlayed: false,\n      ugoiraPlayer: null,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    canHoverPlay() {\n      return this.$store.getters.config.hoverPlay;\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n  },\n  mounted() {\n    this.$nextTick(async() => {\n      if (this.isUgoira && this.canHoverPlay) {\n        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);\n      }\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemImage#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          data: {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          },\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n    controlUgoira(event) {\n      if (!this.ugoiraMeta) {\n        return;\n      }\n      if (!this.ugoiraPlayer) {\n        try {\n          this.ugoiraPlayer = new ZipImagePlayer({\n            autosize: true,\n            canvas: this.$refs.smallUgoiraPreview,\n            chunkSize: 300000,\n            loop: true,\n            metadata: this.ugoiraMeta,\n            source: this.ugoiraMeta.src,\n          });\n        } catch (error) {\n          $print.error(error);\n        }\n      }\n      if (this.canHoverPlay) {\n        if (event.type === 'mouseenter') {\n          this.ugoiraPlayed = true;\n          this.ugoiraPlayer.play();\n        } else {\n          this.ugoiraPlayed = false;\n          this.ugoiraPlayer.pause();\n          this.ugoiraPlayer.rewind();\n        }\n      }\n    },\n    async oneClickBookmarkAdd() {\n      if (!this.selfIsBookmarked) {\n        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {\n          this.selfIsBookmarked = true;\n        }\n      } else {\n        // this.bookmarkId might be empty...\n        // Because RPC API has no bookmarkId returned...\n        let bookmarkId = this.bookmarkId;\n        if (!bookmarkId) {\n          const data = await PixivAPI.getIllustBookmarkData(this.illustId);\n          bookmarkId = data.bookmarkData.id;\n        }\n        if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {\n          this.selfIsBookmarked = false;\n        }\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox:hover {\n  text-decoration: none;\n}\n.top-right-slot {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon {\n  position: absolute;\n}\nimg,\ncanvas {\n  max-height: 100%;\n  max-width: 100%;\n}\n.bookmark-input-container {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-36bd9ed2_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image[data-v-36bd9ed2] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-36bd9ed2] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox[data-v-36bd9ed2]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-36bd9ed2] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-36bd9ed2] {\n  position: absolute;\n}\nimg[data-v-36bd9ed2],\ncanvas[data-v-36bd9ed2] {\n  max-height: 100%;\n  max-width: 100%;\n}\n.bookmark-input-container[data-v-36bd9ed2] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n.bookmark-heart-block[data-v-36bd9ed2] {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AA+KA;;;;;EAKA;AACA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;EACA,mBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,wBAAA;EACA,oBAAA;EACA,WAAA;EACA,sCAAA;EACA,mBAAA;EACA,oDAAA;EACA,mDAAA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,WAAA;EACA,cAAA;EACA,oBAAA;EACA,WAAA;EACA,uBAAA;EACA,uBAAA;EACA,aAAA;EACA,aAAA;EACA,iBAAA;EACA,+BAAA;EACA,yBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,iBAAA;EACA,gBAAA;CACA;AACA;EACA,mBAAA;EACA,QAAA;EACA,OAAA;EACA,+BAAA;EACA,aAAA;EACA,yBAAA;CACA;AACA;EACA,mBAAA;EACA,UAAA;EACA,SAAA;CACA","file":"DefaultImageItemImage.vue","sourcesContent":["<template>\n  <div class=\"image-item-image\">\n    <a\n      :href=\"illustPageUrl\"\n      class=\"image-flexbox\"\n      rel=\"noopener\"\n      @click.right=\"activateContextMenu\"\n      @mouseenter=\"controlUgoira\"\n      @mouseleave=\"controlUgoira\">\n\n      <div v-if=\"illustPageCount > 1\" class=\"top-right-slot\">\n        <span><i class=\"far fa-images\"/>\n          {{ illustPageCount }}</span>\n      </div>\n\n      <img\n        v-show=\"!ugoiraPlayed\"\n        :data-src=\"imgUrl\"\n        :src=\"imgUrl\">\n      <IconUgoiraPlay\n        v-if=\"isUgoira\"\n        v-show=\"!ugoiraPlayed\"\n        :size=\"60\"/>\n      <canvas\n        v-if=\"isUgoira\"\n        v-show=\"ugoiraPlayed\"\n        ref=\"smallUgoiraPreview\"/>\n    </a>\n    <div class=\"bookmark-heart-block\">\n      <IconBookmarkHeart :active=\"selfIsBookmarked\" @click.left.prevent.stop=\"oneClickBookmarkAdd\"/>\n    </div>\n    <div v-if=\"isSelfBookmarkPage\" class=\"bookmark-input-container\">\n      <input\n        :value=\"bookmarkId\"\n        type=\"checkbox\"\n        name=\"book_id[]\">\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\nimport { PixivAPI } from '../lib/pixiv';\nimport IconUgoiraPlay from './IconUgoiraPlay.vue';\nimport IconBookmarkHeart from './IconBookmarkHeart.vue';\n\nexport default {\n  components: { IconBookmarkHeart, IconUgoiraPlay },\n  props: {\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      selfIsBookmarked: this.isBookmarked,\n      ugoiraMeta: null,\n      ugoiraPlayed: false,\n      ugoiraPlayer: null,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    canHoverPlay() {\n      return this.$store.getters.config.hoverPlay;\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n  },\n  mounted() {\n    this.$nextTick(async() => {\n      if (this.isUgoira && this.canHoverPlay) {\n        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);\n      }\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemImage#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          data: {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          },\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n    controlUgoira(event) {\n      if (!this.ugoiraMeta) {\n        return;\n      }\n      if (!this.ugoiraPlayer) {\n        try {\n          this.ugoiraPlayer = new ZipImagePlayer({\n            autosize: true,\n            canvas: this.$refs.smallUgoiraPreview,\n            chunkSize: 300000,\n            loop: true,\n            metadata: this.ugoiraMeta,\n            source: this.ugoiraMeta.src,\n          });\n        } catch (error) {\n          $print.error(error);\n        }\n      }\n      if (this.canHoverPlay) {\n        if (event.type === 'mouseenter') {\n          this.ugoiraPlayed = true;\n          this.ugoiraPlayer.play();\n        } else {\n          this.ugoiraPlayed = false;\n          this.ugoiraPlayer.pause();\n          this.ugoiraPlayer.rewind();\n        }\n      }\n    },\n    async oneClickBookmarkAdd() {\n      if (!this.selfIsBookmarked) {\n        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {\n          this.selfIsBookmarked = true;\n        }\n      } else {\n        // this.bookmarkId might be empty...\n        // Because RPC API has no bookmarkId returned...\n        let bookmarkId = this.bookmarkId;\n        if (!bookmarkId) {\n          const data = await PixivAPI.getIllustBookmarkData(this.illustId);\n          bookmarkId = data.bookmarkData.id;\n        }\n        if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {\n          this.selfIsBookmarked = false;\n        }\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox:hover {\n  text-decoration: none;\n}\n.top-right-slot {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon {\n  position: absolute;\n}\nimg,\ncanvas {\n  max-height: 100%;\n  max-width: 100%;\n}\n.bookmark-input-container {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n.bookmark-heart-block {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n}\n</style>\n"]}, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$4 = "data-v-0f68cd50";
+  const __vue_scope_id__$4 = "data-v-36bd9ed2";
   /* module identifier */
   const __vue_module_identifier__$4 = undefined;
   /* functional template */
