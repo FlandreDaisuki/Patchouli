@@ -63,7 +63,7 @@ const state = {
   moveWindowPrivateBookmarkIndex: 0,
   nextUrl: location.href,
   nppStatus: {
-    isEnded: Array(4).fill(false),
+    isEnded: Array(5).fill(false),
     isPaused: true,
   },
   prefetchPool: {
@@ -138,12 +138,10 @@ const getters = {
         conds.push(d.userId === sp.id && d.isManga);
         break;
       case 3:
-        conds.push(d.userId !== sp.id);
-        if (sp.rest === 'show') {
-          conds.push(!d.isPrivateBookmark);
-        } else {
-          conds.push(d.isPrivateBookmark);
-        }
+        conds.push(d.userId !== sp.id && !d.isPrivateBookmark);
+        break;
+      case 4:
+        conds.push(d.userId !== sp.id && d.isPrivateBookmark);
         break;
       default:
         break;
@@ -178,7 +176,16 @@ const getters = {
       MPT.NEW_PROFILE_MANGA,
       MPT.NEW_PROFILE_BOOKMARK,
     ];
-    return types.indexOf(rootGetters.MPT);
+
+    const loginId = rootGetters.loginData.id;
+    const uid = rootGetters.sp.id;
+    const rest = rootGetters.sp.rest;
+    const mpt = rootGetters.MPT;
+    const isSelfPrivateBookmarkPage = mpt === MPT.NEW_PROFILE_BOOKMARK && loginId === uid && rest === 'hide';
+    if (isSelfPrivateBookmarkPage) {
+      return types.length; // after the last of type
+    }
+    return types.indexOf(mpt);
   },
   status: (state, getters) => {
     if (getters.nppType >= 0) {

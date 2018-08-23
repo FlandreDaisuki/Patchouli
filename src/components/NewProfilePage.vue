@@ -30,12 +30,12 @@
         <nav>
           <a
             id="patchouli-npp-view-bookmark-switch-public"
-            :class="{'current': !isSelfPrivateBookmarkPage}"
+            :class="{'current': nppType === 3}"
             :href="`/bookmark.php?id=${uid}&rest=show`"
             @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.publicBookmark') }}</a>
           <a
             id="patchouli-npp-view-bookmark-switch-private"
-            :class="{'current': isSelfPrivateBookmarkPage}"
+            :class="{'current': nppType === 4}"
             :href="`/bookmark.php?id=${uid}&rest=hide`"
             @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.privateBookmark') }}</a>
         </nav>
@@ -79,7 +79,7 @@ export default {
   components: { NewDefaultImageItem },
   data() {
     return {
-      routeIsInited: Array(4).fill(false),
+      routeIsInited: Array(5).fill(false),
     };
   },
   // eslint-disable-next-line sort-keys
@@ -90,9 +90,9 @@ export default {
     isSelfBookmarkPage() {
       return this.$store.getters.isSelfBookmarkPage;
     },
-    isSelfPrivateBookmarkPage() {
-      return this.isSelfBookmarkPage && this.rest === 'hide';
-    },
+    // isSelfPrivateBookmarkPage() {
+    //   return this.isSelfBookmarkPage && this.rest === 'hide';
+    // },
     nppProcessedLibrary() {
       return this.$store.getters['pixiv/nppProcessedLibrary'];
     },
