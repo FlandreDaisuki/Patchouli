@@ -129,32 +129,6 @@ vuexStore.dispatch('init')
       })
       .catch(error => {
         $print.error('main#init: Fail to first mount', error);
-      })
-      .then(async(status) => {
-        // This can solve slow mounting issue
-        // FIXME: too ugly
-        const nppType = vuexStore.getters['pixiv/nppType'];
-        if (nppType >= 0) {
-          await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'hide', times: 1 } });
-
-          if (nppType === 2) {
-            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'illusts', times: 1 } });
-            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'show', times: 1 } });
-          } else if (nppType === 3) {
-            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'illusts', times: 1 } });
-            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'manga', times: 1 } });
-          } else {
-            // nppType === 0 || nppType === 1
-            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startPrefetchBased', options: { pool: 'manga', times: 1 } });
-            await vuexStore.dispatch('pixiv/delayFirstStart', { actionName: 'startMovingWindowBased', options: { rest: 'show', times: 1 } });
-          }
-        }
-
-        if (status.isEnded) {
-          vuexStore.commit('pixiv/stop');
-        } else {
-          vuexStore.commit('pixiv/relive');
-        }
       });
 
     // document.addEventListener('scroll', (event) => {

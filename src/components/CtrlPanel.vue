@@ -176,7 +176,7 @@ export default {
       if (this.status.isPaused) {
         this.$store.dispatch('pixiv/start');
       } else {
-        this.$store.commit('pixiv/pause');
+        this.$store.dispatch('pixiv/pause');
       }
     },
     clickSortingOrder(event) {

@@ -74,6 +74,12 @@ import NewDefaultImageItem from './NewDefaultImageItem.vue';
 
 export default {
   components: { NewDefaultImageItem },
+  data() {
+    return {
+      routeIsInited: Array(4).fill(false),
+    };
+  },
+  // eslint-disable-next-line sort-keys
   computed: {
     hasNoResult() {
       return !this.nppProcessedLibrary.filter(d => d._show).length;
@@ -97,9 +103,15 @@ export default {
       return this.$store.getters.sp.id;
     },
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.routeIsInited[this.nppType] = true;
+    });
+  },
+  // eslint-disable-next-line sort-keys
   methods: {
-    clickRoute(event) {
-      this.$store.commit('pixiv/pause');
+    async clickRoute(event) {
+      await this.$store.dispatch('pixiv/pause');
       const tid = event.currentTarget.id;
       const thref = event.currentTarget.href;
 
@@ -136,8 +148,10 @@ export default {
       default:
         break;
       }
-
-      this.$store.dispatch('pixiv/start', { force: true, times: 1 });
+      if (!this.routeIsInited[this.nppType]) {
+        this.$store.dispatch('pixiv/start', { force: true, times: 1 });
+        this.routeIsInited[this.nppType] = true;
+      }
     },
     isSamePath(href0, href1) {
       const a0 = $el('a', { href: href0 });

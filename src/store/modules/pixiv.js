@@ -54,12 +54,18 @@ const makeLibraryData = ({ illustDataGroup, userDataGroup }) => {
 
 const state = {
   batchSize: 40,
+  defaultStatus: {
+    isEnded: false,
+    isPaused: true,
+  },
   imageItemLibrary: [],
-  isEnded: false,
-  isPaused: true,
   moveWindowIndex: 0,
   moveWindowPrivateBookmarkIndex: 0,
   nextUrl: location.href,
+  nppStatus: {
+    isEnded: Array(4).fill(false),
+    isPaused: true,
+  },
   prefetchPool: {
     illusts: [],
     manga: [],
@@ -67,6 +73,7 @@ const state = {
 };
 
 const getters = {
+  batchSize: (state) => state.batchSize,
   defaultProcessedLibrary: (state, getters, rootState, rootGetters) => {
     const clonedLib = state.imageItemLibrary.slice();
     const { sp, filters, config, orderBy } = rootGetters;
@@ -173,21 +180,27 @@ const getters = {
     ];
     return types.indexOf(rootGetters.MPT);
   },
-  status: (state) => {
-    const { isEnded, isPaused } = state;
-    return { isEnded, isPaused };
+  status: (state, getters) => {
+    if (getters.nppType >= 0) {
+      return {
+        isEnded: state.nppStatus.isEnded[getters.nppType],
+        isPaused: state.nppStatus.isPaused,
+      };
+    } else {
+      return state.defaultStatus;
+    }
   },
 };
 
 const mutations = {
-  editImgItem: (state, options = {}) => {
+  editImgItem: (state, payload = {}) => {
     const DEFAULT_OPT = {
       illustId: '',
       type: null,
       userId: '',
     };
 
-    const opt = Object.assign({}, DEFAULT_OPT, options);
+    const opt = Object.assign({}, DEFAULT_OPT, payload);
 
     if (opt.type === 'follow-user' && opt.userId) {
       state.imageItemLibrary
@@ -197,18 +210,22 @@ const mutations = {
         });
     }
   },
-  pause: (state) => {
-    state.isPaused = true;
-  },
-  relive: (state) => {
-    state.isEnded = false;
-  },
-  resume: (state) => {
-    state.isPaused = false;
-  },
-  stop: (state) => {
-    state.isPaused = true;
-    state.isEnded = true;
+  setStatus: (state, { nppType = -1, isPaused, isEnded }) => {
+    if (nppType >= 0) {
+      if (isPaused !== undefined) {
+        state.nppStatus.isPaused = isPaused;
+      }
+      if (isEnded !== undefined) {
+        state.nppStatus.isEnded[nppType] = isEnded;
+      }
+    } else {
+      if (isPaused !== undefined) {
+        state.defaultStatus.isPaused = isPaused;
+      }
+      if (isEnded !== undefined) {
+        state.defaultStatus.isEnded = isEnded;
+      }
+    }
   },
 };
 
@@ -218,14 +235,23 @@ const actions = {
     commit('relive');
     await dispatch(actionName, options);
   },
-  start: async({ state, commit, dispatch, getters, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) => {
-    commit('resume');
+  pause: ({ commit, getters }) => {
+    commit('setStatus', { isPaused: true,  nppType: getters.nppType });
+  },
+  relive: ({ commit, getters }) => {
+    commit('setStatus', { isEnded: false,  nppType: getters.nppType });
+  },
+  resume: ({ commit, getters }) => {
+    commit('setStatus', { isPaused: false,  nppType: getters.nppType });
+  },
+  start: async({ state, dispatch, getters, rootGetters }, { times = Infinity, force = false, isFirst = false } = {}) => {
+    await dispatch('resume');
 
     if (force) {
-      commit('relive');
+      await dispatch('relive');
     }
 
-    if (state.isEnded || times <= 0) {
+    if (getters.status.isEnded || times <= 0) {
       return;
     }
 
@@ -269,25 +295,25 @@ const actions = {
       break;
     }
   },
-  startMovingWindowBased: async({ state, commit, getters, rootGetters }, { times = Infinity, rest = null } = {}) => {
-    while (!state.isPaused && !state.isEnded && times) {
+  startMovingWindowBased: async({ state, dispatch, getters, rootGetters }, { times = Infinity, rest = null } = {}) => {
+    while (!getters.status.isPaused && !getters.status.isEnded && times) {
       let illustIds = [], maxTotal = Infinity;
       const _rest = rest || rootGetters.sp.rest;
       const _uid = rootGetters.sp.id;
       let cIndex = (_rest === 'show') ? state.moveWindowIndex : state.moveWindowPrivateBookmarkIndex;
       if (getters.nppType >= 0) {
-        const opt = { limit: state.batchSize, offset: cIndex, rest: _rest };
+        const opt = { limit: getters.batchSize, offset: cIndex, rest: _rest };
         const { works, total } = await PixivAPI.getUserBookmarkData(_uid, opt);
         $print.debug('vuexMudule/pixiv#startMovingWindowBased: works:', works);
         if (!works) {
-          commit('stop');
+          await dispatch('stop');
           break;
         }
         maxTotal = total;
         illustIds.push(...works.map((d) => d.id));
       }
 
-      cIndex += state.batchSize;
+      cIndex += getters.batchSize;
 
       if (getters.nppType >= 0 && _rest === 'hide') {
         state.moveWindowPrivateBookmarkIndex = cIndex;
@@ -317,16 +343,16 @@ const actions = {
       times -= 1;
 
       if (!times) {
-        commit('pause');
+        await dispatch('pause');
       }
 
       if (cIndex > maxTotal) {
-        commit('stop');
+        await dispatch('stop');
       }
     }
   },
-  startNextUrlBased: async({ state, commit, rootGetters }, { times = Infinity } = {}) => {
-    while (!state.isPaused && !state.isEnded && times) {
+  startNextUrlBased: async({ state, dispatch, getters, rootGetters }, { times = Infinity } = {}) => {
+    while (!getters.status.isPaused && !getters.status.isEnded && times) {
       let page = null;
 
       if ([MPT.SEARCH, MPT.FOLLOWED_NEWS].includes(rootGetters.MPT)) {
@@ -360,15 +386,15 @@ const actions = {
       times -= 1;
 
       if (!times) {
-        commit('pause');
+        await dispatch('pause');
       }
 
       if (!state.nextUrl) {
-        commit('stop');
+        await dispatch('stop');
       }
     }
   },
-  startPrefetchBased: async({ state, commit }, { times = Infinity, pool = 'all' } = {}) => {
+  startPrefetchBased: async({ state, dispatch, getters }, { times = Infinity, pool = 'all' } = {}) => {
     const pPool = state.prefetchPool;
     let todoPool = [];
     if (pool === 'all') {
@@ -379,12 +405,12 @@ const actions = {
     }
     $print.debug('vuexMudule/pixiv#startPrefetchBased: todoPool:', todoPool);
 
-    while (!state.isPaused && !state.isEnded && times) {
+    while (!getters.status.isPaused && !getters.status.isEnded && times) {
       if (!todoPool.length) {
-        commit('stop');
+        await dispatch('stop');
       }
 
-      const illustIds = todoPool.splice(0, state.batchSize);
+      const illustIds = todoPool.splice(0, getters.batchSize);
 
       if (pool === 'all') {
         illustIds.forEach((id) => {
@@ -421,13 +447,16 @@ const actions = {
       times -= 1;
 
       if (!times) {
-        commit('pause');
+        await dispatch('pause');
       }
 
       if (!todoPool.length) {
-        commit('stop');
+        await dispatch('stop');
       }
     }
+  },
+  stop: ({ commit, getters }) => {
+    commit('setStatus', { isEnded: true, isPaused: true,  nppType: getters.nppType });
   },
 };
 
