@@ -5144,62 +5144,67 @@ var __vue_render__$a = function() {
       _c(
         "ul",
         {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: !_vm.hasNoResult,
+              expression: "!hasNoResult"
+            }
+          ],
           staticClass: "ω",
           attrs: { id: "patchouli-npp-view-image-item-list" }
         },
-        [
-          _vm._l(_vm.nppProcessedLibrary, function(d) {
-            return _c("NewDefaultImageItem", {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: d._show,
-                  expression: "d._show"
-                }
-              ],
-              key: d.illustId,
-              attrs: {
-                "illust-id": d.illustId,
-                "bookmark-count": d.bookmarkCount,
-                "bookmark-id": d.bookmarkId,
-                "is-bookmarked": d.isBookmarked,
-                "is-followed": d.isFollowed,
-                "is-ugoira": d.isUgoira,
-                "illust-page-count": d.illustPageCount,
-                "illust-title": d.illustTitle,
-                "thumb-img-url": d.urls.thumb,
-                "profile-img-url": d.profileImg,
-                "user-id": d.userId,
-                "user-name": d.userName,
-                "show-user-profile": _vm.uid !== d.userId
+        _vm._l(_vm.nppProcessedLibrary, function(d) {
+          return _c("NewDefaultImageItem", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: d._show,
+                expression: "d._show"
               }
-            })
-          }),
-          _vm._v(" "),
-          _c(
-            "span",
+            ],
+            key: d.illustId,
+            attrs: {
+              "illust-id": d.illustId,
+              "bookmark-count": d.bookmarkCount,
+              "bookmark-id": d.bookmarkId,
+              "is-bookmarked": d.isBookmarked,
+              "is-followed": d.isFollowed,
+              "is-ugoira": d.isUgoira,
+              "illust-page-count": d.illustPageCount,
+              "illust-title": d.illustTitle,
+              "thumb-img-url": d.urls.thumb,
+              "profile-img-url": d.profileImg,
+              "user-id": d.userId,
+              "user-name": d.userName,
+              "show-user-profile": _vm.uid !== d.userId
+            }
+          })
+        })
+      ),
+      _vm._v(" "),
+      _c(
+        "span",
+        {
+          directives: [
             {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.hasNoResult,
-                  expression: "hasNoResult"
-                }
-              ],
-              attrs: { id: "patchouli-npp-view-no-result" }
-            },
-            [
-              _vm._v(
-                "\n        " +
-                  _vm._s(_vm.$t("mainView.newProfilePage.noResult")) +
-                  "\n      "
-              )
-            ]
+              name: "show",
+              rawName: "v-show",
+              value: _vm.hasNoResult,
+              expression: "hasNoResult"
+            }
+          ],
+          attrs: { id: "patchouli-npp-view-no-result" }
+        },
+        [
+          _vm._v(
+            "\n      " +
+              _vm._s(_vm.$t("mainView.newProfilePage.noResult")) +
+              "\n    "
           )
-        ],
-        2
+        ]
       )
     ])
   ])
@@ -5210,11 +5215,11 @@ __vue_render__$a._withStripped = true;
   /* style */
   const __vue_inject_styles__$a = function (inject) {
     if (!inject) return
-    inject("data-v-51e86e78_0", { source: "\n#patchouli-npp-nav[data-v-51e86e78] {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a[data-v-51e86e78] {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a[data-v-51e86e78]:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current[data-v-51e86e78] {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view-bookmark-switch[data-v-51e86e78] {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current[data-v-51e86e78] {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a[data-v-51e86e78] {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list[data-v-51e86e78] {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result[data-v-51e86e78] {\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n  padding: 30px 0;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/NewProfilePage.vue"],"names":[],"mappings":";AAgLA;EACA,cAAA;EACA,wBAAA;EACA,0BAAA;EACA,YAAA;CACA;AACA;EACA,kCAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;EACA,mBAAA;EACA,sBAAA;EACA,uBAAA;CACA;AACA;EACA,YAAA;EACA,gBAAA;CACA;AACA;EACA,YAAA;EACA,iCAAA;CACA;AACA;EACA,cAAA;EACA,0BAAA;EACA,uBAAA;EACA,cAAA;CACA;AACA;EACA,0BAAA;EACA,eAAA;CACA;AACA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;EACA,sBAAA;CACA;AACA;EACA,iBAAA;EACA,cAAA;EACA,0BAAA;EACA,wBAAA;EACA,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,cAAA;CACA;AACA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;EACA,gBAAA;CACA","file":"NewProfilePage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-new-profile-page\">\n    <nav id=\"patchouli-npp-nav\">\n      <a\n        id=\"patchouli-npp-all\"\n        :class=\"{'current': nppType === 0}\"\n        :href=\"`/member.php?id=${uid}`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.contents') }}</a>\n      <a\n        id=\"patchouli-npp-illust\"\n        :class=\"{'current': nppType === 1}\"\n        :href=\"`/member_illust.php?id=${uid}&type=illust`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.illustrations') }}</a>\n      <a\n        id=\"patchouli-npp-manga\"\n        :class=\"{'current': nppType === 2}\"\n        :href=\"`/member_illust.php?id=${uid}&type=manga`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.manga') }}</a>\n      <a\n        id=\"patchouli-npp-bookmark\"\n        :class=\"{'current': nppType === 3}\"\n        :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.bookmarks') }}</a>\n    </nav>\n    <div id=\"patchouli-npp-view\">\n      <div\n        v-show=\"isSelfBookmarkPage\"\n        id=\"patchouli-npp-view-bookmark-switch\"\n        class=\"ω\">\n        <nav>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-public\"\n            :class=\"{'current': !isSelfPrivateBookmarkPage}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.publicBookmark') }}</a>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-private\"\n            :class=\"{'current': isSelfPrivateBookmarkPage}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=hide`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.privateBookmark') }}</a>\n        </nav>\n      </div>\n      <div id=\"patchouli-npp-view-header\"/>\n      <ul id=\"patchouli-npp-view-image-item-list\" class=\"ω\">\n        <NewDefaultImageItem\n          v-for=\"d in nppProcessedLibrary\"\n          v-show=\"d._show\"\n          :key=\"d.illustId\"\n          :illust-id=\"d.illustId\"\n          :bookmark-count=\"d.bookmarkCount\"\n          :bookmark-id=\"d.bookmarkId\"\n          :is-bookmarked=\"d.isBookmarked\"\n          :is-followed=\"d.isFollowed\"\n          :is-ugoira=\"d.isUgoira\"\n          :illust-page-count=\"d.illustPageCount\"\n          :illust-title=\"d.illustTitle\"\n          :thumb-img-url=\"d.urls.thumb\"\n          :profile-img-url=\"d.profileImg\"\n          :user-id=\"d.userId\"\n          :user-name=\"d.userName\"\n          :show-user-profile=\"uid !== d.userId\"/>\n        <span v-show=\"hasNoResult\" id=\"patchouli-npp-view-no-result\">\n          {{ $t('mainView.newProfilePage.noResult') }}\n        </span>\n      </ul>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { MAIN_PAGE_TYPE as MPT } from '../lib/enums';\nimport { $el } from '../lib/utils';\nimport NewDefaultImageItem from './NewDefaultImageItem.vue';\n\nexport default {\n  components: { NewDefaultImageItem },\n  data() {\n    return {\n      routeIsInited: Array(4).fill(false),\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    hasNoResult() {\n      return !this.nppProcessedLibrary.filter(d => d._show).length;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    isSelfPrivateBookmarkPage() {\n      return this.isSelfBookmarkPage && this.rest === 'hide';\n    },\n    nppProcessedLibrary() {\n      return this.$store.getters['pixiv/nppProcessedLibrary'];\n    },\n    nppType() {\n      return this.$store.getters['pixiv/nppType'];\n    },\n    rest() {\n      return this.$store.getters.sp.rest;\n    },\n    uid() {\n      return this.$store.getters.sp.id;\n    },\n  },\n  mounted() {\n    this.$nextTick(() => {\n      this.routeIsInited[this.nppType] = true;\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    async clickRoute(event) {\n      await this.$store.dispatch('pixiv/pause');\n      const tid = event.currentTarget.id;\n      const thref = event.currentTarget.href;\n\n      if (this.isSamePath(location.href, thref)) {\n        return;\n      }\n\n      history.pushState(null, '', thref);\n\n      switch (tid) {\n      case 'patchouli-npp-all':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE,\n        });\n        break;\n      case 'patchouli-npp-illust':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_ILLUST,\n        });\n        break;\n      case 'patchouli-npp-manga':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_MANGA,\n        });\n        break;\n      case 'patchouli-npp-bookmark':\n      case 'patchouli-npp-view-bookmark-switch-public':\n      case 'patchouli-npp-view-bookmark-switch-private':\n        this.$store.commit('updateSearchParam');\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_BOOKMARK,\n        });\n        break;\n      default:\n        break;\n      }\n      if (!this.routeIsInited[this.nppType]) {\n        this.$store.dispatch('pixiv/start', { force: true, times: 1 });\n        this.routeIsInited[this.nppType] = true;\n      }\n    },\n    isSamePath(href0, href1) {\n      const a0 = $el('a', { href: href0 });\n      const a1 = $el('a', { href: href1 });\n      if (a0.pathname !== a1.pathname) {\n        return false;\n      }\n      const sp0 = new URLSearchParams(a0.search);\n      const sp1 = new URLSearchParams(a1.search);\n      const keysSet = new Set([...sp0.keys(), ...sp1.keys()]);\n      for (const k of keysSet) {\n        if (sp0.get(k) !== sp1.get(k)) {\n          return false;\n        }\n      }\n      return true;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-npp-nav {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view-bookmark-switch {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result {\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n  padding: 30px 0;\n}\n</style>\n\n\n"]}, media: undefined });
+    inject("data-v-ef621a98_0", { source: "\n#patchouli-npp-nav[data-v-ef621a98] {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a[data-v-ef621a98] {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a[data-v-ef621a98]:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current[data-v-ef621a98] {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view[data-v-ef621a98] {\n  display: flex;\n  flex-flow: column;\n  min-height: 340px;\n  align-items: center;\n}\n#patchouli-npp-view-bookmark-switch[data-v-ef621a98] {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current[data-v-ef621a98] {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a[data-v-ef621a98] {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list[data-v-ef621a98] {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result[data-v-ef621a98] {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/NewProfilePage.vue"],"names":[],"mappings":";AAmLA;EACA,cAAA;EACA,wBAAA;EACA,0BAAA;EACA,YAAA;CACA;AACA;EACA,kCAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;EACA,mBAAA;EACA,sBAAA;EACA,uBAAA;CACA;AACA;EACA,YAAA;EACA,gBAAA;CACA;AACA;EACA,YAAA;EACA,iCAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,kBAAA;EACA,oBAAA;CACA;AACA;EACA,cAAA;EACA,0BAAA;EACA,uBAAA;EACA,cAAA;CACA;AACA;EACA,0BAAA;EACA,eAAA;CACA;AACA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;EACA,sBAAA;CACA;AACA;EACA,iBAAA;EACA,cAAA;EACA,0BAAA;EACA,wBAAA;EACA,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,cAAA;CACA;AACA;EACA,QAAA;EACA,qBAAA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;CACA","file":"NewProfilePage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-new-profile-page\">\n    <nav id=\"patchouli-npp-nav\">\n      <a\n        id=\"patchouli-npp-all\"\n        :class=\"{'current': nppType === 0}\"\n        :href=\"`/member.php?id=${uid}`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.contents') }}</a>\n      <a\n        id=\"patchouli-npp-illust\"\n        :class=\"{'current': nppType === 1}\"\n        :href=\"`/member_illust.php?id=${uid}&type=illust`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.illustrations') }}</a>\n      <a\n        id=\"patchouli-npp-manga\"\n        :class=\"{'current': nppType === 2}\"\n        :href=\"`/member_illust.php?id=${uid}&type=manga`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.manga') }}</a>\n      <a\n        id=\"patchouli-npp-bookmark\"\n        :class=\"{'current': nppType === 3}\"\n        :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.bookmarks') }}</a>\n    </nav>\n    <div id=\"patchouli-npp-view\">\n      <div\n        v-show=\"isSelfBookmarkPage\"\n        id=\"patchouli-npp-view-bookmark-switch\"\n        class=\"ω\">\n        <nav>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-public\"\n            :class=\"{'current': !isSelfPrivateBookmarkPage}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.publicBookmark') }}</a>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-private\"\n            :class=\"{'current': isSelfPrivateBookmarkPage}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=hide`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.privateBookmark') }}</a>\n        </nav>\n      </div>\n      <div id=\"patchouli-npp-view-header\"/>\n      <ul\n        v-show=\"!hasNoResult\"\n        id=\"patchouli-npp-view-image-item-list\"\n        class=\"ω\">\n        <NewDefaultImageItem\n          v-for=\"d in nppProcessedLibrary\"\n          v-show=\"d._show\"\n          :key=\"d.illustId\"\n          :illust-id=\"d.illustId\"\n          :bookmark-count=\"d.bookmarkCount\"\n          :bookmark-id=\"d.bookmarkId\"\n          :is-bookmarked=\"d.isBookmarked\"\n          :is-followed=\"d.isFollowed\"\n          :is-ugoira=\"d.isUgoira\"\n          :illust-page-count=\"d.illustPageCount\"\n          :illust-title=\"d.illustTitle\"\n          :thumb-img-url=\"d.urls.thumb\"\n          :profile-img-url=\"d.profileImg\"\n          :user-id=\"d.userId\"\n          :user-name=\"d.userName\"\n          :show-user-profile=\"uid !== d.userId\"/>\n      </ul>\n      <span v-show=\"hasNoResult\" id=\"patchouli-npp-view-no-result\">\n        {{ $t('mainView.newProfilePage.noResult') }}\n      </span>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { MAIN_PAGE_TYPE as MPT } from '../lib/enums';\nimport { $el } from '../lib/utils';\nimport NewDefaultImageItem from './NewDefaultImageItem.vue';\n\nexport default {\n  components: { NewDefaultImageItem },\n  data() {\n    return {\n      routeIsInited: Array(4).fill(false),\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    hasNoResult() {\n      return !this.nppProcessedLibrary.filter(d => d._show).length;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    isSelfPrivateBookmarkPage() {\n      return this.isSelfBookmarkPage && this.rest === 'hide';\n    },\n    nppProcessedLibrary() {\n      return this.$store.getters['pixiv/nppProcessedLibrary'];\n    },\n    nppType() {\n      return this.$store.getters['pixiv/nppType'];\n    },\n    rest() {\n      return this.$store.getters.sp.rest;\n    },\n    uid() {\n      return this.$store.getters.sp.id;\n    },\n  },\n  mounted() {\n    this.$nextTick(() => {\n      this.routeIsInited[this.nppType] = true;\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    async clickRoute(event) {\n      await this.$store.dispatch('pixiv/pause');\n      const tid = event.currentTarget.id;\n      const thref = event.currentTarget.href;\n\n      if (this.isSamePath(location.href, thref)) {\n        return;\n      }\n\n      history.pushState(null, '', thref);\n\n      switch (tid) {\n      case 'patchouli-npp-all':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE,\n        });\n        break;\n      case 'patchouli-npp-illust':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_ILLUST,\n        });\n        break;\n      case 'patchouli-npp-manga':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_MANGA,\n        });\n        break;\n      case 'patchouli-npp-bookmark':\n      case 'patchouli-npp-view-bookmark-switch-public':\n      case 'patchouli-npp-view-bookmark-switch-private':\n        this.$store.commit('updateSearchParam');\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_BOOKMARK,\n        });\n        break;\n      default:\n        break;\n      }\n      if (!this.routeIsInited[this.nppType]) {\n        this.$store.dispatch('pixiv/start', { force: true, times: 1 });\n        this.routeIsInited[this.nppType] = true;\n      }\n    },\n    isSamePath(href0, href1) {\n      const a0 = $el('a', { href: href0 });\n      const a1 = $el('a', { href: href1 });\n      if (a0.pathname !== a1.pathname) {\n        return false;\n      }\n      const sp0 = new URLSearchParams(a0.search);\n      const sp1 = new URLSearchParams(a1.search);\n      const keysSet = new Set([...sp0.keys(), ...sp1.keys()]);\n      for (const k of keysSet) {\n        if (sp0.get(k) !== sp1.get(k)) {\n          return false;\n        }\n      }\n      return true;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-npp-nav {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view {\n  display: flex;\n  flex-flow: column;\n  min-height: 340px;\n  align-items: center;\n}\n#patchouli-npp-view-bookmark-switch {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n}\n</style>\n\n\n"]}, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$a = "data-v-51e86e78";
+  const __vue_scope_id__$a = "data-v-ef621a98";
   /* module identifier */
   const __vue_module_identifier__$a = undefined;
   /* functional template */

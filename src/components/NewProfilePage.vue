@@ -41,7 +41,10 @@
         </nav>
       </div>
       <div id="patchouli-npp-view-header"/>
-      <ul id="patchouli-npp-view-image-item-list" class="ω">
+      <ul
+        v-show="!hasNoResult"
+        id="patchouli-npp-view-image-item-list"
+        class="ω">
         <NewDefaultImageItem
           v-for="d in nppProcessedLibrary"
           v-show="d._show"
@@ -59,10 +62,10 @@
           :user-id="d.userId"
           :user-name="d.userName"
           :show-user-profile="uid !== d.userId"/>
-        <span v-show="hasNoResult" id="patchouli-npp-view-no-result">
-          {{ $t('mainView.newProfilePage.noResult') }}
-        </span>
       </ul>
+      <span v-show="hasNoResult" id="patchouli-npp-view-no-result">
+        {{ $t('mainView.newProfilePage.noResult') }}
+      </span>
     </div>
   </div>
 </template>
@@ -198,6 +201,12 @@ export default {
   color: #333;
   border-bottom: 4px solid #0096fa;
 }
+#patchouli-npp-view {
+  display: flex;
+  flex-flow: column;
+  min-height: 340px;
+  align-items: center;
+}
 #patchouli-npp-view-bookmark-switch {
   display: flex;
   justify-content: flex-end;
@@ -227,11 +236,13 @@ export default {
   width: 1300px;
 }
 #patchouli-npp-view-no-result {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
   color: #b8b8b8;
   font-size: 20px;
   font-weight: 700;
   line-height: 1;
-  padding: 30px 0;
 }
 </style>
 
