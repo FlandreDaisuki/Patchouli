@@ -1276,6 +1276,7 @@ const mutations$3 = {
     }
 
     const path = location.pathname;
+
     const _id = state.searchParam.id;
     const _type = state.searchParam.type;
     const _mode = state.searchParam.mode;
@@ -1311,7 +1312,13 @@ const mutations$3 = {
       }
       break;
     case '/bookmark.php': {
-      state.mainPageType = (!_id) ? MAIN_PAGE_TYPE.SELF_BOOKMARK : MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+      if (_type) {
+        // ?id={userId}&type=user
+        // ?id={userId}&type=reg_user
+        state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
+      } else {
+        state.mainPageType = (!_id) ? MAIN_PAGE_TYPE.SELF_BOOKMARK : MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+      }
       break;
     }
     default:

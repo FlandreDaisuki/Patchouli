@@ -1177,7 +1177,11 @@
         }
         break;
       case '/bookmark.php': {
-        state.mainPageType = (!_id) ? MAIN_PAGE_TYPE.SELF_BOOKMARK : MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+        if (_type) {
+          state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
+        } else {
+          state.mainPageType = (!_id) ? MAIN_PAGE_TYPE.SELF_BOOKMARK : MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+        }
         break;
       }
       default:

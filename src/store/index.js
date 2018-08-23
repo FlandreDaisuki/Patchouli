@@ -133,6 +133,7 @@ const mutations = {
     }
 
     const path = location.pathname;
+
     const _id = state.searchParam.id;
     const _type = state.searchParam.type;
     const _mode = state.searchParam.mode;
@@ -168,7 +169,13 @@ const mutations = {
       }
       break;
     case '/bookmark.php': {
-      state.mainPageType = (!_id) ? MPT.SELF_BOOKMARK : MPT.NEW_PROFILE_BOOKMARK;
+      if (_type) {
+        // ?id={userId}&type=user
+        // ?id={userId}&type=reg_user
+        state.mainPageType = MPT.NO_SUPPORT;
+      } else {
+        state.mainPageType = (!_id) ? MPT.SELF_BOOKMARK : MPT.NEW_PROFILE_BOOKMARK;
+      }
       break;
     }
     default:
