@@ -234,7 +234,7 @@ const actions = {
       state.mountPointCtrlPanel = $el('div', null, async(el) => {
         if (getters['pixiv/nppType'] >= 0) {
           await $ready(() => $('.sLHPYEz'));
-          $after($('.sLHPYEz'), el);
+          $after($('.sLHPYEz').parentNode, el);
         } else {
           $after($('header._global-header'), el);
         }

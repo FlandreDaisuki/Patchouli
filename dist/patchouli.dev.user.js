@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.2.0-alpha.10
+// @version           4.2.0-alpha.11
 // @grant             unsafeWindow
 // @grant             GM_getValue
 // @grant             GM.getValue
@@ -1428,7 +1428,7 @@
         state.mountPointCtrlPanel = $el('div', null, async(el) => {
           if (getters['pixiv/nppType'] >= 0) {
             await $ready(() => $('.sLHPYEz'));
-            $after($('.sLHPYEz'), el);
+            $after($('.sLHPYEz').parentNode, el);
           } else {
             $after($('header._global-header'), el);
           }
