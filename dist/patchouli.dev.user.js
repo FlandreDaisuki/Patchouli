@@ -1331,6 +1331,7 @@
       const _id = state.searchParam.id;
       const _type = state.searchParam.type;
       const _mode = state.searchParam.mode;
+      const _rest = state.searchParam.rest;
 
       switch (path) {
       case '/search.php':
@@ -1353,7 +1354,7 @@
           state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
           break;
         }
-        // MPT.NEW_PROFILE_ILLUST: (_type === 'illust') || (!_type)
+
         if (_type === 'manga') {
           state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE_MANGA; // pool = manga
         } else if (_type === 'illust') {
@@ -1363,12 +1364,19 @@
         }
         break;
       case '/bookmark.php': {
-        if (_type) {
+        if (_rest && _id) {
+          // ?id={userId}&rest=show
+          // ?id={userId}&rest=hide
+          state.mainPageType =  MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+        } else if (_type === 'user' || _type === 'reg_user') {
           // ?id={userId}&type=user
           // ?id={userId}&type=reg_user
           state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
         } else {
-          state.mainPageType = (!_id) ? MAIN_PAGE_TYPE.SELF_BOOKMARK : MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+          // ?
+          // ?untagged=1
+          // ?type=illust_all
+          state.mainPageType = MAIN_PAGE_TYPE.SELF_BOOKMARK;
         }
         break;
       }

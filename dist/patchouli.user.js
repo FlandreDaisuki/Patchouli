@@ -1147,6 +1147,7 @@
       const _id = state.searchParam.id;
       const _type = state.searchParam.type;
       const _mode = state.searchParam.mode;
+      const _rest = state.searchParam.rest;
       switch (path) {
       case '/search.php':
         state.mainPageType = MAIN_PAGE_TYPE.SEARCH;
@@ -1177,10 +1178,12 @@
         }
         break;
       case '/bookmark.php': {
-        if (_type) {
+        if (_rest && _id) {
+          state.mainPageType =  MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+        } else if (_type === 'user' || _type === 'reg_user') {
           state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
         } else {
-          state.mainPageType = (!_id) ? MAIN_PAGE_TYPE.SELF_BOOKMARK : MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+          state.mainPageType = MAIN_PAGE_TYPE.SELF_BOOKMARK;
         }
         break;
       }
