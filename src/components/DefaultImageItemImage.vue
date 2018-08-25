@@ -27,7 +27,7 @@
         ref="smallUgoiraPreview"/>
     </a>
     <div class="bookmark-heart-block">
-      <IconBookmarkHeart :active="selfIsBookmarked" @click.left.prevent.stop="oneClickBookmarkAdd"/>
+      <IconBookmarkHeart :actived="selfIsBookmarked" @click.left.prevent.stop="oneClickBookmarkAdd"/>
     </div>
     <div v-if="isSelfBookmarkPage" class="bookmark-input-container">
       <input
