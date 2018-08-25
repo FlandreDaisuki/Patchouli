@@ -52,10 +52,12 @@ export const makeRuleFunc = (rule, target) => {
       $print.log('tagMatcher#makeRuleFunc: Unknown ruleList', ruleList);
       return defaultFunc;
     }
-    if (opList.every(isOrOp)) {
-      return () => funcList.some(fn => fn());
-    } else if (opList.every(isAndOp)) {
+
+    if (opList.every(isAndOp)) {
+      // include opList.length === 0
       return () => funcList.every(fn => fn());
+    } else if (opList.every(isOrOp)) {
+      return () => funcList.some(fn => fn());
     } else {
       $print.log('tagMatcher#makeRuleFunc: Mixed condition operators without grouping', ruleList);
       return defaultFunc;

@@ -28,4 +28,8 @@ export default [{
   answer: [1, 0, 0, 1, 1, 0].map(Boolean),
   problem: tagStrList,
   rule: '{-レミ && スカーレット} || 風景',
+}, {
+  answer: [0, 0, 0, 1, 1, 0].map(Boolean),
+  problem: tagStrList,
+  rule: '-レミ スカーレット',
 }];
