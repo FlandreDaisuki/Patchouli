@@ -46,6 +46,32 @@ vuexStore.dispatch('init')
       $('._global-header').classList.add('koakuma-placeholder');
     }
 
+    // hijack link
+    if (vuexStore.getters.MPT === MPT.SEARCH) {
+      const menuItems = $('ul.menu-items');
+      [...menuItems.children].forEach((item, index) => {
+        const textContent = item.textContent;
+        const a = $el('a', { href: 'javascript:;', textContent });
+        item.removeChild(item.firstChild);
+        item.appendChild(a);
+
+        item.addEventListener('click', () => {
+          [...menuItems.children].forEach(_item => _item.classList.remove('current'));
+          item.classList.add('current');
+
+          const target = $('#koakuma-bookmark-tags-filter-input');
+          if (index === 1) {
+            target.value = '-R-18';
+          } else if (index === 2) {
+            target.value = 'R-18';
+          } else {
+            target.value = '';
+          }
+          Koakuma.$children[0].tagsFilterInput({ target });
+        });
+      });
+    }
+
     /* eslint-disable sort-keys */
     const Koakuma = new Vue({
       i18n,

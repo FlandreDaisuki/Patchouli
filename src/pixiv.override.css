@@ -10,6 +10,11 @@
      but it should preserve 42px to keep all spacing correct */
   margin-bottom: 42px;
 }
+ul.menu-items > li.current > a {
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}
 #toolbar-items {
   z-index: 5;
 }
