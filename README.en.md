@@ -19,10 +19,12 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 - The UI with i18n (en, ja, zh-cn, zh-tw)
 - Filter by **bookmarks count**<br>
   ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
-- Filter by **tags with regexp**<br>
+- Filter by **Tag Filter Query**<br>
   ![tags filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tags-filter.png)
-   - example of tags or part of tags: `flandre`, `users入り`
-   - example of regexp: `flandre|koishi`, `\d{3,}users入り`
+   - Basic examples: `flandre`, `users入り`, `-R-18`
+   - Logical operator examples: `flandre || koishi`, `touhou && R-18`
+   - complicated examples: `touhou && {flandre || alice}`
+   - More details in [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
 - Sort by **bookmarks count or upload time**<br>
   ![sorting by](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/sorting-by.png)
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
@@ -62,6 +64,7 @@ Copyright (c) 2016-2018 FlandreDaisuki
 - Refactoring code
 - Support [new profile page](https://www.pixiv.net/info.php?id=4704)
 - Support mouse wheel in showing original images
+- Change tag filter from **RegExp** to **Tag Filter Query**
 - Adjust styles
 
 2018-08-03 v4.1.10

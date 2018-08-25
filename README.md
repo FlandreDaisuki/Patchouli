@@ -19,10 +19,12 @@
 - 部份 i18n 界面 (en, ja, zh-cn, zh-tw)
 - 以 **收藏數** 過濾結果<br>
   ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
-- 以 **標籤正規表達式** 過濾結果<br>
+- 以 **標籤過濾查詢式** 過濾結果<br>
   ![tags filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tags-filter.png)
-   - 完整／部份標籤範例： `芙蘭朵露`, `users入り`
-   - 正規表達式範例： `芙蘭朵露|古明地戀`, `\d{3,}users入り`
+   - 基本範例： `芙蘭朵露`, `users入り`, `-R-18`
+   - 邏輯運算子範例： `芙蘭朵露 || 古明地戀`, `東方 && R-18`
+   - 複雜範例：`東方 && {フラン || アリス}`
+   - 詳細請見 [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
 - 以 **人氣／日期** 排序結果<br>
   ![sorting by](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/sorting-by.png)
 - 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> 切換寬度
@@ -62,6 +64,7 @@ Copyright (c) 2016-2018 FlandreDaisuki
 - 內部程式碼重構
 - 支援[新版作者頁](https://www.pixiv.net/info.php?id=4704)
 - 原圖預覽支援滾輪翻頁
+- 將標籤過濾器的語言規則從**標籤正規表達式**改成**標籤過濾查詢式**
 - 部份樣式調整
 
 2018-08-03 v4.1.10
