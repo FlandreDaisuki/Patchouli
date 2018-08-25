@@ -3,7 +3,8 @@
     "es6": true,
     "node": true,
     "browser": true,
-    "greasemonkey": true
+    "greasemonkey": true,
+    "mocha": true
   },
   "globals": {
     "saveAs": true,
