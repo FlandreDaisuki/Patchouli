@@ -34,7 +34,7 @@
     <div>
       <input
         id="koakuma-bookmark-tags-filter-input"
-        :placeholder="$t('ctrlPanel.tagsPlaceholder')"
+        :placeholder="$t('ctrlPanel.tagFilterQueryPlaceholder')"
         type="text"
         @input="tagsFilterInput">
     </div>
@@ -248,7 +248,7 @@ export default {
       this.debounceId4tagsFilter = setTimeout(() => {
         this.debounceId4tagsFilter = null;
         this.$store.commit('setFilters', {
-          tag: new RegExp(event.target.value, 'ig'),
+          query: event.target.value,
         });
       }, 1500);
     },

@@ -43,7 +43,7 @@ const state = {
   ctrlPanelOffsetY: 0,
   filters: {
     limit: 0,
-    tag: new RegExp('', 'i'),
+    query: '',
   },
   locale: document.documentElement.lang.toLowerCase(),
   loginData: null,

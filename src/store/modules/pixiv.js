@@ -1,5 +1,6 @@
 import { PixivAPI } from '../../lib/pixiv';
 import { $print, toInt } from '../../lib/utils';
+import tagFilterQuerier from '../../lib/tagFilterQuerier';
 import { MAIN_PAGE_TYPE as MPT } from '../../lib/enums';
 
 const makeNewTag = (tag) => {
@@ -82,7 +83,7 @@ const getters = {
 
     const isToShow = (d) => {
       return d.bookmarkCount >= filters.limit &&
-        d.tags.match(filters.tag) &&
+        tagFilterQuerier.isMatched(filters.query, d.tags) &&
         !config.blacklist.includes(d.userId);
     };
 
@@ -123,7 +124,7 @@ const getters = {
     const isToShow = (d) => {
       const conds = [
         d.bookmarkCount >= filters.limit,
-        d.tags.match(filters.tag),
+        tagFilterQuerier.isMatched(filters.query, d.tags),
         !config.blacklist.includes(d.userId),
       ];
 

@@ -27,7 +27,7 @@ const en = {
     sortByBookmarkId: 'sort by bookmark id',
     sortByDate: 'sort by date',
     sortByPopularity: 'sort by popularity',
-    tagsPlaceholder: 'tags filter example: flandre|sister',
+    tagFilterQueryPlaceholder: 'tags filter example: flandre || sister',
   },
   mainView: {
     bookmarkTooltip: '{count} bookmarks',
@@ -66,7 +66,7 @@ const ja = {
     sortByBookmarkId: 'ブックマーク順',
     sortByDate: '投稿順',
     sortByPopularity: '人気順',
-    tagsPlaceholder: 'タグフィルター 例: フランドール|妹様',
+    tagFilterQueryPlaceholder: 'タグフィルター 例: フランドール || 妹様',
   },
   mainView: {
     bookmarkTooltip: '{count} 件のブックマーク',
@@ -105,7 +105,7 @@ const zhCN = {
     sortByBookmarkId: '以加入顺序排序',
     sortByDate: '以日期排序',
     sortByPopularity: '以人气排序',
-    tagsPlaceholder: '标签过滤 例: 芙兰朵露|二小姐',
+    tagFilterQueryPlaceholder: '标签过滤 例: 芙兰朵露 || 二小姐',
   },
   mainView: {
     bookmarkTooltip: '{count} 个收藏',
@@ -144,7 +144,7 @@ const zhTW = {
     sortByBookmarkId: '以加入順序排序',
     sortByDate: '以日期排序',
     sortByPopularity: '以人氣排序',
-    tagsPlaceholder: '標籤過濾 例: 芙蘭朵露|二小姐',
+    tagFilterQueryPlaceholder: '標籤過濾 例: 芙蘭朵露 || 二小姐',
   },
   mainView: {
     bookmarkTooltip: '{count} 個收藏',

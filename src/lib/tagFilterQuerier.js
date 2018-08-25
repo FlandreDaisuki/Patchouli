@@ -64,3 +64,8 @@ export const makeRuleFunc = (rule, target) => {
     }
   }
 };
+
+export default {
+  isMatched,
+  makeRuleFunc,
+};
