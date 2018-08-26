@@ -63,7 +63,7 @@
           :user-name="d.userName"
           :show-user-profile="uid !== d.userId"/>
       </ul>
-      <span v-show="hasNoResult && routeIsInited[nppType]" id="patchouli-npp-view-no-result">
+      <span v-show="hasNoResult" id="patchouli-npp-view-no-result">
         {{ $t('mainView.newProfilePage.noResult') }}
       </span>
       <span v-show="!status.isPaused" id="patchouli-npp-view-loading">
