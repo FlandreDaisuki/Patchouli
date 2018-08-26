@@ -21,7 +21,6 @@ const makeLibraryData = ({ illustDataGroup, userDataGroup }) => {
   for (const [illustId, illustData] of Object.entries(illustDataGroup)) {
     const allTags = illustData.tags.tags.map(makeNewTag).join('\x00');
     const d = {
-      _show: true,
       bookmarkCount: illustData.bookmarkCount,
       bookmarkId: '',
       illustId,
@@ -75,7 +74,7 @@ const state = {
 
 const getters = {
   batchSize: (state) => state.batchSize,
-  defaultProcessedLibrary: (state, getters, rootState, rootGetters) => {
+  defaultDisplayIndices: (state, getters, rootState, rootGetters) => {
     const clonedLib = state.imageItemLibrary.slice();
     const { sp, filters, config, orderBy } = rootGetters;
     const dateOldFirst = sp.order === 'date';
@@ -88,13 +87,16 @@ const getters = {
     };
 
     const shows = [], hides = [];
-    for (const d of clonedLib) {
+    for (const [i, d] of clonedLib.entries()) {
       const s = isToShow(d);
-      d._show = s;
+      const o = {
+        index: i,
+        [orderBy]: d[orderBy],
+      };
       if (s) {
-        shows.push(d);
+        shows.push(o);
       } else {
-        hides.push(d);
+        hides.push(o);
       }
     }
 
@@ -114,10 +116,13 @@ const getters = {
       }
     });
 
-    return shows.concat(hides);
+    return {
+      hides: hides.map(item => item.index),
+      shows: shows.map(item => item.index),
+    };
   },
   imageItemLibrary: (state) => state.imageItemLibrary,
-  nppProcessedLibrary: (state, getters, rootState, rootGetters) => {
+  nppDisplayIndices: (state, getters, rootState, rootGetters) => {
     const clonedLib = state.imageItemLibrary.slice();
     const { filters, config, orderBy, sp } = rootGetters;
     const { nppType } = getters;
@@ -152,13 +157,16 @@ const getters = {
     };
 
     const shows = [], hides = [];
-    for (const d of clonedLib) {
+    for (const [i, d] of clonedLib.entries()) {
       const s = isToShow(d);
-      d._show = s;
+      const o = {
+        index: i,
+        [orderBy]: d[orderBy],
+      };
       if (s) {
-        shows.push(d);
+        shows.push(o);
       } else {
-        hides.push(d);
+        hides.push(o);
       }
     }
 
@@ -168,7 +176,10 @@ const getters = {
       return bv - av;
     });
 
-    return shows.concat(hides);
+    return {
+      hides: hides.map(item => item.index),
+      shows: shows.map(item => item.index),
+    };
   },
   nppType: (state, getters, rootState, rootGetters) => {
     const types = [

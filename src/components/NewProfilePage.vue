@@ -46,8 +46,8 @@
         id="patchouli-npp-view-image-item-list"
         class="ω">
         <NewDefaultImageItem
-          v-for="d in nppProcessedLibrary"
-          v-show="d._show"
+          v-for="(d, index) in nppProcessedLibrary"
+          v-show="index < imageToShowCount"
           :key="d.illustId"
           :illust-id="d.illustId"
           :bookmark-count="d.bookmarkCount"
@@ -85,7 +85,11 @@ export default {
   // eslint-disable-next-line sort-keys
   computed: {
     hasNoResult() {
-      return !this.nppProcessedLibrary.filter(d => d._show).length;
+      return !this.imageToShowCount;
+    },
+    imageToShowCount() {
+      const { shows } = this.$store.getters['pixiv/nppDisplayIndices'];
+      return shows.length;
     },
     isSelfBookmarkPage() {
       return this.$store.getters.isSelfBookmarkPage;
@@ -94,7 +98,10 @@ export default {
     //   return this.isSelfBookmarkPage && this.rest === 'hide';
     // },
     nppProcessedLibrary() {
-      return this.$store.getters['pixiv/nppProcessedLibrary'];
+      const { shows, hides } = this.$store.getters['pixiv/nppDisplayIndices'];
+      const iiLib = this.$store.getters['pixiv/imageItemLibrary'];
+
+      return shows.concat(hides).map(idx => iiLib[idx]);
     },
     nppType() {
       return this.$store.getters['pixiv/nppType'];

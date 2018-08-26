@@ -64,7 +64,7 @@ export default {
       if (!this.xdata) {
         return null;
       }
-      const lib = this.$store.getters['pixiv/defaultProcessedLibrary'];
+      const lib = this.$store.getters['pixiv/imageItemLibrary'];
       const found = lib.find(i => i.illustId === this.xdata.illustId);
       return found ? found : null;
     },

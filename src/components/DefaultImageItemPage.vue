@@ -1,8 +1,8 @@
 <template>
   <div id="patchouli-default-image-item-page">
     <DefaultImageItem
-      v-for="d in defaultProcessedLibrary"
-      v-show="d._show"
+      v-for="(d, index) in defaultProcessedLibrary"
+      v-show="index < imageToShowCount"
       :key="d.illustId"
       :img-url="d.urls.thumb"
       :illust-id="d.illustId"
@@ -26,7 +26,16 @@ export default {
   components: { DefaultImageItem },
   computed: {
     defaultProcessedLibrary() {
-      return this.$store.getters['pixiv/defaultProcessedLibrary'];
+      const { shows, hides } = this.$store.getters[
+        'pixiv/defaultDisplayIndices'
+      ];
+      const iiLib = this.$store.getters['pixiv/imageItemLibrary'];
+
+      return shows.concat(hides).map(idx => iiLib[idx]);
+    },
+    imageToShowCount() {
+      const { shows } = this.$store.getters['pixiv/defaultDisplayIndices'];
+      return shows.length;
     },
   },
 };
