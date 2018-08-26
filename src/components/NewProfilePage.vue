@@ -66,7 +66,7 @@
       <span v-show="hasNoResult" id="patchouli-npp-view-no-result">
         {{ $t('mainView.newProfilePage.noResult') }}
       </span>
-      <span v-show="!status.isPaused" id="patchouli-npp-view-loading">
+      <span v-show="!status.isPaused && !status.isEnded" id="patchouli-npp-view-loading">
         <IconLoadingSpin/>
       </span>
     </div>
