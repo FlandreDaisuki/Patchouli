@@ -66,7 +66,7 @@
       <span v-show="hasNoResult && routeIsInited[nppType]" id="patchouli-npp-view-no-result">
         {{ $t('mainView.newProfilePage.noResult') }}
       </span>
-      <span v-show="hasNoResult && !routeIsInited[nppType]" id="patchouli-npp-view-loading">
+      <span v-show="!status.isPaused" id="patchouli-npp-view-loading">
         <IconLoadingSpin/>
       </span>
     </div>
@@ -112,6 +112,9 @@ export default {
     },
     rest() {
       return this.$store.getters.sp.rest;
+    },
+    status() {
+      return this.$store.getters['pixiv/status'];
     },
     uid() {
       return this.$store.getters.sp.id;
@@ -163,7 +166,7 @@ export default {
         break;
       }
       if (!this.routeIsInited[this.nppType]) {
-        await this.$store.dispatch('pixiv/start', { force: true, times: 1 });
+        this.$store.dispatch('pixiv/start', { force: true, times: 1 });
         this.routeIsInited[this.nppType] = true;
       }
     },
