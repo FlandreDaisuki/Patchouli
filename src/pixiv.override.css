@@ -76,6 +76,8 @@ iframe,
 :root {
   --new-default-image-item-square-size: 184px;
   --default-image-item-image-square-size: 200px;
+  --loading-icon-size: 72px;
+  --loading-icon-color: #0096fa;
 }
 
 /* dotted focus */

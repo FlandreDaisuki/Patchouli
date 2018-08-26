@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.2.0-alpha.14
+// @version           4.2.0-alpha.15
 // @grant             unsafeWindow
 // @grant             GM_getValue
 // @grant             GM.getValue
@@ -51,7 +51,7 @@
   VueI18n = VueI18n && VueI18n.hasOwnProperty('default') ? VueI18n['default'] : VueI18n;
   Vuex = Vuex && Vuex.hasOwnProperty('default') ? Vuex['default'] : Vuex;
 
-  __$styleInject("._global-header {\n  z-index: 4;\n  position: relative;\n}\n._global-header .ui-search {\n  z-index: auto;\n}\n._global-header.koakuma-placeholder {\n  /* I don't know why #koakuma just 32px\n     but it should preserve 42px to keep all spacing correct */\n  margin-bottom: 42px;\n}\nul.menu-items > li.current > a {\n  color: black;\n  font-weight: bold;\n  text-decoration: none;\n}\n#toolbar-items {\n  z-index: 5;\n}\n.ω {\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: center;\n  position: relative;\n}\n.ω,\n.ω .layout-a,\n.ω .layout-body {\n  transition: width 0.2s;\n}\n.ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n  width: 100% !important;\n}\n.ω.↔ .layout-a {\n  display: flex;\n  flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2 {\n  flex: 1;\n  margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n  margin: 10px 20px;\n}\n\n/* annoyings, ref: lib/pixiv.js */\n\niframe,\n/* Ad */\n.ad,\n.ads_area,\n.ad-footer,\n.ads_anchor,\n.ads-top-info,\n.comic-hot-works,\n.user-ad-container,\n.ads_area_no_margin,\n/* Premium */\n.hover-item,\n.ad-printservice,\n.bookmark-ranges,\n.require-premium,\n.showcase-reminder,\n.sample-user-search,\n.popular-introduction,\n._premium-lead-tag-search-bar,\n._premium-lead-popular-d-body,\n._premium-lead-promotion-banner {\n  display: none !important;\n}\n\n:root {\n  --new-default-image-item-square-size: 184px;\n  --default-image-item-image-square-size: 200px;\n}\n\n/* dotted focus */\na::-moz-focus-inner,\nbutton::-moz-focus-inner {\n  border: 0 !important;\n  outline: 0 !important;\n}\na:focus,\nbutton:focus {\n  outline: 0 !important;\n}\n");
+  __$styleInject("._global-header {\n  z-index: 4;\n  position: relative;\n}\n._global-header .ui-search {\n  z-index: auto;\n}\n._global-header.koakuma-placeholder {\n  /* I don't know why #koakuma just 32px\n     but it should preserve 42px to keep all spacing correct */\n  margin-bottom: 42px;\n}\nul.menu-items > li.current > a {\n  color: black;\n  font-weight: bold;\n  text-decoration: none;\n}\n#toolbar-items {\n  z-index: 5;\n}\n.ω {\n  display: flex;\n  flex-flow: row wrap;\n  justify-content: center;\n  position: relative;\n}\n.ω,\n.ω .layout-a,\n.ω .layout-body {\n  transition: width 0.2s;\n}\n.ω.↔,\n.ω.↔ .layout-a,\n.ω.↔ .layout-body {\n  width: 100% !important;\n}\n.ω.↔ .layout-a {\n  display: flex;\n  flex-direction: row-reverse;\n}\n.ω.↔ .layout-column-2 {\n  flex: 1;\n  margin-left: 20px;\n}\n.ω.↔ .layout-body,\n.ω.↔ .layout-a {\n  margin: 10px 20px;\n}\n\n/* annoyings, ref: lib/pixiv.js */\n\niframe,\n/* Ad */\n.ad,\n.ads_area,\n.ad-footer,\n.ads_anchor,\n.ads-top-info,\n.comic-hot-works,\n.user-ad-container,\n.ads_area_no_margin,\n/* Premium */\n.hover-item,\n.ad-printservice,\n.bookmark-ranges,\n.require-premium,\n.showcase-reminder,\n.sample-user-search,\n.popular-introduction,\n._premium-lead-tag-search-bar,\n._premium-lead-popular-d-body,\n._premium-lead-promotion-banner {\n  display: none !important;\n}\n\n:root {\n  --new-default-image-item-square-size: 184px;\n  --default-image-item-image-square-size: 200px;\n  --loading-icon-size: 72px;\n  --loading-icon-color: #0096fa;\n}\n\n/* dotted focus */\na::-moz-focus-inner,\nbutton::-moz-focus-inner {\n  border: 0 !important;\n  outline: 0 !important;\n}\na:focus,\nbutton:focus {\n  outline: 0 !important;\n}\n");
 
   /**
    * The differents between FOLLOWED_NEWS and ANCIENT_FOLLOWED_NEWS:
@@ -76,6 +76,8 @@
     BOOKMARK_ID: 1,
     ILLUST_ID: 0,
   };
+
+  const NPP_TYPE_COUNT = 5;
 
   const $ = (selector) => {
     return document.querySelector(selector);
@@ -806,7 +808,7 @@
     moveWindowPrivateBookmarkIndex: 0,
     nextUrl: location.href,
     nppStatus: {
-      isEnded: Array(5).fill(false),
+      isEnded: Array(NPP_TYPE_COUNT).fill(false),
       isPaused: true,
     },
     prefetchPool: {
@@ -4123,15 +4125,16 @@
     components: { DefaultImageItem },
     computed: {
       defaultProcessedLibrary() {
-        const { shows, hides } = this.$store.getters[
-          'pixiv/defaultDisplayIndices'
-        ];
+        const { shows, hides } = this.displayIndices;
         const iiLib = this.$store.getters['pixiv/imageItemLibrary'];
 
         return shows.concat(hides).map(idx => iiLib[idx]);
       },
+      displayIndices() {
+        return this.$store.getters['pixiv/defaultDisplayIndices'];
+      },
       imageToShowCount() {
-        const { shows } = this.$store.getters['pixiv/defaultDisplayIndices'];
+        const { shows } = this.displayIndices;
         return shows.length;
       },
     },
@@ -4183,11 +4186,11 @@
     /* style */
     const __vue_inject_styles__$7 = function (inject) {
       if (!inject) return
-      inject("data-v-7273087c_0", { source: "\n#patchouli-default-image-item-page[data-v-7273087c] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemPage.vue"],"names":[],"mappings":";AA4CA;EACA,cAAA;EACA,gBAAA;EACA,8BAAA;CACA","file":"DefaultImageItemPage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-default-image-item-page\">\n    <DefaultImageItem\n      v-for=\"(d, index) in defaultProcessedLibrary\"\n      v-show=\"index < imageToShowCount\"\n      :key=\"d.illustId\"\n      :img-url=\"d.urls.thumb\"\n      :illust-id=\"d.illustId\"\n      :illust-title=\"d.illustTitle\"\n      :illust-page-count=\"d.illustPageCount\"\n      :is-ugoira=\"d.isUgoira\"\n      :user-name=\"d.userName\"\n      :user-id=\"d.userId\"\n      :profile-img-url=\"d.profileImg\"\n      :bookmark-count=\"d.bookmarkCount\"\n      :is-bookmarked=\"d.isBookmarked\"\n      :is-followed=\"d.isFollowed\"\n      :bookmark-id=\"d.bookmarkId\" />\n  </div>\n</template>\n\n<script>\nimport DefaultImageItem from './DefaultImageItem.vue';\n\nexport default {\n  components: { DefaultImageItem },\n  computed: {\n    defaultProcessedLibrary() {\n      const { shows, hides } = this.$store.getters[\n        'pixiv/defaultDisplayIndices'\n      ];\n      const iiLib = this.$store.getters['pixiv/imageItemLibrary'];\n\n      return shows.concat(hides).map(idx => iiLib[idx]);\n    },\n    imageToShowCount() {\n      const { shows } = this.$store.getters['pixiv/defaultDisplayIndices'];\n      return shows.length;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-default-image-item-page {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n</style>\n\n\n"]}, media: undefined });
+      inject("data-v-ebe2fb1e_0", { source: "\n#patchouli-default-image-item-page[data-v-ebe2fb1e] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemPage.vue"],"names":[],"mappings":";AA6CA;EACA,cAAA;EACA,gBAAA;EACA,8BAAA;CACA","file":"DefaultImageItemPage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-default-image-item-page\">\n    <DefaultImageItem\n      v-for=\"(d, index) in defaultProcessedLibrary\"\n      v-show=\"index < imageToShowCount\"\n      :key=\"d.illustId\"\n      :img-url=\"d.urls.thumb\"\n      :illust-id=\"d.illustId\"\n      :illust-title=\"d.illustTitle\"\n      :illust-page-count=\"d.illustPageCount\"\n      :is-ugoira=\"d.isUgoira\"\n      :user-name=\"d.userName\"\n      :user-id=\"d.userId\"\n      :profile-img-url=\"d.profileImg\"\n      :bookmark-count=\"d.bookmarkCount\"\n      :is-bookmarked=\"d.isBookmarked\"\n      :is-followed=\"d.isFollowed\"\n      :bookmark-id=\"d.bookmarkId\" />\n  </div>\n</template>\n\n<script>\nimport DefaultImageItem from './DefaultImageItem.vue';\n\nexport default {\n  components: { DefaultImageItem },\n  computed: {\n    defaultProcessedLibrary() {\n      const { shows, hides } = this.displayIndices;\n      const iiLib = this.$store.getters['pixiv/imageItemLibrary'];\n\n      return shows.concat(hides).map(idx => iiLib[idx]);\n    },\n    displayIndices() {\n      return this.$store.getters['pixiv/defaultDisplayIndices'];\n    },\n    imageToShowCount() {\n      const { shows } = this.displayIndices;\n      return shows.length;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-default-image-item-page {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n</style>\n\n\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$7 = "data-v-7273087c";
+    const __vue_scope_id__$7 = "data-v-ebe2fb1e";
     /* module identifier */
     const __vue_module_identifier__$7 = undefined;
     /* functional template */
@@ -4984,31 +4987,218 @@
     );
 
   //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
+  //
 
-  var script$a = {
-    components: { NewDefaultImageItem },
+  var script$a = {};
+
+  /* script */
+              const __vue_script__$a = script$a;
+              
+  /* template */
+  var __vue_render__$a = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _vm._m(0)
+  };
+  var __vue_staticRenderFns__$a = [
+    function() {
+      var _vm = this;
+      var _h = _vm.$createElement;
+      var _c = _vm._self._c || _h;
+      return _c("div", { staticClass: "sk-cube-grid" }, [
+        _c("div", { staticClass: "sk-cube sk-cube1" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "sk-cube sk-cube2" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "sk-cube sk-cube3" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "sk-cube sk-cube4" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "sk-cube sk-cube5" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "sk-cube sk-cube6" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "sk-cube sk-cube7" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "sk-cube sk-cube8" }),
+        _vm._v(" "),
+        _c("div", { staticClass: "sk-cube sk-cube9" })
+      ])
+    }
+  ];
+  __vue_render__$a._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$a = function (inject) {
+      if (!inject) return
+      inject("data-v-3f445ab8_0", { source: "\n.sk-cube-grid[data-v-3f445ab8] {\n  width: var(--loading-icon-size);\n  height: var(--loading-icon-size);\n  margin: 100px auto;\n}\n.sk-cube-grid .sk-cube[data-v-3f445ab8] {\n  width: 33%;\n  height: 33%;\n  background-color: var(--loading-icon-color);\n  float: left;\n  -webkit-animation: sk-cubeGridScaleDelay-data-v-3f445ab8 1.3s infinite ease-in-out;\n  animation: sk-cubeGridScaleDelay-data-v-3f445ab8 1.3s infinite ease-in-out;\n}\n.sk-cube-grid .sk-cube1[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n.sk-cube-grid .sk-cube2[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s;\n}\n.sk-cube-grid .sk-cube3[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.4s;\n  animation-delay: 0.4s;\n}\n.sk-cube-grid .sk-cube4[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s;\n}\n.sk-cube-grid .sk-cube5[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n.sk-cube-grid .sk-cube6[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s;\n}\n.sk-cube-grid .sk-cube7[data-v-3f445ab8] {\n  -webkit-animation-delay: 0s;\n  animation-delay: 0s;\n}\n.sk-cube-grid .sk-cube8[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s;\n}\n.sk-cube-grid .sk-cube9[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n@-webkit-keyframes sk-cubeGridScaleDelay-data-v-3f445ab8 {\n0%,\n  70%,\n  100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1);\n}\n35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1);\n}\n}\n@keyframes sk-cubeGridScaleDelay-data-v-3f445ab8 {\n0%,\n  70%,\n  100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1);\n}\n35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1);\n}\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconLoadingSpin.vue"],"names":[],"mappings":";AAoBA;EACA,gCAAA;EACA,iCAAA;EACA,mBAAA;CACA;AAEA;EACA,WAAA;EACA,YAAA;EACA,4CAAA;EACA,YAAA;EACA,mFAAA;EACA,2EAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,4BAAA;EACA,oBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AAEA;AACA;;;IAGA,oCAAA;IACA,4BAAA;CACA;AACA;IACA,oCAAA;IACA,4BAAA;CACA;CACA;AAEA;AACA;;;IAGA,oCAAA;IACA,4BAAA;CACA;AACA;IACA,oCAAA;IACA,4BAAA;CACA;CACA","file":"IconLoadingSpin.vue","sourcesContent":["<template>\n  <!-- copy from: https://github.com/tobiasahlin/SpinKit -->\n  <div class=\"sk-cube-grid\">\n    <div class=\"sk-cube sk-cube1\"/>\n    <div class=\"sk-cube sk-cube2\"/>\n    <div class=\"sk-cube sk-cube3\"/>\n    <div class=\"sk-cube sk-cube4\"/>\n    <div class=\"sk-cube sk-cube5\"/>\n    <div class=\"sk-cube sk-cube6\"/>\n    <div class=\"sk-cube sk-cube7\"/>\n    <div class=\"sk-cube sk-cube8\"/>\n    <div class=\"sk-cube sk-cube9\"/>\n  </div>\n</template>\n\n<script>\nexport default {};\n</script>\n\n<style scoped>\n.sk-cube-grid {\n  width: var(--loading-icon-size);\n  height: var(--loading-icon-size);\n  margin: 100px auto;\n}\n\n.sk-cube-grid .sk-cube {\n  width: 33%;\n  height: 33%;\n  background-color: var(--loading-icon-color);\n  float: left;\n  -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;\n  animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;\n}\n.sk-cube-grid .sk-cube1 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n.sk-cube-grid .sk-cube2 {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s;\n}\n.sk-cube-grid .sk-cube3 {\n  -webkit-animation-delay: 0.4s;\n  animation-delay: 0.4s;\n}\n.sk-cube-grid .sk-cube4 {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s;\n}\n.sk-cube-grid .sk-cube5 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n.sk-cube-grid .sk-cube6 {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s;\n}\n.sk-cube-grid .sk-cube7 {\n  -webkit-animation-delay: 0s;\n  animation-delay: 0s;\n}\n.sk-cube-grid .sk-cube8 {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s;\n}\n.sk-cube-grid .sk-cube9 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n\n@-webkit-keyframes sk-cubeGridScaleDelay {\n  0%,\n  70%,\n  100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1);\n  }\n  35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1);\n  }\n}\n\n@keyframes sk-cubeGridScaleDelay {\n  0%,\n  70%,\n  100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1);\n  }\n  35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1);\n  }\n}\n</style>\n\n\n"]}, media: undefined });
+
+    };
+    /* scoped */
+    const __vue_scope_id__$a = "data-v-3f445ab8";
+    /* module identifier */
+    const __vue_module_identifier__$a = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$a = false;
+    /* component normalizer */
+    function __vue_normalize__$a(
+      template, style, script,
+      scope, functional, moduleIdentifier,
+      createInjector, createInjectorSSR
+    ) {
+      const component = (typeof script === 'function' ? script.options : script) || {};
+
+      // For security concerns, we use only base name in production mode.
+      component.__file = "/home/flandre/dev/Patchouli/src/components/IconLoadingSpin.vue";
+
+      if (!component.render) {
+        component.render = template.render;
+        component.staticRenderFns = template.staticRenderFns;
+        component._compiled = true;
+
+        if (functional) component.functional = true;
+      }
+
+      component._scopeId = scope;
+
+      {
+        let hook;
+        if (style) {
+          hook = function(context) {
+            style.call(this, createInjector(context));
+          };
+        }
+
+        if (hook !== undefined) {
+          if (component.functional) {
+            // register for functional component in vue file
+            const originalRender = component.render;
+            component.render = function renderWithStyleInjection(h, context) {
+              hook.call(context);
+              return originalRender(h, context)
+            };
+          } else {
+            // inject component registration as beforeCreate hook
+            const existing = component.beforeCreate;
+            component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+          }
+        }
+      }
+
+      return component
+    }
+    /* style inject */
+    function __vue_create_injector__$a() {
+      const head = document.head || document.getElementsByTagName('head')[0];
+      const styles = __vue_create_injector__$a.styles || (__vue_create_injector__$a.styles = {});
+      const isOldIE =
+        typeof navigator !== 'undefined' &&
+        /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+      return function addStyle(id, css) {
+        if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return // SSR styles are present.
+
+        const group = isOldIE ? css.media || 'default' : id;
+        const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+        if (!style.ids.includes(id)) {
+          let code = css.source;
+          let index = style.ids.length;
+
+          style.ids.push(id);
+
+          if (isOldIE) {
+            style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+          }
+
+          if (!style.element) {
+            const el = style.element = document.createElement('style');
+            el.type = 'text/css';
+
+            if (css.media) el.setAttribute('media', css.media);
+            if (isOldIE) {
+              el.setAttribute('data-group', group);
+              el.setAttribute('data-next-index', '0');
+            }
+
+            head.appendChild(el);
+          }
+
+          if (isOldIE) {
+            index = parseInt(style.element.getAttribute('data-next-index'));
+            style.element.setAttribute('data-next-index', index + 1);
+          }
+
+          if (style.element.styleSheet) {
+            style.parts.push(code);
+            style.element.styleSheet.cssText = style.parts
+              .filter(Boolean)
+              .join('\n');
+          } else {
+            const textNode = document.createTextNode(code);
+            const nodes = style.element.childNodes;
+            if (nodes[index]) style.element.removeChild(nodes[index]);
+            if (nodes.length) style.element.insertBefore(textNode, nodes[index]);
+            else style.element.appendChild(textNode);
+          }
+        }
+      }
+    }
+    /* style inject SSR */
+    
+
+    
+    var IconLoadingSpin = __vue_normalize__$a(
+      { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a },
+      __vue_inject_styles__$a,
+      __vue_script__$a,
+      __vue_scope_id__$a,
+      __vue_is_functional_template__$a,
+      __vue_module_identifier__$a,
+      __vue_create_injector__$a,
+      undefined
+    );
+
+  //
+
+  var script$b = {
+    components: { IconLoadingSpin, NewDefaultImageItem },
     data() {
       return {
-        routeIsInited: Array(5).fill(false),
+        routeIsInited: Array(NPP_TYPE_COUNT).fill(false),
       };
     },
     // eslint-disable-next-line sort-keys
     computed: {
+      displayIndices() {
+        return this.$store.getters['pixiv/nppDisplayIndices'];
+      },
       hasNoResult() {
         return !this.imageToShowCount;
       },
       imageToShowCount() {
-        const { shows } = this.$store.getters['pixiv/nppDisplayIndices'];
+        const { shows } = this.displayIndices;
         return shows.length;
       },
       isSelfBookmarkPage() {
         return this.$store.getters.isSelfBookmarkPage;
       },
-      // isSelfPrivateBookmarkPage() {
-      //   return this.isSelfBookmarkPage && this.rest === 'hide';
-      // },
       nppProcessedLibrary() {
-        const { shows, hides } = this.$store.getters['pixiv/nppDisplayIndices'];
+        const { shows, hides } = this.displayIndices;
         const iiLib = this.$store.getters['pixiv/imageItemLibrary'];
 
         return shows.concat(hides).map(idx => iiLib[idx]);
@@ -5069,7 +5259,7 @@
           break;
         }
         if (!this.routeIsInited[this.nppType]) {
-          this.$store.dispatch('pixiv/start', { force: true, times: 1 });
+          await this.$store.dispatch('pixiv/start', { force: true, times: 1 });
           this.routeIsInited[this.nppType] = true;
         }
       },
@@ -5093,10 +5283,10 @@
   };
 
   /* script */
-              const __vue_script__$a = script$a;
+              const __vue_script__$b = script$b;
               
   /* template */
-  var __vue_render__$a = function() {
+  var __vue_render__$b = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -5357,8 +5547,8 @@
               {
                 name: "show",
                 rawName: "v-show",
-                value: _vm.hasNoResult,
-                expression: "hasNoResult"
+                value: _vm.hasNoResult && _vm.routeIsInited[_vm.nppType],
+                expression: "hasNoResult && routeIsInited[nppType]"
               }
             ],
             attrs: { id: "patchouli-npp-view-no-result" }
@@ -5370,180 +5560,26 @@
                 "\n    "
             )
           ]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.hasNoResult && !_vm.routeIsInited[_vm.nppType],
+                expression: "hasNoResult && !routeIsInited[nppType]"
+              }
+            ],
+            attrs: { id: "patchouli-npp-view-loading" }
+          },
+          [_c("IconLoadingSpin")],
+          1
         )
       ])
     ])
-  };
-  var __vue_staticRenderFns__$a = [];
-  __vue_render__$a._withStripped = true;
-
-    /* style */
-    const __vue_inject_styles__$a = function (inject) {
-      if (!inject) return
-      inject("data-v-199e86a9_0", { source: "\n#patchouli-npp-nav[data-v-199e86a9] {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a[data-v-199e86a9] {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a[data-v-199e86a9]:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current[data-v-199e86a9] {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view[data-v-199e86a9] {\n  display: flex;\n  flex-flow: column;\n  min-height: 340px;\n  align-items: center;\n}\n#patchouli-npp-view-bookmark-switch[data-v-199e86a9] {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current[data-v-199e86a9] {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a[data-v-199e86a9] {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list[data-v-199e86a9] {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result[data-v-199e86a9] {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/NewProfilePage.vue"],"names":[],"mappings":";AA0LA;EACA,cAAA;EACA,wBAAA;EACA,0BAAA;EACA,YAAA;CACA;AACA;EACA,kCAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;EACA,mBAAA;EACA,sBAAA;EACA,uBAAA;CACA;AACA;EACA,YAAA;EACA,gBAAA;CACA;AACA;EACA,YAAA;EACA,iCAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,kBAAA;EACA,oBAAA;CACA;AACA;EACA,cAAA;EACA,0BAAA;EACA,uBAAA;EACA,cAAA;CACA;AACA;EACA,0BAAA;EACA,eAAA;CACA;AACA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;EACA,sBAAA;CACA;AACA;EACA,iBAAA;EACA,cAAA;EACA,0BAAA;EACA,wBAAA;EACA,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,cAAA;CACA;AACA;EACA,QAAA;EACA,qBAAA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;CACA","file":"NewProfilePage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-new-profile-page\">\n    <nav id=\"patchouli-npp-nav\">\n      <a\n        id=\"patchouli-npp-all\"\n        :class=\"{'current': nppType === 0}\"\n        :href=\"`/member.php?id=${uid}`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.contents') }}</a>\n      <a\n        id=\"patchouli-npp-illust\"\n        :class=\"{'current': nppType === 1}\"\n        :href=\"`/member_illust.php?id=${uid}&type=illust`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.illustrations') }}</a>\n      <a\n        id=\"patchouli-npp-manga\"\n        :class=\"{'current': nppType === 2}\"\n        :href=\"`/member_illust.php?id=${uid}&type=manga`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.manga') }}</a>\n      <a\n        id=\"patchouli-npp-bookmark\"\n        :class=\"{'current': nppType === 3}\"\n        :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.bookmarks') }}</a>\n    </nav>\n    <div id=\"patchouli-npp-view\">\n      <div\n        v-show=\"isSelfBookmarkPage\"\n        id=\"patchouli-npp-view-bookmark-switch\"\n        class=\"ω\">\n        <nav>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-public\"\n            :class=\"{'current': nppType === 3}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.publicBookmark') }}</a>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-private\"\n            :class=\"{'current': nppType === 4}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=hide`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.privateBookmark') }}</a>\n        </nav>\n      </div>\n      <div id=\"patchouli-npp-view-header\"/>\n      <ul\n        v-show=\"!hasNoResult\"\n        id=\"patchouli-npp-view-image-item-list\"\n        class=\"ω\">\n        <NewDefaultImageItem\n          v-for=\"(d, index) in nppProcessedLibrary\"\n          v-show=\"index < imageToShowCount\"\n          :key=\"d.illustId\"\n          :illust-id=\"d.illustId\"\n          :bookmark-count=\"d.bookmarkCount\"\n          :bookmark-id=\"d.bookmarkId\"\n          :is-bookmarked=\"d.isBookmarked\"\n          :is-followed=\"d.isFollowed\"\n          :is-ugoira=\"d.isUgoira\"\n          :illust-page-count=\"d.illustPageCount\"\n          :illust-title=\"d.illustTitle\"\n          :thumb-img-url=\"d.urls.thumb\"\n          :profile-img-url=\"d.profileImg\"\n          :user-id=\"d.userId\"\n          :user-name=\"d.userName\"\n          :show-user-profile=\"uid !== d.userId\"/>\n      </ul>\n      <span v-show=\"hasNoResult\" id=\"patchouli-npp-view-no-result\">\n        {{ $t('mainView.newProfilePage.noResult') }}\n      </span>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { MAIN_PAGE_TYPE as MPT } from '../lib/enums';\nimport { $el } from '../lib/utils';\nimport NewDefaultImageItem from './NewDefaultImageItem.vue';\n\nexport default {\n  components: { NewDefaultImageItem },\n  data() {\n    return {\n      routeIsInited: Array(5).fill(false),\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    hasNoResult() {\n      return !this.imageToShowCount;\n    },\n    imageToShowCount() {\n      const { shows } = this.$store.getters['pixiv/nppDisplayIndices'];\n      return shows.length;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    // isSelfPrivateBookmarkPage() {\n    //   return this.isSelfBookmarkPage && this.rest === 'hide';\n    // },\n    nppProcessedLibrary() {\n      const { shows, hides } = this.$store.getters['pixiv/nppDisplayIndices'];\n      const iiLib = this.$store.getters['pixiv/imageItemLibrary'];\n\n      return shows.concat(hides).map(idx => iiLib[idx]);\n    },\n    nppType() {\n      return this.$store.getters['pixiv/nppType'];\n    },\n    rest() {\n      return this.$store.getters.sp.rest;\n    },\n    uid() {\n      return this.$store.getters.sp.id;\n    },\n  },\n  mounted() {\n    this.$nextTick(() => {\n      this.routeIsInited[this.nppType] = true;\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    async clickRoute(event) {\n      await this.$store.dispatch('pixiv/pause');\n      const tid = event.currentTarget.id;\n      const thref = event.currentTarget.href;\n\n      if (this.isSamePath(location.href, thref)) {\n        return;\n      }\n\n      history.pushState(null, '', thref);\n\n      switch (tid) {\n      case 'patchouli-npp-all':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE,\n        });\n        break;\n      case 'patchouli-npp-illust':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_ILLUST,\n        });\n        break;\n      case 'patchouli-npp-manga':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_MANGA,\n        });\n        break;\n      case 'patchouli-npp-bookmark':\n      case 'patchouli-npp-view-bookmark-switch-public':\n      case 'patchouli-npp-view-bookmark-switch-private':\n        this.$store.commit('updateSearchParam');\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_BOOKMARK,\n        });\n        break;\n      default:\n        break;\n      }\n      if (!this.routeIsInited[this.nppType]) {\n        this.$store.dispatch('pixiv/start', { force: true, times: 1 });\n        this.routeIsInited[this.nppType] = true;\n      }\n    },\n    isSamePath(href0, href1) {\n      const a0 = $el('a', { href: href0 });\n      const a1 = $el('a', { href: href1 });\n      if (a0.pathname !== a1.pathname) {\n        return false;\n      }\n      const sp0 = new URLSearchParams(a0.search);\n      const sp1 = new URLSearchParams(a1.search);\n      const keysSet = new Set([...sp0.keys(), ...sp1.keys()]);\n      for (const k of keysSet) {\n        if (sp0.get(k) !== sp1.get(k)) {\n          return false;\n        }\n      }\n      return true;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-npp-nav {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view {\n  display: flex;\n  flex-flow: column;\n  min-height: 340px;\n  align-items: center;\n}\n#patchouli-npp-view-bookmark-switch {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n}\n</style>\n\n\n"]}, media: undefined });
-
-    };
-    /* scoped */
-    const __vue_scope_id__$a = "data-v-199e86a9";
-    /* module identifier */
-    const __vue_module_identifier__$a = undefined;
-    /* functional template */
-    const __vue_is_functional_template__$a = false;
-    /* component normalizer */
-    function __vue_normalize__$a(
-      template, style, script,
-      scope, functional, moduleIdentifier,
-      createInjector, createInjectorSSR
-    ) {
-      const component = (typeof script === 'function' ? script.options : script) || {};
-
-      // For security concerns, we use only base name in production mode.
-      component.__file = "/home/flandre/dev/Patchouli/src/components/NewProfilePage.vue";
-
-      if (!component.render) {
-        component.render = template.render;
-        component.staticRenderFns = template.staticRenderFns;
-        component._compiled = true;
-
-        if (functional) component.functional = true;
-      }
-
-      component._scopeId = scope;
-
-      {
-        let hook;
-        if (style) {
-          hook = function(context) {
-            style.call(this, createInjector(context));
-          };
-        }
-
-        if (hook !== undefined) {
-          if (component.functional) {
-            // register for functional component in vue file
-            const originalRender = component.render;
-            component.render = function renderWithStyleInjection(h, context) {
-              hook.call(context);
-              return originalRender(h, context)
-            };
-          } else {
-            // inject component registration as beforeCreate hook
-            const existing = component.beforeCreate;
-            component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
-          }
-        }
-      }
-
-      return component
-    }
-    /* style inject */
-    function __vue_create_injector__$a() {
-      const head = document.head || document.getElementsByTagName('head')[0];
-      const styles = __vue_create_injector__$a.styles || (__vue_create_injector__$a.styles = {});
-      const isOldIE =
-        typeof navigator !== 'undefined' &&
-        /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
-
-      return function addStyle(id, css) {
-        if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return // SSR styles are present.
-
-        const group = isOldIE ? css.media || 'default' : id;
-        const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
-
-        if (!style.ids.includes(id)) {
-          let code = css.source;
-          let index = style.ids.length;
-
-          style.ids.push(id);
-
-          if (isOldIE) {
-            style.element = style.element || document.querySelector('style[data-group=' + group + ']');
-          }
-
-          if (!style.element) {
-            const el = style.element = document.createElement('style');
-            el.type = 'text/css';
-
-            if (css.media) el.setAttribute('media', css.media);
-            if (isOldIE) {
-              el.setAttribute('data-group', group);
-              el.setAttribute('data-next-index', '0');
-            }
-
-            head.appendChild(el);
-          }
-
-          if (isOldIE) {
-            index = parseInt(style.element.getAttribute('data-next-index'));
-            style.element.setAttribute('data-next-index', index + 1);
-          }
-
-          if (style.element.styleSheet) {
-            style.parts.push(code);
-            style.element.styleSheet.cssText = style.parts
-              .filter(Boolean)
-              .join('\n');
-          } else {
-            const textNode = document.createTextNode(code);
-            const nodes = style.element.childNodes;
-            if (nodes[index]) style.element.removeChild(nodes[index]);
-            if (nodes.length) style.element.insertBefore(textNode, nodes[index]);
-            else style.element.appendChild(textNode);
-          }
-        }
-      }
-    }
-    /* style inject SSR */
-    
-
-    
-    var NewProfilePage = __vue_normalize__$a(
-      { render: __vue_render__$a, staticRenderFns: __vue_staticRenderFns__$a },
-      __vue_inject_styles__$a,
-      __vue_script__$a,
-      __vue_scope_id__$a,
-      __vue_is_functional_template__$a,
-      __vue_module_identifier__$a,
-      __vue_create_injector__$a,
-      undefined
-    );
-
-  //
-
-  var script$b = {
-    components: { ContextMenu, DefaultImageItemPage, NewProfilePage },
-    props: {
-      id: {
-        default: '',
-        type: String,
-      },
-    },
-    // eslint-disable-next-line sort-keys
-    computed: {
-      isNewProfilePage() {
-        return this.$store.getters['pixiv/nppType'] >= 0;
-      },
-    },
-  };
-
-  /* script */
-              const __vue_script__$b = script$b;
-              
-  /* template */
-  var __vue_render__$b = function() {
-    var _vm = this;
-    var _h = _vm.$createElement;
-    var _c = _vm._self._c || _h;
-    return _c(
-      "div",
-      { attrs: { id: _vm.id } },
-      [
-        _vm.isNewProfilePage ? _c("NewProfilePage") : _c("DefaultImageItemPage"),
-        _vm._v(" "),
-        _c("ContextMenu")
-      ],
-      1
-    )
   };
   var __vue_staticRenderFns__$b = [];
   __vue_render__$b._withStripped = true;
@@ -5551,11 +5587,11 @@
     /* style */
     const __vue_inject_styles__$b = function (inject) {
       if (!inject) return
-      inject("data-v-4ab1002e_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", map: {"version":3,"sources":[],"names":[],"mappings":"","file":"MainView.vue"}, media: undefined });
+      inject("data-v-239138b2_0", { source: "\n#patchouli-npp-nav[data-v-239138b2] {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a[data-v-239138b2] {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a[data-v-239138b2]:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current[data-v-239138b2] {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view[data-v-239138b2] {\n  display: flex;\n  flex-flow: column;\n  min-height: 340px;\n  align-items: center;\n}\n#patchouli-npp-view-bookmark-switch[data-v-239138b2] {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current[data-v-239138b2] {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a[data-v-239138b2] {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list[data-v-239138b2] {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result[data-v-239138b2] {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n}\n#patchouli-npp-view-loading[data-v-239138b2] {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/NewProfilePage.vue"],"names":[],"mappings":";AA8LA;EACA,cAAA;EACA,wBAAA;EACA,0BAAA;EACA,YAAA;CACA;AACA;EACA,kCAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;EACA,mBAAA;EACA,sBAAA;EACA,uBAAA;CACA;AACA;EACA,YAAA;EACA,gBAAA;CACA;AACA;EACA,YAAA;EACA,iCAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,kBAAA;EACA,oBAAA;CACA;AACA;EACA,cAAA;EACA,0BAAA;EACA,uBAAA;EACA,cAAA;CACA;AACA;EACA,0BAAA;EACA,eAAA;CACA;AACA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;EACA,sBAAA;CACA;AACA;EACA,iBAAA;EACA,cAAA;EACA,0BAAA;EACA,wBAAA;EACA,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,cAAA;CACA;AACA;EACA,QAAA;EACA,qBAAA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;CACA;AACA;EACA,QAAA;EACA,qBAAA;EACA,oBAAA;CACA","file":"NewProfilePage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-new-profile-page\">\n    <nav id=\"patchouli-npp-nav\">\n      <a\n        id=\"patchouli-npp-all\"\n        :class=\"{'current': nppType === 0}\"\n        :href=\"`/member.php?id=${uid}`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.contents') }}</a>\n      <a\n        id=\"patchouli-npp-illust\"\n        :class=\"{'current': nppType === 1}\"\n        :href=\"`/member_illust.php?id=${uid}&type=illust`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.illustrations') }}</a>\n      <a\n        id=\"patchouli-npp-manga\"\n        :class=\"{'current': nppType === 2}\"\n        :href=\"`/member_illust.php?id=${uid}&type=manga`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.manga') }}</a>\n      <a\n        id=\"patchouli-npp-bookmark\"\n        :class=\"{'current': nppType === 3}\"\n        :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.bookmarks') }}</a>\n    </nav>\n    <div id=\"patchouli-npp-view\">\n      <div\n        v-show=\"isSelfBookmarkPage\"\n        id=\"patchouli-npp-view-bookmark-switch\"\n        class=\"ω\">\n        <nav>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-public\"\n            :class=\"{'current': nppType === 3}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.publicBookmark') }}</a>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-private\"\n            :class=\"{'current': nppType === 4}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=hide`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.privateBookmark') }}</a>\n        </nav>\n      </div>\n      <div id=\"patchouli-npp-view-header\"/>\n      <ul\n        v-show=\"!hasNoResult\"\n        id=\"patchouli-npp-view-image-item-list\"\n        class=\"ω\">\n        <NewDefaultImageItem\n          v-for=\"(d, index) in nppProcessedLibrary\"\n          v-show=\"index < imageToShowCount\"\n          :key=\"d.illustId\"\n          :illust-id=\"d.illustId\"\n          :bookmark-count=\"d.bookmarkCount\"\n          :bookmark-id=\"d.bookmarkId\"\n          :is-bookmarked=\"d.isBookmarked\"\n          :is-followed=\"d.isFollowed\"\n          :is-ugoira=\"d.isUgoira\"\n          :illust-page-count=\"d.illustPageCount\"\n          :illust-title=\"d.illustTitle\"\n          :thumb-img-url=\"d.urls.thumb\"\n          :profile-img-url=\"d.profileImg\"\n          :user-id=\"d.userId\"\n          :user-name=\"d.userName\"\n          :show-user-profile=\"uid !== d.userId\"/>\n      </ul>\n      <span v-show=\"hasNoResult && routeIsInited[nppType]\" id=\"patchouli-npp-view-no-result\">\n        {{ $t('mainView.newProfilePage.noResult') }}\n      </span>\n      <span v-show=\"hasNoResult && !routeIsInited[nppType]\" id=\"patchouli-npp-view-loading\">\n        <IconLoadingSpin/>\n      </span>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { MAIN_PAGE_TYPE as MPT, NPP_TYPE_COUNT } from '../lib/enums';\nimport { $el } from '../lib/utils';\nimport NewDefaultImageItem from './NewDefaultImageItem.vue';\nimport IconLoadingSpin from './IconLoadingSpin.vue';\n\nexport default {\n  components: { IconLoadingSpin, NewDefaultImageItem },\n  data() {\n    return {\n      routeIsInited: Array(NPP_TYPE_COUNT).fill(false),\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    displayIndices() {\n      return this.$store.getters['pixiv/nppDisplayIndices'];\n    },\n    hasNoResult() {\n      return !this.imageToShowCount;\n    },\n    imageToShowCount() {\n      const { shows } = this.displayIndices;\n      return shows.length;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    nppProcessedLibrary() {\n      const { shows, hides } = this.displayIndices;\n      const iiLib = this.$store.getters['pixiv/imageItemLibrary'];\n\n      return shows.concat(hides).map(idx => iiLib[idx]);\n    },\n    nppType() {\n      return this.$store.getters['pixiv/nppType'];\n    },\n    rest() {\n      return this.$store.getters.sp.rest;\n    },\n    uid() {\n      return this.$store.getters.sp.id;\n    },\n  },\n  mounted() {\n    this.$nextTick(() => {\n      this.routeIsInited[this.nppType] = true;\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    async clickRoute(event) {\n      await this.$store.dispatch('pixiv/pause');\n      const tid = event.currentTarget.id;\n      const thref = event.currentTarget.href;\n\n      if (this.isSamePath(location.href, thref)) {\n        return;\n      }\n\n      history.pushState(null, '', thref);\n\n      switch (tid) {\n      case 'patchouli-npp-all':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE,\n        });\n        break;\n      case 'patchouli-npp-illust':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_ILLUST,\n        });\n        break;\n      case 'patchouli-npp-manga':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_MANGA,\n        });\n        break;\n      case 'patchouli-npp-bookmark':\n      case 'patchouli-npp-view-bookmark-switch-public':\n      case 'patchouli-npp-view-bookmark-switch-private':\n        this.$store.commit('updateSearchParam');\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_BOOKMARK,\n        });\n        break;\n      default:\n        break;\n      }\n      if (!this.routeIsInited[this.nppType]) {\n        await this.$store.dispatch('pixiv/start', { force: true, times: 1 });\n        this.routeIsInited[this.nppType] = true;\n      }\n    },\n    isSamePath(href0, href1) {\n      const a0 = $el('a', { href: href0 });\n      const a1 = $el('a', { href: href1 });\n      if (a0.pathname !== a1.pathname) {\n        return false;\n      }\n      const sp0 = new URLSearchParams(a0.search);\n      const sp1 = new URLSearchParams(a1.search);\n      const keysSet = new Set([...sp0.keys(), ...sp1.keys()]);\n      for (const k of keysSet) {\n        if (sp0.get(k) !== sp1.get(k)) {\n          return false;\n        }\n      }\n      return true;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-npp-nav {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view {\n  display: flex;\n  flex-flow: column;\n  min-height: 340px;\n  align-items: center;\n}\n#patchouli-npp-view-bookmark-switch {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n}\n#patchouli-npp-view-loading {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n}\n</style>\n\n\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$b = "data-v-4ab1002e";
+    const __vue_scope_id__$b = "data-v-239138b2";
     /* module identifier */
     const __vue_module_identifier__$b = undefined;
     /* functional template */
@@ -5569,7 +5605,7 @@
       const component = (typeof script === 'function' ? script.options : script) || {};
 
       // For security concerns, we use only base name in production mode.
-      component.__file = "/home/flandre/dev/Patchouli/src/components/MainView.vue";
+      component.__file = "/home/flandre/dev/Patchouli/src/components/NewProfilePage.vue";
 
       if (!component.render) {
         component.render = template.render;
@@ -5668,7 +5704,7 @@
     
 
     
-    var mainView = __vue_normalize__$b(
+    var NewProfilePage = __vue_normalize__$b(
       { render: __vue_render__$b, staticRenderFns: __vue_staticRenderFns__$b },
       __vue_inject_styles__$b,
       __vue_script__$b,
@@ -5682,6 +5718,177 @@
   //
 
   var script$c = {
+    components: { ContextMenu, DefaultImageItemPage, NewProfilePage },
+    props: {
+      id: {
+        default: '',
+        type: String,
+      },
+    },
+    // eslint-disable-next-line sort-keys
+    computed: {
+      isNewProfilePage() {
+        return this.$store.getters['pixiv/nppType'] >= 0;
+      },
+    },
+  };
+
+  /* script */
+              const __vue_script__$c = script$c;
+              
+  /* template */
+  var __vue_render__$c = function() {
+    var _vm = this;
+    var _h = _vm.$createElement;
+    var _c = _vm._self._c || _h;
+    return _c(
+      "div",
+      { attrs: { id: _vm.id } },
+      [
+        _vm.isNewProfilePage ? _c("NewProfilePage") : _c("DefaultImageItemPage"),
+        _vm._v(" "),
+        _c("ContextMenu")
+      ],
+      1
+    )
+  };
+  var __vue_staticRenderFns__$c = [];
+  __vue_render__$c._withStripped = true;
+
+    /* style */
+    const __vue_inject_styles__$c = function (inject) {
+      if (!inject) return
+      inject("data-v-4ab1002e_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", map: {"version":3,"sources":[],"names":[],"mappings":"","file":"MainView.vue"}, media: undefined });
+
+    };
+    /* scoped */
+    const __vue_scope_id__$c = "data-v-4ab1002e";
+    /* module identifier */
+    const __vue_module_identifier__$c = undefined;
+    /* functional template */
+    const __vue_is_functional_template__$c = false;
+    /* component normalizer */
+    function __vue_normalize__$c(
+      template, style, script,
+      scope, functional, moduleIdentifier,
+      createInjector, createInjectorSSR
+    ) {
+      const component = (typeof script === 'function' ? script.options : script) || {};
+
+      // For security concerns, we use only base name in production mode.
+      component.__file = "/home/flandre/dev/Patchouli/src/components/MainView.vue";
+
+      if (!component.render) {
+        component.render = template.render;
+        component.staticRenderFns = template.staticRenderFns;
+        component._compiled = true;
+
+        if (functional) component.functional = true;
+      }
+
+      component._scopeId = scope;
+
+      {
+        let hook;
+        if (style) {
+          hook = function(context) {
+            style.call(this, createInjector(context));
+          };
+        }
+
+        if (hook !== undefined) {
+          if (component.functional) {
+            // register for functional component in vue file
+            const originalRender = component.render;
+            component.render = function renderWithStyleInjection(h, context) {
+              hook.call(context);
+              return originalRender(h, context)
+            };
+          } else {
+            // inject component registration as beforeCreate hook
+            const existing = component.beforeCreate;
+            component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
+          }
+        }
+      }
+
+      return component
+    }
+    /* style inject */
+    function __vue_create_injector__$c() {
+      const head = document.head || document.getElementsByTagName('head')[0];
+      const styles = __vue_create_injector__$c.styles || (__vue_create_injector__$c.styles = {});
+      const isOldIE =
+        typeof navigator !== 'undefined' &&
+        /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
+
+      return function addStyle(id, css) {
+        if (document.querySelector('style[data-vue-ssr-id~="' + id + '"]')) return // SSR styles are present.
+
+        const group = isOldIE ? css.media || 'default' : id;
+        const style = styles[group] || (styles[group] = { ids: [], parts: [], element: undefined });
+
+        if (!style.ids.includes(id)) {
+          let code = css.source;
+          let index = style.ids.length;
+
+          style.ids.push(id);
+
+          if (isOldIE) {
+            style.element = style.element || document.querySelector('style[data-group=' + group + ']');
+          }
+
+          if (!style.element) {
+            const el = style.element = document.createElement('style');
+            el.type = 'text/css';
+
+            if (css.media) el.setAttribute('media', css.media);
+            if (isOldIE) {
+              el.setAttribute('data-group', group);
+              el.setAttribute('data-next-index', '0');
+            }
+
+            head.appendChild(el);
+          }
+
+          if (isOldIE) {
+            index = parseInt(style.element.getAttribute('data-next-index'));
+            style.element.setAttribute('data-next-index', index + 1);
+          }
+
+          if (style.element.styleSheet) {
+            style.parts.push(code);
+            style.element.styleSheet.cssText = style.parts
+              .filter(Boolean)
+              .join('\n');
+          } else {
+            const textNode = document.createTextNode(code);
+            const nodes = style.element.childNodes;
+            if (nodes[index]) style.element.removeChild(nodes[index]);
+            if (nodes.length) style.element.insertBefore(textNode, nodes[index]);
+            else style.element.appendChild(textNode);
+          }
+        }
+      }
+    }
+    /* style inject SSR */
+    
+
+    
+    var mainView = __vue_normalize__$c(
+      { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
+      __vue_inject_styles__$c,
+      __vue_script__$c,
+      __vue_scope_id__$c,
+      __vue_is_functional_template__$c,
+      __vue_module_identifier__$c,
+      __vue_create_injector__$c,
+      undefined
+    );
+
+  //
+
+  var script$d = {
     props: {
       id: {
         default: '',
@@ -5850,10 +6057,10 @@
   };
 
   /* script */
-              const __vue_script__$c = script$c;
+              const __vue_script__$d = script$d;
               
   /* template */
-  var __vue_render__$c = function() {
+  var __vue_render__$d = function() {
     var _vm = this;
     var _h = _vm.$createElement;
     var _c = _vm._self._c || _h;
@@ -6257,23 +6464,23 @@
       ]
     )
   };
-  var __vue_staticRenderFns__$c = [];
-  __vue_render__$c._withStripped = true;
+  var __vue_staticRenderFns__$d = [];
+  __vue_render__$d._withStripped = true;
 
     /* style */
-    const __vue_inject_styles__$c = function (inject) {
+    const __vue_inject_styles__$d = function (inject) {
       if (!inject) return
       inject("data-v-6e5f249a_0", { source: "\n#Marisa[data-v-6e5f249a] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#marisa-config-mode[data-v-6e5f249a],\n#marisa-preview-mode[data-v-6e5f249a] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#marisa-config-mode[data-v-6e5f249a] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#marisa-config-mode a[data-v-6e5f249a] {\n  color: #00186c;\n  text-decoration: none;\n}\n#marisa-config-mode [id$=\"switch\"][data-v-6e5f249a] {\n  text-align: center;\n}\n#marisa-config-mode [id$=\"switch\"][data-v-6e5f249a]:hover {\n  cursor: pointer;\n}\n#marisa-config-mode [id$=\"label\"][data-v-6e5f249a] {\n  text-align: center;\n  margin: 0 5px;\n}\n#marisa-config-blacklist-label > .fa-eye-slash[data-v-6e5f249a] {\n  margin: 0 4px;\n}\n#marisa-config-blacklist-textarea[data-v-6e5f249a] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#marisa-preview-mode[data-v-6e5f249a] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#marisa-preview-display-area[data-v-6e5f249a] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#marisa-preview-display-area > a[data-v-6e5f249a],\n#marisa-preview-display-area > div[data-v-6e5f249a] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#marisa-preview-display-area > a > img[data-v-6e5f249a],\n#marisa-preview-display-area > div > canvas[data-v-6e5f249a] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#marisa-preview-thumbnails-area[data-v-6e5f249a] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n#marisa-preview-thumbnails-area > li[data-v-6e5f249a] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#marisa-preview-thumbnails-area > li > a[data-v-6e5f249a] {\n  cursor: pointer;\n  display: inline-flex;\n  border: 3px solid transparent;\n}\n#marisa-preview-thumbnails-area > li > a.current-preview[data-v-6e5f249a] {\n  border: 3px solid palevioletred;\n}\n#marisa-preview-thumbnails-area > li > a > img[data-v-6e5f249a] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/CoverLayer.vue"],"names":[],"mappings":";AAgRA;EACA,wBAAA;EACA,gBAAA;EACA,aAAA;EACA,YAAA;EACA,WAAA;EACA,OAAA;EACA,QAAA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;CACA;AACA;;EAEA,iBAAA;EACA,kBAAA;EACA,uBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,cAAA;EACA,oBAAA;EACA,gBAAA;EACA,oBAAA;CACA;AACA;EACA,eAAA;EACA,sBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,mBAAA;EACA,cAAA;CACA;AACA;EACA,cAAA;CACA;AACA;EACA,uBAAA;EACA,QAAA;EACA,aAAA;EACA,gBAAA;EACA,aAAA;CACA;AACA;EACA,WAAA;EACA,aAAA;EACA,uBAAA;EACA,cAAA;EACA,gDAAA;CACA;AACA;EACA,0BAAA;EACA,uBAAA;EACA,mBAAA;CACA;AACA;;EAEA,qBAAA;EACA,aAAA;EACA,wBAAA;EACA,oBAAA;CACA;AACA;;EAEA,oBAAA;EACA,gBAAA;EACA,iBAAA;CACA;AACA;EACA,6BAAA;EACA,cAAA;EACA,oBAAA;EACA,iBAAA;EACA,mBAAA;EACA,aAAA;EACA,uBAAA;EACA,uBAAA;EACA,cAAA;EACA,UAAA;EACA,WAAA;EACA,iBAAA;CACA;AACA;EACA,eAAA;EACA,qBAAA;CACA;AACA;EACA,gBAAA;EACA,qBAAA;EACA,8BAAA;CACA;AACA;EACA,gCAAA;CACA;AACA;EACA,kBAAA;EACA,uBAAA;EACA,sBAAA;CACA","file":"CoverLayer.vue","sourcesContent":["<template>\n  <div\n    v-show=\"xmode\"\n    ref=\"coverLayerRoot\"\n    :id=\"id\"\n    tabindex=\"0\"\n    @keyup=\"jumpByKeyup\"\n    @click.left=\"clickBase\"\n    @scroll.stop.prevent=\"0\"\n    @wheel.stop.prevent=\"jumpByWheel\">\n    <div\n      v-show=\"xmode === 'config'\"\n      id=\"marisa-config-mode\"\n      @click.stop=\"0\">\n      <a id=\"config-context-menu-switch\" @click.left=\"clickSwitch\">\n        <a\n          v-show=\"xc.contextMenu\"\n          id=\"config-context-menu-switch-on\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-on\"/>\n        </a>\n        <a\n          v-show=\"!xc.contextMenu\"\n          id=\"config-context-menu-switch-off\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-off\"/>\n        </a>\n        <span id=\"config-context-menu-label\">{{ $t('config.contextMenuExtension') }}</span>\n      </a>\n      <a id=\"config-user-tooltip-switch\" @click.left=\"clickSwitch\">\n        <a\n          v-show=\"xc.userTooltip\"\n          id=\"config-user-tooltip-switch-on\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-on\"/>\n        </a>\n        <a\n          v-show=\"!xc.userTooltip\"\n          id=\"config-user-tooltip-switch-off\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-off\"/>\n        </a>\n        <span id=\"config-user-tooltip-label\">{{ $t('config.userTooltip') }}</span>\n      </a>\n      <a id=\"config-hover-play-switch\" @click.left=\"clickSwitch\">\n        <a\n          v-show=\"xc.hoverPlay\"\n          id=\"config-hover-play-switch-on\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-on\"/>\n        </a>\n        <a\n          v-show=\"!xc.hoverPlay\"\n          id=\"config-hover-play-switch-off\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-off\"/>\n        </a>\n        <span id=\"config-hover-play-label\">{{ $t('config.hoverPlay') }}</span>\n      </a>\n      <a id=\"marisa-config-blacklist-label\">\n        <i class=\"far fa-eye-slash\"/>{{ $t('config.blacklist') }}\n      </a>\n      <textarea\n        id=\"marisa-config-blacklist-textarea\"\n        ref=\"blacklistTextarea\"\n        :value=\"xc.blacklist.join('\\n')\"\n        spellcheck=\"false\"\n        rows=\"5\"/>\n    </div>\n    <div\n      v-show=\"xmode === 'preview'\"\n      id=\"marisa-preview-mode\"\n      @click.stop=\"0\">\n      <div id=\"marisa-preview-display-area\">\n        <a\n          v-show=\"!previewUgoiraMetaData\"\n          :href=\"previewSrcList[previewCurrentIndex]\"\n          target=\"_blank\">\n          <img :src=\"previewSrcList[previewCurrentIndex]\">\n        </a>\n        <div v-show=\"!!previewUgoiraMetaData\">\n          <canvas v-show=\"previewCurrentIndex === 0\" ref=\"previewUgoiraCanvas\"/>\n          <canvas v-show=\"previewCurrentIndex === 1\" ref=\"previewOriginalUgoiraCanvas\"/>\n        </div>\n      </div>\n      <ul v-show=\"previewSrcList.length > 1\" id=\"marisa-preview-thumbnails-area\">\n        <li v-for=\"(pSrc, index) in previewSrcList\" :key=\"pSrc\">\n          <a\n            :class=\"(index === previewCurrentIndex) ? 'current-preview' : ''\"\n            @click.left=\"jumpTo(index)\" >\n            <img :src=\"pSrc\">\n          </a>\n        </li>\n      </ul>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { PixivAPI } from '../lib/pixiv';\nimport { $print, toInt } from '../lib/utils';\n\nexport default {\n  props: {\n    id: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      previewCurrentIndex: 0,\n      previewSrcList: [],\n      previewUgoiraMetaData: null,\n      ugoiraPlayers: [],\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    // vue'x' 'c'onfig\n    xc() {\n      return this.$store.getters.config;\n    },\n    xdata() {\n      return this.$store.getters['coverLayer/data'];\n    },\n    xmode() {\n      return this.$store.getters['coverLayer/mode'];\n    },\n  },\n  watch: {\n    async xmode(value) {\n      $print.debug('watch xmode change:', value);\n\n      if (value === 'preview') {\n        const imageItem = this.xdata;\n        if (imageItem.isUgoira) {\n          this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(\n            imageItem.illustId\n          );\n          this.initZipImagePlayer();\n          this.previewSrcList.push(imageItem.urls.thumb);\n          this.previewSrcList.push(imageItem.urls.original);\n        } else if (imageItem.illustPageCount > 1) {\n          const indexArray = Array.from(\n            Array(imageItem.illustPageCount).keys()\n          );\n          const srcs = indexArray.map(idx =>\n            imageItem.urls.original.replace('p0', `p${idx}`)\n          );\n          this.previewSrcList.push(...srcs);\n        } else {\n          this.previewSrcList.push(imageItem.urls.original);\n        }\n      } else if (!value) {\n        this.previewSrcList.length = 0;\n        this.previewCurrentIndex = 0;\n        this.previewUgoiraMetaData = null;\n        this.ugoiraPlayers.forEach(player => player.stop());\n        this.ugoiraPlayers.length = 0;\n      }\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  updated() {\n    if (this.xmode === 'preview') {\n      this.$refs.coverLayerRoot.focus();\n    }\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    clickBase(event) {\n      $print.debug('CoverLayer#clickBase: event', event);\n      this.$store.commit('coverLayer/close');\n\n      const blacklist = [\n        ...new Set(\n          this.$refs.blacklistTextarea.value\n            .split('\\n')\n            .map(s => s.trim())\n            .filter(Boolean)\n        ),\n      ];\n\n      blacklist.sort((a, b) => a - b);\n\n      this.$store.commit('setConfig', { blacklist });\n      this.$store.commit('saveConfig');\n    },\n    clickSwitch(event) {\n      $print.debug('CoverLayer#clickSwitch: event', event);\n\n      if (event.currentTarget.id === 'config-context-menu-switch') {\n        this.xc.contextMenu = toInt(!this.xc.contextMenu);\n      }\n\n      if (event.currentTarget.id === 'config-user-tooltip-switch') {\n        this.xc.userTooltip = toInt(!this.xc.userTooltip);\n      }\n\n      if (event.currentTarget.id === 'config-hover-play-switch') {\n        this.xc.hoverPlay = toInt(!this.xc.hoverPlay);\n      }\n    },\n    initZipImagePlayer() {\n      const meta = this.previewUgoiraMetaData;\n      // resize as clear\n      this.$refs.previewOriginalUgoiraCanvas.width = 0;\n      this.$refs.previewUgoiraCanvas.width = 0;\n\n      const opt = {\n        autoStart: true,\n        autosize: true,\n        canvas: this.$refs.previewUgoiraCanvas,\n        chunkSize: 300000,\n        loop: true,\n        metadata: meta,\n        source: meta.src,\n      };\n\n      this.ugoiraPlayers.push(new ZipImagePlayer(opt));\n\n      this.ugoiraPlayers.push(\n        new ZipImagePlayer(\n          Object.assign({}, opt, {\n            canvas: this.$refs.previewOriginalUgoiraCanvas,\n            source: meta.originalSrc,\n          })\n        )\n      );\n    },\n    jumpByKeyup(event) {\n      $print.debug('CoverLayer#jumpByKeyup: event', event);\n\n      if (this.xmode === 'preview') {\n        if (event.key === 'ArrowLeft') {\n          this.jumpPrev();\n        } else if (event.key === 'ArrowRight') {\n          this.jumpNext();\n        }\n      }\n    },\n    jumpByWheel(event) {\n      $print.debug('CoverLayer#jumpByWheel: event', event);\n\n      if (this.xmode === 'preview') {\n        if (event.deltaY < 0) {\n          this.jumpPrev();\n        } else if (event.deltaY > 0) {\n          this.jumpNext();\n        }\n      }\n    },\n    jumpNext() {\n      const t = this.previewSrcList.length;\n      const c = this.previewCurrentIndex;\n      this.jumpTo((c + 1) % t);\n    },\n    jumpPrev() {\n      const t = this.previewSrcList.length;\n      const c = this.previewCurrentIndex;\n      this.jumpTo((c + t - 1) % t);\n    },\n    jumpTo(index) {\n      this.previewCurrentIndex = index;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#Marisa {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#marisa-config-mode,\n#marisa-preview-mode {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#marisa-config-mode {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#marisa-config-mode a {\n  color: #00186c;\n  text-decoration: none;\n}\n#marisa-config-mode [id$=\"switch\"] {\n  text-align: center;\n}\n#marisa-config-mode [id$=\"switch\"]:hover {\n  cursor: pointer;\n}\n#marisa-config-mode [id$=\"label\"] {\n  text-align: center;\n  margin: 0 5px;\n}\n#marisa-config-blacklist-label > .fa-eye-slash {\n  margin: 0 4px;\n}\n#marisa-config-blacklist-textarea {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#marisa-preview-mode {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#marisa-preview-display-area {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#marisa-preview-display-area > a,\n#marisa-preview-display-area > div {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#marisa-preview-display-area > a > img,\n#marisa-preview-display-area > div > canvas {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#marisa-preview-thumbnails-area {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n#marisa-preview-thumbnails-area > li {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#marisa-preview-thumbnails-area > li > a {\n  cursor: pointer;\n  display: inline-flex;\n  border: 3px solid transparent;\n}\n#marisa-preview-thumbnails-area > li > a.current-preview {\n  border: 3px solid palevioletred;\n}\n#marisa-preview-thumbnails-area > li > a > img {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n</style>\n"]}, media: undefined });
 
     };
     /* scoped */
-    const __vue_scope_id__$c = "data-v-6e5f249a";
+    const __vue_scope_id__$d = "data-v-6e5f249a";
     /* module identifier */
-    const __vue_module_identifier__$c = undefined;
+    const __vue_module_identifier__$d = undefined;
     /* functional template */
-    const __vue_is_functional_template__$c = false;
+    const __vue_is_functional_template__$d = false;
     /* component normalizer */
-    function __vue_normalize__$c(
+    function __vue_normalize__$d(
       template, style, script,
       scope, functional, moduleIdentifier,
       createInjector, createInjectorSSR
@@ -6320,9 +6527,9 @@
       return component
     }
     /* style inject */
-    function __vue_create_injector__$c() {
+    function __vue_create_injector__$d() {
       const head = document.head || document.getElementsByTagName('head')[0];
-      const styles = __vue_create_injector__$c.styles || (__vue_create_injector__$c.styles = {});
+      const styles = __vue_create_injector__$d.styles || (__vue_create_injector__$d.styles = {});
       const isOldIE =
         typeof navigator !== 'undefined' &&
         /msie [6-9]\\b/.test(navigator.userAgent.toLowerCase());
@@ -6380,14 +6587,14 @@
     
 
     
-    var coverLayer$1 = __vue_normalize__$c(
-      { render: __vue_render__$c, staticRenderFns: __vue_staticRenderFns__$c },
-      __vue_inject_styles__$c,
-      __vue_script__$c,
-      __vue_scope_id__$c,
-      __vue_is_functional_template__$c,
-      __vue_module_identifier__$c,
-      __vue_create_injector__$c,
+    var coverLayer$1 = __vue_normalize__$d(
+      { render: __vue_render__$d, staticRenderFns: __vue_staticRenderFns__$d },
+      __vue_inject_styles__$d,
+      __vue_script__$d,
+      __vue_scope_id__$d,
+      __vue_is_functional_template__$d,
+      __vue_module_identifier__$d,
+      __vue_create_injector__$d,
       undefined
     );
 

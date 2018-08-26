@@ -63,8 +63,11 @@
           :user-name="d.userName"
           :show-user-profile="uid !== d.userId"/>
       </ul>
-      <span v-show="hasNoResult" id="patchouli-npp-view-no-result">
+      <span v-show="hasNoResult && routeIsInited[nppType]" id="patchouli-npp-view-no-result">
         {{ $t('mainView.newProfilePage.noResult') }}
+      </span>
+      <span v-show="hasNoResult && !routeIsInited[nppType]" id="patchouli-npp-view-loading">
+        <IconLoadingSpin/>
       </span>
     </div>
   </div>
@@ -74,9 +77,10 @@
 import { MAIN_PAGE_TYPE as MPT, NPP_TYPE_COUNT } from '../lib/enums';
 import { $el } from '../lib/utils';
 import NewDefaultImageItem from './NewDefaultImageItem.vue';
+import IconLoadingSpin from './IconLoadingSpin.vue';
 
 export default {
-  components: { NewDefaultImageItem },
+  components: { IconLoadingSpin, NewDefaultImageItem },
   data() {
     return {
       routeIsInited: Array(NPP_TYPE_COUNT).fill(false),
@@ -159,7 +163,7 @@ export default {
         break;
       }
       if (!this.routeIsInited[this.nppType]) {
-        this.$store.dispatch('pixiv/start', { force: true, times: 1 });
+        await this.$store.dispatch('pixiv/start', { force: true, times: 1 });
         this.routeIsInited[this.nppType] = true;
       }
     },
@@ -250,6 +254,11 @@ export default {
   font-size: 20px;
   font-weight: 700;
   line-height: 1;
+}
+#patchouli-npp-view-loading {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
 }
 </style>
 
