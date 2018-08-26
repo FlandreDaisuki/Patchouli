@@ -8,6 +8,10 @@
 
 A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 
+Pixiv deploys their [new profile page](https://www.pixiv.net/info.php?id=4704). We'll release v4.2.0 to make compatiable to that after they are done completely.
+
+If you are already in new profile page, you can [download the alpha version here](https://github.com/FlandreDaisuki/Patchouli/raw/4.2.x/dist/patchouli.user.js).
+
 ## Installation
 
 1. First, install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome or [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) for Firefox or [other userscript managers](https://greasyfork.org/help/installing-user-scripts) you like.

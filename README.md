@@ -8,6 +8,10 @@
 
 一個簡單暴力的 pixiv 搜尋引擎。命名以兩位**東方Project**角色為主。
 
+pixiv 目前正在實施[新版個人頁](https://www.pixiv.net/info.php?id=4704)的改版，本腳本將在 pixiv 宣佈全面完成改版時，釋出 v4.2.0 版以相容。
+
+如果你的個人頁已經被改為新版，可以[點此](https://github.com/FlandreDaisuki/Patchouli/raw/4.2.x/dist/patchouli.user.js)下載測試版。
+
 ## Installation 安裝
 
 1. 安裝 Chrome 的 [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) 或 Firefox 的 [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) 或[其他你喜歡的腳本管理器](https://greasyfork.org/help/installing-user-scripts)
