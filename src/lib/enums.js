@@ -21,3 +21,5 @@ export const SORT_TYPE = {
   BOOKMARK_ID: 1,
   ILLUST_ID: 0,
 };
+
+export const NPP_TYPE_COUNT = 5;

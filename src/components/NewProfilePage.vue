@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import { MAIN_PAGE_TYPE as MPT } from '../lib/enums';
+import { MAIN_PAGE_TYPE as MPT, NPP_TYPE_COUNT } from '../lib/enums';
 import { $el } from '../lib/utils';
 import NewDefaultImageItem from './NewDefaultImageItem.vue';
 
@@ -79,7 +79,7 @@ export default {
   components: { NewDefaultImageItem },
   data() {
     return {
-      routeIsInited: Array(5).fill(false),
+      routeIsInited: Array(NPP_TYPE_COUNT).fill(false),
     };
   },
   // eslint-disable-next-line sort-keys

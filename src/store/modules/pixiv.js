@@ -1,7 +1,7 @@
 import { PixivAPI } from '../../lib/pixiv';
 import { $print, toInt } from '../../lib/utils';
 import tagFilterQuerier from '../../lib/tagFilterQuerier';
-import { MAIN_PAGE_TYPE as MPT } from '../../lib/enums';
+import { MAIN_PAGE_TYPE as MPT, NPP_TYPE_COUNT } from '../../lib/enums';
 
 const makeNewTag = (tag) => {
   if (tag.translation) {
@@ -63,7 +63,7 @@ const state = {
   moveWindowPrivateBookmarkIndex: 0,
   nextUrl: location.href,
   nppStatus: {
-    isEnded: Array(5).fill(false),
+    isEnded: Array(NPP_TYPE_COUNT).fill(false),
     isPaused: true,
   },
   prefetchPool: {
