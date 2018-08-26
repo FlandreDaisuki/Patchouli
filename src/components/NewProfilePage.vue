@@ -84,21 +84,21 @@ export default {
   },
   // eslint-disable-next-line sort-keys
   computed: {
+    displayIndices() {
+      return this.$store.getters['pixiv/nppDisplayIndices'];
+    },
     hasNoResult() {
       return !this.imageToShowCount;
     },
     imageToShowCount() {
-      const { shows } = this.$store.getters['pixiv/nppDisplayIndices'];
+      const { shows } = this.displayIndices;
       return shows.length;
     },
     isSelfBookmarkPage() {
       return this.$store.getters.isSelfBookmarkPage;
     },
-    // isSelfPrivateBookmarkPage() {
-    //   return this.isSelfBookmarkPage && this.rest === 'hide';
-    // },
     nppProcessedLibrary() {
-      const { shows, hides } = this.$store.getters['pixiv/nppDisplayIndices'];
+      const { shows, hides } = this.displayIndices;
       const iiLib = this.$store.getters['pixiv/imageItemLibrary'];
 
       return shows.concat(hides).map(idx => iiLib[idx]);

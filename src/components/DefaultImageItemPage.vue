@@ -26,15 +26,16 @@ export default {
   components: { DefaultImageItem },
   computed: {
     defaultProcessedLibrary() {
-      const { shows, hides } = this.$store.getters[
-        'pixiv/defaultDisplayIndices'
-      ];
+      const { shows, hides } = this.displayIndices;
       const iiLib = this.$store.getters['pixiv/imageItemLibrary'];
 
       return shows.concat(hides).map(idx => iiLib[idx]);
     },
+    displayIndices() {
+      return this.$store.getters['pixiv/defaultDisplayIndices'];
+    },
     imageToShowCount() {
-      const { shows } = this.$store.getters['pixiv/defaultDisplayIndices'];
+      const { shows } = this.displayIndices;
       return shows.length;
     },
   },
