@@ -478,7 +478,6 @@ const en = {
     buttonGo: 'Go',
     buttonPause: 'Pause',
     fitWidth: 'fit browser width',
-    processed: '{count} imgs processed',
     sortByBookmarkId: 'sort by bookmark id',
     sortByDate: 'sort by date',
     sortByPopularity: 'sort by popularity',
@@ -517,7 +516,6 @@ const ja = {
     buttonGo: '捜す',
     buttonPause: '中断',
     fitWidth: '全幅',
-    processed: '{count} 件が処理された',
     sortByBookmarkId: 'ブックマーク順',
     sortByDate: '投稿順',
     sortByPopularity: '人気順',
@@ -556,7 +554,6 @@ const zhCN = {
     buttonGo: '找',
     buttonPause: '停',
     fitWidth: '自适应浏览器宽度',
-    processed: '已处理 {count} 张',
     sortByBookmarkId: '以加入顺序排序',
     sortByDate: '以日期排序',
     sortByPopularity: '以人气排序',
@@ -595,7 +592,6 @@ const zhTW = {
     buttonGo: '找',
     buttonPause: '停',
     fitWidth: '自適應瀏覽器寬度',
-    processed: '已處理 {count} 張',
     sortByBookmarkId: '以加入順序排序',
     sortByDate: '以日期排序',
     sortByPopularity: '以人氣排序',
@@ -1545,8 +1541,17 @@ var script = {
     isSelfBookmarkPage() {
       return this.$store.getters.isSelfBookmarkPage;
     },
-    processedCount() {
-      return this.$store.getters['pixiv/imageItemLibrary'].length;
+    processedCountMsg() {
+      const rootGetters = this.$store.getters;
+      const isNewProfilePage = rootGetters['pixiv/nppType'] >= 0;
+      let indices = null;
+      if (isNewProfilePage) {
+        indices = rootGetters['pixiv/nppDisplayIndices'];
+      } else {
+        indices = rootGetters['pixiv/defaultDisplayIndices'];
+      }
+      const { shows, hides } = indices;
+      return `${shows.length} / ${shows.length + hides.length}`;
     },
     sortingOrderMsg() {
       switch (this.xc.sort) {
@@ -1667,119 +1672,132 @@ var __vue_render__ = function() {
   var _h = _vm.$createElement;
   var _c = _vm._self._c || _h;
   return _c("div", { ref: _vm.id, attrs: { id: _vm.id } }, [
-    _c("div", { staticClass: "processed" }, [
-      _vm._v(
-        _vm._s(_vm.$t("ctrlPanel.processed", { count: _vm.processedCount }))
-      )
-    ]),
+    _c(
+      "div",
+      {
+        staticClass: "koakuma-block",
+        attrs: { id: "koakuma-processed-block" }
+      },
+      [_vm._v(_vm._s(_vm.processedCountMsg))]
+    ),
     _vm._v(" "),
-    _c("div", { attrs: { id: "koakuma-bookmark-sort-block" } }, [
-      _c(
-        "label",
-        {
-          attrs: {
-            id: "koakuma-bookmark-sort-label",
-            for: "koakuma-bookmark-sort-input"
-          }
-        },
-        [
-          _c("span", [_vm._v("❤️")]),
-          _vm._v(" "),
-          _c("input", {
+    _c(
+      "div",
+      {
+        staticClass: "koakuma-block",
+        attrs: { id: "koakuma-bookmark-sort-block" }
+      },
+      [
+        _c(
+          "label",
+          {
             attrs: {
-              id: "koakuma-bookmark-sort-input",
-              type: "number",
-              min: "0",
-              step: "1"
-            },
-            domProps: { value: _vm.filters.limit },
-            on: {
-              wheel: function($event) {
-                $event.stopPropagation();
-                $event.preventDefault();
-                return _vm.sortInputWheel($event)
-              },
-              input: _vm.sortInputInput
+              id: "koakuma-bookmark-sort-label",
+              for: "koakuma-bookmark-sort-input"
             }
-          })
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          attrs: { id: "koakuma-bookmark-input-usual-switch", role: "button" },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              _vm.usualSwitchOn = !_vm.usualSwitchOn;
-            }
-          }
-        },
-        [_c("i", { staticClass: "fas fa-angle-down" })]
-      ),
-      _vm._v(" "),
-      _c(
-        "ul",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.usualSwitchOn,
-              expression: "usualSwitchOn"
-            }
-          ],
-          attrs: { id: "koakuma-bookmark-input-usual-list" }
-        },
-        _vm._l(_vm.usualList, function(usual) {
-          return _c("li", { key: usual }, [
-            _c("span", { staticClass: "sort-order-apply-indicator" }, [
-              _vm._v("⮬")
-            ]),
+          },
+          [
+            _c("span", [_vm._v("❤️")]),
             _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "usual-list-link",
-                attrs: { role: "button" },
-                on: {
-                  click: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "left", 37, $event.key, [
-                        "Left",
-                        "ArrowLeft"
-                      ])
-                    ) {
-                      return null
-                    }
-                    if ("button" in $event && $event.button !== 0) {
-                      return null
-                    }
-                    return _vm.clickUsual($event)
-                  }
-                }
+            _c("input", {
+              attrs: {
+                id: "koakuma-bookmark-sort-input",
+                type: "number",
+                min: "0",
+                step: "1"
               },
-              [_vm._v(_vm._s(usual))]
-            )
-          ])
-        })
-      )
-    ]),
+              domProps: { value: _vm.filters.limit },
+              on: {
+                wheel: function($event) {
+                  $event.stopPropagation();
+                  $event.preventDefault();
+                  return _vm.sortInputWheel($event)
+                },
+                input: _vm.sortInputInput
+              }
+            })
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "a",
+          {
+            attrs: {
+              id: "koakuma-bookmark-input-usual-switch",
+              role: "button"
+            },
+            on: {
+              click: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "left", 37, $event.key, [
+                    "Left",
+                    "ArrowLeft"
+                  ])
+                ) {
+                  return null
+                }
+                if ("button" in $event && $event.button !== 0) {
+                  return null
+                }
+                _vm.usualSwitchOn = !_vm.usualSwitchOn;
+              }
+            }
+          },
+          [_c("i", { staticClass: "fas fa-angle-down" })]
+        ),
+        _vm._v(" "),
+        _c(
+          "ul",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.usualSwitchOn,
+                expression: "usualSwitchOn"
+              }
+            ],
+            attrs: { id: "koakuma-bookmark-input-usual-list" }
+          },
+          _vm._l(_vm.usualList, function(usual) {
+            return _c("li", { key: usual }, [
+              _c("span", { staticClass: "sort-order-apply-indicator" }, [
+                _vm._v("⮬")
+              ]),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "usual-list-link",
+                  attrs: { role: "button" },
+                  on: {
+                    click: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "left", 37, $event.key, [
+                          "Left",
+                          "ArrowLeft"
+                        ])
+                      ) {
+                        return null
+                      }
+                      if ("button" in $event && $event.button !== 0) {
+                        return null
+                      }
+                      return _vm.clickUsual($event)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(usual))]
+              )
+            ])
+          })
+        )
+      ]
+    ),
     _vm._v(" "),
-    _c("div", [
+    _c("div", { staticClass: "koakuma-block" }, [
       _c("input", {
         attrs: {
           id: "koakuma-bookmark-tags-filter-input",
@@ -1790,7 +1808,7 @@ var __vue_render__ = function() {
       })
     ]),
     _vm._v(" "),
-    _c("div", [
+    _c("div", { staticClass: "koakuma-block" }, [
       _c(
         "button",
         {
@@ -1818,133 +1836,63 @@ var __vue_render__ = function() {
       )
     ]),
     _vm._v(" "),
-    _c("div", { attrs: { id: "koakuma-sorting-order-block" } }, [
-      _c(
-        "a",
-        {
-          attrs: { id: "koakuma-sorting-order-select-switch", role: "button" },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              _vm.sortingOrderSwitchOn = !_vm.sortingOrderSwitchOn;
-            }
-          }
-        },
-        [
-          _c("output", {
-            attrs: { id: "koakuma-sorting-order-select-output" },
-            domProps: { innerHTML: _vm._s(_vm.sortingOrderMsg) }
-          }),
-          _vm._v(" "),
-          _c("i", { staticClass: "fas fa-angle-down" })
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "ul",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.sortingOrderSwitchOn,
-              expression: "sortingOrderSwitchOn"
-            }
-          ],
-          attrs: { id: "koakuma-sorting-order-select-list" }
-        },
-        [
-          _c("li", [
-            _c("span", { staticClass: "sort-order-apply-indicator" }, [
-              _vm._v("⮬")
-            ]),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "sorting-order-link",
-                attrs: {
-                  id: "koakuma-sorting-order-by-popularity",
-                  role: "button"
-                },
-                on: {
-                  click: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "left", 37, $event.key, [
-                        "Left",
-                        "ArrowLeft"
-                      ])
-                    ) {
-                      return null
-                    }
-                    if ("button" in $event && $event.button !== 0) {
-                      return null
-                    }
-                    return _vm.clickSortingOrder($event)
-                  }
-                }
-              },
-              [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByPopularity")))]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c("span", { staticClass: "sort-order-apply-indicator" }, [
-              _vm._v("⮬")
-            ]),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                staticClass: "sorting-order-link",
-                attrs: { id: "koakuma-sorting-order-by-date", role: "button" },
-                on: {
-                  click: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "left", 37, $event.key, [
-                        "Left",
-                        "ArrowLeft"
-                      ])
-                    ) {
-                      return null
-                    }
-                    if ("button" in $event && $event.button !== 0) {
-                      return null
-                    }
-                    return _vm.clickSortingOrder($event)
-                  }
-                }
-              },
-              [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByDate")))]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.isSelfBookmarkPage,
-                  expression: "isSelfBookmarkPage"
-                }
-              ]
+    _c(
+      "div",
+      {
+        staticClass: "koakuma-block",
+        attrs: { id: "koakuma-sorting-order-block" }
+      },
+      [
+        _c(
+          "a",
+          {
+            attrs: {
+              id: "koakuma-sorting-order-select-switch",
+              role: "button"
             },
-            [
+            on: {
+              click: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "left", 37, $event.key, [
+                    "Left",
+                    "ArrowLeft"
+                  ])
+                ) {
+                  return null
+                }
+                if ("button" in $event && $event.button !== 0) {
+                  return null
+                }
+                _vm.sortingOrderSwitchOn = !_vm.sortingOrderSwitchOn;
+              }
+            }
+          },
+          [
+            _c("output", {
+              attrs: { id: "koakuma-sorting-order-select-output" },
+              domProps: { innerHTML: _vm._s(_vm.sortingOrderMsg) }
+            }),
+            _vm._v(" "),
+            _c("i", { staticClass: "fas fa-angle-down" })
+          ]
+        ),
+        _vm._v(" "),
+        _c(
+          "ul",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.sortingOrderSwitchOn,
+                expression: "sortingOrderSwitchOn"
+              }
+            ],
+            attrs: { id: "koakuma-sorting-order-select-list" }
+          },
+          [
+            _c("li", [
               _c("span", { staticClass: "sort-order-apply-indicator" }, [
                 _vm._v("⮬")
               ]),
@@ -1954,7 +1902,7 @@ var __vue_render__ = function() {
                 {
                   staticClass: "sorting-order-link",
                   attrs: {
-                    id: "koakuma-sorting-order-by-bookmark-id",
+                    id: "koakuma-sorting-order-by-popularity",
                     role: "button"
                   },
                   on: {
@@ -1975,101 +1923,188 @@ var __vue_render__ = function() {
                     }
                   }
                 },
-                [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByBookmarkId")))]
+                [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByPopularity")))]
               )
-            ]
-          )
-        ]
-      )
-    ]),
+            ]),
+            _vm._v(" "),
+            _c("li", [
+              _c("span", { staticClass: "sort-order-apply-indicator" }, [
+                _vm._v("⮬")
+              ]),
+              _vm._v(" "),
+              _c(
+                "a",
+                {
+                  staticClass: "sorting-order-link",
+                  attrs: {
+                    id: "koakuma-sorting-order-by-date",
+                    role: "button"
+                  },
+                  on: {
+                    click: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "left", 37, $event.key, [
+                          "Left",
+                          "ArrowLeft"
+                        ])
+                      ) {
+                        return null
+                      }
+                      if ("button" in $event && $event.button !== 0) {
+                        return null
+                      }
+                      return _vm.clickSortingOrder($event)
+                    }
+                  }
+                },
+                [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByDate")))]
+              )
+            ]),
+            _vm._v(" "),
+            _c(
+              "li",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.isSelfBookmarkPage,
+                    expression: "isSelfBookmarkPage"
+                  }
+                ]
+              },
+              [
+                _c("span", { staticClass: "sort-order-apply-indicator" }, [
+                  _vm._v("⮬")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "a",
+                  {
+                    staticClass: "sorting-order-link",
+                    attrs: {
+                      id: "koakuma-sorting-order-by-bookmark-id",
+                      role: "button"
+                    },
+                    on: {
+                      click: function($event) {
+                        if (
+                          !("button" in $event) &&
+                          _vm._k($event.keyCode, "left", 37, $event.key, [
+                            "Left",
+                            "ArrowLeft"
+                          ])
+                        ) {
+                          return null
+                        }
+                        if ("button" in $event && $event.button !== 0) {
+                          return null
+                        }
+                        return _vm.clickSortingOrder($event)
+                      }
+                    }
+                  },
+                  [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByBookmarkId")))]
+                )
+              ]
+            )
+          ]
+        )
+      ]
+    ),
     _vm._v(" "),
-    _c("div", { attrs: { id: "koakuma-options-block" } }, [
-      _c("div", [
-        _c("i", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.xc.fitwidth,
-              expression: "xc.fitwidth"
-            }
-          ],
-          staticClass: "fas fa-compress",
-          attrs: { id: "koakuma-options-width-compress" },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
+    _c(
+      "div",
+      { staticClass: "koakuma-block", attrs: { id: "koakuma-options-block" } },
+      [
+        _c("div", [
+          _c("i", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.xc.fitwidth,
+                expression: "xc.fitwidth"
               }
-              if ("button" in $event && $event.button !== 0) {
-                return null
+            ],
+            staticClass: "fas fa-compress",
+            attrs: { id: "koakuma-options-width-compress" },
+            on: {
+              click: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "left", 37, $event.key, [
+                    "Left",
+                    "ArrowLeft"
+                  ])
+                ) {
+                  return null
+                }
+                if ("button" in $event && $event.button !== 0) {
+                  return null
+                }
+                return _vm.optionsChange($event)
               }
-              return _vm.optionsChange($event)
             }
-          }
-        }),
+          }),
+          _vm._v(" "),
+          _c("i", {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: !_vm.xc.fitwidth,
+                expression: "!xc.fitwidth"
+              }
+            ],
+            staticClass: "fas fa-expand",
+            attrs: { id: "koakuma-options-width-expand" },
+            on: {
+              click: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "left", 37, $event.key, [
+                    "Left",
+                    "ArrowLeft"
+                  ])
+                ) {
+                  return null
+                }
+                if ("button" in $event && $event.button !== 0) {
+                  return null
+                }
+                return _vm.optionsChange($event)
+              }
+            }
+          })
+        ]),
         _vm._v(" "),
-        _c("i", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: !_vm.xc.fitwidth,
-              expression: "!xc.fitwidth"
+        _c("div", [
+          _c("i", {
+            staticClass: "fas fa-cog",
+            attrs: { id: "koakuma-options-config" },
+            on: {
+              click: function($event) {
+                if (
+                  !("button" in $event) &&
+                  _vm._k($event.keyCode, "left", 37, $event.key, [
+                    "Left",
+                    "ArrowLeft"
+                  ])
+                ) {
+                  return null
+                }
+                if ("button" in $event && $event.button !== 0) {
+                  return null
+                }
+                return _vm.openCoverLayerInConfigMode($event)
+              }
             }
-          ],
-          staticClass: "fas fa-expand",
-          attrs: { id: "koakuma-options-width-expand" },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              return _vm.optionsChange($event)
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", [
-        _c("i", {
-          staticClass: "fas fa-cog",
-          attrs: { id: "koakuma-options-config" },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              return _vm.openCoverLayerInConfigMode($event)
-            }
-          }
-        })
-      ])
-    ])
+          })
+        ])
+      ]
+    )
   ])
 };
 var __vue_staticRenderFns__ = [];
@@ -2078,11 +2113,11 @@ __vue_render__._withStripped = true;
   /* style */
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject("data-v-a935f598_0", { source: "\na[data-v-a935f598] {\n  color: #258fb8;\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-a935f598] {\n  padding: 2px;\n}\n#Koakuma[data-v-a935f598] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n}\n#Koakuma > div[data-v-a935f598] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-bookmark-sort-label[data-v-a935f598] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block[data-v-a935f598],\n#koakuma-sorting-order-block[data-v-a935f598] {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-a935f598] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-a935f598] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-a935f598]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-a935f598]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-a935f598] {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input[data-v-a935f598]:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch[data-v-a935f598],\n#koakuma-sorting-order-select-switch[data-v-a935f598] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-a935f598] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-a935f598],\n#koakuma-sorting-order-select-list[data-v-a935f598] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list[data-v-a935f598] {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-a935f598],\n#koakuma-sorting-order-select-list > li[data-v-a935f598] {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-a935f598]::after,\n#koakuma-sorting-order-select-list > li[data-v-a935f598]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-a935f598]:first-child::after,\n#koakuma-sorting-order-select-list > li[data-v-a935f598]:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-a935f598],\n#koakuma-sorting-order-select-list .sort-order-apply-indicator[data-v-a935f598] {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-a935f598] {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator[data-v-a935f598],\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator[data-v-a935f598] {\n  visibility: visible;\n}\n.sort-order-apply-indicator[data-v-a935f598] {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link[data-v-a935f598],\n.sorting-order-link[data-v-a935f598] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link[data-v-a935f598] {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output[data-v-a935f598] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-a935f598] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-a935f598] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-a935f598] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-a935f598]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-a935f598]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-a935f598]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-a935f598] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-a935f598] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-a935f598] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-a935f598],\n#koakuma-options-width-expand[data-v-a935f598],\n#koakuma-options-config[data-v-a935f598] {\n  cursor: pointer;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/CtrlPanel.vue"],"names":[],"mappings":";AAmQA;EACA,eAAA;EACA,sBAAA;CACA;AACA;EACA,aAAA;CACA;AACA;EACA,cAAA;EACA,wBAAA;EACA,oBAAA;EACA,iBAAA;EACA,OAAA;EACA,WAAA;EACA,uBAAA;EACA,2BAAA;EACA,aAAA;EACA,eAAA;EACA,gBAAA;CACA;AACA;EACA,eAAA;EACA,qBAAA;CACA;AACA;EACA,gCAAA;EACA,oBAAA;EACA,gBAAA;EACA,2BAAA;EACA,uBAAA;EACA,wBAAA;EACA,cAAA;EACA,eAAA;CACA;AACA;;EAEA,mBAAA;EACA,yBAAA;EACA,mBAAA;CACA;AACA;EACA,uBAAA;CACA;AACA;EACA,2BAAA;EACA,aAAA;EACA,8BAAA;EACA,WAAA;EACA,eAAA;EACA,gBAAA;EACA,sBAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;;EAEA,6EAAA;EACA,yBAAA;EACA,UAAA;CACA;AACA;EACA,UAAA;EACA,eAAA;EACA,YAAA;EACA,gBAAA;EACA,0BAAA;EACA,aAAA;EACA,iBAAA;CACA;AACA;EACA,oBAAA;EACA,cAAA;CACA;AACA;;EAEA,uBAAA;EACA,aAAA;EACA,4BAAA;EACA,2BAAA;EACA,gBAAA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,aAAA;EACA,mBAAA;CACA;AACA;;EAEA,mBAAA;EACA,uBAAA;EACA,yBAAA;EACA,mBAAA;EACA,UAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,WAAA;CACA;AACA;EACA,cAAA;EACA,+BAAA;EACA,eAAA;CACA;AACA;;EAEA,cAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;;EAEA,YAAA;EACA,8BAAA;EACA,sBAAA;EACA,UAAA;EACA,UAAA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,QAAA;EACA,SAAA;EACA,YAAA;EACA,uBAAA;CACA;AACA;;EAEA,iBAAA;CACA;AACA;;EAEA,mBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,oBAAA;CACA;AACA;EACA,eAAA;EACA,wBAAA;EACA,oBAAA;EACA,oBAAA;EACA,eAAA;CACA;AACA;;EAEA,eAAA;EACA,gBAAA;EACA,mBAAA;EACA,QAAA;CACA;AACA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;EACA,cAAA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,cAAA;CACA;AACA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;EACA,iCAAA;EACA,yCAAA;EACA,gBAAA;CACA;AACA;EACA,wBAAA;EACA,iBAAA;CACA;AACA;EACA,+BAAA;EACA,2CAAA;CACA;AACA;EACA,sCAAA;CACA;AACA;EACA,qCAAA;CACA;AACA;EACA,0BAAA;EACA,YAAA;EACA,cAAA;CACA;AACA;;;EAGA,gBAAA;CACA","file":"CtrlPanel.vue","sourcesContent":["<template>\n  <div\n    :id=\"id\"\n    :ref=\"id\">\n    <div class=\"processed\">{{ $t('ctrlPanel.processed', { count: processedCount }) }}</div>\n    <div id=\"koakuma-bookmark-sort-block\">\n      <label id=\"koakuma-bookmark-sort-label\" for=\"koakuma-bookmark-sort-input\">\n        <span>❤️</span>\n        <input\n          id=\"koakuma-bookmark-sort-input\"\n          :value=\"filters.limit\"\n          type=\"number\"\n          min=\"0\"\n          step=\"1\"\n          @wheel.stop.prevent=\"sortInputWheel\"\n          @input=\"sortInputInput\">\n      </label>\n      <a\n        id=\"koakuma-bookmark-input-usual-switch\"\n        role=\"button\"\n        @click.left=\"usualSwitchOn = !usualSwitchOn\">\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"usualSwitchOn\" id=\"koakuma-bookmark-input-usual-list\">\n        <li v-for=\"usual in usualList\" :key=\"usual\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            role=\"button\"\n            class=\"usual-list-link\"\n            @click.left=\"clickUsual\">{{ usual }}</a>\n        </li>\n      </ul>\n    </div>\n    <div>\n      <input\n        id=\"koakuma-bookmark-tags-filter-input\"\n        :placeholder=\"$t('ctrlPanel.tagFilterQueryPlaceholder')\"\n        type=\"text\"\n        @input=\"tagsFilterInput\">\n    </div>\n    <div>\n      <button\n        id=\"koakuma-main-button\"\n        :disabled=\"status.isEnded\"\n        :class=\"statusClass\"\n        @mouseup.left=\"clickMainButton\">\n        {{ buttonMsg }}\n      </button>\n    </div>\n    <div id=\"koakuma-sorting-order-block\">\n      <a\n        id=\"koakuma-sorting-order-select-switch\"\n        role=\"button\"\n        @click.left=\"sortingOrderSwitchOn = !sortingOrderSwitchOn\">\n        <output id=\"koakuma-sorting-order-select-output\" v-html=\"sortingOrderMsg\"/>\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"sortingOrderSwitchOn\" id=\"koakuma-sorting-order-select-list\">\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-popularity\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByPopularity') }}</a>\n        </li>\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-date\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByDate') }}</a>\n        </li>\n        <li v-show=\"isSelfBookmarkPage\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-bookmark-id\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByBookmarkId') }}</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"koakuma-options-block\">\n      <div>\n        <i\n          v-show=\"xc.fitwidth\"\n          id=\"koakuma-options-width-compress\"\n          class=\"fas fa-compress\"\n          @click.left=\"optionsChange\"/>\n        <i\n          v-show=\"!xc.fitwidth\"\n          id=\"koakuma-options-width-expand\"\n          class=\"fas fa-expand\"\n          @click.left=\"optionsChange\"/>\n      </div>\n      <div>\n        <i\n          id=\"koakuma-options-config\"\n          class=\"fas fa-cog\"\n          @click.left=\"openCoverLayerInConfigMode\"/>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print, toInt } from '../lib/utils';\nimport { SORT_TYPE as ST } from '../lib/enums';\nexport default {\n  props: {\n    id: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      debounceId4sortInput: null,\n      debounceId4tagsFilter: null,\n      sortingOrderSwitchOn: false,\n      usualList: [100, 500, 1000, 3000, 5000, 10000],\n      usualSwitchOn: false,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    buttonMsg() {\n      if (this.status.isEnded) {\n        return this.$t('ctrlPanel.buttonEnd');\n      } else if (this.status.isPaused) {\n        return this.$t('ctrlPanel.buttonGo');\n      } else {\n        return this.$t('ctrlPanel.buttonPause');\n      }\n    },\n    filters() {\n      return this.$store.getters.filters;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    processedCount() {\n      return this.$store.getters['pixiv/imageItemLibrary'].length;\n    },\n    sortingOrderMsg() {\n      switch (this.xc.sort) {\n      case ST.BOOKMARK_COUNT:\n        return this.$t('ctrlPanel.sortByPopularity');\n      case ST.ILLUST_ID:\n        return this.$t('ctrlPanel.sortByDate');\n      default:\n        //ST.BOOKMARK_ID\n        return this.$t('ctrlPanel.sortByBookmarkId');\n      }\n    },\n    status() {\n      return this.$store.getters['pixiv/status'];\n    },\n    statusClass() {\n      const _s = this.status;\n      return {\n        end: _s.isEnded,\n        go: _s.isPaused && !_s.isEnded,\n        paused: !_s.isPaused && !_s.isEnded,\n      };\n    },\n    xc() {\n      return this.$store.getters.config;\n    },\n  },\n  methods: {\n    clickMainButton() {\n      if (this.status.isPaused) {\n        this.$store.dispatch('pixiv/start');\n      } else {\n        this.$store.dispatch('pixiv/pause');\n      }\n    },\n    clickSortingOrder(event) {\n      $print.debug('Koakuma#clickSortingOrder: event', event);\n\n      const ct = event.currentTarget;\n      switch (ct.id) {\n      case 'koakuma-sorting-order-by-popularity':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_COUNT });\n        break;\n      case 'koakuma-sorting-order-by-bookmark-id':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_ID });\n        break;\n      default:\n        this.$store.commit('setConfig', { sort: ST.ILLUST_ID });\n        break;\n      }\n\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n\n      this.sortingOrderSwitchOn = false;\n    },\n    clickUsual(event) {\n      this.$store.commit('setFilters', {\n        limit: toInt(event.currentTarget.textContent),\n      });\n      this.usualSwitchOn = false;\n    },\n    openCoverLayerInConfigMode() {\n      this.$store.commit('coverLayer/open', { data: null, mode: 'config' });\n    },\n    optionsChange(event) {\n      $print.debug('Koakuma#optionsChange: event', event);\n      if (event.target.id === 'koakuma-options-width-compress') {\n        this.$store.commit('setConfig', { fitwidth: false });\n      } else if (event.target.id === 'koakuma-options-width-expand') {\n        this.$store.commit('setConfig', { fitwidth: true });\n      }\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n    },\n    sortInputInput(event) {\n      if (this.debounceId4sortInput) {\n        clearTimeout(this.debounceId4sortInput);\n      }\n      this.debounceId4sortInput = setTimeout(() => {\n        this.debounceId4sortInput = null;\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value)),\n        });\n      }, 500);\n    },\n    sortInputWheel(event) {\n      if (event.deltaY < 0) {\n        this.$store.commit('setFilters', {\n          limit: toInt(event.target.value) + 20,\n        });\n      } else {\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value) - 20),\n        });\n      }\n    },\n    tagsFilterInput(event) {\n      if (this.debounceId4tagsFilter) {\n        clearTimeout(this.debounceId4tagsFilter);\n      }\n      this.debounceId4tagsFilter = setTimeout(() => {\n        this.debounceId4tagsFilter = null;\n        this.$store.commit('setFilters', {\n          query: event.target.value,\n        });\n      }, 1500);\n    },\n  },\n};\n</script>\n\n<style scoped>\na {\n  color: #258fb8;\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down {\n  padding: 2px;\n}\n#Koakuma {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n}\n#Koakuma > div {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-bookmark-sort-label {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block,\n#koakuma-sorting-order-block {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch,\n#koakuma-sorting-order-select-switch {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list,\n#koakuma-sorting-order-select-list {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li,\n#koakuma-sorting-order-select-list > li {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li::after,\n#koakuma-sorting-order-select-list > li::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li:first-child::after,\n#koakuma-sorting-order-select-list > li:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list .sort-order-apply-indicator {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator {\n  visibility: visible;\n}\n.sort-order-apply-indicator {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link,\n.sorting-order-link {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select {\n  font-size: 14px;\n}\n#koakuma-options-block > * {\n  margin: 0 5px;\n}\n#koakuma-main-button {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress,\n#koakuma-options-width-expand,\n#koakuma-options-config {\n  cursor: pointer;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-4305a231_0", { source: "\na[data-v-4305a231] {\n  color: #258fb8;\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-4305a231] {\n  padding: 2px;\n}\n#Koakuma[data-v-4305a231] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n}\n.koakuma-block[data-v-4305a231] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-processed-block[data-v-4305a231] {\n  font-size: 18px;\n}\n#koakuma-bookmark-sort-label[data-v-4305a231] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block[data-v-4305a231],\n#koakuma-sorting-order-block[data-v-4305a231] {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-4305a231] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-4305a231] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-4305a231]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-4305a231]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-4305a231] {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input[data-v-4305a231]:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch[data-v-4305a231],\n#koakuma-sorting-order-select-switch[data-v-4305a231] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-4305a231] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-4305a231],\n#koakuma-sorting-order-select-list[data-v-4305a231] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list[data-v-4305a231] {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-4305a231],\n#koakuma-sorting-order-select-list > li[data-v-4305a231] {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-4305a231]::after,\n#koakuma-sorting-order-select-list > li[data-v-4305a231]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-4305a231]:first-child::after,\n#koakuma-sorting-order-select-list > li[data-v-4305a231]:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-4305a231],\n#koakuma-sorting-order-select-list .sort-order-apply-indicator[data-v-4305a231] {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-4305a231] {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator[data-v-4305a231],\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator[data-v-4305a231] {\n  visibility: visible;\n}\n.sort-order-apply-indicator[data-v-4305a231] {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link[data-v-4305a231],\n.sorting-order-link[data-v-4305a231] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link[data-v-4305a231] {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output[data-v-4305a231] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-4305a231] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-4305a231] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-4305a231] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-4305a231]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-4305a231]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-4305a231]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-4305a231] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-4305a231] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-4305a231] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-4305a231],\n#koakuma-options-width-expand[data-v-4305a231],\n#koakuma-options-config[data-v-4305a231] {\n  cursor: pointer;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/CtrlPanel.vue"],"names":[],"mappings":";AA4QA;EACA,eAAA;EACA,sBAAA;CACA;AACA;EACA,aAAA;CACA;AACA;EACA,cAAA;EACA,wBAAA;EACA,oBAAA;EACA,iBAAA;EACA,OAAA;EACA,WAAA;EACA,uBAAA;EACA,2BAAA;EACA,aAAA;EACA,eAAA;EACA,gBAAA;CACA;AACA;EACA,eAAA;EACA,qBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,gCAAA;EACA,oBAAA;EACA,gBAAA;EACA,2BAAA;EACA,uBAAA;EACA,wBAAA;EACA,cAAA;EACA,eAAA;CACA;AACA;;EAEA,mBAAA;EACA,yBAAA;EACA,mBAAA;CACA;AACA;EACA,uBAAA;CACA;AACA;EACA,2BAAA;EACA,aAAA;EACA,8BAAA;EACA,WAAA;EACA,eAAA;EACA,gBAAA;EACA,sBAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;;EAEA,6EAAA;EACA,yBAAA;EACA,UAAA;CACA;AACA;EACA,UAAA;EACA,eAAA;EACA,YAAA;EACA,gBAAA;EACA,0BAAA;EACA,aAAA;EACA,iBAAA;CACA;AACA;EACA,oBAAA;EACA,cAAA;CACA;AACA;;EAEA,uBAAA;EACA,aAAA;EACA,4BAAA;EACA,2BAAA;EACA,gBAAA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,aAAA;EACA,mBAAA;CACA;AACA;;EAEA,mBAAA;EACA,uBAAA;EACA,yBAAA;EACA,mBAAA;EACA,UAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,WAAA;CACA;AACA;EACA,cAAA;EACA,+BAAA;EACA,eAAA;CACA;AACA;;EAEA,cAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;;EAEA,YAAA;EACA,8BAAA;EACA,sBAAA;EACA,UAAA;EACA,UAAA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,QAAA;EACA,SAAA;EACA,YAAA;EACA,uBAAA;CACA;AACA;;EAEA,iBAAA;CACA;AACA;;EAEA,mBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,oBAAA;CACA;AACA;EACA,eAAA;EACA,wBAAA;EACA,oBAAA;EACA,oBAAA;EACA,eAAA;CACA;AACA;;EAEA,eAAA;EACA,gBAAA;EACA,mBAAA;EACA,QAAA;CACA;AACA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;EACA,cAAA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,cAAA;CACA;AACA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;EACA,iCAAA;EACA,yCAAA;EACA,gBAAA;CACA;AACA;EACA,wBAAA;EACA,iBAAA;CACA;AACA;EACA,+BAAA;EACA,2CAAA;CACA;AACA;EACA,sCAAA;CACA;AACA;EACA,qCAAA;CACA;AACA;EACA,0BAAA;EACA,YAAA;EACA,cAAA;CACA;AACA;;;EAGA,gBAAA;CACA","file":"CtrlPanel.vue","sourcesContent":["<template>\n  <div\n    :id=\"id\"\n    :ref=\"id\">\n    <div id=\"koakuma-processed-block\" class=\"koakuma-block\">{{ processedCountMsg }}</div>\n    <div id=\"koakuma-bookmark-sort-block\" class=\"koakuma-block\">\n      <label id=\"koakuma-bookmark-sort-label\" for=\"koakuma-bookmark-sort-input\">\n        <span>❤️</span>\n        <input\n          id=\"koakuma-bookmark-sort-input\"\n          :value=\"filters.limit\"\n          type=\"number\"\n          min=\"0\"\n          step=\"1\"\n          @wheel.stop.prevent=\"sortInputWheel\"\n          @input=\"sortInputInput\">\n      </label>\n      <a\n        id=\"koakuma-bookmark-input-usual-switch\"\n        role=\"button\"\n        @click.left=\"usualSwitchOn = !usualSwitchOn\">\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"usualSwitchOn\" id=\"koakuma-bookmark-input-usual-list\">\n        <li v-for=\"usual in usualList\" :key=\"usual\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            role=\"button\"\n            class=\"usual-list-link\"\n            @click.left=\"clickUsual\">{{ usual }}</a>\n        </li>\n      </ul>\n    </div>\n    <div class=\"koakuma-block\">\n      <input\n        id=\"koakuma-bookmark-tags-filter-input\"\n        :placeholder=\"$t('ctrlPanel.tagFilterQueryPlaceholder')\"\n        type=\"text\"\n        @input=\"tagsFilterInput\">\n    </div>\n    <div class=\"koakuma-block\">\n      <button\n        id=\"koakuma-main-button\"\n        :disabled=\"status.isEnded\"\n        :class=\"statusClass\"\n        @mouseup.left=\"clickMainButton\">\n        {{ buttonMsg }}\n      </button>\n    </div>\n    <div id=\"koakuma-sorting-order-block\" class=\"koakuma-block\">\n      <a\n        id=\"koakuma-sorting-order-select-switch\"\n        role=\"button\"\n        @click.left=\"sortingOrderSwitchOn = !sortingOrderSwitchOn\">\n        <output id=\"koakuma-sorting-order-select-output\" v-html=\"sortingOrderMsg\"/>\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"sortingOrderSwitchOn\" id=\"koakuma-sorting-order-select-list\">\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-popularity\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByPopularity') }}</a>\n        </li>\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-date\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByDate') }}</a>\n        </li>\n        <li v-show=\"isSelfBookmarkPage\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-bookmark-id\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByBookmarkId') }}</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"koakuma-options-block\" class=\"koakuma-block\">\n      <div>\n        <i\n          v-show=\"xc.fitwidth\"\n          id=\"koakuma-options-width-compress\"\n          class=\"fas fa-compress\"\n          @click.left=\"optionsChange\"/>\n        <i\n          v-show=\"!xc.fitwidth\"\n          id=\"koakuma-options-width-expand\"\n          class=\"fas fa-expand\"\n          @click.left=\"optionsChange\"/>\n      </div>\n      <div>\n        <i\n          id=\"koakuma-options-config\"\n          class=\"fas fa-cog\"\n          @click.left=\"openCoverLayerInConfigMode\"/>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print, toInt } from '../lib/utils';\nimport { SORT_TYPE as ST } from '../lib/enums';\nexport default {\n  props: {\n    id: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      debounceId4sortInput: null,\n      debounceId4tagsFilter: null,\n      sortingOrderSwitchOn: false,\n      usualList: [100, 500, 1000, 3000, 5000, 10000],\n      usualSwitchOn: false,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    buttonMsg() {\n      if (this.status.isEnded) {\n        return this.$t('ctrlPanel.buttonEnd');\n      } else if (this.status.isPaused) {\n        return this.$t('ctrlPanel.buttonGo');\n      } else {\n        return this.$t('ctrlPanel.buttonPause');\n      }\n    },\n    filters() {\n      return this.$store.getters.filters;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    processedCountMsg() {\n      const rootGetters = this.$store.getters;\n      const isNewProfilePage = rootGetters['pixiv/nppType'] >= 0;\n      let indices = null;\n      if (isNewProfilePage) {\n        indices = rootGetters['pixiv/nppDisplayIndices'];\n      } else {\n        indices = rootGetters['pixiv/defaultDisplayIndices'];\n      }\n      const { shows, hides } = indices;\n      return `${shows.length} / ${shows.length + hides.length}`;\n    },\n    sortingOrderMsg() {\n      switch (this.xc.sort) {\n      case ST.BOOKMARK_COUNT:\n        return this.$t('ctrlPanel.sortByPopularity');\n      case ST.ILLUST_ID:\n        return this.$t('ctrlPanel.sortByDate');\n      default:\n        //ST.BOOKMARK_ID\n        return this.$t('ctrlPanel.sortByBookmarkId');\n      }\n    },\n    status() {\n      return this.$store.getters['pixiv/status'];\n    },\n    statusClass() {\n      const _s = this.status;\n      return {\n        end: _s.isEnded,\n        go: _s.isPaused && !_s.isEnded,\n        paused: !_s.isPaused && !_s.isEnded,\n      };\n    },\n    xc() {\n      return this.$store.getters.config;\n    },\n  },\n  methods: {\n    clickMainButton() {\n      if (this.status.isPaused) {\n        this.$store.dispatch('pixiv/start');\n      } else {\n        this.$store.dispatch('pixiv/pause');\n      }\n    },\n    clickSortingOrder(event) {\n      $print.debug('Koakuma#clickSortingOrder: event', event);\n\n      const ct = event.currentTarget;\n      switch (ct.id) {\n      case 'koakuma-sorting-order-by-popularity':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_COUNT });\n        break;\n      case 'koakuma-sorting-order-by-bookmark-id':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_ID });\n        break;\n      default:\n        this.$store.commit('setConfig', { sort: ST.ILLUST_ID });\n        break;\n      }\n\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n\n      this.sortingOrderSwitchOn = false;\n    },\n    clickUsual(event) {\n      this.$store.commit('setFilters', {\n        limit: toInt(event.currentTarget.textContent),\n      });\n      this.usualSwitchOn = false;\n    },\n    openCoverLayerInConfigMode() {\n      this.$store.commit('coverLayer/open', { data: null, mode: 'config' });\n    },\n    optionsChange(event) {\n      $print.debug('Koakuma#optionsChange: event', event);\n      if (event.target.id === 'koakuma-options-width-compress') {\n        this.$store.commit('setConfig', { fitwidth: false });\n      } else if (event.target.id === 'koakuma-options-width-expand') {\n        this.$store.commit('setConfig', { fitwidth: true });\n      }\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n    },\n    sortInputInput(event) {\n      if (this.debounceId4sortInput) {\n        clearTimeout(this.debounceId4sortInput);\n      }\n      this.debounceId4sortInput = setTimeout(() => {\n        this.debounceId4sortInput = null;\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value)),\n        });\n      }, 500);\n    },\n    sortInputWheel(event) {\n      if (event.deltaY < 0) {\n        this.$store.commit('setFilters', {\n          limit: toInt(event.target.value) + 20,\n        });\n      } else {\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value) - 20),\n        });\n      }\n    },\n    tagsFilterInput(event) {\n      if (this.debounceId4tagsFilter) {\n        clearTimeout(this.debounceId4tagsFilter);\n      }\n      this.debounceId4tagsFilter = setTimeout(() => {\n        this.debounceId4tagsFilter = null;\n        this.$store.commit('setFilters', {\n          query: event.target.value,\n        });\n      }, 1500);\n    },\n  },\n};\n</script>\n\n<style scoped>\na {\n  color: #258fb8;\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down {\n  padding: 2px;\n}\n#Koakuma {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n}\n.koakuma-block {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-processed-block {\n  font-size: 18px;\n}\n#koakuma-bookmark-sort-label {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block,\n#koakuma-sorting-order-block {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch,\n#koakuma-sorting-order-select-switch {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list,\n#koakuma-sorting-order-select-list {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li,\n#koakuma-sorting-order-select-list > li {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li::after,\n#koakuma-sorting-order-select-list > li::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li:first-child::after,\n#koakuma-sorting-order-select-list > li:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list .sort-order-apply-indicator {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator {\n  visibility: visible;\n}\n.sort-order-apply-indicator {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link,\n.sorting-order-link {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select {\n  font-size: 14px;\n}\n#koakuma-options-block > * {\n  margin: 0 5px;\n}\n#koakuma-main-button {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress,\n#koakuma-options-width-expand,\n#koakuma-options-config {\n  cursor: pointer;\n}\n</style>\n"]}, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__ = "data-v-a935f598";
+  const __vue_scope_id__ = "data-v-4305a231";
   /* module identifier */
   const __vue_module_identifier__ = undefined;
   /* functional template */

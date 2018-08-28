@@ -2,8 +2,8 @@
   <div
     :id="id"
     :ref="id">
-    <div class="processed">{{ $t('ctrlPanel.processed', { count: processedCount }) }}</div>
-    <div id="koakuma-bookmark-sort-block">
+    <div id="koakuma-processed-block" class="koakuma-block">{{ processedCountMsg }}</div>
+    <div id="koakuma-bookmark-sort-block" class="koakuma-block">
       <label id="koakuma-bookmark-sort-label" for="koakuma-bookmark-sort-input">
         <span>❤️</span>
         <input
@@ -31,14 +31,14 @@
         </li>
       </ul>
     </div>
-    <div>
+    <div class="koakuma-block">
       <input
         id="koakuma-bookmark-tags-filter-input"
         :placeholder="$t('ctrlPanel.tagFilterQueryPlaceholder')"
         type="text"
         @input="tagsFilterInput">
     </div>
-    <div>
+    <div class="koakuma-block">
       <button
         id="koakuma-main-button"
         :disabled="status.isEnded"
@@ -47,7 +47,7 @@
         {{ buttonMsg }}
       </button>
     </div>
-    <div id="koakuma-sorting-order-block">
+    <div id="koakuma-sorting-order-block" class="koakuma-block">
       <a
         id="koakuma-sorting-order-select-switch"
         role="button"
@@ -82,7 +82,7 @@
         </li>
       </ul>
     </div>
-    <div id="koakuma-options-block">
+    <div id="koakuma-options-block" class="koakuma-block">
       <div>
         <i
           v-show="xc.fitwidth"
@@ -142,8 +142,17 @@ export default {
     isSelfBookmarkPage() {
       return this.$store.getters.isSelfBookmarkPage;
     },
-    processedCount() {
-      return this.$store.getters['pixiv/imageItemLibrary'].length;
+    processedCountMsg() {
+      const rootGetters = this.$store.getters;
+      const isNewProfilePage = rootGetters['pixiv/nppType'] >= 0;
+      let indices = null;
+      if (isNewProfilePage) {
+        indices = rootGetters['pixiv/nppDisplayIndices'];
+      } else {
+        indices = rootGetters['pixiv/defaultDisplayIndices'];
+      }
+      const { shows, hides } = indices;
+      return `${shows.length} / ${shows.length + hides.length}`;
     },
     sortingOrderMsg() {
       switch (this.xc.sort) {
@@ -277,9 +286,12 @@ a[role="button"] > .fa-angle-down {
   color: #00186c;
   font-size: 16px;
 }
-#Koakuma > div {
+.koakuma-block {
   margin: 0 10px;
   display: inline-flex;
+}
+#koakuma-processed-block {
+  font-size: 18px;
 }
 #koakuma-bookmark-sort-label {
   display: inline-flex !important;
