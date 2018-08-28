@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { InitError } from '../lib/errors';
 import { MAIN_PAGE_TYPE as MPT, SORT_TYPE as ST } from '../lib/enums';
-import { $, $el, $$, $after, $print, $ready } from '../lib/utils';
+import { $, $el, $$, $print, $ready } from '../lib/utils';
 import pixiv from './modules/pixiv';
 import contextMenu from './modules/contextMenu';
 import coverLayer from './modules/coverLayer';
@@ -242,9 +242,9 @@ const actions = {
       state.mountPointCtrlPanel = $el('div', null, async(el) => {
         if (getters['pixiv/nppType'] >= 0) {
           await $ready(() => $('.sLHPYEz'));
-          $after($('.sLHPYEz').parentNode, el);
+          $('.sLHPYEz').parentNode.insertAdjacentElement('afterend', el);
         } else {
-          $after($('header._global-header'), el);
+          $('header._global-header').insertAdjacentElement('afterend', el);
         }
         state.ctrlPanelOffsetY = el.getBoundingClientRect().y;
       });

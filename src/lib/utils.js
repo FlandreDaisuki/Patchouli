@@ -38,10 +38,6 @@ export const toInt = (x) => {
   return isNaN(t) ? 0 : Math.floor(t);
 };
 
-export const $after = (el, target) => {
-  el.parentNode.insertBefore(target, el.nextSibling);
-};
-
 export const toFormUrlencoded = (o) => {
   // application/x-www-form-urlencoded
   return Object.entries(o)

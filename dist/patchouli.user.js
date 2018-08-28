@@ -100,9 +100,6 @@
     const t = Number(x);
     return isNaN(t) ? 0 : Math.floor(t);
   };
-  const $after = (el, target) => {
-    el.parentNode.insertBefore(target, el.nextSibling);
-  };
   const toFormUrlencoded = (o) => {
     return Object.entries(o)
       .map(p => p.map(encodeURIComponent).join('='))
@@ -1286,9 +1283,9 @@
         state.mountPointCtrlPanel = $el('div', null, async(el) => {
           if (getters['pixiv/nppType'] >= 0) {
             await $ready(() => $('.sLHPYEz'));
-            $after($('.sLHPYEz').parentNode, el);
+            $('.sLHPYEz').parentNode.insertAdjacentElement('afterend', el);
           } else {
-            $after($('header._global-header'), el);
+            $('header._global-header').insertAdjacentElement('afterend', el);
           }
           state.ctrlPanelOffsetY = el.getBoundingClientRect().y;
         });
