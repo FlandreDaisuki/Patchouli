@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 import { MAIN_PAGE_TYPE as MPT } from './lib/enums';
-import { $, $print, $el, $parents } from './lib/utils';
+import { $, $print, $el } from './lib/utils';
 import { removeAnnoyings } from './lib/pixiv';
 import i18n from './lib/i18n';
 import vuexStore from './store/index';
@@ -165,10 +165,10 @@ vuexStore.dispatch('init')
       $print.debug('body#click event:', event);
 
       const koakuma = Koakuma.$children[0];
-      if (!$parents(event.target).find((el) => el.id === 'koakuma-bookmark-input-usual-switch')) {
+      if (!event.target.closest('#koakuma-bookmark-input-usual-switch')) {
         koakuma.usualSwitchOn = false;
       }
-      if (!$parents(event.target).find((el) => el.id === 'koakuma-sorting-order-select-switch')) {
+      if (!event.target.closest('#koakuma-sorting-order-select-switch')) {
         koakuma.sortingOrderSwitchOn = false;
       }
 

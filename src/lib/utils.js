@@ -42,16 +42,6 @@ export const $after = (el, target) => {
   el.parentNode.insertBefore(target, el.nextSibling);
 };
 
-export const $parents = (el) => {
-  let cur = el;
-  const collection = [];
-  while (cur.parentElement) {
-    collection.push(cur.parentElement);
-    cur = cur.parentElement;
-  }
-  return collection;
-};
-
 export const toFormUrlencoded = (o) => {
   // application/x-www-form-urlencoded
   return Object.entries(o)

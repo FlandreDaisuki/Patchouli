@@ -68,16 +68,6 @@ const $after = (el, target) => {
   el.parentNode.insertBefore(target, el.nextSibling);
 };
 
-const $parents = (el) => {
-  let cur = el;
-  const collection = [];
-  while (cur.parentElement) {
-    collection.push(cur.parentElement);
-    cur = cur.parentElement;
-  }
-  return collection;
-};
-
 const toFormUrlencoded = (o) => {
   // application/x-www-form-urlencoded
   return Object.entries(o)
@@ -6740,10 +6730,10 @@ vuexStore.dispatch('init')
       $print.debug('body#click event:', event);
 
       const koakuma = Koakuma.$children[0];
-      if (!$parents(event.target).find((el) => el.id === 'koakuma-bookmark-input-usual-switch')) {
+      if (!event.target.closest('#koakuma-bookmark-input-usual-switch')) {
         koakuma.usualSwitchOn = false;
       }
-      if (!$parents(event.target).find((el) => el.id === 'koakuma-sorting-order-select-switch')) {
+      if (!event.target.closest('#koakuma-sorting-order-select-switch')) {
         koakuma.sortingOrderSwitchOn = false;
       }
 
