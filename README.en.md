@@ -4,6 +4,15 @@
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
+- [Introduction](#introduction)
+- [Installation](#installation)
+  - [Compatibility Table](#compatibility-table)
+- [Functions](#functions)
+- [Usage](#usage)
+- [Contribution](#contribution)
+- [Lisence](#lisence)
+- [Changelog](#changelog)
+
 ## Introduction
 
 A simple pixiv crawler. Naming is inspired from **Touhou Project**.
@@ -13,36 +22,67 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
 1. First, install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome or [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) for Firefox or [other userscript managers](https://greasyfork.org/help/installing-user-scripts) you like.
 2. Then, click [**`here`**](https://rawgit.com/FlandreDaisuki/Patchouli/master/dist/patchouli.user.js)
 
+### Compatibility Table
+
+|×|![tampermonkey](assets/tm32.png)|![violentmonkey](assets/vm32.png)|![greasemonkey](assets/gm32.png)|
+|:--:|:--:|:--:|:--:|
+|![Firefox](assets/fx32.png)|✔️|✔️|🔺|
+|![Google Chrome](assets/gc32.png)|✔️|✔️| N/A |
+
+🔺 Not support Greasemonkey ugoira autoplay ([#22](https://github.com/FlandreDaisuki/Patchouli/issues/22))
+
 ## Functions
 
-- Find pictures automatically
-- The UI with i18n (en, ja, zh-cn, zh-tw)
-- Filter by **bookmarks count**<br>
-  ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
+### Demo Video
+
+[![demo video](https://img.youtube.com/vi/zIoCwdpZr0M/0.jpg)](https://www.youtube.com/watch?v=zIoCwdpZr0M)
+
+### Control Panel
+
+![koakuma](assets/koakuma-en.png)
+
+- Press `GO`, find all. (No need pagination any more)
+- The UI with i18n (en, ja, zh-cn, zh-tw) **Welcome translation PR**
+- Filter by **bookmarks count**
 - Filter by **Tag Filter Query**<br>
-  ![tags filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tags-filter.png)
    - Basic examples: `flandre`, `users入り`, `-R-18`
    - Logical operator examples: `flandre || koishi`, `touhou && R-18`
    - complicated examples: `touhou && {flandre || alice}`
    - More details in [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
-- Sort by **bookmarks count or upload time**<br>
-  ![sorting by](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/sorting-by.png)
+- Sort by **bookmarks count**or **upload time** or **bookmark added time**
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
+- Settings:
+   - Switch right click extension
+   - Switch illustrator tooltip (the popup when mouse over illustrator name)
+   - Switch ugoira autoplay
+   - Blacklist
+
+### Image items
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> to indicate following illustrator
-- Right click extension
-   - Click on image
-      - Like
-      - Download original size image (only support single image)
-      - Preview  original size images (can browse with mouse wheel and arrow key)
-      - Open add bookmark page (Just click <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
-   - Click on illustrator name
-      - Follow
-      - Blacklist (simulate mute function)
-- Autoplay ugoira when mouse over ⚠️ This feature uses network bandwith quite heavily ⚠️
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12">to indicate bookmarked or not, click icon can add or remove bookmark directly
 
-## Usage
+![imageitem](assets/imageitem.png)
 
-[![demo video](https://img.youtube.com/vi/zIoCwdpZr0M/0.jpg)](https://www.youtube.com/watch?v=zIoCwdpZr0M)
+Autoplay ugoira when mouse over ⚠️ This feature uses network bandwith quite heavily ⚠️
+
+![ugoira](assets/ugoira.gif)
+
+Right click extension
+- Click on image
+   - Like
+   - Download original size image (only support single image)
+   - Preview images in preview mode
+   - Open add bookmark (with tags) page
+- Click on illustrator name
+   - Follow
+   - Blacklist (simulate mute function)
+
+
+### Preview Mode
+
+Support single, multiple, and ugoira illustration, and manipulate with mouse click and wheel scroll.
+
+![preview mode](assets/preview-mode.png)
 
 ## Contribution
 
