@@ -62,7 +62,7 @@
 
 ### 插圖簡介
 
-- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> 標注已關注繪師
+- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.svg" width="12"> 標注已關注繪師
 - 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12">表示已收藏/未收藏，點擊則可直接添加收藏及取消收藏
 
 ![imageitem](assets/imageitem.png)
