@@ -92,10 +92,6 @@ const mutations = {
         });
       }
     }
-    const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
-    if (!_sbp && state.config.sort === ST.BOOKMARK_ID) {
-      state.config.sort = ST.ILLUST_ID;
-    }
   },
   applyConfig: (state) => {
     if (state.mainPageType !== MPT.NO_SUPPORT) {
@@ -121,74 +117,65 @@ const mutations = {
     Object.assign(state.filters, payload);
   },
   setMainPageType: (state, payload = {}) => {
+    $print.debug('vuexStore#setMainPageType: payload:', payload);
+
     if (payload.forceSet) {
-      $print.debug('vuexStore#setMainPageType: payload:', payload);
       state.mainPageType = payload.forceSet;
+    } else {
+      const path = location.pathname;
+      const sp = state.searchParam;
 
-      const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
-      if (!_sbp && state.config.sort === ST.BOOKMARK_ID) {
-        state.config.sort = ST.ILLUST_ID;
+      switch (path) {
+      case '/search.php':
+        state.mainPageType = MPT.SEARCH;
+        break;
+      case '/bookmark_new_illust_r18.php':
+      case '/bookmark_new_illust.php':
+        state.mainPageType = MPT.FOLLOWED_NEWS;
+        break;
+      case '/new_illust.php':
+      case '/mypixiv_new_illust.php':
+      case '/new_illust_r18.php':
+        state.mainPageType = MPT.ANCIENT_FOLLOWED_NEWS;
+        break;
+      case '/member.php':
+        state.mainPageType = MPT.NEW_PROFILE;
+        break;
+      case '/member_illust.php':
+        if (sp.mode) {
+          state.mainPageType = MPT.NO_SUPPORT;
+          break;
+        }
+
+        if (sp.type === 'manga') {
+          state.mainPageType = MPT.NEW_PROFILE_MANGA; // pool = manga
+        } else if (sp.type === 'illust') {
+          state.mainPageType = MPT.NEW_PROFILE_ILLUST; // pool = illusts
+        } else { // !sp.type
+          state.mainPageType = MPT.NEW_PROFILE; // pool = all (illusts + manga)
+        }
+        break;
+      case '/bookmark.php': {
+        if (sp.rest && sp.id) {
+          // ?id={userId}&rest=show
+          // ?id={userId}&rest=hide
+          state.mainPageType =  MPT.NEW_PROFILE_BOOKMARK;
+        } else if (sp.type === 'user' || sp.type === 'reg_user') {
+          // ?id={userId}&type=user
+          // ?id={userId}&type=reg_user
+          state.mainPageType = MPT.NO_SUPPORT;
+        } else {
+          // ?
+          // ?untagged=1
+          // ?type=illust_all
+          state.mainPageType = MPT.SELF_BOOKMARK;
+        }
+        break;
       }
-      return;
-    }
-
-    const path = location.pathname;
-
-    const _id = state.searchParam.id;
-    const _type = state.searchParam.type;
-    const _mode = state.searchParam.mode;
-    const _rest = state.searchParam.rest;
-
-    switch (path) {
-    case '/search.php':
-      state.mainPageType = MPT.SEARCH;
-      break;
-    case '/bookmark_new_illust_r18.php':
-    case '/bookmark_new_illust.php':
-      state.mainPageType = MPT.FOLLOWED_NEWS;
-      break;
-    case '/new_illust.php':
-    case '/mypixiv_new_illust.php':
-    case '/new_illust_r18.php':
-      state.mainPageType = MPT.ANCIENT_FOLLOWED_NEWS;
-      break;
-    case '/member.php':
-      state.mainPageType = MPT.NEW_PROFILE;
-      break;
-    case '/member_illust.php':
-      if (_mode) {
+      default:
         state.mainPageType = MPT.NO_SUPPORT;
         break;
       }
-
-      if (_type === 'manga') {
-        state.mainPageType = MPT.NEW_PROFILE_MANGA; // pool = manga
-      } else if (_type === 'illust') {
-        state.mainPageType = MPT.NEW_PROFILE_ILLUST; // pool = illusts
-      } else { // !_type
-        state.mainPageType = MPT.NEW_PROFILE; // pool = all (illusts + manga)
-      }
-      break;
-    case '/bookmark.php': {
-      if (_rest && _id) {
-        // ?id={userId}&rest=show
-        // ?id={userId}&rest=hide
-        state.mainPageType =  MPT.NEW_PROFILE_BOOKMARK;
-      } else if (_type === 'user' || _type === 'reg_user') {
-        // ?id={userId}&type=user
-        // ?id={userId}&type=reg_user
-        state.mainPageType = MPT.NO_SUPPORT;
-      } else {
-        // ?
-        // ?untagged=1
-        // ?type=illust_all
-        state.mainPageType = MPT.SELF_BOOKMARK;
-      }
-      break;
-    }
-    default:
-      state.mainPageType = MPT.NO_SUPPORT;
-      break;
     }
 
     const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
@@ -219,60 +206,59 @@ const actions = {
     // determine mainPageType
     commit('setMainPageType');
 
-    commit('loadConfig');
+    if (state.mainPageType !== MPT.NO_SUPPORT) {
+      commit('loadConfig');
 
-    // set mount points by mainPageType
-    await dispatch('setMountPoints');
+      // set mount points by mainPageType
+      await dispatch('setMountPoints');
 
-    // others
-    commit('afterInit');
-    commit('applyConfig');
-    commit('saveConfig');
+      // others
+      commit('afterInit');
+      commit('applyConfig');
+      commit('saveConfig');
+    }
   },
   setMountPoints: async({ state, getters }) => {
-    const mpt = state.mainPageType;
-    if (mpt !== MPT.NO_SUPPORT) {
+    $$('#wrapper').forEach(el => el.classList.add('ω'));
 
-      $$('#wrapper').forEach(el => el.classList.add('ω'));
+    state.mountPointCoverLayer = $el('div', null, (el) => {
+      document.body.appendChild(el);
+    });
 
-      state.mountPointCoverLayer = $el('div', null, (el) => {
-        document.body.appendChild(el);
-      });
-
-      state.mountPointCtrlPanel = $el('div', null, async(el) => {
-        if (getters['pixiv/nppType'] >= 0) {
-          await $ready(() => $('.sLHPYEz'));
-          $('.sLHPYEz').parentNode.insertAdjacentElement('afterend', el);
-        } else {
-          $('header._global-header').insertAdjacentElement('afterend', el);
-        }
-        state.ctrlPanelOffsetY = el.getBoundingClientRect().y;
-      });
-
-      switch (mpt) {
-      case MPT.SEARCH:
-        state.mountPointMainView = $('#js-react-search-mid');
-        break;
-      case MPT.FOLLOWED_NEWS:
-        state.mountPointMainView = $('#js-mount-point-latest-following');
-        break;
-      case MPT.ANCIENT_FOLLOWED_NEWS:
-        state.mountPointMainView = $('ul._image-items');
-        break;
-      case MPT.NEW_PROFILE:
-      case MPT.NEW_PROFILE_BOOKMARK:
-      case MPT.NEW_PROFILE_ILLUST:
-      case MPT.NEW_PROFILE_MANGA:
-        await $ready(() => $('.g4R-bsH'));
-        state.mountPointMainView = $('.g4R-bsH');
-        break;
-      case MPT.SELF_BOOKMARK:
-        state.mountPointMainView = $('.display_editable_works');
-        break;
-      default:
-        break;
+    state.mountPointCtrlPanel = $el('div', null, async(el) => {
+      if (getters['pixiv/nppType'] >= 0) {
+        await $ready(() => $('.sLHPYEz'));
+        $('.sLHPYEz').parentNode.insertAdjacentElement('afterend', el);
+      } else {
+        $('header._global-header').insertAdjacentElement('afterend', el);
       }
+      state.ctrlPanelOffsetY = el.getBoundingClientRect().y;
+    });
+
+    switch (state.mainPageType) {
+    case MPT.SEARCH:
+      state.mountPointMainView = $('#js-react-search-mid');
+      break;
+    case MPT.FOLLOWED_NEWS:
+      state.mountPointMainView = $('#js-mount-point-latest-following');
+      break;
+    case MPT.ANCIENT_FOLLOWED_NEWS:
+      state.mountPointMainView = $('ul._image-items');
+      break;
+    case MPT.NEW_PROFILE:
+    case MPT.NEW_PROFILE_BOOKMARK:
+    case MPT.NEW_PROFILE_ILLUST:
+    case MPT.NEW_PROFILE_MANGA:
+      await $ready(() => $('.g4R-bsH'));
+      state.mountPointMainView = $('.g4R-bsH');
+      break;
+    case MPT.SELF_BOOKMARK:
+      state.mountPointMainView = $('.display_editable_works');
+      break;
+    default:
+      break;
     }
+
   },
 };
 

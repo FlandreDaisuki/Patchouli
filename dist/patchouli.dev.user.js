@@ -1351,10 +1351,6 @@
           });
         }
       }
-      const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
-      if (!_sbp && state.config.sort === SORT_TYPE.BOOKMARK_ID) {
-        state.config.sort = SORT_TYPE.ILLUST_ID;
-      }
     },
     applyConfig: (state) => {
       if (state.mainPageType !== MAIN_PAGE_TYPE.NO_SUPPORT) {
@@ -1380,74 +1376,65 @@
       Object.assign(state.filters, payload);
     },
     setMainPageType: (state, payload = {}) => {
+      $print.debug('vuexStore#setMainPageType: payload:', payload);
+
       if (payload.forceSet) {
-        $print.debug('vuexStore#setMainPageType: payload:', payload);
         state.mainPageType = payload.forceSet;
+      } else {
+        const path = location.pathname;
+        const sp = state.searchParam;
 
-        const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
-        if (!_sbp && state.config.sort === SORT_TYPE.BOOKMARK_ID) {
-          state.config.sort = SORT_TYPE.ILLUST_ID;
+        switch (path) {
+        case '/search.php':
+          state.mainPageType = MAIN_PAGE_TYPE.SEARCH;
+          break;
+        case '/bookmark_new_illust_r18.php':
+        case '/bookmark_new_illust.php':
+          state.mainPageType = MAIN_PAGE_TYPE.FOLLOWED_NEWS;
+          break;
+        case '/new_illust.php':
+        case '/mypixiv_new_illust.php':
+        case '/new_illust_r18.php':
+          state.mainPageType = MAIN_PAGE_TYPE.ANCIENT_FOLLOWED_NEWS;
+          break;
+        case '/member.php':
+          state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE;
+          break;
+        case '/member_illust.php':
+          if (sp.mode) {
+            state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
+            break;
+          }
+
+          if (sp.type === 'manga') {
+            state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE_MANGA; // pool = manga
+          } else if (sp.type === 'illust') {
+            state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE_ILLUST; // pool = illusts
+          } else { // !sp.type
+            state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE; // pool = all (illusts + manga)
+          }
+          break;
+        case '/bookmark.php': {
+          if (sp.rest && sp.id) {
+            // ?id={userId}&rest=show
+            // ?id={userId}&rest=hide
+            state.mainPageType =  MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
+          } else if (sp.type === 'user' || sp.type === 'reg_user') {
+            // ?id={userId}&type=user
+            // ?id={userId}&type=reg_user
+            state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
+          } else {
+            // ?
+            // ?untagged=1
+            // ?type=illust_all
+            state.mainPageType = MAIN_PAGE_TYPE.SELF_BOOKMARK;
+          }
+          break;
         }
-        return;
-      }
-
-      const path = location.pathname;
-
-      const _id = state.searchParam.id;
-      const _type = state.searchParam.type;
-      const _mode = state.searchParam.mode;
-      const _rest = state.searchParam.rest;
-
-      switch (path) {
-      case '/search.php':
-        state.mainPageType = MAIN_PAGE_TYPE.SEARCH;
-        break;
-      case '/bookmark_new_illust_r18.php':
-      case '/bookmark_new_illust.php':
-        state.mainPageType = MAIN_PAGE_TYPE.FOLLOWED_NEWS;
-        break;
-      case '/new_illust.php':
-      case '/mypixiv_new_illust.php':
-      case '/new_illust_r18.php':
-        state.mainPageType = MAIN_PAGE_TYPE.ANCIENT_FOLLOWED_NEWS;
-        break;
-      case '/member.php':
-        state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE;
-        break;
-      case '/member_illust.php':
-        if (_mode) {
+        default:
           state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
           break;
         }
-
-        if (_type === 'manga') {
-          state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE_MANGA; // pool = manga
-        } else if (_type === 'illust') {
-          state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE_ILLUST; // pool = illusts
-        } else { // !_type
-          state.mainPageType = MAIN_PAGE_TYPE.NEW_PROFILE; // pool = all (illusts + manga)
-        }
-        break;
-      case '/bookmark.php': {
-        if (_rest && _id) {
-          // ?id={userId}&rest=show
-          // ?id={userId}&rest=hide
-          state.mainPageType =  MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
-        } else if (_type === 'user' || _type === 'reg_user') {
-          // ?id={userId}&type=user
-          // ?id={userId}&type=reg_user
-          state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
-        } else {
-          // ?
-          // ?untagged=1
-          // ?type=illust_all
-          state.mainPageType = MAIN_PAGE_TYPE.SELF_BOOKMARK;
-        }
-        break;
-      }
-      default:
-        state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
-        break;
       }
 
       const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
@@ -1478,60 +1465,59 @@
       // determine mainPageType
       commit('setMainPageType');
 
-      commit('loadConfig');
+      if (state.mainPageType !== MAIN_PAGE_TYPE.NO_SUPPORT) {
+        commit('loadConfig');
 
-      // set mount points by mainPageType
-      await dispatch('setMountPoints');
+        // set mount points by mainPageType
+        await dispatch('setMountPoints');
 
-      // others
-      commit('afterInit');
-      commit('applyConfig');
-      commit('saveConfig');
+        // others
+        commit('afterInit');
+        commit('applyConfig');
+        commit('saveConfig');
+      }
     },
     setMountPoints: async({ state, getters }) => {
-      const mpt = state.mainPageType;
-      if (mpt !== MAIN_PAGE_TYPE.NO_SUPPORT) {
+      $$('#wrapper').forEach(el => el.classList.add('ω'));
 
-        $$('#wrapper').forEach(el => el.classList.add('ω'));
+      state.mountPointCoverLayer = $el('div', null, (el) => {
+        document.body.appendChild(el);
+      });
 
-        state.mountPointCoverLayer = $el('div', null, (el) => {
-          document.body.appendChild(el);
-        });
-
-        state.mountPointCtrlPanel = $el('div', null, async(el) => {
-          if (getters['pixiv/nppType'] >= 0) {
-            await $ready(() => $('.sLHPYEz'));
-            $('.sLHPYEz').parentNode.insertAdjacentElement('afterend', el);
-          } else {
-            $('header._global-header').insertAdjacentElement('afterend', el);
-          }
-          state.ctrlPanelOffsetY = el.getBoundingClientRect().y;
-        });
-
-        switch (mpt) {
-        case MAIN_PAGE_TYPE.SEARCH:
-          state.mountPointMainView = $('#js-react-search-mid');
-          break;
-        case MAIN_PAGE_TYPE.FOLLOWED_NEWS:
-          state.mountPointMainView = $('#js-mount-point-latest-following');
-          break;
-        case MAIN_PAGE_TYPE.ANCIENT_FOLLOWED_NEWS:
-          state.mountPointMainView = $('ul._image-items');
-          break;
-        case MAIN_PAGE_TYPE.NEW_PROFILE:
-        case MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK:
-        case MAIN_PAGE_TYPE.NEW_PROFILE_ILLUST:
-        case MAIN_PAGE_TYPE.NEW_PROFILE_MANGA:
-          await $ready(() => $('.g4R-bsH'));
-          state.mountPointMainView = $('.g4R-bsH');
-          break;
-        case MAIN_PAGE_TYPE.SELF_BOOKMARK:
-          state.mountPointMainView = $('.display_editable_works');
-          break;
-        default:
-          break;
+      state.mountPointCtrlPanel = $el('div', null, async(el) => {
+        if (getters['pixiv/nppType'] >= 0) {
+          await $ready(() => $('.sLHPYEz'));
+          $('.sLHPYEz').parentNode.insertAdjacentElement('afterend', el);
+        } else {
+          $('header._global-header').insertAdjacentElement('afterend', el);
         }
+        state.ctrlPanelOffsetY = el.getBoundingClientRect().y;
+      });
+
+      switch (state.mainPageType) {
+      case MAIN_PAGE_TYPE.SEARCH:
+        state.mountPointMainView = $('#js-react-search-mid');
+        break;
+      case MAIN_PAGE_TYPE.FOLLOWED_NEWS:
+        state.mountPointMainView = $('#js-mount-point-latest-following');
+        break;
+      case MAIN_PAGE_TYPE.ANCIENT_FOLLOWED_NEWS:
+        state.mountPointMainView = $('ul._image-items');
+        break;
+      case MAIN_PAGE_TYPE.NEW_PROFILE:
+      case MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK:
+      case MAIN_PAGE_TYPE.NEW_PROFILE_ILLUST:
+      case MAIN_PAGE_TYPE.NEW_PROFILE_MANGA:
+        await $ready(() => $('.g4R-bsH'));
+        state.mountPointMainView = $('.g4R-bsH');
+        break;
+      case MAIN_PAGE_TYPE.SELF_BOOKMARK:
+        state.mountPointMainView = $('.display_editable_works');
+        break;
+      default:
+        break;
       }
+
     },
   };
 
