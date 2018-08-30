@@ -150,7 +150,7 @@ export default {
         const userId = this.currentImageItem.userId;
 
         if (await PixivAPI.postFollowUser(userId)) {
-          this.$store.commit('editImgItem', {
+          this.$store.commit('pixiv/editImgItem', {
             type: 'follow-user',
             userId: this.currentImageItem.userId,
           });
