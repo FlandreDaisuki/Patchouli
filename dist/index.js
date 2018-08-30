@@ -95,6 +95,173 @@ async function $ready(func) {
     .catch($print.error);
 }
 
+Vue.use(VueI18n);
+
+const en = {
+  config: {
+    blacklist: 'Blacklist',
+    contextMenuExtension: 'Right click extension',
+    hoverPlay: 'Mouse hover play ugoira',
+    userTooltip: 'Illustrator tooltip',
+  },
+  contextMenu: {
+    addToBlacklist: 'Add to Blacklist',
+    download: 'Download',
+    followUser: 'Follow',
+    openBookmarkPage: 'Add Bookmark Page',
+    preview: 'Preview',
+    thumbUp: 'Like',
+  },
+  ctrlPanel: {
+    buttonEnd: 'End',
+    buttonGo: 'Go',
+    buttonPause: 'Pause',
+    fitWidth: 'fit browser width',
+    sortByBookmarkId: 'sort by bookmark id',
+    sortByDate: 'sort by date',
+    sortByPopularity: 'sort by popularity',
+    tagFilterQueryPlaceholder: 'tags filter example: flandre || sister',
+  },
+  mainView: {
+    bookmarkTooltip: '{count} bookmarks',
+    newProfilePage: {
+      bookmarks: 'Bookmarks',
+      contents: 'Contents',
+      illustrations: 'Illustrations',
+      manga: 'Manga',
+      noResult: 'Not found',
+      privateBookmark: 'Private',
+      publicBookmark: 'Public',
+    },
+  },
+};
+const ja = {
+  config: {
+    blacklist: 'ブラックリスト',
+    contextMenuExtension: '右クリックの拡張機能',
+    hoverPlay: 'マウスオーバーでうごイラ再生',
+    userTooltip: 'イラストレーターツールチップ',
+  },
+  contextMenu: {
+    addToBlacklist: 'ブラックリストへ',
+    download: 'ダウンロード',
+    followUser: 'フォローする',
+    openBookmarkPage: 'ブックマーク追加ページ',
+    preview: 'プレビュー',
+    thumbUp: 'いいね',
+  },
+  ctrlPanel: {
+    buttonEnd: '終了',
+    buttonGo: '捜す',
+    buttonPause: '中断',
+    fitWidth: '全幅',
+    sortByBookmarkId: 'ブックマーク順',
+    sortByDate: '投稿順',
+    sortByPopularity: '人気順',
+    tagFilterQueryPlaceholder: 'タグフィルター 例: フランドール || 妹様',
+  },
+  mainView: {
+    bookmarkTooltip: '{count} 件のブックマーク',
+    newProfilePage: {
+      bookmarks: 'ブックマーク',
+      contents: '作品',
+      illustrations: 'イラスト',
+      manga: 'マンガ',
+      noResult: '作品がありません',
+      privateBookmark: '非公開',
+      publicBookmark: '公開',
+    },
+  },
+};
+const zhCN = {
+  config: {
+    blacklist: '黑名單',
+    contextMenuExtension: '右键扩展',
+    hoverPlay: '鼠标播放动图',
+    userTooltip: '绘师提示框',
+  },
+  contextMenu: {
+    addToBlacklist: '拉黑',
+    download: '下载',
+    followUser: '加关注',
+    openBookmarkPage: '开启添加收藏页',
+    preview: '原图预览',
+    thumbUp: '赞',
+  },
+  ctrlPanel: {
+    buttonEnd: '完',
+    buttonGo: '找',
+    buttonPause: '停',
+    fitWidth: '自适应浏览器宽度',
+    sortByBookmarkId: '以加入顺序排序',
+    sortByDate: '以日期排序',
+    sortByPopularity: '以人气排序',
+    tagFilterQueryPlaceholder: '标签过滤 例: 芙兰朵露 || 二小姐',
+  },
+  mainView: {
+    bookmarkTooltip: '{count} 个收藏',
+    newProfilePage: {
+      bookmarks: '收藏',
+      contents: '作品',
+      illustrations: '插画',
+      manga: '漫画',
+      noResult: '找不到作品',
+      privateBookmark: '非公开',
+      publicBookmark: '公开',
+    },
+  },
+};
+const zhTW = {
+  config: {
+    blacklist: '黑名單',
+    contextMenuExtension: '擴充右鍵',
+    hoverPlay: '滑鼠播放動圖',
+    userTooltip: '繪師提示框',
+  },
+  contextMenu: {
+    addToBlacklist: '加入黑名單',
+    download: '下載',
+    followUser: '加關注',
+    openBookmarkPage: '開啟添加收藏頁',
+    preview: '原圖預覽',
+    thumbUp: '讚',
+  },
+  ctrlPanel: {
+    buttonEnd: '完',
+    buttonGo: '找',
+    buttonPause: '停',
+    fitWidth: '自適應瀏覽器寬度',
+    sortByBookmarkId: '以加入順序排序',
+    sortByDate: '以日期排序',
+    sortByPopularity: '以人氣排序',
+    tagFilterQueryPlaceholder: '標籤過濾 例: 芙蘭朵露 || 二小姐',
+  },
+  mainView: {
+    bookmarkTooltip: '{count} 個收藏',
+    newProfilePage: {
+      bookmarks: '收藏',
+      contents: '作品',
+      illustrations: '插畫',
+      manga: '漫畫',
+      noResult: '找不到作品',
+      privateBookmark: '非公開',
+      publicBookmark: '公開',
+    },
+  },
+};
+
+var i18n = new VueI18n({
+  fallbackLocale: 'ja',
+  locale: document.documentElement.lang.toLowerCase(),
+  messages: {
+    en,
+    ja,
+    'zh': zhCN,
+    'zh-cn': zhCN,
+    'zh-tw': zhTW,
+  },
+});
+
 // ref: https://stackoverflow.com/questions/31089801/extending-error-in-javascript-with-es6-syntax-babel#32749533
 class ExtendableError extends Error {
   constructor(message) {
@@ -441,173 +608,6 @@ function removeAnnoyings(doc = document) {
     }
   }
 }
-
-Vue.use(VueI18n);
-
-const en = {
-  config: {
-    blacklist: 'Blacklist',
-    contextMenuExtension: 'Right click extension',
-    hoverPlay: 'Mouse hover play ugoira',
-    userTooltip: 'Illustrator tooltip',
-  },
-  contextMenu: {
-    addToBlacklist: 'Add to Blacklist',
-    download: 'Download',
-    followUser: 'Follow',
-    openBookmarkPage: 'Add Bookmark Page',
-    preview: 'Preview',
-    thumbUp: 'Like',
-  },
-  ctrlPanel: {
-    buttonEnd: 'End',
-    buttonGo: 'Go',
-    buttonPause: 'Pause',
-    fitWidth: 'fit browser width',
-    sortByBookmarkId: 'sort by bookmark id',
-    sortByDate: 'sort by date',
-    sortByPopularity: 'sort by popularity',
-    tagFilterQueryPlaceholder: 'tags filter example: flandre || sister',
-  },
-  mainView: {
-    bookmarkTooltip: '{count} bookmarks',
-    newProfilePage: {
-      bookmarks: 'Bookmarks',
-      contents: 'Contents',
-      illustrations: 'Illustrations',
-      manga: 'Manga',
-      noResult: 'Not found',
-      privateBookmark: 'Private',
-      publicBookmark: 'Public',
-    },
-  },
-};
-const ja = {
-  config: {
-    blacklist: 'ブラックリスト',
-    contextMenuExtension: '右クリックの拡張機能',
-    hoverPlay: 'マウスオーバーでうごイラ再生',
-    userTooltip: 'イラストレーターツールチップ',
-  },
-  contextMenu: {
-    addToBlacklist: 'ブラックリストへ',
-    download: 'ダウンロード',
-    followUser: 'フォローする',
-    openBookmarkPage: 'ブックマーク追加ページ',
-    preview: 'プレビュー',
-    thumbUp: 'いいね',
-  },
-  ctrlPanel: {
-    buttonEnd: '終了',
-    buttonGo: '捜す',
-    buttonPause: '中断',
-    fitWidth: '全幅',
-    sortByBookmarkId: 'ブックマーク順',
-    sortByDate: '投稿順',
-    sortByPopularity: '人気順',
-    tagFilterQueryPlaceholder: 'タグフィルター 例: フランドール || 妹様',
-  },
-  mainView: {
-    bookmarkTooltip: '{count} 件のブックマーク',
-    newProfilePage: {
-      bookmarks: 'ブックマーク',
-      contents: '作品',
-      illustrations: 'イラスト',
-      manga: 'マンガ',
-      noResult: '作品がありません',
-      privateBookmark: '非公開',
-      publicBookmark: '公開',
-    },
-  },
-};
-const zhCN = {
-  config: {
-    blacklist: '黑名單',
-    contextMenuExtension: '右键扩展',
-    hoverPlay: '鼠标播放动图',
-    userTooltip: '绘师提示框',
-  },
-  contextMenu: {
-    addToBlacklist: '拉黑',
-    download: '下载',
-    followUser: '加关注',
-    openBookmarkPage: '开启添加收藏页',
-    preview: '原图预览',
-    thumbUp: '赞',
-  },
-  ctrlPanel: {
-    buttonEnd: '完',
-    buttonGo: '找',
-    buttonPause: '停',
-    fitWidth: '自适应浏览器宽度',
-    sortByBookmarkId: '以加入顺序排序',
-    sortByDate: '以日期排序',
-    sortByPopularity: '以人气排序',
-    tagFilterQueryPlaceholder: '标签过滤 例: 芙兰朵露 || 二小姐',
-  },
-  mainView: {
-    bookmarkTooltip: '{count} 个收藏',
-    newProfilePage: {
-      bookmarks: '收藏',
-      contents: '作品',
-      illustrations: '插画',
-      manga: '漫画',
-      noResult: '找不到作品',
-      privateBookmark: '非公开',
-      publicBookmark: '公开',
-    },
-  },
-};
-const zhTW = {
-  config: {
-    blacklist: '黑名單',
-    contextMenuExtension: '擴充右鍵',
-    hoverPlay: '滑鼠播放動圖',
-    userTooltip: '繪師提示框',
-  },
-  contextMenu: {
-    addToBlacklist: '加入黑名單',
-    download: '下載',
-    followUser: '加關注',
-    openBookmarkPage: '開啟添加收藏頁',
-    preview: '原圖預覽',
-    thumbUp: '讚',
-  },
-  ctrlPanel: {
-    buttonEnd: '完',
-    buttonGo: '找',
-    buttonPause: '停',
-    fitWidth: '自適應瀏覽器寬度',
-    sortByBookmarkId: '以加入順序排序',
-    sortByDate: '以日期排序',
-    sortByPopularity: '以人氣排序',
-    tagFilterQueryPlaceholder: '標籤過濾 例: 芙蘭朵露 || 二小姐',
-  },
-  mainView: {
-    bookmarkTooltip: '{count} 個收藏',
-    newProfilePage: {
-      bookmarks: '收藏',
-      contents: '作品',
-      illustrations: '插畫',
-      manga: '漫畫',
-      noResult: '找不到作品',
-      privateBookmark: '非公開',
-      publicBookmark: '公開',
-    },
-  },
-};
-
-var i18n = new VueI18n({
-  fallbackLocale: 'ja',
-  locale: document.documentElement.lang.toLowerCase(),
-  messages: {
-    en,
-    ja,
-    'zh': zhCN,
-    'zh-cn': zhCN,
-    'zh-tw': zhTW,
-  },
-});
 
 const DEFAULT_MATCH = true;
 
@@ -1300,6 +1300,17 @@ const mutations$3 = {
         });
       }
     }
+
+    removeAnnoyings();
+
+    // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    const fontawesome = $el('link', {
+      crossOrigin: 'anonymous',
+      href: 'https://use.fontawesome.com/releases/v5.2.0/css/all.css',
+      integrity: 'sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ',
+      rel: 'stylesheet',
+    });
+    document.head.appendChild(fontawesome);
   },
   applyConfig: (state) => {
     if (state.mainPageType !== MAIN_PAGE_TYPE.NO_SUPPORT) {
@@ -6577,48 +6588,7 @@ vuexStore.dispatch('init')
       return;
     }
 
-    removeAnnoyings();
-
-    // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-    const fontawesome = $el('link', {
-      crossOrigin: 'anonymous',
-      href: 'https://use.fontawesome.com/releases/v5.2.0/css/all.css',
-      integrity: 'sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ',
-      rel: 'stylesheet',
-    });
-    document.head.appendChild(fontawesome);
-
-    // setup koamuma placeholder
-    if (vuexStore.getters['pixiv/nppType'] < 0) {
-      $('._global-header').classList.add('koakuma-placeholder');
-    }
-
-    // hijack link
-    if (vuexStore.getters.MPT === MAIN_PAGE_TYPE.SEARCH) {
-      const menuItems = $('ul.menu-items');
-      [...menuItems.children].forEach((item, index) => {
-        const textContent = item.textContent;
-        const a = $el('a', { href: 'javascript:;', textContent });
-        item.removeChild(item.firstChild);
-        item.appendChild(a);
-
-        item.addEventListener('click', () => {
-          [...menuItems.children].forEach(_item => _item.classList.remove('current'));
-          item.classList.add('current');
-
-          const target = $('#koakuma-bookmark-tags-filter-input');
-          if (index === 1) {
-            target.value = '-R-18';
-          } else if (index === 2) {
-            target.value = 'R-18';
-          } else {
-            target.value = '';
-          }
-          Koakuma.$children[0].tagsFilterInput({ target });
-        });
-      });
-    }
-
+    // setup main components
     /* eslint-disable sort-keys */
     const Koakuma = new Vue({
       i18n,
@@ -6684,6 +6654,12 @@ vuexStore.dispatch('init')
     });
     /* eslint-enable sort-keys */
 
+    // setup koamuma placeholder
+    if (vuexStore.getters['pixiv/nppType'] < 0) {
+      $('._global-header').classList.add('koakuma-placeholder');
+    }
+
+    // sount after vuexStore has data
     vuexStore.dispatch('pixiv/start', { isFirst: true, times: 1 })
       .then(() => {
         Patchouli.$mount(vuexStore.getters.mountPointMainView);
@@ -6696,18 +6672,12 @@ vuexStore.dispatch('init')
         if (vuexStore.getters['pixiv/nppType'] < 0) {
           $('._global-header').classList.remove('koakuma-placeholder');
         }
-
-        // pass current mpt status
-        return vuexStore.getters['pixiv/status'];
       })
       .catch(error => {
         $print.error('main#init: Fail to first mount', error);
       });
 
-    // document.addEventListener('scroll', (event) => {
-    //   $print.debug('body#scroll event:', event);
-    // });
-
+    // bind event listeners
     document.body.addEventListener('click', (event) => {
       $print.debug('body#click event:', event);
 
@@ -6723,6 +6693,32 @@ vuexStore.dispatch('init')
         vuexStore.commit('contextMenu/deactivate');
       }
     });
+
+    // hijack links
+    if (vuexStore.getters.MPT === MAIN_PAGE_TYPE.SEARCH) {
+      const menuItems = $('ul.menu-items');
+      [...menuItems.children].forEach((item, index) => {
+        const textContent = item.textContent;
+        const a = $el('a', { href: 'javascript:;', textContent });
+        item.removeChild(item.firstChild);
+        item.appendChild(a);
+
+        item.addEventListener('click', () => {
+          [...menuItems.children].forEach(_item => _item.classList.remove('current'));
+          item.classList.add('current');
+
+          const target = $('#koakuma-bookmark-tags-filter-input');
+          if (index === 1) {
+            target.value = '-R-18';
+          } else if (index === 2) {
+            target.value = 'R-18';
+          } else {
+            target.value = '';
+          }
+          Koakuma.$children[0].tagsFilterInput({ target });
+        });
+      });
+    }
 
     Object.assign(unsafeWindow, {
       Koakuma,

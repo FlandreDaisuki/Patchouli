@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import { InitError } from '../lib/errors';
 import { MAIN_PAGE_TYPE as MPT, SORT_TYPE as ST } from '../lib/enums';
 import { $, $el, $$, $print, $ready } from '../lib/utils';
+import { removeAnnoyings } from '../lib/pixiv';
 import pixiv from './modules/pixiv';
 import contextMenu from './modules/contextMenu';
 import coverLayer from './modules/coverLayer';
@@ -92,6 +93,17 @@ const mutations = {
         });
       }
     }
+
+    removeAnnoyings();
+
+    // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+    const fontawesome = $el('link', {
+      crossOrigin: 'anonymous',
+      href: 'https://use.fontawesome.com/releases/v5.2.0/css/all.css',
+      integrity: 'sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ',
+      rel: 'stylesheet',
+    });
+    document.head.appendChild(fontawesome);
   },
   applyConfig: (state) => {
     if (state.mainPageType !== MPT.NO_SUPPORT) {

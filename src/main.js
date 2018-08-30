@@ -2,7 +2,6 @@ import Vue from 'vue';
 
 import { MAIN_PAGE_TYPE as MPT } from './lib/enums';
 import { $, $print, $el } from './lib/utils';
-import { removeAnnoyings } from './lib/pixiv';
 import i18n from './lib/i18n';
 import vuexStore from './store/index';
 
@@ -30,48 +29,7 @@ vuexStore.dispatch('init')
       return;
     }
 
-    removeAnnoyings();
-
-    // <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
-    const fontawesome = $el('link', {
-      crossOrigin: 'anonymous',
-      href: 'https://use.fontawesome.com/releases/v5.2.0/css/all.css',
-      integrity: 'sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ',
-      rel: 'stylesheet',
-    });
-    document.head.appendChild(fontawesome);
-
-    // setup koamuma placeholder
-    if (vuexStore.getters['pixiv/nppType'] < 0) {
-      $('._global-header').classList.add('koakuma-placeholder');
-    }
-
-    // hijack link
-    if (vuexStore.getters.MPT === MPT.SEARCH) {
-      const menuItems = $('ul.menu-items');
-      [...menuItems.children].forEach((item, index) => {
-        const textContent = item.textContent;
-        const a = $el('a', { href: 'javascript:;', textContent });
-        item.removeChild(item.firstChild);
-        item.appendChild(a);
-
-        item.addEventListener('click', () => {
-          [...menuItems.children].forEach(_item => _item.classList.remove('current'));
-          item.classList.add('current');
-
-          const target = $('#koakuma-bookmark-tags-filter-input');
-          if (index === 1) {
-            target.value = '-R-18';
-          } else if (index === 2) {
-            target.value = 'R-18';
-          } else {
-            target.value = '';
-          }
-          Koakuma.$children[0].tagsFilterInput({ target });
-        });
-      });
-    }
-
+    // setup main components
     /* eslint-disable sort-keys */
     const Koakuma = new Vue({
       i18n,
@@ -137,6 +95,12 @@ vuexStore.dispatch('init')
     });
     /* eslint-enable sort-keys */
 
+    // setup koamuma placeholder
+    if (vuexStore.getters['pixiv/nppType'] < 0) {
+      $('._global-header').classList.add('koakuma-placeholder');
+    }
+
+    // mount after vuexStore has data
     vuexStore.dispatch('pixiv/start', { isFirst: true, times: 1 })
       .then(() => {
         Patchouli.$mount(vuexStore.getters.mountPointMainView);
@@ -149,18 +113,12 @@ vuexStore.dispatch('init')
         if (vuexStore.getters['pixiv/nppType'] < 0) {
           $('._global-header').classList.remove('koakuma-placeholder');
         }
-
-        // pass current mpt status
-        return vuexStore.getters['pixiv/status'];
       })
       .catch(error => {
         $print.error('main#init: Fail to first mount', error);
       });
 
-    // document.addEventListener('scroll', (event) => {
-    //   $print.debug('body#scroll event:', event);
-    // });
-
+    // bind event listeners
     document.body.addEventListener('click', (event) => {
       $print.debug('body#click event:', event);
 
@@ -176,6 +134,32 @@ vuexStore.dispatch('init')
         vuexStore.commit('contextMenu/deactivate');
       }
     });
+
+    // hijack links
+    if (vuexStore.getters.MPT === MPT.SEARCH) {
+      const menuItems = $('ul.menu-items');
+      [...menuItems.children].forEach((item, index) => {
+        const textContent = item.textContent;
+        const a = $el('a', { href: 'javascript:;', textContent });
+        item.removeChild(item.firstChild);
+        item.appendChild(a);
+
+        item.addEventListener('click', () => {
+          [...menuItems.children].forEach(_item => _item.classList.remove('current'));
+          item.classList.add('current');
+
+          const target = $('#koakuma-bookmark-tags-filter-input');
+          if (index === 1) {
+            target.value = '-R-18';
+          } else if (index === 2) {
+            target.value = 'R-18';
+          } else {
+            target.value = '';
+          }
+          Koakuma.$children[0].tagsFilterInput({ target });
+        });
+      });
+    }
 
     Object.assign(unsafeWindow, {
       Koakuma,
