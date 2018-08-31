@@ -17,6 +17,16 @@ const globals = {
   vuex: 'Vuex',
 };
 
+// prevent absolute path in script
+process.env.NODE_ENV = 'production';
+
+// entry
+preBuild().then(() => {
+  buildRel();
+  buildDev();
+  updateReadme();
+});
+
 async function preBuild() {
   const bundle = await rollup.rollup({
     external,
@@ -163,9 +173,3 @@ function updateReadme() {
   }
 }
 
-// entry
-preBuild().then(() => {
-  buildRel();
-  buildDev();
-  updateReadme();
-});

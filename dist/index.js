@@ -1650,457 +1650,17 @@ var script = {
             const __vue_script__ = script;
             
 /* template */
-var __vue_render__ = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { ref: _vm.id, attrs: { id: _vm.id } }, [
-    _c(
-      "div",
-      {
-        staticClass: "koakuma-block",
-        attrs: { id: "koakuma-processed-block" }
-      },
-      [_vm._v(_vm._s(_vm.processedCountMsg))]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "koakuma-block",
-        attrs: { id: "koakuma-bookmark-sort-block" }
-      },
-      [
-        _c(
-          "label",
-          {
-            attrs: {
-              id: "koakuma-bookmark-sort-label",
-              for: "koakuma-bookmark-sort-input"
-            }
-          },
-          [
-            _c("span", [_vm._v("❤️")]),
-            _vm._v(" "),
-            _c("input", {
-              attrs: {
-                id: "koakuma-bookmark-sort-input",
-                type: "number",
-                min: "0",
-                step: "1"
-              },
-              domProps: { value: _vm.filters.limit },
-              on: {
-                wheel: function($event) {
-                  $event.stopPropagation();
-                  $event.preventDefault();
-                  return _vm.sortInputWheel($event)
-                },
-                input: _vm.sortInputInput
-              }
-            })
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            attrs: {
-              id: "koakuma-bookmark-input-usual-switch",
-              role: "button"
-            },
-            on: {
-              click: function($event) {
-                if (
-                  !("button" in $event) &&
-                  _vm._k($event.keyCode, "left", 37, $event.key, [
-                    "Left",
-                    "ArrowLeft"
-                  ])
-                ) {
-                  return null
-                }
-                if ("button" in $event && $event.button !== 0) {
-                  return null
-                }
-                _vm.usualSwitchOn = !_vm.usualSwitchOn;
-              }
-            }
-          },
-          [_c("i", { staticClass: "fas fa-angle-down" })]
-        ),
-        _vm._v(" "),
-        _c(
-          "ul",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.usualSwitchOn,
-                expression: "usualSwitchOn"
-              }
-            ],
-            attrs: { id: "koakuma-bookmark-input-usual-list" }
-          },
-          _vm._l(_vm.usualList, function(usual) {
-            return _c("li", { key: usual }, [
-              _c("span", { staticClass: "sort-order-apply-indicator" }, [
-                _vm._v("⮬")
-              ]),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "usual-list-link",
-                  attrs: { role: "button" },
-                  on: {
-                    click: function($event) {
-                      if (
-                        !("button" in $event) &&
-                        _vm._k($event.keyCode, "left", 37, $event.key, [
-                          "Left",
-                          "ArrowLeft"
-                        ])
-                      ) {
-                        return null
-                      }
-                      if ("button" in $event && $event.button !== 0) {
-                        return null
-                      }
-                      return _vm.clickUsual($event)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(usual))]
-              )
-            ])
-          })
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "koakuma-block" }, [
-      _c("input", {
-        attrs: {
-          id: "koakuma-bookmark-tags-filter-input",
-          placeholder: _vm.$t("ctrlPanel.tagFilterQueryPlaceholder"),
-          type: "text"
-        },
-        on: { input: _vm.tagsFilterInput }
-      })
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "koakuma-block" }, [
-      _c(
-        "button",
-        {
-          class: _vm.statusClass,
-          attrs: { id: "koakuma-main-button", disabled: _vm.status.isEnded },
-          on: {
-            mouseup: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              return _vm.clickMainButton($event)
-            }
-          }
-        },
-        [_vm._v("\n      " + _vm._s(_vm.buttonMsg) + "\n    ")]
-      )
-    ]),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        staticClass: "koakuma-block",
-        attrs: { id: "koakuma-sorting-order-block" }
-      },
-      [
-        _c(
-          "a",
-          {
-            attrs: {
-              id: "koakuma-sorting-order-select-switch",
-              role: "button"
-            },
-            on: {
-              click: function($event) {
-                if (
-                  !("button" in $event) &&
-                  _vm._k($event.keyCode, "left", 37, $event.key, [
-                    "Left",
-                    "ArrowLeft"
-                  ])
-                ) {
-                  return null
-                }
-                if ("button" in $event && $event.button !== 0) {
-                  return null
-                }
-                _vm.sortingOrderSwitchOn = !_vm.sortingOrderSwitchOn;
-              }
-            }
-          },
-          [
-            _c("output", {
-              attrs: { id: "koakuma-sorting-order-select-output" },
-              domProps: { innerHTML: _vm._s(_vm.sortingOrderMsg) }
-            }),
-            _vm._v(" "),
-            _c("i", { staticClass: "fas fa-angle-down" })
-          ]
-        ),
-        _vm._v(" "),
-        _c(
-          "ul",
-          {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.sortingOrderSwitchOn,
-                expression: "sortingOrderSwitchOn"
-              }
-            ],
-            attrs: { id: "koakuma-sorting-order-select-list" }
-          },
-          [
-            _c("li", [
-              _c("span", { staticClass: "sort-order-apply-indicator" }, [
-                _vm._v("⮬")
-              ]),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "sorting-order-link",
-                  attrs: {
-                    id: "koakuma-sorting-order-by-popularity",
-                    role: "button"
-                  },
-                  on: {
-                    click: function($event) {
-                      if (
-                        !("button" in $event) &&
-                        _vm._k($event.keyCode, "left", 37, $event.key, [
-                          "Left",
-                          "ArrowLeft"
-                        ])
-                      ) {
-                        return null
-                      }
-                      if ("button" in $event && $event.button !== 0) {
-                        return null
-                      }
-                      return _vm.clickSortingOrder($event)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByPopularity")))]
-              )
-            ]),
-            _vm._v(" "),
-            _c("li", [
-              _c("span", { staticClass: "sort-order-apply-indicator" }, [
-                _vm._v("⮬")
-              ]),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  staticClass: "sorting-order-link",
-                  attrs: {
-                    id: "koakuma-sorting-order-by-date",
-                    role: "button"
-                  },
-                  on: {
-                    click: function($event) {
-                      if (
-                        !("button" in $event) &&
-                        _vm._k($event.keyCode, "left", 37, $event.key, [
-                          "Left",
-                          "ArrowLeft"
-                        ])
-                      ) {
-                        return null
-                      }
-                      if ("button" in $event && $event.button !== 0) {
-                        return null
-                      }
-                      return _vm.clickSortingOrder($event)
-                    }
-                  }
-                },
-                [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByDate")))]
-              )
-            ]),
-            _vm._v(" "),
-            _c(
-              "li",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: _vm.isSelfBookmarkPage,
-                    expression: "isSelfBookmarkPage"
-                  }
-                ]
-              },
-              [
-                _c("span", { staticClass: "sort-order-apply-indicator" }, [
-                  _vm._v("⮬")
-                ]),
-                _vm._v(" "),
-                _c(
-                  "a",
-                  {
-                    staticClass: "sorting-order-link",
-                    attrs: {
-                      id: "koakuma-sorting-order-by-bookmark-id",
-                      role: "button"
-                    },
-                    on: {
-                      click: function($event) {
-                        if (
-                          !("button" in $event) &&
-                          _vm._k($event.keyCode, "left", 37, $event.key, [
-                            "Left",
-                            "ArrowLeft"
-                          ])
-                        ) {
-                          return null
-                        }
-                        if ("button" in $event && $event.button !== 0) {
-                          return null
-                        }
-                        return _vm.clickSortingOrder($event)
-                      }
-                    }
-                  },
-                  [_vm._v(_vm._s(_vm.$t("ctrlPanel.sortByBookmarkId")))]
-                )
-              ]
-            )
-          ]
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "koakuma-block", attrs: { id: "koakuma-options-block" } },
-      [
-        _c("div", [
-          _c("i", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: _vm.xc.fitwidth,
-                expression: "xc.fitwidth"
-              }
-            ],
-            staticClass: "fas fa-compress",
-            attrs: { id: "koakuma-options-width-compress" },
-            on: {
-              click: function($event) {
-                if (
-                  !("button" in $event) &&
-                  _vm._k($event.keyCode, "left", 37, $event.key, [
-                    "Left",
-                    "ArrowLeft"
-                  ])
-                ) {
-                  return null
-                }
-                if ("button" in $event && $event.button !== 0) {
-                  return null
-                }
-                return _vm.optionsChange($event)
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("i", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: !_vm.xc.fitwidth,
-                expression: "!xc.fitwidth"
-              }
-            ],
-            staticClass: "fas fa-expand",
-            attrs: { id: "koakuma-options-width-expand" },
-            on: {
-              click: function($event) {
-                if (
-                  !("button" in $event) &&
-                  _vm._k($event.keyCode, "left", 37, $event.key, [
-                    "Left",
-                    "ArrowLeft"
-                  ])
-                ) {
-                  return null
-                }
-                if ("button" in $event && $event.button !== 0) {
-                  return null
-                }
-                return _vm.optionsChange($event)
-              }
-            }
-          })
-        ]),
-        _vm._v(" "),
-        _c("div", [
-          _c("i", {
-            staticClass: "fas fa-cog",
-            attrs: { id: "koakuma-options-config" },
-            on: {
-              click: function($event) {
-                if (
-                  !("button" in $event) &&
-                  _vm._k($event.keyCode, "left", 37, $event.key, [
-                    "Left",
-                    "ArrowLeft"
-                  ])
-                ) {
-                  return null
-                }
-                if ("button" in $event && $event.button !== 0) {
-                  return null
-                }
-                return _vm.openCoverLayerInConfigMode($event)
-              }
-            }
-          })
-        ])
-      ]
-    )
-  ])
-};
+var __vue_render__ = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{ref:_vm.id,attrs:{"id":_vm.id}},[_c('div',{staticClass:"koakuma-block",attrs:{"id":"koakuma-processed-block"}},[_vm._v(_vm._s(_vm.processedCountMsg))]),_vm._v(" "),_c('div',{staticClass:"koakuma-block",attrs:{"id":"koakuma-bookmark-sort-block"}},[_c('label',{attrs:{"id":"koakuma-bookmark-sort-label","for":"koakuma-bookmark-sort-input"}},[_c('span',[_vm._v("❤️")]),_vm._v(" "),_c('input',{attrs:{"id":"koakuma-bookmark-sort-input","type":"number","min":"0","step":"1"},domProps:{"value":_vm.filters.limit},on:{"wheel":function($event){$event.stopPropagation();$event.preventDefault();return _vm.sortInputWheel($event)},"input":_vm.sortInputInput}})]),_vm._v(" "),_c('a',{attrs:{"id":"koakuma-bookmark-input-usual-switch","role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }_vm.usualSwitchOn = !_vm.usualSwitchOn;}}},[_c('i',{staticClass:"fas fa-angle-down"})]),_vm._v(" "),_c('ul',{directives:[{name:"show",rawName:"v-show",value:(_vm.usualSwitchOn),expression:"usualSwitchOn"}],attrs:{"id":"koakuma-bookmark-input-usual-list"}},_vm._l((_vm.usualList),function(usual){return _c('li',{key:usual},[_c('span',{staticClass:"sort-order-apply-indicator"},[_vm._v("⮬")]),_vm._v(" "),_c('a',{staticClass:"usual-list-link",attrs:{"role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickUsual($event)}}},[_vm._v(_vm._s(usual))])])}))]),_vm._v(" "),_c('div',{staticClass:"koakuma-block"},[_c('input',{attrs:{"id":"koakuma-bookmark-tags-filter-input","placeholder":_vm.$t('ctrlPanel.tagFilterQueryPlaceholder'),"type":"text"},on:{"input":_vm.tagsFilterInput}})]),_vm._v(" "),_c('div',{staticClass:"koakuma-block"},[_c('button',{class:_vm.statusClass,attrs:{"id":"koakuma-main-button","disabled":_vm.status.isEnded},on:{"mouseup":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickMainButton($event)}}},[_vm._v("\n      "+_vm._s(_vm.buttonMsg)+"\n    ")])]),_vm._v(" "),_c('div',{staticClass:"koakuma-block",attrs:{"id":"koakuma-sorting-order-block"}},[_c('a',{attrs:{"id":"koakuma-sorting-order-select-switch","role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }_vm.sortingOrderSwitchOn = !_vm.sortingOrderSwitchOn;}}},[_c('output',{attrs:{"id":"koakuma-sorting-order-select-output"},domProps:{"innerHTML":_vm._s(_vm.sortingOrderMsg)}}),_vm._v(" "),_c('i',{staticClass:"fas fa-angle-down"})]),_vm._v(" "),_c('ul',{directives:[{name:"show",rawName:"v-show",value:(_vm.sortingOrderSwitchOn),expression:"sortingOrderSwitchOn"}],attrs:{"id":"koakuma-sorting-order-select-list"}},[_c('li',[_c('span',{staticClass:"sort-order-apply-indicator"},[_vm._v("⮬")]),_vm._v(" "),_c('a',{staticClass:"sorting-order-link",attrs:{"id":"koakuma-sorting-order-by-popularity","role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickSortingOrder($event)}}},[_vm._v(_vm._s(_vm.$t('ctrlPanel.sortByPopularity')))])]),_vm._v(" "),_c('li',[_c('span',{staticClass:"sort-order-apply-indicator"},[_vm._v("⮬")]),_vm._v(" "),_c('a',{staticClass:"sorting-order-link",attrs:{"id":"koakuma-sorting-order-by-date","role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickSortingOrder($event)}}},[_vm._v(_vm._s(_vm.$t('ctrlPanel.sortByDate')))])]),_vm._v(" "),_c('li',{directives:[{name:"show",rawName:"v-show",value:(_vm.isSelfBookmarkPage),expression:"isSelfBookmarkPage"}]},[_c('span',{staticClass:"sort-order-apply-indicator"},[_vm._v("⮬")]),_vm._v(" "),_c('a',{staticClass:"sorting-order-link",attrs:{"id":"koakuma-sorting-order-by-bookmark-id","role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickSortingOrder($event)}}},[_vm._v(_vm._s(_vm.$t('ctrlPanel.sortByBookmarkId')))])])])]),_vm._v(" "),_c('div',{staticClass:"koakuma-block",attrs:{"id":"koakuma-options-block"}},[_c('div',[_c('i',{directives:[{name:"show",rawName:"v-show",value:(_vm.xc.fitwidth),expression:"xc.fitwidth"}],staticClass:"fas fa-compress",attrs:{"id":"koakuma-options-width-compress"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.optionsChange($event)}}}),_vm._v(" "),_c('i',{directives:[{name:"show",rawName:"v-show",value:(!_vm.xc.fitwidth),expression:"!xc.fitwidth"}],staticClass:"fas fa-expand",attrs:{"id":"koakuma-options-width-expand"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.optionsChange($event)}}})]),_vm._v(" "),_c('div',[_c('i',{staticClass:"fas fa-cog",attrs:{"id":"koakuma-options-config"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.openCoverLayerInConfigMode($event)}}})])])])};
 var __vue_staticRenderFns__ = [];
-__vue_render__._withStripped = true;
 
   /* style */
   const __vue_inject_styles__ = function (inject) {
     if (!inject) return
-    inject("data-v-4305a231_0", { source: "\na[data-v-4305a231] {\n  color: #258fb8;\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down[data-v-4305a231] {\n  padding: 2px;\n}\n#Koakuma[data-v-4305a231] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n}\n.koakuma-block[data-v-4305a231] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-processed-block[data-v-4305a231] {\n  font-size: 18px;\n}\n#koakuma-bookmark-sort-label[data-v-4305a231] {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block[data-v-4305a231],\n#koakuma-sorting-order-block[data-v-4305a231] {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block[data-v-4305a231] {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input[data-v-4305a231] {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input[data-v-4305a231]::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input[data-v-4305a231]::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input[data-v-4305a231] {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input[data-v-4305a231]:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch[data-v-4305a231],\n#koakuma-sorting-order-select-switch[data-v-4305a231] {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch[data-v-4305a231] {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list[data-v-4305a231],\n#koakuma-sorting-order-select-list[data-v-4305a231] {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list[data-v-4305a231] {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-4305a231],\n#koakuma-sorting-order-select-list > li[data-v-4305a231] {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li[data-v-4305a231]::after,\n#koakuma-sorting-order-select-list > li[data-v-4305a231]::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li[data-v-4305a231]:first-child::after,\n#koakuma-sorting-order-select-list > li[data-v-4305a231]:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-4305a231],\n#koakuma-sorting-order-select-list .sort-order-apply-indicator[data-v-4305a231] {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-4305a231] {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator[data-v-4305a231],\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator[data-v-4305a231] {\n  visibility: visible;\n}\n.sort-order-apply-indicator[data-v-4305a231] {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link[data-v-4305a231],\n.sorting-order-link[data-v-4305a231] {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link[data-v-4305a231] {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output[data-v-4305a231] {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select[data-v-4305a231] {\n  font-size: 14px;\n}\n#koakuma-options-block > *[data-v-4305a231] {\n  margin: 0 5px;\n}\n#koakuma-main-button[data-v-4305a231] {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button[data-v-4305a231]:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button[data-v-4305a231]:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button[data-v-4305a231]:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go[data-v-4305a231] {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused[data-v-4305a231] {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end[data-v-4305a231] {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress[data-v-4305a231],\n#koakuma-options-width-expand[data-v-4305a231],\n#koakuma-options-config[data-v-4305a231] {\n  cursor: pointer;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/CtrlPanel.vue"],"names":[],"mappings":";AA4QA;EACA,eAAA;EACA,sBAAA;CACA;AACA;EACA,aAAA;CACA;AACA;EACA,cAAA;EACA,wBAAA;EACA,oBAAA;EACA,iBAAA;EACA,OAAA;EACA,WAAA;EACA,uBAAA;EACA,2BAAA;EACA,aAAA;EACA,eAAA;EACA,gBAAA;CACA;AACA;EACA,eAAA;EACA,qBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,gCAAA;EACA,oBAAA;EACA,gBAAA;EACA,2BAAA;EACA,uBAAA;EACA,wBAAA;EACA,cAAA;EACA,eAAA;CACA;AACA;;EAEA,mBAAA;EACA,yBAAA;EACA,mBAAA;CACA;AACA;EACA,uBAAA;CACA;AACA;EACA,2BAAA;EACA,aAAA;EACA,8BAAA;EACA,WAAA;EACA,eAAA;EACA,gBAAA;EACA,sBAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;;EAEA,6EAAA;EACA,yBAAA;EACA,UAAA;CACA;AACA;EACA,UAAA;EACA,eAAA;EACA,YAAA;EACA,gBAAA;EACA,0BAAA;EACA,aAAA;EACA,iBAAA;CACA;AACA;EACA,oBAAA;EACA,cAAA;CACA;AACA;;EAEA,uBAAA;EACA,aAAA;EACA,4BAAA;EACA,2BAAA;EACA,gBAAA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,aAAA;EACA,mBAAA;CACA;AACA;;EAEA,mBAAA;EACA,uBAAA;EACA,yBAAA;EACA,mBAAA;EACA,UAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,WAAA;CACA;AACA;EACA,cAAA;EACA,+BAAA;EACA,eAAA;CACA;AACA;;EAEA,cAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;;EAEA,YAAA;EACA,8BAAA;EACA,sBAAA;EACA,UAAA;EACA,UAAA;EACA,eAAA;EACA,aAAA;EACA,mBAAA;EACA,QAAA;EACA,SAAA;EACA,YAAA;EACA,uBAAA;CACA;AACA;;EAEA,iBAAA;CACA;AACA;;EAEA,mBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,oBAAA;CACA;AACA;EACA,eAAA;EACA,wBAAA;EACA,oBAAA;EACA,oBAAA;EACA,eAAA;CACA;AACA;;EAEA,eAAA;EACA,gBAAA;EACA,mBAAA;EACA,QAAA;CACA;AACA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;EACA,cAAA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,cAAA;CACA;AACA;EACA,aAAA;EACA,kBAAA;EACA,mBAAA;EACA,gBAAA;CACA;AACA;EACA,iCAAA;EACA,yCAAA;EACA,gBAAA;CACA;AACA;EACA,wBAAA;EACA,iBAAA;CACA;AACA;EACA,+BAAA;EACA,2CAAA;CACA;AACA;EACA,sCAAA;CACA;AACA;EACA,qCAAA;CACA;AACA;EACA,0BAAA;EACA,YAAA;EACA,cAAA;CACA;AACA;;;EAGA,gBAAA;CACA","file":"CtrlPanel.vue","sourcesContent":["<template>\n  <div\n    :id=\"id\"\n    :ref=\"id\">\n    <div id=\"koakuma-processed-block\" class=\"koakuma-block\">{{ processedCountMsg }}</div>\n    <div id=\"koakuma-bookmark-sort-block\" class=\"koakuma-block\">\n      <label id=\"koakuma-bookmark-sort-label\" for=\"koakuma-bookmark-sort-input\">\n        <span>❤️</span>\n        <input\n          id=\"koakuma-bookmark-sort-input\"\n          :value=\"filters.limit\"\n          type=\"number\"\n          min=\"0\"\n          step=\"1\"\n          @wheel.stop.prevent=\"sortInputWheel\"\n          @input=\"sortInputInput\">\n      </label>\n      <a\n        id=\"koakuma-bookmark-input-usual-switch\"\n        role=\"button\"\n        @click.left=\"usualSwitchOn = !usualSwitchOn\">\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"usualSwitchOn\" id=\"koakuma-bookmark-input-usual-list\">\n        <li v-for=\"usual in usualList\" :key=\"usual\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            role=\"button\"\n            class=\"usual-list-link\"\n            @click.left=\"clickUsual\">{{ usual }}</a>\n        </li>\n      </ul>\n    </div>\n    <div class=\"koakuma-block\">\n      <input\n        id=\"koakuma-bookmark-tags-filter-input\"\n        :placeholder=\"$t('ctrlPanel.tagFilterQueryPlaceholder')\"\n        type=\"text\"\n        @input=\"tagsFilterInput\">\n    </div>\n    <div class=\"koakuma-block\">\n      <button\n        id=\"koakuma-main-button\"\n        :disabled=\"status.isEnded\"\n        :class=\"statusClass\"\n        @mouseup.left=\"clickMainButton\">\n        {{ buttonMsg }}\n      </button>\n    </div>\n    <div id=\"koakuma-sorting-order-block\" class=\"koakuma-block\">\n      <a\n        id=\"koakuma-sorting-order-select-switch\"\n        role=\"button\"\n        @click.left=\"sortingOrderSwitchOn = !sortingOrderSwitchOn\">\n        <output id=\"koakuma-sorting-order-select-output\" v-html=\"sortingOrderMsg\"/>\n        <i class=\"fas fa-angle-down\"/>\n      </a>\n      <ul v-show=\"sortingOrderSwitchOn\" id=\"koakuma-sorting-order-select-list\">\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-popularity\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByPopularity') }}</a>\n        </li>\n        <li>\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-date\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByDate') }}</a>\n        </li>\n        <li v-show=\"isSelfBookmarkPage\">\n          <span class=\"sort-order-apply-indicator\">⮬</span>\n          <a\n            id=\"koakuma-sorting-order-by-bookmark-id\"\n            class=\"sorting-order-link\"\n            role=\"button\"\n            @click.left=\"clickSortingOrder\">{{ $t('ctrlPanel.sortByBookmarkId') }}</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"koakuma-options-block\" class=\"koakuma-block\">\n      <div>\n        <i\n          v-show=\"xc.fitwidth\"\n          id=\"koakuma-options-width-compress\"\n          class=\"fas fa-compress\"\n          @click.left=\"optionsChange\"/>\n        <i\n          v-show=\"!xc.fitwidth\"\n          id=\"koakuma-options-width-expand\"\n          class=\"fas fa-expand\"\n          @click.left=\"optionsChange\"/>\n      </div>\n      <div>\n        <i\n          id=\"koakuma-options-config\"\n          class=\"fas fa-cog\"\n          @click.left=\"openCoverLayerInConfigMode\"/>\n      </div>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print, toInt } from '../lib/utils';\nimport { SORT_TYPE as ST } from '../lib/enums';\nexport default {\n  props: {\n    id: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      debounceId4sortInput: null,\n      debounceId4tagsFilter: null,\n      sortingOrderSwitchOn: false,\n      usualList: [100, 500, 1000, 3000, 5000, 10000],\n      usualSwitchOn: false,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    buttonMsg() {\n      if (this.status.isEnded) {\n        return this.$t('ctrlPanel.buttonEnd');\n      } else if (this.status.isPaused) {\n        return this.$t('ctrlPanel.buttonGo');\n      } else {\n        return this.$t('ctrlPanel.buttonPause');\n      }\n    },\n    filters() {\n      return this.$store.getters.filters;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    processedCountMsg() {\n      const rootGetters = this.$store.getters;\n      const isNewProfilePage = rootGetters['pixiv/nppType'] >= 0;\n      let indices = null;\n      if (isNewProfilePage) {\n        indices = rootGetters['pixiv/nppDisplayIndices'];\n      } else {\n        indices = rootGetters['pixiv/defaultDisplayIndices'];\n      }\n      const { shows, hides } = indices;\n      return `${shows.length} / ${shows.length + hides.length}`;\n    },\n    sortingOrderMsg() {\n      switch (this.xc.sort) {\n      case ST.BOOKMARK_COUNT:\n        return this.$t('ctrlPanel.sortByPopularity');\n      case ST.ILLUST_ID:\n        return this.$t('ctrlPanel.sortByDate');\n      default:\n        //ST.BOOKMARK_ID\n        return this.$t('ctrlPanel.sortByBookmarkId');\n      }\n    },\n    status() {\n      return this.$store.getters['pixiv/status'];\n    },\n    statusClass() {\n      const _s = this.status;\n      return {\n        end: _s.isEnded,\n        go: _s.isPaused && !_s.isEnded,\n        paused: !_s.isPaused && !_s.isEnded,\n      };\n    },\n    xc() {\n      return this.$store.getters.config;\n    },\n  },\n  methods: {\n    clickMainButton() {\n      if (this.status.isPaused) {\n        this.$store.dispatch('pixiv/start');\n      } else {\n        this.$store.dispatch('pixiv/pause');\n      }\n    },\n    clickSortingOrder(event) {\n      $print.debug('Koakuma#clickSortingOrder: event', event);\n\n      const ct = event.currentTarget;\n      switch (ct.id) {\n      case 'koakuma-sorting-order-by-popularity':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_COUNT });\n        break;\n      case 'koakuma-sorting-order-by-bookmark-id':\n        this.$store.commit('setConfig', { sort: ST.BOOKMARK_ID });\n        break;\n      default:\n        this.$store.commit('setConfig', { sort: ST.ILLUST_ID });\n        break;\n      }\n\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n\n      this.sortingOrderSwitchOn = false;\n    },\n    clickUsual(event) {\n      this.$store.commit('setFilters', {\n        limit: toInt(event.currentTarget.textContent),\n      });\n      this.usualSwitchOn = false;\n    },\n    openCoverLayerInConfigMode() {\n      this.$store.commit('coverLayer/open', { data: null, mode: 'config' });\n    },\n    optionsChange(event) {\n      $print.debug('Koakuma#optionsChange: event', event);\n      if (event.target.id === 'koakuma-options-width-compress') {\n        this.$store.commit('setConfig', { fitwidth: false });\n      } else if (event.target.id === 'koakuma-options-width-expand') {\n        this.$store.commit('setConfig', { fitwidth: true });\n      }\n      this.$store.commit('saveConfig');\n      this.$store.commit('applyConfig');\n    },\n    sortInputInput(event) {\n      if (this.debounceId4sortInput) {\n        clearTimeout(this.debounceId4sortInput);\n      }\n      this.debounceId4sortInput = setTimeout(() => {\n        this.debounceId4sortInput = null;\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value)),\n        });\n      }, 500);\n    },\n    sortInputWheel(event) {\n      if (event.deltaY < 0) {\n        this.$store.commit('setFilters', {\n          limit: toInt(event.target.value) + 20,\n        });\n      } else {\n        this.$store.commit('setFilters', {\n          limit: Math.max(0, toInt(event.target.value) - 20),\n        });\n      }\n    },\n    tagsFilterInput(event) {\n      if (this.debounceId4tagsFilter) {\n        clearTimeout(this.debounceId4tagsFilter);\n      }\n      this.debounceId4tagsFilter = setTimeout(() => {\n        this.debounceId4tagsFilter = null;\n        this.$store.commit('setFilters', {\n          query: event.target.value,\n        });\n      }, 1500);\n    },\n  },\n};\n</script>\n\n<style scoped>\na {\n  color: #258fb8;\n  text-decoration: none;\n}\na[role=\"button\"] > .fa-angle-down {\n  padding: 2px;\n}\n#Koakuma {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  position: sticky;\n  top: 0;\n  z-index: 3;\n  background-color: #eef;\n  box-shadow: 0 1px 1px #777;\n  padding: 4px;\n  color: #00186c;\n  font-size: 16px;\n}\n.koakuma-block {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#koakuma-processed-block {\n  font-size: 18px;\n}\n#koakuma-bookmark-sort-label {\n  display: inline-flex !important;\n  align-items: center;\n  margin-right: 0;\n  border-radius: 3px 0 0 3px;\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  margin: 0 1px;\n  padding: 0 6px;\n}\n#koakuma-bookmark-sort-block,\n#koakuma-sorting-order-block {\n  position: relative;\n  box-shadow: 0 0 1px #069;\n  border-radius: 4px;\n}\n#koakuma-sorting-order-block {\n  background-color: #cef;\n}\n#koakuma-bookmark-sort-input {\n  -moz-appearance: textfield;\n  border: none;\n  background-color: transparent;\n  padding: 0;\n  color: inherit;\n  font-size: 16px;\n  display: inline-block;\n  cursor: ns-resize;\n  text-align: center;\n  max-width: 50px;\n}\n#koakuma-bookmark-sort-input::-webkit-inner-spin-button,\n#koakuma-bookmark-sort-input::-webkit-outer-spin-button {\n  /* https://css-tricks.com/numeric-inputs-a-comparison-of-browser-defaults/ */\n  -webkit-appearance: none;\n  margin: 0;\n}\n#koakuma-bookmark-tags-filter-input {\n  margin: 0;\n  padding: 0 4px;\n  color: #333;\n  font-size: 12px;\n  border: 1px solid #becad7;\n  height: 20px;\n  min-width: 300px;\n}\n#koakuma-bookmark-tags-filter-input:focus {\n  background: #ffffcc;\n  outline: none;\n}\n#koakuma-bookmark-input-usual-switch,\n#koakuma-sorting-order-select-switch {\n  background-color: #cef;\n  padding: 1px;\n  border-left: 1px solid #888;\n  border-radius: 0 3px 3px 0;\n  cursor: pointer;\n  display: inline-flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select-switch {\n  border: none;\n  border-radius: 3px;\n}\n#koakuma-bookmark-input-usual-list,\n#koakuma-sorting-order-select-list {\n  border-radius: 3px;\n  background-color: #cef;\n  box-shadow: 0 0 2px #069;\n  position: absolute;\n  top: 100%;\n  width: 100%;\n  margin-top: 1px;\n  list-style: none;\n  padding: 0;\n}\n#koakuma-sorting-order-select-list {\n  display: grid;\n  grid-auto-columns: max-content;\n  width: initial;\n}\n#koakuma-bookmark-input-usual-list > li,\n#koakuma-sorting-order-select-list > li {\n  display: flex;\n  position: relative;\n  line-height: 24px;\n}\n#koakuma-bookmark-input-usual-list > li::after,\n#koakuma-sorting-order-select-list > li::after {\n  content: \"\";\n  box-shadow: 0 0 0 1px #89d8ff;\n  display: inline-block;\n  margin: 0;\n  height: 0;\n  line-height: 0;\n  font-size: 0;\n  position: absolute;\n  left: 0;\n  right: 0;\n  width: 100%;\n  transform: scaleX(0.8);\n}\n#koakuma-bookmark-input-usual-list > li:first-child::after,\n#koakuma-sorting-order-select-list > li:first-child::after {\n  box-shadow: none;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list .sort-order-apply-indicator {\n  visibility: hidden;\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator {\n  position: absolute;\n}\n#koakuma-bookmark-input-usual-list > li:hover .sort-order-apply-indicator,\n#koakuma-sorting-order-select-list > li:hover .sort-order-apply-indicator {\n  visibility: visible;\n}\n.sort-order-apply-indicator {\n  display: block;\n  justify-content: center;\n  align-items: center;\n  font-weight: bolder;\n  padding: 0 4px;\n}\n.usual-list-link,\n.sorting-order-link {\n  display: block;\n  cursor: pointer;\n  text-align: center;\n  flex: 1;\n}\n.sorting-order-link {\n  padding-right: 18px;\n}\n#koakuma-sorting-order-select-output {\n  padding: 0 16px;\n  display: flex;\n  align-items: center;\n}\n#koakuma-sorting-order-select {\n  font-size: 14px;\n}\n#koakuma-options-block > * {\n  margin: 0 5px;\n}\n#koakuma-main-button {\n  border: none;\n  padding: 2px 14px;\n  border-radius: 3px;\n  font-size: 16px;\n}\n#koakuma-main-button:enabled {\n  transform: translate(-1px, -1px);\n  box-shadow: 1px 1px 1px hsl(60, 0%, 30%);\n  cursor: pointer;\n}\n#koakuma-main-button:enabled:hover {\n  transform: translate(0);\n  box-shadow: none;\n}\n#koakuma-main-button:enabled:active {\n  transform: translate(1px, 1px);\n  box-shadow: -1px -1px 1px hsl(60, 0%, 30%);\n}\n#koakuma-main-button.go {\n  background-color: hsl(141, 100%, 50%);\n}\n#koakuma-main-button.paused {\n  background-color: hsl(60, 100%, 50%);\n}\n#koakuma-main-button.end {\n  background-color: #878787;\n  color: #fff;\n  opacity: 0.87;\n}\n#koakuma-options-width-compress,\n#koakuma-options-width-expand,\n#koakuma-options-config {\n  cursor: pointer;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-0ade4ee9_0", { source: "\na[data-v-0ade4ee9]{color:#258fb8;text-decoration:none\n}\na[role=button]>.fa-angle-down[data-v-0ade4ee9]{padding:2px\n}\n#Koakuma[data-v-0ade4ee9]{display:flex;justify-content:center;align-items:center;position:sticky;top:0;z-index:3;background-color:#eef;box-shadow:0 1px 1px #777;padding:4px;color:#00186c;font-size:16px\n}\n.koakuma-block[data-v-0ade4ee9]{margin:0 10px;display:inline-flex\n}\n#koakuma-processed-block[data-v-0ade4ee9]{font-size:18px\n}\n#koakuma-bookmark-sort-label[data-v-0ade4ee9]{display:inline-flex!important;align-items:center;margin-right:0;border-radius:3px 0 0 3px;background-color:#cef;color:#0069b1;margin:0 1px;padding:0 6px\n}\n#koakuma-bookmark-sort-block[data-v-0ade4ee9],#koakuma-sorting-order-block[data-v-0ade4ee9]{position:relative;box-shadow:0 0 1px #069;border-radius:4px\n}\n#koakuma-sorting-order-block[data-v-0ade4ee9]{background-color:#cef\n}\n#koakuma-bookmark-sort-input[data-v-0ade4ee9]{-moz-appearance:textfield;border:none;background-color:transparent;padding:0;color:inherit;font-size:16px;display:inline-block;cursor:ns-resize;text-align:center;max-width:50px\n}\n#koakuma-bookmark-sort-input[data-v-0ade4ee9]::-webkit-inner-spin-button,#koakuma-bookmark-sort-input[data-v-0ade4ee9]::-webkit-outer-spin-button{-webkit-appearance:none;margin:0\n}\n#koakuma-bookmark-tags-filter-input[data-v-0ade4ee9]{margin:0;padding:0 4px;color:#333;font-size:12px;border:1px solid #becad7;height:20px;min-width:300px\n}\n#koakuma-bookmark-tags-filter-input[data-v-0ade4ee9]:focus{background:#ffc;outline:0\n}\n#koakuma-bookmark-input-usual-switch[data-v-0ade4ee9],#koakuma-sorting-order-select-switch[data-v-0ade4ee9]{background-color:#cef;padding:1px;border-left:1px solid #888;border-radius:0 3px 3px 0;cursor:pointer;display:inline-flex;align-items:center\n}\n#koakuma-sorting-order-select-switch[data-v-0ade4ee9]{border:none;border-radius:3px\n}\n#koakuma-bookmark-input-usual-list[data-v-0ade4ee9],#koakuma-sorting-order-select-list[data-v-0ade4ee9]{border-radius:3px;background-color:#cef;box-shadow:0 0 2px #069;position:absolute;top:100%;width:100%;margin-top:1px;list-style:none;padding:0\n}\n#koakuma-sorting-order-select-list[data-v-0ade4ee9]{display:grid;grid-auto-columns:max-content;width:initial\n}\n#koakuma-bookmark-input-usual-list>li[data-v-0ade4ee9],#koakuma-sorting-order-select-list>li[data-v-0ade4ee9]{display:flex;position:relative;line-height:24px\n}\n#koakuma-bookmark-input-usual-list>li[data-v-0ade4ee9]::after,#koakuma-sorting-order-select-list>li[data-v-0ade4ee9]::after{content:\"\";box-shadow:0 0 0 1px #89d8ff;display:inline-block;margin:0;height:0;line-height:0;font-size:0;position:absolute;left:0;right:0;width:100%;transform:scaleX(.8)\n}\n#koakuma-bookmark-input-usual-list>li[data-v-0ade4ee9]:first-child::after,#koakuma-sorting-order-select-list>li[data-v-0ade4ee9]:first-child::after{box-shadow:none\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-0ade4ee9],#koakuma-sorting-order-select-list .sort-order-apply-indicator[data-v-0ade4ee9]{visibility:hidden\n}\n#koakuma-bookmark-input-usual-list .sort-order-apply-indicator[data-v-0ade4ee9]{position:absolute\n}\n#koakuma-bookmark-input-usual-list>li:hover .sort-order-apply-indicator[data-v-0ade4ee9],#koakuma-sorting-order-select-list>li:hover .sort-order-apply-indicator[data-v-0ade4ee9]{visibility:visible\n}\n.sort-order-apply-indicator[data-v-0ade4ee9]{display:block;justify-content:center;align-items:center;font-weight:bolder;padding:0 4px\n}\n.sorting-order-link[data-v-0ade4ee9],.usual-list-link[data-v-0ade4ee9]{display:block;cursor:pointer;text-align:center;flex:1\n}\n.sorting-order-link[data-v-0ade4ee9]{padding-right:18px\n}\n#koakuma-sorting-order-select-output[data-v-0ade4ee9]{padding:0 16px;display:flex;align-items:center\n}\n#koakuma-sorting-order-select[data-v-0ade4ee9]{font-size:14px\n}\n#koakuma-options-block>*[data-v-0ade4ee9]{margin:0 5px\n}\n#koakuma-main-button[data-v-0ade4ee9]{border:none;padding:2px 14px;border-radius:3px;font-size:16px\n}\n#koakuma-main-button[data-v-0ade4ee9]:enabled{transform:translate(-1px,-1px);box-shadow:1px 1px 1px #4c4c4c;cursor:pointer\n}\n#koakuma-main-button[data-v-0ade4ee9]:enabled:hover{transform:translate(0);box-shadow:none\n}\n#koakuma-main-button[data-v-0ade4ee9]:enabled:active{transform:translate(1px,1px);box-shadow:-1px -1px 1px #4c4c4c\n}\n#koakuma-main-button.go[data-v-0ade4ee9]{background-color:#00ff59\n}\n#koakuma-main-button.paused[data-v-0ade4ee9]{background-color:#feff00\n}\n#koakuma-main-button.end[data-v-0ade4ee9]{background-color:#878787;color:#fff;opacity:.87\n}\n#koakuma-options-config[data-v-0ade4ee9],#koakuma-options-width-compress[data-v-0ade4ee9],#koakuma-options-width-expand[data-v-0ade4ee9]{cursor:pointer\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__ = "data-v-4305a231";
+  const __vue_scope_id__ = "data-v-0ade4ee9";
   /* module identifier */
   const __vue_module_identifier__ = undefined;
   /* functional template */
@@ -2114,7 +1674,7 @@ __vue_render__._withStripped = true;
     const component = (typeof script$$1 === 'function' ? script$$1.options : script$$1) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/CtrlPanel.vue";
+    component.__file = "CtrlPanel.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -2171,6 +1731,17 @@ __vue_render__._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -2382,275 +1953,17 @@ var script$1 = {
             const __vue_script__$1 = script$1;
             
 /* template */
-var __vue_render__$1 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { style: _vm.inlineStyle, attrs: { id: "patchouli-context-menu" } },
-    [
-      _c(
-        "ul",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.currentType === "image-item-image",
-              expression: "currentType === 'image-item-image'"
-            }
-          ]
-        },
-        [
-          _c("li", [
-            _c(
-              "a",
-              {
-                attrs: { role: "button" },
-                on: {
-                  click: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "left", 37, $event.key, [
-                        "Left",
-                        "ArrowLeft"
-                      ])
-                    ) {
-                      return null
-                    }
-                    if ("button" in $event && $event.button !== 0) {
-                      return null
-                    }
-                    return _vm.thumbUp($event)
-                  }
-                }
-              },
-              [
-                _c("i", { staticClass: "far fa-thumbs-up" }),
-                _vm._v(
-                  "\n        " +
-                    _vm._s(_vm.$t("contextMenu.thumbUp")) +
-                    "\n      "
-                )
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.isDownloadable,
-                  expression: "isDownloadable"
-                }
-              ]
-            },
-            [
-              _c(
-                "a",
-                {
-                  attrs: { role: "button" },
-                  on: {
-                    click: function($event) {
-                      if (
-                        !("button" in $event) &&
-                        _vm._k($event.keyCode, "left", 37, $event.key, [
-                          "Left",
-                          "ArrowLeft"
-                        ])
-                      ) {
-                        return null
-                      }
-                      if ("button" in $event && $event.button !== 0) {
-                        return null
-                      }
-                      return _vm.downloadOne($event)
-                    }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fas fa-download" }),
-                  _vm._v(
-                    "\n        " +
-                      _vm._s(_vm.$t("contextMenu.download")) +
-                      "\n      "
-                  )
-                ]
-              )
-            ]
-          ),
-          _vm._v(" "),
-          _c("li", [
-            _c(
-              "a",
-              {
-                attrs: { role: "button" },
-                on: {
-                  click: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "left", 37, $event.key, [
-                        "Left",
-                        "ArrowLeft"
-                      ])
-                    ) {
-                      return null
-                    }
-                    if ("button" in $event && $event.button !== 0) {
-                      return null
-                    }
-                    return _vm.openPreview($event)
-                  }
-                }
-              },
-              [
-                _c("i", { staticClass: "fas fa-search-plus" }),
-                _vm._v(
-                  "\n        " +
-                    _vm._s(_vm.$t("contextMenu.preview")) +
-                    "\n      "
-                )
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c("li", [
-            _c(
-              "a",
-              {
-                attrs: {
-                  href: _vm.bookmarkPageLink,
-                  role: "button",
-                  target: "_blank"
-                }
-              },
-              [
-                _c("i", { staticClass: "far fa-bookmark" }),
-                _vm._v(
-                  "\n        " +
-                    _vm._s(_vm.$t("contextMenu.openBookmarkPage")) +
-                    "\n      "
-                )
-              ]
-            )
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "ul",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.currentType === "image-item-title-user",
-              expression: "currentType === 'image-item-title-user'"
-            }
-          ]
-        },
-        [
-          _c("li", [
-            _c(
-              "a",
-              {
-                attrs: { role: "button" },
-                on: {
-                  click: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "left", 37, $event.key, [
-                        "Left",
-                        "ArrowLeft"
-                      ])
-                    ) {
-                      return null
-                    }
-                    if ("button" in $event && $event.button !== 0) {
-                      return null
-                    }
-                    return _vm.addToBlacklist($event)
-                  }
-                }
-              },
-              [
-                _c("i", { staticClass: "far fa-eye-slash" }),
-                _vm._v(
-                  "\n        " +
-                    _vm._s(_vm.$t("contextMenu.addToBlacklist")) +
-                    "\n      "
-                )
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "li",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value:
-                    _vm.currentImageItem && !_vm.currentImageItem.isFollowed,
-                  expression: "currentImageItem && !currentImageItem.isFollowed"
-                }
-              ]
-            },
-            [
-              _c(
-                "a",
-                {
-                  attrs: { role: "button" },
-                  on: {
-                    click: function($event) {
-                      if (
-                        !("button" in $event) &&
-                        _vm._k($event.keyCode, "left", 37, $event.key, [
-                          "Left",
-                          "ArrowLeft"
-                        ])
-                      ) {
-                        return null
-                      }
-                      if ("button" in $event && $event.button !== 0) {
-                        return null
-                      }
-                      return _vm.followUser($event)
-                    }
-                  }
-                },
-                [
-                  _c("i", { staticClass: "fas fa-rss" }),
-                  _vm._v(
-                    "\n        " +
-                      _vm._s(_vm.$t("contextMenu.followUser")) +
-                      "\n      "
-                  )
-                ]
-              )
-            ]
-          )
-        ]
-      )
-    ]
-  )
-};
+var __vue_render__$1 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{style:(_vm.inlineStyle),attrs:{"id":"patchouli-context-menu"}},[_c('ul',{directives:[{name:"show",rawName:"v-show",value:(_vm.currentType === 'image-item-image'),expression:"currentType === 'image-item-image'"}]},[_c('li',[_c('a',{attrs:{"role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.thumbUp($event)}}},[_c('i',{staticClass:"far fa-thumbs-up"}),_vm._v("\n        "+_vm._s(_vm.$t('contextMenu.thumbUp'))+"\n      ")])]),_vm._v(" "),_c('li',{directives:[{name:"show",rawName:"v-show",value:(_vm.isDownloadable),expression:"isDownloadable"}]},[_c('a',{attrs:{"role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.downloadOne($event)}}},[_c('i',{staticClass:"fas fa-download"}),_vm._v("\n        "+_vm._s(_vm.$t('contextMenu.download'))+"\n      ")])]),_vm._v(" "),_c('li',[_c('a',{attrs:{"role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.openPreview($event)}}},[_c('i',{staticClass:"fas fa-search-plus"}),_vm._v("\n        "+_vm._s(_vm.$t('contextMenu.preview'))+"\n      ")])]),_vm._v(" "),_c('li',[_c('a',{attrs:{"href":_vm.bookmarkPageLink,"role":"button","target":"_blank"}},[_c('i',{staticClass:"far fa-bookmark"}),_vm._v("\n        "+_vm._s(_vm.$t('contextMenu.openBookmarkPage'))+"\n      ")])])]),_vm._v(" "),_c('ul',{directives:[{name:"show",rawName:"v-show",value:(_vm.currentType === 'image-item-title-user'),expression:"currentType === 'image-item-title-user'"}]},[_c('li',[_c('a',{attrs:{"role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.addToBlacklist($event)}}},[_c('i',{staticClass:"far fa-eye-slash"}),_vm._v("\n        "+_vm._s(_vm.$t('contextMenu.addToBlacklist'))+"\n      ")])]),_vm._v(" "),_c('li',{directives:[{name:"show",rawName:"v-show",value:(_vm.currentImageItem && !_vm.currentImageItem.isFollowed),expression:"currentImageItem && !currentImageItem.isFollowed"}]},[_c('a',{attrs:{"role":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.followUser($event)}}},[_c('i',{staticClass:"fas fa-rss"}),_vm._v("\n        "+_vm._s(_vm.$t('contextMenu.followUser'))+"\n      ")])])])])};
 var __vue_staticRenderFns__$1 = [];
-__vue_render__$1._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$1 = function (inject) {
     if (!inject) return
-    inject("data-v-9f68f7ce_0", { source: "\n#patchouli-context-menu[data-v-9f68f7ce] {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 5px;\n}\n#patchouli-context-menu > ul[data-v-9f68f7ce] {\n  margin: 0;\n  padding: 0;\n  line-height: 20px;\n}\n#patchouli-context-menu > ul > li[data-v-9f68f7ce] {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a[data-v-9f68f7ce] {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a[data-v-9f68f7ce]:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far[data-v-9f68f7ce],\n#patchouli-context-menu > ul i.fas[data-v-9f68f7ce] {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/ContextMenu.vue"],"names":[],"mappings":";AA+KA;EACA,uBAAA;EACA,0BAAA;EACA,gBAAA;EACA,YAAA;EACA,uBAAA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;CACA;AACA;EACA,UAAA;EACA,WAAA;EACA,kBAAA;CACA;AACA;EACA,cAAA;EACA,oBAAA;CACA;AACA;EACA,YAAA;EACA,aAAA;EACA,QAAA;EACA,sBAAA;EACA,oBAAA;EACA,qBAAA;EACA,oBAAA;EACA,mBAAA;CACA;AACA;EACA,0BAAA;EACA,YAAA;EACA,gBAAA;CACA;AACA;;EAEA,aAAA;EACA,YAAA;EACA,cAAA;CACA","file":"ContextMenu.vue","sourcesContent":["<template>\n  <div id=\"patchouli-context-menu\" :style=\"inlineStyle\">\n    <ul v-show=\"currentType === 'image-item-image'\">\n      <li>\n        <a role=\"button\" @click.left=\"thumbUp\">\n          <i class=\"far fa-thumbs-up\"/>\n          {{ $t('contextMenu.thumbUp') }}\n        </a>\n      </li>\n      <li v-show=\"isDownloadable\">\n        <a role=\"button\" @click.left=\"downloadOne\">\n          <i class=\"fas fa-download\"/>\n          {{ $t('contextMenu.download') }}\n        </a>\n      </li>\n      <li>\n        <a role=\"button\" @click.left=\"openPreview\">\n          <i class=\"fas fa-search-plus\"/>\n          {{ $t('contextMenu.preview') }}\n        </a>\n      </li>\n      <li>\n        <a\n          :href=\"bookmarkPageLink\"\n          role=\"button\"\n          target=\"_blank\">\n          <i class=\"far fa-bookmark\"/>\n          {{ $t('contextMenu.openBookmarkPage') }}\n        </a>\n      </li>\n    </ul>\n    <ul v-show=\"currentType === 'image-item-title-user'\">\n      <li>\n        <a role=\"button\" @click.left=\"addToBlacklist\">\n          <i class=\"far fa-eye-slash\"/>\n          {{ $t('contextMenu.addToBlacklist') }}\n        </a>\n      </li>\n      <li v-show=\"currentImageItem && !currentImageItem.isFollowed\">\n        <a role=\"button\" @click.left=\"followUser\">\n          <i class=\"fas fa-rss\"/>\n          {{ $t('contextMenu.followUser') }}\n        </a>\n      </li>\n    </ul>\n  </div>\n</template>\n\n\n<script>\nimport { PixivAPI } from '../lib/pixiv';\nimport { $el } from '../lib/utils';\nimport GMC from '../lib/gmc';\n\nexport default {\n  computed: {\n    bookmarkPageLink() {\n      if (!this.xdata) {\n        return '#';\n      }\n      return `bookmark_add.php?type=illust&illust_id=${this.xdata.illustId}`;\n    },\n    currentImageItem() {\n      if (!this.xdata) {\n        return null;\n      }\n      const lib = this.$store.getters['pixiv/imageItemLibrary'];\n      const found = lib.find(i => i.illustId === this.xdata.illustId);\n      return found ? found : null;\n    },\n    currentType() {\n      if (!this.xdata) {\n        return '';\n      }\n      return this.xdata.type;\n    },\n    inlineStyle() {\n      const RIGHT_BOUND = 200; // magic number\n      const position = this.xpos;\n      const ow = document.body.offsetWidth;\n\n      let style = `top: ${position.y}px;`;\n      if (ow - position.x < RIGHT_BOUND) {\n        style += `right: ${ow - position.x}px;`;\n      } else {\n        style += `left: ${position.x}px;`;\n      }\n      return style;\n    },\n    isDownloadable() {\n      return (\n        this.currentImageItem &&\n        this.currentImageItem.illustPageCount === 1 &&\n        !this.currentImageItem.isUgoira // unsupport ugoira currently\n      );\n    },\n    isUgoira() {\n      return this.currentImageItem && this.currentImageItem.isUgoira;\n    },\n    xdata() {\n      return this.$store.getters['contextMenu/data'];\n    },\n    xpos() {\n      return this.$store.getters['contextMenu/pos'];\n    },\n  },\n  methods: {\n    addToBlacklist() {\n      if (this.currentImageItem) {\n        const userId = this.currentImageItem.userId;\n        const blacklist = this.$store.getters.config.blacklist;\n        blacklist.push(userId);\n        blacklist.sort((a, b) => a - b);\n        this.$store.commit('setConfig', { blacklist });\n        this.$store.commit('saveConfig');\n      }\n    },\n    async downloadOne() {\n      const imgUrl = this.currentImageItem.urls.original;\n      const illustId = this.currentImageItem.illustId;\n      const a = $el('a', { href: imgUrl });\n\n      const filename = a.pathname.split('/').pop();\n      const ext = filename\n        .split('.')\n        .pop()\n        .toLowerCase();\n      /* eslint-disable sort-keys */\n      const response = await GMC.XHR({\n        method: 'GET',\n        url: imgUrl,\n        // greasemonkey has no this API\n        responseType: 'arraybuffer',\n        // for greasemonkey\n        binary: true,\n        headers: {\n          Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`,\n        },\n      });\n      /* eslint-enable sort-keys */\n\n      if (ext === 'jpg' || ext === 'jpeg') {\n        saveAs(new File([response.response], filename, { type: 'image/jpeg' }));\n      } else if (ext === 'png') {\n        saveAs(new File([response.response], filename, { type: 'image/png' }));\n      }\n    },\n    async followUser() {\n      if (this.currentImageItem) {\n        const userId = this.currentImageItem.userId;\n\n        if (await PixivAPI.postFollowUser(userId)) {\n          this.$store.commit('pixiv/editImgItem', {\n            type: 'follow-user',\n            userId: this.currentImageItem.userId,\n          });\n        }\n      }\n    },\n    openPreview() {\n      this.$store.commit('coverLayer/open', {\n        data: this.currentImageItem,\n        mode: 'preview',\n      });\n    },\n    thumbUp() {\n      if (this.currentImageItem) {\n        PixivAPI.postIllustLike(this.currentImageItem.illustId);\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-context-menu {\n  box-sizing: border-box;\n  border: 1px solid #b28fce;\n  position: fixed;\n  z-index: 10;\n  background-color: #fff;\n  font-size: 16px;\n  overflow: hidden;\n  border-radius: 5px;\n}\n#patchouli-context-menu > ul {\n  margin: 0;\n  padding: 0;\n  line-height: 20px;\n}\n#patchouli-context-menu > ul > li {\n  display: flex;\n  align-items: center;\n}\n#patchouli-context-menu > ul a {\n  color: #85a;\n  padding: 3px;\n  flex: 1;\n  text-decoration: none;\n  white-space: nowrap;\n  display: inline-flex;\n  align-items: center;\n  text-align: center;\n}\n#patchouli-context-menu > ul a:hover {\n  background-color: #b28fce;\n  color: #fff;\n  cursor: pointer;\n}\n#patchouli-context-menu > ul i.far,\n#patchouli-context-menu > ul i.fas {\n  height: 18px;\n  width: 18px;\n  margin: 0 4px;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-0d957a5e_0", { source: "\n#patchouli-context-menu[data-v-0d957a5e]{box-sizing:border-box;border:1px solid #b28fce;position:fixed;z-index:10;background-color:#fff;font-size:16px;overflow:hidden;border-radius:5px\n}\n#patchouli-context-menu>ul[data-v-0d957a5e]{margin:0;padding:0;line-height:20px\n}\n#patchouli-context-menu>ul>li[data-v-0d957a5e]{display:flex;align-items:center\n}\n#patchouli-context-menu>ul a[data-v-0d957a5e]{color:#85a;padding:3px;flex:1;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;text-align:center\n}\n#patchouli-context-menu>ul a[data-v-0d957a5e]:hover{background-color:#b28fce;color:#fff;cursor:pointer\n}\n#patchouli-context-menu>ul i.far[data-v-0d957a5e],#patchouli-context-menu>ul i.fas[data-v-0d957a5e]{height:18px;width:18px;margin:0 4px\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$1 = "data-v-9f68f7ce";
+  const __vue_scope_id__$1 = "data-v-0d957a5e";
   /* module identifier */
   const __vue_module_identifier__$1 = undefined;
   /* functional template */
@@ -2664,7 +1977,7 @@ __vue_render__$1._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/ContextMenu.vue";
+    component.__file = "ContextMenu.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -2721,6 +2034,17 @@ __vue_render__$1._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -2808,43 +2132,17 @@ var script$2 = {
             const __vue_script__$2 = script$2;
             
 /* template */
-var __vue_render__$2 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "svg",
-    {
-      staticClass: "ugoira-icon",
-      style: _vm.inlineStyle,
-      attrs: { viewBox: "0 0 24 24" }
-    },
-    [
-      _c("circle", {
-        staticClass: "ugoira-icon-circle",
-        attrs: { cx: "12", cy: "12", r: "10" }
-      }),
-      _vm._v(" "),
-      _c("path", {
-        attrs: {
-          d:
-            "M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z"
-        }
-      })
-    ]
-  )
-};
+var __vue_render__$2 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('svg',{staticClass:"ugoira-icon",style:(_vm.inlineStyle),attrs:{"viewBox":"0 0 24 24"}},[_c('circle',{staticClass:"ugoira-icon-circle",attrs:{"cx":"12","cy":"12","r":"10"}}),_vm._v(" "),_c('path',{attrs:{"d":"M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z"}})])};
 var __vue_staticRenderFns__$2 = [];
-__vue_render__$2._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$2 = function (inject) {
     if (!inject) return
-    inject("data-v-f6964bfe_0", { source: "\n.ugoira-icon-circle[data-v-f6964bfe] {\n  fill: #000;\n  fill-opacity: 0.4;\n}\n.ugoira-icon[data-v-f6964bfe] {\n  fill: #fff;\n  font-size: 0;\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconUgoiraPlay.vue"],"names":[],"mappings":";AAgCA;EACA,WAAA;EACA,kBAAA;CACA;AACA;EACA,WAAA;EACA,aAAA;EACA,eAAA;EACA,aAAA;EACA,uBAAA;CACA","file":"IconUgoiraPlay.vue","sourcesContent":["<template>\n  <svg\n    :style=\"inlineStyle\"\n    viewBox=\"0 0 24 24\"\n    class=\"ugoira-icon\">\n    <circle\n      class=\"ugoira-icon-circle\"\n      cx=\"12\"\n      cy=\"12\"\n      r=\"10\"/>\n    <path d=\"M9,8.74841664 L9,15.2515834 C9,15.8038681 9.44771525,16.2515834 10,16.2515834 C10.1782928,16.2515834 10.3533435,16.2039156 10.5070201,16.1135176 L16.0347118,12.8619342 C16.510745,12.5819147 16.6696454,11.969013 16.3896259,11.4929799 C16.3034179,11.3464262 16.1812655,11.2242738 16.0347118,11.1380658 L10.5070201,7.88648243 C10.030987,7.60646294 9.41808527,7.76536339 9.13806578,8.24139652 C9.04766776,8.39507316 9,8.57012386 9,8.74841664 Z\"/>\n  </svg>\n</template>\n\n<script>\nexport default {\n  props: {\n    size: {\n      default: 48,\n      type: Number,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    inlineStyle() {\n      return `height: ${this.size}px; width: ${this.size}px;`;\n    },\n  },\n};\n</script>\n\n<style scoped>\n.ugoira-icon-circle {\n  fill: #000;\n  fill-opacity: 0.4;\n}\n.ugoira-icon {\n  fill: #fff;\n  font-size: 0;\n  line-height: 0;\n  stroke: none;\n  vertical-align: middle;\n}\n</style>\n\n\n\n"]}, media: undefined });
+    inject("data-v-7eda7049_0", { source: "\n.ugoira-icon-circle[data-v-7eda7049]{fill:#000;fill-opacity:.4\n}\n.ugoira-icon[data-v-7eda7049]{fill:#fff;font-size:0;line-height:0;stroke:none;vertical-align:middle\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$2 = "data-v-f6964bfe";
+  const __vue_scope_id__$2 = "data-v-7eda7049";
   /* module identifier */
   const __vue_module_identifier__$2 = undefined;
   /* functional template */
@@ -2858,7 +2156,7 @@ __vue_render__$2._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/IconUgoiraPlay.vue";
+    component.__file = "IconUgoiraPlay.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -2915,6 +2213,17 @@ __vue_render__$2._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -2994,45 +2303,17 @@ var script$3 = {
             const __vue_script__$3 = script$3;
             
 /* template */
-var __vue_render__$3 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "svg",
-    {
-      staticClass: "i-effect",
-      class: _vm.actived ? "f-active" : "f-inactive",
-      attrs: { viewBox: "0 0 32 32", width: "32", height: "32" }
-    },
-    [
-      _c("path", {
-        attrs: {
-          d:
-            "M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z"
-        }
-      }),
-      _vm._v(" "),
-      _c("path", {
-        attrs: {
-          d:
-            "M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5 C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z"
-        }
-      })
-    ]
-  )
-};
+var __vue_render__$3 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('svg',{staticClass:"i-effect",class:_vm.actived?'f-active':'f-inactive',attrs:{"viewBox":"0 0 32 32","width":"32","height":"32"}},[_c('path',{attrs:{"d":"M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z"}}),_vm._v(" "),_c('path',{attrs:{"d":"M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5 C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z"}})])};
 var __vue_staticRenderFns__$3 = [];
-__vue_render__$3._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject("data-v-2a37bd30_0", { source: "\n.f-active[data-v-2a37bd30] {\n  fill: #ff4060;\n}\n.f-inactive[data-v-2a37bd30] {\n  fill: #fff;\n}\n.f-inactive > path[data-v-2a37bd30]:first-child {\n  fill: #333;\n}\n.i-effect[data-v-2a37bd30] {\n  box-sizing: border-box;\n  font-size: 0;\n  line-height: 0;\n  -webkit-transition: fill 0.2s, stroke 0.2s;\n  transition: fill 0.2s, stroke 0.2s;\n  vertical-align: top;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconBookmarkHeart.vue"],"names":[],"mappings":";AAwBA;EACA,cAAA;CACA;AACA;EACA,WAAA;CACA;AACA;EACA,WAAA;CACA;AACA;EACA,uBAAA;EACA,aAAA;EACA,eAAA;EACA,2CAAA;EACA,mCAAA;EACA,oBAAA;CACA","file":"IconBookmarkHeart.vue","sourcesContent":["<template>\n  <svg\n    :class=\"actived?'f-active':'f-inactive'\"\n    class=\"i-effect\"\n    viewBox=\"0 0 32 32\"\n    width=\"32\"\n    height=\"32\">\n    <path d=\"M21,5.5 C24.8659932,5.5 28,8.63400675 28,12.5 C28,18.2694439 24.2975093,23.1517313 17.2206059,27.1100183 C16.4622493,27.5342993 15.5379984,27.5343235 14.779626,27.110148 C7.70250208,23.1517462 4,18.2694529 4,12.5 C4,8.63400691 7.13400681,5.5 11,5.5 C12.829814,5.5 14.6210123,6.4144028 16,7.8282366 C17.3789877,6.4144028 19.170186,5.5 21,5.5 Z\"/>\n    <path d=\"M16,11.3317089 C15.0857201,9.28334665 13.0491506,7.5 11,7.5 C8.23857625,7.5 6,9.73857647 6,12.5 C6,17.4386065 9.2519779,21.7268174 15.7559337,25.3646328 C15.9076021,25.4494645 16.092439,25.4494644 16.2441073,25.3646326 C22.7480325,21.7268037 26,17.4385986 26,12.5 C26,9.73857625 23.7614237,7.5 21,7.5 C18.9508494,7.5 16.9142799,9.28334665 16,11.3317089 Z\"/>\n  </svg>\n</template>\n\n<script>\nexport default {\n  props: {\n    actived: {\n      default: false,\n      type: Boolean,\n    },\n  },\n};\n</script>\n\n<style scoped>\n.f-active {\n  fill: #ff4060;\n}\n.f-inactive {\n  fill: #fff;\n}\n.f-inactive > path:first-child {\n  fill: #333;\n}\n.i-effect {\n  box-sizing: border-box;\n  font-size: 0;\n  line-height: 0;\n  -webkit-transition: fill 0.2s, stroke 0.2s;\n  transition: fill 0.2s, stroke 0.2s;\n  vertical-align: top;\n}\n</style>\n\n\n\n"]}, media: undefined });
+    inject("data-v-e3fb88a0_0", { source: "\n.f-active[data-v-e3fb88a0]{fill:#ff4060\n}\n.f-inactive[data-v-e3fb88a0]{fill:#fff\n}\n.f-inactive>path[data-v-e3fb88a0]:first-child{fill:#333\n}\n.i-effect[data-v-e3fb88a0]{box-sizing:border-box;font-size:0;line-height:0;-webkit-transition:fill .2s,stroke .2s;transition:fill .2s,stroke .2s;vertical-align:top\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$3 = "data-v-2a37bd30";
+  const __vue_scope_id__$3 = "data-v-e3fb88a0";
   /* module identifier */
   const __vue_module_identifier__$3 = undefined;
   /* functional template */
@@ -3046,7 +2327,7 @@ __vue_render__$3._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/IconBookmarkHeart.vue";
+    component.__file = "IconBookmarkHeart.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -3103,6 +2384,17 @@ __vue_render__$3._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -3289,128 +2581,17 @@ var script$4 = {
             const __vue_script__$4 = script$4;
             
 /* template */
-var __vue_render__$4 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "image-item-image" }, [
-    _c(
-      "a",
-      {
-        staticClass: "image-flexbox",
-        attrs: { href: _vm.illustPageUrl, rel: "noopener" },
-        on: {
-          contextmenu: function($event) {
-            return _vm.activateContextMenu($event)
-          },
-          mouseenter: _vm.controlUgoira,
-          mouseleave: _vm.controlUgoira
-        }
-      },
-      [
-        _vm.illustPageCount > 1
-          ? _c("div", { staticClass: "top-right-slot" }, [
-              _c("span", [
-                _c("i", { staticClass: "far fa-images" }),
-                _vm._v("\n        " + _vm._s(_vm.illustPageCount))
-              ])
-            ])
-          : _vm._e(),
-        _vm._v(" "),
-        _c("img", {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: !_vm.ugoiraPlayed,
-              expression: "!ugoiraPlayed"
-            }
-          ],
-          attrs: { "data-src": _vm.imgUrl, src: _vm.imgUrl }
-        }),
-        _vm._v(" "),
-        _vm.isUgoira
-          ? _c("IconUgoiraPlay", {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: !_vm.ugoiraPlayed,
-                  expression: "!ugoiraPlayed"
-                }
-              ],
-              attrs: { size: 60 }
-            })
-          : _vm._e(),
-        _vm._v(" "),
-        _vm.isUgoira
-          ? _c("canvas", {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.ugoiraPlayed,
-                  expression: "ugoiraPlayed"
-                }
-              ],
-              ref: "smallUgoiraPreview"
-            })
-          : _vm._e()
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "bookmark-heart-block" },
-      [
-        _c("IconBookmarkHeart", {
-          attrs: { actived: _vm.selfIsBookmarked },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              $event.preventDefault();
-              $event.stopPropagation();
-              return _vm.oneClickBookmarkAdd($event)
-            }
-          }
-        })
-      ],
-      1
-    ),
-    _vm._v(" "),
-    _vm.isSelfBookmarkPage
-      ? _c("div", { staticClass: "bookmark-input-container" }, [
-          _c("input", {
-            attrs: { type: "checkbox", name: "book_id[]" },
-            domProps: { value: _vm.bookmarkId }
-          })
-        ])
-      : _vm._e()
-  ])
-};
+var __vue_render__$4 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item-image"},[_c('a',{staticClass:"image-flexbox",attrs:{"href":_vm.illustPageUrl,"rel":"noopener"},on:{"contextmenu":function($event){return _vm.activateContextMenu($event)},"mouseenter":_vm.controlUgoira,"mouseleave":_vm.controlUgoira}},[(_vm.illustPageCount > 1)?_c('div',{staticClass:"top-right-slot"},[_c('span',[_c('i',{staticClass:"far fa-images"}),_vm._v("\n        "+_vm._s(_vm.illustPageCount))])]):_vm._e(),_vm._v(" "),_c('img',{directives:[{name:"show",rawName:"v-show",value:(!_vm.ugoiraPlayed),expression:"!ugoiraPlayed"}],attrs:{"data-src":_vm.imgUrl,"src":_vm.imgUrl}}),_vm._v(" "),(_vm.isUgoira)?_c('IconUgoiraPlay',{directives:[{name:"show",rawName:"v-show",value:(!_vm.ugoiraPlayed),expression:"!ugoiraPlayed"}],attrs:{"size":60}}):_vm._e(),_vm._v(" "),(_vm.isUgoira)?_c('canvas',{directives:[{name:"show",rawName:"v-show",value:(_vm.ugoiraPlayed),expression:"ugoiraPlayed"}],ref:"smallUgoiraPreview"}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"bookmark-heart-block"},[_c('IconBookmarkHeart',{attrs:{"actived":_vm.selfIsBookmarked},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }$event.preventDefault();$event.stopPropagation();return _vm.oneClickBookmarkAdd($event)}}})],1),_vm._v(" "),(_vm.isSelfBookmarkPage)?_c('div',{staticClass:"bookmark-input-container"},[_c('input',{attrs:{"type":"checkbox","name":"book_id[]"},domProps:{"value":_vm.bookmarkId}})]):_vm._e()])};
 var __vue_staticRenderFns__$4 = [];
-__vue_render__$4._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$4 = function (inject) {
     if (!inject) return
-    inject("data-v-5165e7fc_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image[data-v-5165e7fc] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox[data-v-5165e7fc] {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox[data-v-5165e7fc]:hover {\n  text-decoration: none;\n}\n.top-right-slot[data-v-5165e7fc] {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon[data-v-5165e7fc] {\n  position: absolute;\n}\nimg[data-v-5165e7fc],\ncanvas[data-v-5165e7fc] {\n  max-height: 100%;\n  max-width: 100%;\n}\n.bookmark-input-container[data-v-5165e7fc] {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n.bookmark-heart-block[data-v-5165e7fc] {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AA+KA;;;;;EAKA;AACA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;EACA,mBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,wBAAA;EACA,oBAAA;EACA,WAAA;EACA,sCAAA;EACA,mBAAA;EACA,oDAAA;EACA,mDAAA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,WAAA;EACA,cAAA;EACA,oBAAA;EACA,WAAA;EACA,uBAAA;EACA,uBAAA;EACA,aAAA;EACA,aAAA;EACA,iBAAA;EACA,+BAAA;EACA,yBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;;EAEA,iBAAA;EACA,gBAAA;CACA;AACA;EACA,mBAAA;EACA,QAAA;EACA,OAAA;EACA,+BAAA;EACA,aAAA;EACA,yBAAA;CACA;AACA;EACA,mBAAA;EACA,UAAA;EACA,SAAA;CACA","file":"DefaultImageItemImage.vue","sourcesContent":["<template>\n  <div class=\"image-item-image\">\n    <a\n      :href=\"illustPageUrl\"\n      class=\"image-flexbox\"\n      rel=\"noopener\"\n      @click.right=\"activateContextMenu\"\n      @mouseenter=\"controlUgoira\"\n      @mouseleave=\"controlUgoira\">\n\n      <div v-if=\"illustPageCount > 1\" class=\"top-right-slot\">\n        <span><i class=\"far fa-images\"/>\n          {{ illustPageCount }}</span>\n      </div>\n\n      <img\n        v-show=\"!ugoiraPlayed\"\n        :data-src=\"imgUrl\"\n        :src=\"imgUrl\">\n      <IconUgoiraPlay\n        v-if=\"isUgoira\"\n        v-show=\"!ugoiraPlayed\"\n        :size=\"60\"/>\n      <canvas\n        v-if=\"isUgoira\"\n        v-show=\"ugoiraPlayed\"\n        ref=\"smallUgoiraPreview\"/>\n    </a>\n    <div class=\"bookmark-heart-block\">\n      <IconBookmarkHeart :actived=\"selfIsBookmarked\" @click.left.prevent.stop=\"oneClickBookmarkAdd\"/>\n    </div>\n    <div v-if=\"isSelfBookmarkPage\" class=\"bookmark-input-container\">\n      <input\n        :value=\"bookmarkId\"\n        type=\"checkbox\"\n        name=\"book_id[]\">\n    </div>\n  </div>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\nimport { PixivAPI } from '../lib/pixiv';\nimport IconUgoiraPlay from './IconUgoiraPlay.vue';\nimport IconBookmarkHeart from './IconBookmarkHeart.vue';\n\nexport default {\n  components: { IconBookmarkHeart, IconUgoiraPlay },\n  props: {\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      selfIsBookmarked: this.isBookmarked,\n      ugoiraMeta: null,\n      ugoiraPlayed: false,\n      ugoiraPlayer: null,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    canHoverPlay() {\n      return this.$store.getters.config.hoverPlay;\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n  },\n  mounted() {\n    this.$nextTick(async() => {\n      if (this.isUgoira && this.canHoverPlay) {\n        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);\n      }\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemImage#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          data: {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          },\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n    controlUgoira(event) {\n      if (!this.ugoiraMeta) {\n        return;\n      }\n      if (!this.ugoiraPlayer) {\n        try {\n          this.ugoiraPlayer = new ZipImagePlayer({\n            autosize: true,\n            canvas: this.$refs.smallUgoiraPreview,\n            chunkSize: 300000,\n            loop: true,\n            metadata: this.ugoiraMeta,\n            source: this.ugoiraMeta.src,\n          });\n        } catch (error) {\n          $print.error(error);\n        }\n      }\n      if (this.canHoverPlay) {\n        if (event.type === 'mouseenter') {\n          this.ugoiraPlayed = true;\n          this.ugoiraPlayer.play();\n        } else {\n          this.ugoiraPlayed = false;\n          this.ugoiraPlayer.pause();\n          this.ugoiraPlayer.rewind();\n        }\n      }\n    },\n    async oneClickBookmarkAdd() {\n      if (!this.selfIsBookmarked) {\n        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {\n          this.selfIsBookmarked = true;\n        }\n      } else {\n        // this.bookmarkId might be empty...\n        // Because RPC API has no bookmarkId returned...\n        let bookmarkId = this.bookmarkId;\n        if (!bookmarkId) {\n          const data = await PixivAPI.getIllustBookmarkData(this.illustId);\n          bookmarkId = data.bookmarkData.id;\n        }\n        if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {\n          this.selfIsBookmarked = false;\n        }\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n/*\n@pixiv.override.css\n:root {\n  --default-image-item-image-square-size: 184px;\n}\n*/\n.image-item-image {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: relative;\n}\n.image-flexbox {\n  display: flex;\n  flex-flow: column;\n  justify-content: center;\n  align-items: center;\n  z-index: 0;\n  border: 1px solid rgba(0, 0, 0, 0.04);\n  position: relative;\n  height: var(--default-image-item-image-square-size);\n  width: var(--default-image-item-image-square-size);\n}\n.image-flexbox:hover {\n  text-decoration: none;\n}\n.top-right-slot {\n  flex: none;\n  display: flex;\n  align-items: center;\n  z-index: 1;\n  box-sizing: border-box;\n  margin: 0 0 -24px auto;\n  padding: 6px;\n  height: 24px;\n  background: #000;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 0 0 0 4px;\n  color: #fff;\n  font-size: 12px;\n  line-height: 1;\n  font-weight: 700;\n}\n.ugoira-icon {\n  position: absolute;\n}\nimg,\ncanvas {\n  max-height: 100%;\n  max-width: 100%;\n}\n.bookmark-input-container {\n  position: absolute;\n  left: 0;\n  top: 0;\n  background: rgba(0, 0, 0, 0.4);\n  padding: 6px;\n  border-radius: 0 0 4px 0;\n}\n.bookmark-heart-block {\n  position: absolute;\n  bottom: 0;\n  right: 0;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-2d6e4e8c_0", { source: "\n.image-item-image[data-v-2d6e4e8c]{display:flex;align-items:center;justify-content:center;position:relative\n}\n.image-flexbox[data-v-2d6e4e8c]{display:flex;flex-flow:column;justify-content:center;align-items:center;z-index:0;border:1px solid rgba(0,0,0,.04);position:relative;height:var(--default-image-item-image-square-size);width:var(--default-image-item-image-square-size)\n}\n.image-flexbox[data-v-2d6e4e8c]:hover{text-decoration:none\n}\n.top-right-slot[data-v-2d6e4e8c]{flex:none;display:flex;align-items:center;z-index:1;box-sizing:border-box;margin:0 0 -24px auto;padding:6px;height:24px;background:#000;background:rgba(0,0,0,.4);border-radius:0 0 0 4px;color:#fff;font-size:12px;line-height:1;font-weight:700\n}\n.ugoira-icon[data-v-2d6e4e8c]{position:absolute\n}\ncanvas[data-v-2d6e4e8c],img[data-v-2d6e4e8c]{max-height:100%;max-width:100%\n}\n.bookmark-input-container[data-v-2d6e4e8c]{position:absolute;left:0;top:0;background:rgba(0,0,0,.4);padding:6px;border-radius:0 0 4px 0\n}\n.bookmark-heart-block[data-v-2d6e4e8c]{position:absolute;bottom:0;right:0\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$4 = "data-v-5165e7fc";
+  const __vue_scope_id__$4 = "data-v-2d6e4e8c";
   /* module identifier */
   const __vue_module_identifier__$4 = undefined;
   /* functional template */
@@ -3424,7 +2605,7 @@ __vue_render__$4._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemImage.vue";
+    component.__file = "DefaultImageItemImage.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -3481,6 +2662,17 @@ __vue_render__$4._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -3628,111 +2820,17 @@ var script$5 = {
             const __vue_script__$5 = script$5;
             
 /* template */
-var __vue_render__$5 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("figcaption", { staticClass: "image-item-title-user" }, [
-    _c("ul", [
-      _c(
-        "li",
-        {
-          staticClass: "title-text",
-          on: {
-            contextmenu: function($event) {
-              return _vm.activateContextMenu($event)
-            }
-          }
-        },
-        [
-          _c(
-            "a",
-            { attrs: { href: _vm.illustPageUrl, title: _vm.illustTitle } },
-            [_vm._v(_vm._s(_vm.illustTitle))]
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "li",
-        {
-          staticClass: "user-info",
-          on: {
-            contextmenu: function($event) {
-              return _vm.activateContextMenu($event)
-            }
-          }
-        },
-        [
-          _c(
-            "a",
-            {
-              staticClass: "user-link",
-              class: _vm.isEnableUserTooltip ? "ui-profile-popup" : "",
-              attrs: {
-                href: _vm.userPageUrl,
-                title: _vm.userName,
-                "data-user_id": _vm.userId,
-                "data-user_name": _vm.userName,
-                target: "_blank"
-              }
-            },
-            [
-              _c("span", {
-                staticClass: "user-img",
-                style: _vm.profileImgStyle
-              }),
-              _vm._v(" "),
-              _c("span", [_vm._v(_vm._s(_vm.userName))])
-            ]
-          ),
-          _vm._v(" "),
-          _vm.isFollowed ? _c("i", { staticClass: "fas fa-rss" }) : _vm._e()
-        ]
-      ),
-      _vm._v(" "),
-      _vm.bookmarkCount > 0
-        ? _c("li", [
-            _c("ul", { staticClass: "count-list" }, [
-              _c("li", [
-                _c(
-                  "a",
-                  {
-                    staticClass: "_ui-tooltip bookmark-count",
-                    attrs: {
-                      href: _vm.bookmarkDetailUrl,
-                      "data-tooltip": _vm.$t("mainView.bookmarkTooltip", {
-                        count: _vm.bookmarkCount
-                      })
-                    }
-                  },
-                  [
-                    _c("i", { staticClass: "_icon _bookmark-icon-inline" }),
-                    _vm._v(
-                      "\n            " +
-                        _vm._s(_vm.bookmarkCount) +
-                        "\n          "
-                    )
-                  ]
-                )
-              ])
-            ])
-          ])
-        : _vm._e()
-    ])
-  ])
-};
+var __vue_render__$5 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('figcaption',{staticClass:"image-item-title-user"},[_c('ul',[_c('li',{staticClass:"title-text",on:{"contextmenu":function($event){return _vm.activateContextMenu($event)}}},[_c('a',{attrs:{"href":_vm.illustPageUrl,"title":_vm.illustTitle}},[_vm._v(_vm._s(_vm.illustTitle))])]),_vm._v(" "),_c('li',{staticClass:"user-info",on:{"contextmenu":function($event){return _vm.activateContextMenu($event)}}},[_c('a',{staticClass:"user-link",class:_vm.isEnableUserTooltip ? 'ui-profile-popup' : '',attrs:{"href":_vm.userPageUrl,"title":_vm.userName,"data-user_id":_vm.userId,"data-user_name":_vm.userName,"target":"_blank"}},[_c('span',{staticClass:"user-img",style:(_vm.profileImgStyle)}),_vm._v(" "),_c('span',[_vm._v(_vm._s(_vm.userName))])]),_vm._v(" "),(_vm.isFollowed)?_c('i',{staticClass:"fas fa-rss"}):_vm._e()]),_vm._v(" "),(_vm.bookmarkCount > 0)?_c('li',[_c('ul',{staticClass:"count-list"},[_c('li',[_c('a',{staticClass:"_ui-tooltip bookmark-count",attrs:{"href":_vm.bookmarkDetailUrl,"data-tooltip":_vm.$t('mainView.bookmarkTooltip', { count: _vm.bookmarkCount })}},[_c('i',{staticClass:"_icon _bookmark-icon-inline"}),_vm._v("\n            "+_vm._s(_vm.bookmarkCount)+"\n          ")])])])]):_vm._e()])])};
 var __vue_staticRenderFns__$5 = [];
-__vue_render__$5._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$5 = function (inject) {
     if (!inject) return
-    inject("data-v-6cfe9952_0", { source: "\n.image-item-title-user[data-v-6cfe9952] {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text[data-v-6cfe9952] {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info[data-v-6cfe9952] {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link[data-v-6cfe9952] {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img[data-v-6cfe9952] {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss[data-v-6cfe9952] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemTitle.vue"],"names":[],"mappings":";AAoIA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;CACA;AACA;EACA,cAAA;EACA,iBAAA;EACA,wBAAA;EACA,oBAAA;EACA,iBAAA;CACA;AACA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,gBAAA;EACA,qBAAA;EACA,oBAAA;CACA;AACA;EACA,YAAA;EACA,aAAA;EACA,sBAAA;EACA,uBAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;EACA,sBAAA;EACA,iBAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;CACA","file":"DefaultImageItemTitle.vue","sourcesContent":["<template>\n  <figcaption class=\"image-item-title-user\">\n    <ul>\n      <li class=\"title-text\" @click.right=\"activateContextMenu\">\n        <a :href=\"illustPageUrl\" :title=\"illustTitle\">{{ illustTitle }}</a>\n      </li>\n      <li\n        class=\"user-info\"\n        @click.right=\"activateContextMenu\">\n        <a\n          :href=\"userPageUrl\"\n          :title=\"userName\"\n          :data-user_id=\"userId\"\n          :data-user_name=\"userName\"\n          :class=\"isEnableUserTooltip ? 'ui-profile-popup' : ''\"\n          class=\"user-link\"\n          target=\"_blank\">\n          <span :style=\"profileImgStyle\" class=\"user-img\"/>\n          <span>{{ userName }}</span>\n        </a>\n        <i v-if=\"isFollowed\" class=\"fas fa-rss\"/>\n      </li>\n      <li v-if=\"bookmarkCount > 0\">\n        <ul class=\"count-list\">\n          <li>\n            <a\n              :href=\"bookmarkDetailUrl\"\n              :data-tooltip=\"$t('mainView.bookmarkTooltip', { count: bookmarkCount })\"\n              class=\"_ui-tooltip bookmark-count\">\n              <i class=\"_icon _bookmark-icon-inline\"/>\n              {{ bookmarkCount }}\n            </a>\n          </li>\n        </ul>\n      </li>\n    </ul>\n  </figcaption>\n</template>\n\n<script>\nimport { $print } from '../lib/utils';\n\nexport default {\n  props: {\n    bookmarkCount: {\n      default: 0,\n      type: Number,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustTitle: {\n      default: '',\n      type: String,\n    },\n    isFollowed: {\n      default: false,\n      type: Boolean,\n    },\n    profileImgUrl: {\n      default: '',\n      type: String,\n    },\n    userId: {\n      default: '',\n      type: String,\n    },\n    userName: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    bookmarkDetailUrl() {\n      return `/bookmark_detail.php?illust_id=${this.illustId}`;\n    },\n    bookmarkTooltipMsg() {\n      return this.$t('mainView.bookmarkTooltip', {\n        count: this.bookmarkCount,\n      });\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    isEnableUserTooltip() {\n      return this.$store.state.config.userTooltip;\n    },\n    profileImgStyle() {\n      return {\n        backgroundImage: `url(${this.profileImgUrl})`,\n      };\n    },\n    userPageUrl() {\n      return `/member_illust.php?id=${this.userId}`;\n    },\n  },\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('DefaultImageItemTitle#activateContextMenu', event);\n      if (this.$store.state.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        const ct = event.currentTarget;\n        if (ct.classList.contains('user-info')) {\n          payload.data = {\n            illustId: this.illustId,\n            type: 'image-item-title-user',\n          };\n        } else {\n          payload.data = {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          };\n        }\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n.image-item-title-user {\n  max-width: 100%;\n  margin: 8px auto;\n  text-align: center;\n  color: #333;\n  font-size: 12px;\n  line-height: 1;\n}\n.title-text {\n  margin: 4px 0;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  font-weight: 700;\n}\n.user-info {\n  display: inline-flex;\n  align-items: center;\n}\n.user-link {\n  font-size: 12px;\n  display: inline-flex;\n  align-items: center;\n}\n.user-img {\n  width: 20px;\n  height: 20px;\n  display: inline-block;\n  background-size: cover;\n  border-radius: 50%;\n  margin-right: 4px;\n}\ni.fa-rss {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-dbefa7e2_0", { source: "\n.image-item-title-user[data-v-dbefa7e2]{max-width:100%;margin:8px auto;text-align:center;color:#333;font-size:12px;line-height:1\n}\n.title-text[data-v-dbefa7e2]{margin:4px 0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:700\n}\n.user-info[data-v-dbefa7e2]{display:inline-flex;align-items:center\n}\n.user-link[data-v-dbefa7e2]{font-size:12px;display:inline-flex;align-items:center\n}\n.user-img[data-v-dbefa7e2]{width:20px;height:20px;display:inline-block;background-size:cover;border-radius:50%;margin-right:4px\n}\ni.fa-rss[data-v-dbefa7e2]{display:inline-block;margin-left:4px;width:16px;height:16px;color:#1e90ff\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$5 = "data-v-6cfe9952";
+  const __vue_scope_id__$5 = "data-v-dbefa7e2";
   /* module identifier */
   const __vue_module_identifier__$5 = undefined;
   /* functional template */
@@ -3746,7 +2844,7 @@ __vue_render__$5._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemTitle.vue";
+    component.__file = "DefaultImageItemTitle.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -3803,6 +2901,17 @@ __vue_render__$5._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -3916,53 +3025,17 @@ var script$6 = {
             const __vue_script__$6 = script$6;
             
 /* template */
-var __vue_render__$6 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "image-item" }, [
-    _c(
-      "figure",
-      { staticClass: "image-item-inner" },
-      [
-        _c("DefaultImageItemImage", {
-          attrs: {
-            "img-url": _vm.imgUrl,
-            "illust-id": _vm.illustId,
-            "illust-page-count": _vm.illustPageCount,
-            "is-ugoira": _vm.isUgoira,
-            "is-bookmarked": _vm.isBookmarked,
-            "bookmark-id": _vm.bookmarkId
-          }
-        }),
-        _vm._v(" "),
-        _c("DefaultImageItemTitle", {
-          attrs: {
-            "illust-id": _vm.illustId,
-            "illust-title": _vm.illustTitle,
-            "user-name": _vm.userName,
-            "user-id": _vm.userId,
-            "is-followed": _vm.isFollowed,
-            "profile-img-url": _vm.profileImgUrl,
-            "bookmark-count": _vm.bookmarkCount
-          }
-        })
-      ],
-      1
-    )
-  ])
-};
+var __vue_render__$6 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"image-item"},[_c('figure',{staticClass:"image-item-inner"},[_c('DefaultImageItemImage',{attrs:{"img-url":_vm.imgUrl,"illust-id":_vm.illustId,"illust-page-count":_vm.illustPageCount,"is-ugoira":_vm.isUgoira,"is-bookmarked":_vm.isBookmarked,"bookmark-id":_vm.bookmarkId}}),_vm._v(" "),_c('DefaultImageItemTitle',{attrs:{"illust-id":_vm.illustId,"illust-title":_vm.illustTitle,"user-name":_vm.userName,"user-id":_vm.userId,"is-followed":_vm.isFollowed,"profile-img-url":_vm.profileImgUrl,"bookmark-count":_vm.bookmarkCount}})],1)])};
 var __vue_staticRenderFns__$6 = [];
-__vue_render__$6._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$6 = function (inject) {
     if (!inject) return
-    inject("data-v-2ff3eadc_0", { source: "\n.image-item[data-v-2ff3eadc] {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner[data-v-2ff3eadc] {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItem.vue"],"names":[],"mappings":";AAkFA;EACA,cAAA;EACA,wBAAA;EACA,mBAAA;EACA,cAAA;EACA,aAAA;EACA,aAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,gBAAA;EACA,kBAAA;CACA","file":"DefaultImageItem.vue","sourcesContent":["<template>\n  <div class=\"image-item\">\n    <figure class=\"image-item-inner\">\n      <DefaultImageItemImage\n        :img-url=\"imgUrl\"\n        :illust-id=\"illustId\"\n        :illust-page-count=\"illustPageCount\"\n        :is-ugoira=\"isUgoira\"\n        :is-bookmarked=\"isBookmarked\"\n        :bookmark-id=\"bookmarkId\"/>\n      <DefaultImageItemTitle\n        :illust-id=\"illustId\"\n        :illust-title=\"illustTitle\"\n        :user-name=\"userName\"\n        :user-id=\"userId\"\n        :is-followed=\"isFollowed\"\n        :profile-img-url=\"profileImgUrl\"\n        :bookmark-count=\"bookmarkCount\"/>\n    </figure>\n  </div>\n</template>\n\n<script>\nimport DefaultImageItemImage from './DefaultImageItemImage.vue';\nimport DefaultImageItemTitle from './DefaultImageItemTitle.vue';\n\nexport default {\n  components: { DefaultImageItemImage, DefaultImageItemTitle },\n  props: {\n    bookmarkCount: {\n      default: 0,\n      type: Number,\n    },\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    illustTitle: {\n      default: '',\n      type: String,\n    },\n    imgUrl: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isFollowed: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n    profileImgUrl: {\n      default: '',\n      type: String,\n    },\n    userId: {\n      default: '',\n      type: String,\n    },\n    userName: {\n      default: '',\n      type: String,\n    },\n  },\n};\n</script>\n\n<style scoped>\n.image-item {\n  display: flex;\n  justify-content: center;\n  margin: 0 0 30px 0;\n  padding: 10px;\n  height: auto;\n  width: 200px;\n}\n.image-item-inner {\n  display: flex;\n  flex-flow: column;\n  max-width: 100%;\n  max-height: 300px;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-6ad29eda_0", { source: "\n.image-item[data-v-6ad29eda]{display:flex;justify-content:center;margin:0 0 30px 0;padding:10px;height:auto;width:200px\n}\n.image-item-inner[data-v-6ad29eda]{display:flex;flex-flow:column;max-width:100%;max-height:300px\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$6 = "data-v-2ff3eadc";
+  const __vue_scope_id__$6 = "data-v-6ad29eda";
   /* module identifier */
   const __vue_module_identifier__$6 = undefined;
   /* functional template */
@@ -3976,7 +3049,7 @@ __vue_render__$6._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItem.vue";
+    component.__file = "DefaultImageItem.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -4033,6 +3106,17 @@ __vue_render__$6._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -4111,53 +3195,17 @@ var script$7 = {
             const __vue_script__$7 = script$7;
             
 /* template */
-var __vue_render__$7 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { attrs: { id: "patchouli-default-image-item-page" } },
-    _vm._l(_vm.defaultProcessedLibrary, function(d, index) {
-      return _c("DefaultImageItem", {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: index < _vm.imageToShowCount,
-            expression: "index < imageToShowCount"
-          }
-        ],
-        key: d.illustId,
-        attrs: {
-          "img-url": d.urls.thumb,
-          "illust-id": d.illustId,
-          "illust-title": d.illustTitle,
-          "illust-page-count": d.illustPageCount,
-          "is-ugoira": d.isUgoira,
-          "user-name": d.userName,
-          "user-id": d.userId,
-          "profile-img-url": d.profileImg,
-          "bookmark-count": d.bookmarkCount,
-          "is-bookmarked": d.isBookmarked,
-          "is-followed": d.isFollowed,
-          "bookmark-id": d.bookmarkId
-        }
-      })
-    })
-  )
-};
+var __vue_render__$7 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"patchouli-default-image-item-page"}},_vm._l((_vm.defaultProcessedLibrary),function(d,index){return _c('DefaultImageItem',{directives:[{name:"show",rawName:"v-show",value:(index < _vm.imageToShowCount),expression:"index < imageToShowCount"}],key:d.illustId,attrs:{"img-url":d.urls.thumb,"illust-id":d.illustId,"illust-title":d.illustTitle,"illust-page-count":d.illustPageCount,"is-ugoira":d.isUgoira,"user-name":d.userName,"user-id":d.userId,"profile-img-url":d.profileImg,"bookmark-count":d.bookmarkCount,"is-bookmarked":d.isBookmarked,"is-followed":d.isFollowed,"bookmark-id":d.bookmarkId}})}))};
 var __vue_staticRenderFns__$7 = [];
-__vue_render__$7._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$7 = function (inject) {
     if (!inject) return
-    inject("data-v-ebe2fb1e_0", { source: "\n#patchouli-default-image-item-page[data-v-ebe2fb1e] {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/DefaultImageItemPage.vue"],"names":[],"mappings":";AA6CA;EACA,cAAA;EACA,gBAAA;EACA,8BAAA;CACA","file":"DefaultImageItemPage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-default-image-item-page\">\n    <DefaultImageItem\n      v-for=\"(d, index) in defaultProcessedLibrary\"\n      v-show=\"index < imageToShowCount\"\n      :key=\"d.illustId\"\n      :img-url=\"d.urls.thumb\"\n      :illust-id=\"d.illustId\"\n      :illust-title=\"d.illustTitle\"\n      :illust-page-count=\"d.illustPageCount\"\n      :is-ugoira=\"d.isUgoira\"\n      :user-name=\"d.userName\"\n      :user-id=\"d.userId\"\n      :profile-img-url=\"d.profileImg\"\n      :bookmark-count=\"d.bookmarkCount\"\n      :is-bookmarked=\"d.isBookmarked\"\n      :is-followed=\"d.isFollowed\"\n      :bookmark-id=\"d.bookmarkId\" />\n  </div>\n</template>\n\n<script>\nimport DefaultImageItem from './DefaultImageItem.vue';\n\nexport default {\n  components: { DefaultImageItem },\n  computed: {\n    defaultProcessedLibrary() {\n      const { shows, hides } = this.displayIndices;\n      const iiLib = this.$store.getters['pixiv/imageItemLibrary'];\n\n      return shows.concat(hides).map(idx => iiLib[idx]);\n    },\n    displayIndices() {\n      return this.$store.getters['pixiv/defaultDisplayIndices'];\n    },\n    imageToShowCount() {\n      const { shows } = this.displayIndices;\n      return shows.length;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-default-image-item-page {\n  display: flex;\n  flex-flow: wrap;\n  justify-content: space-around;\n}\n</style>\n\n\n"]}, media: undefined });
+    inject("data-v-3ef38e8e_0", { source: "\n#patchouli-default-image-item-page[data-v-3ef38e8e]{display:flex;flex-flow:wrap;justify-content:space-around\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$7 = "data-v-ebe2fb1e";
+  const __vue_scope_id__$7 = "data-v-3ef38e8e";
   /* module identifier */
   const __vue_module_identifier__$7 = undefined;
   /* functional template */
@@ -4171,7 +3219,7 @@ __vue_render__$7._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/DefaultImageItemPage.vue";
+    component.__file = "DefaultImageItemPage.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -4228,6 +3276,17 @@ __vue_render__$7._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -4304,40 +3363,17 @@ var script$8 = {
             const __vue_script__$8 = script$8;
             
 /* template */
-var __vue_render__$8 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { staticClass: "icon-multiple-indicator" }, [
-    _c(
-      "svg",
-      { staticClass: "icon-multiple-svg", attrs: { viewBox: "0 0 9 10" } },
-      [
-        _c("path", {
-          attrs: {
-            d:
-              "M8,3 C8.55228475,3 9,3.44771525 9,4 L9,9 C9,9.55228475 8.55228475,10 8,10 L3,10 C2.44771525,10 2,9.55228475 2,9 L6,9 C7.1045695,9 8,8.1045695 8,7 L8,3 Z M1,1 L6,1 C6.55228475,1 7,1.44771525 7,2 L7,7 C7,7.55228475 6.55228475,8 6,8 L1,8 C0.44771525,8 0,7.55228475 0,7 L0,2 C0,1.44771525 0.44771525,1 1,1 Z"
-          }
-        })
-      ]
-    ),
-    _vm._v(" "),
-    _c("span", { staticClass: "illust-page-count" }, [
-      _vm._v(_vm._s(_vm.illustPageCount))
-    ])
-  ])
-};
+var __vue_render__$8 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"icon-multiple-indicator"},[_c('svg',{staticClass:"icon-multiple-svg",attrs:{"viewBox":"0 0 9 10"}},[_c('path',{attrs:{"d":"M8,3 C8.55228475,3 9,3.44771525 9,4 L9,9 C9,9.55228475 8.55228475,10 8,10 L3,10 C2.44771525,10 2,9.55228475 2,9 L6,9 C7.1045695,9 8,8.1045695 8,7 L8,3 Z M1,1 L6,1 C6.55228475,1 7,1.44771525 7,2 L7,7 C7,7.55228475 6.55228475,8 6,8 L1,8 C0.44771525,8 0,7.55228475 0,7 L0,2 C0,1.44771525 0.44771525,1 1,1 Z"}})]),_vm._v(" "),_c('span',{staticClass:"illust-page-count"},[_vm._v(_vm._s(_vm.illustPageCount))])])};
 var __vue_staticRenderFns__$8 = [];
-__vue_render__$8._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$8 = function (inject) {
     if (!inject) return
-    inject("data-v-7c086544_0", { source: "\n.icon-multiple-indicator[data-v-7c086544] {\n  align-items: center;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 10px;\n  box-sizing: border-box;\n  display: flex;\n  flex: none;\n  height: 20px;\n  margin: 2px 2px -20px auto;\n  padding: 5px 6px;\n  z-index: 1;\n  color: #fff;\n  font-size: 10px;\n  font-weight: 700;\n  line-height: 1;\n}\n.icon-multiple-svg[data-v-7c086544] {\n  fill: #fff;\n  font-size: 0;\n  height: 10px;\n  line-height: 0;\n  stroke: none;\n  width: 9px;\n}\n.illust-page-count[data-v-7c086544] {\n  margin-left: 2px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IndicatorMultiple.vue"],"names":[],"mappings":";AAqBA;EACA,oBAAA;EACA,+BAAA;EACA,oBAAA;EACA,uBAAA;EACA,cAAA;EACA,WAAA;EACA,aAAA;EACA,2BAAA;EACA,iBAAA;EACA,WAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;CACA;AACA;EACA,WAAA;EACA,aAAA;EACA,aAAA;EACA,eAAA;EACA,aAAA;EACA,WAAA;CACA;AACA;EACA,iBAAA;CACA","file":"IndicatorMultiple.vue","sourcesContent":["<template>\n  <div class=\"icon-multiple-indicator\">\n    <svg viewBox=\"0 0 9 10\" class=\"icon-multiple-svg\">\n      <path d=\"M8,3 C8.55228475,3 9,3.44771525 9,4 L9,9 C9,9.55228475 8.55228475,10 8,10 L3,10 C2.44771525,10 2,9.55228475 2,9 L6,9 C7.1045695,9 8,8.1045695 8,7 L8,3 Z M1,1 L6,1 C6.55228475,1 7,1.44771525 7,2 L7,7 C7,7.55228475 6.55228475,8 6,8 L1,8 C0.44771525,8 0,7.55228475 0,7 L0,2 C0,1.44771525 0.44771525,1 1,1 Z\"/>\n    </svg>\n    <span class=\"illust-page-count\">{{ illustPageCount }}</span>\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n  },\n};\n</script>\n\n<style scoped>\n.icon-multiple-indicator {\n  align-items: center;\n  background: rgba(0, 0, 0, 0.4);\n  border-radius: 10px;\n  box-sizing: border-box;\n  display: flex;\n  flex: none;\n  height: 20px;\n  margin: 2px 2px -20px auto;\n  padding: 5px 6px;\n  z-index: 1;\n  color: #fff;\n  font-size: 10px;\n  font-weight: 700;\n  line-height: 1;\n}\n.icon-multiple-svg {\n  fill: #fff;\n  font-size: 0;\n  height: 10px;\n  line-height: 0;\n  stroke: none;\n  width: 9px;\n}\n.illust-page-count {\n  margin-left: 2px;\n}\n</style>\n\n"]}, media: undefined });
+    inject("data-v-6d8cbce8_0", { source: "\n.icon-multiple-indicator[data-v-6d8cbce8]{align-items:center;background:rgba(0,0,0,.4);border-radius:10px;box-sizing:border-box;display:flex;flex:none;height:20px;margin:2px 2px -20px auto;padding:5px 6px;z-index:1;color:#fff;font-size:10px;font-weight:700;line-height:1\n}\n.icon-multiple-svg[data-v-6d8cbce8]{fill:#fff;font-size:0;height:10px;line-height:0;stroke:none;width:9px\n}\n.illust-page-count[data-v-6d8cbce8]{margin-left:2px\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$8 = "data-v-7c086544";
+  const __vue_scope_id__$8 = "data-v-6d8cbce8";
   /* module identifier */
   const __vue_module_identifier__$8 = undefined;
   /* functional template */
@@ -4351,7 +3387,7 @@ __vue_render__$8._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/IndicatorMultiple.vue";
+    component.__file = "IndicatorMultiple.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -4408,6 +3444,17 @@ __vue_render__$8._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -4641,195 +3688,17 @@ var script$9 = {
             const __vue_script__$9 = script$9;
             
 /* template */
-var __vue_render__$9 = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("li", { staticClass: "illust-item-root" }, [
-    _c(
-      "a",
-      {
-        staticClass: "illust-main",
-        attrs: { href: _vm.illustPageUrl },
-        on: {
-          contextmenu: function($event) {
-            return _vm.activateContextMenu($event)
-          },
-          mouseenter: _vm.controlUgoira,
-          mouseleave: _vm.controlUgoira
-        }
-      },
-      [
-        _c(
-          "div",
-          { staticClass: "illust-main-indicators" },
-          [
-            _vm.illustPageCount > 1
-              ? _c("IndicatorMultiple", {
-                  attrs: { "illust-page-count": _vm.illustPageCount }
-                })
-              : _vm._e()
-          ],
-          1
-        ),
-        _vm._v(" "),
-        _c(
-          "div",
-          { staticClass: "illust-main-img", style: _vm.illustMainImgStyle },
-          [
-            _vm.isUgoira
-              ? _c("IconUgoiraPlay", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: !_vm.ugoiraPlayed,
-                      expression: "!ugoiraPlayed"
-                    }
-                  ]
-                })
-              : _vm._e(),
-            _vm._v(" "),
-            _vm.isUgoira
-              ? _c("canvas", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.ugoiraPlayed,
-                      expression: "ugoiraPlayed"
-                    }
-                  ],
-                  ref: "smallUgoiraPreview",
-                  staticClass: "illust-main-ugoira"
-                })
-              : _vm._e()
-          ],
-          1
-        )
-      ]
-    ),
-    _vm._v(" "),
-    _c("div", { staticClass: "illust-buttons" }, [
-      _c("div", [
-        _c(
-          "button",
-          {
-            attrs: { type: "button" },
-            on: {
-              click: function($event) {
-                if (
-                  !("button" in $event) &&
-                  _vm._k($event.keyCode, "left", 37, $event.key, [
-                    "Left",
-                    "ArrowLeft"
-                  ])
-                ) {
-                  return null
-                }
-                if ("button" in $event && $event.button !== 0) {
-                  return null
-                }
-                $event.preventDefault();
-                $event.stopPropagation();
-                return _vm.oneClickBookmarkAdd($event)
-              }
-            }
-          },
-          [
-            _c("IconBookmarkHeart", {
-              attrs: { actived: _vm.selfIsBookmarked }
-            })
-          ],
-          1
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _c(
-      "a",
-      {
-        staticClass: "illust-title",
-        attrs: { href: _vm.illustPageUrl },
-        on: {
-          contextmenu: function($event) {
-            return _vm.activateContextMenu($event)
-          }
-        }
-      },
-      [_vm._v(_vm._s(_vm.illustTitle))]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.showUserProfile,
-            expression: "showUserProfile"
-          }
-        ],
-        staticClass: "user-profile"
-      },
-      [
-        _c("div", [
-          _c("a", {
-            staticClass: "user-profile-img",
-            style: _vm.profileImgStyle,
-            attrs: { href: _vm.illustPageUrl }
-          })
-        ]),
-        _vm._v(" "),
-        _c(
-          "a",
-          {
-            staticClass: "user-profile-name",
-            attrs: { href: _vm.userPageUrl },
-            on: {
-              contextmenu: function($event) {
-                return _vm.activateContextMenu($event)
-              }
-            }
-          },
-          [_vm._v(_vm._s(_vm.userName))]
-        ),
-        _vm._v(" "),
-        _vm.isFollowed
-          ? _c("i", { staticClass: "fas fa-rss user-followed-indicator" })
-          : _vm._e()
-      ]
-    ),
-    _vm._v(" "),
-    _c(
-      "div",
-      {
-        directives: [
-          {
-            name: "show",
-            rawName: "v-show",
-            value: _vm.bookmarkCount > 0,
-            expression: "bookmarkCount > 0"
-          }
-        ],
-        staticClass: "illust-popularity"
-      },
-      [_c("span", [_vm._v(_vm._s(_vm.bookmarkCount))])]
-    )
-  ])
-};
+var __vue_render__$9 = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('li',{staticClass:"illust-item-root"},[_c('a',{staticClass:"illust-main",attrs:{"href":_vm.illustPageUrl},on:{"contextmenu":function($event){return _vm.activateContextMenu($event)},"mouseenter":_vm.controlUgoira,"mouseleave":_vm.controlUgoira}},[_c('div',{staticClass:"illust-main-indicators"},[(_vm.illustPageCount > 1)?_c('IndicatorMultiple',{attrs:{"illust-page-count":_vm.illustPageCount}}):_vm._e()],1),_vm._v(" "),_c('div',{staticClass:"illust-main-img",style:(_vm.illustMainImgStyle)},[(_vm.isUgoira)?_c('IconUgoiraPlay',{directives:[{name:"show",rawName:"v-show",value:(!_vm.ugoiraPlayed),expression:"!ugoiraPlayed"}]}):_vm._e(),_vm._v(" "),(_vm.isUgoira)?_c('canvas',{directives:[{name:"show",rawName:"v-show",value:(_vm.ugoiraPlayed),expression:"ugoiraPlayed"}],ref:"smallUgoiraPreview",staticClass:"illust-main-ugoira"}):_vm._e()],1)]),_vm._v(" "),_c('div',{staticClass:"illust-buttons"},[_c('div',[_c('button',{attrs:{"type":"button"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }$event.preventDefault();$event.stopPropagation();return _vm.oneClickBookmarkAdd($event)}}},[_c('IconBookmarkHeart',{attrs:{"actived":_vm.selfIsBookmarked}})],1)])]),_vm._v(" "),_c('a',{staticClass:"illust-title",attrs:{"href":_vm.illustPageUrl},on:{"contextmenu":function($event){return _vm.activateContextMenu($event)}}},[_vm._v(_vm._s(_vm.illustTitle))]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.showUserProfile),expression:"showUserProfile"}],staticClass:"user-profile"},[_c('div',[_c('a',{staticClass:"user-profile-img",style:(_vm.profileImgStyle),attrs:{"href":_vm.illustPageUrl}})]),_vm._v(" "),_c('a',{staticClass:"user-profile-name",attrs:{"href":_vm.userPageUrl},on:{"contextmenu":function($event){return _vm.activateContextMenu($event)}}},[_vm._v(_vm._s(_vm.userName))]),_vm._v(" "),(_vm.isFollowed)?_c('i',{staticClass:"fas fa-rss user-followed-indicator"}):_vm._e()]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.bookmarkCount > 0),expression:"bookmarkCount > 0"}],staticClass:"illust-popularity"},[_c('span',[_vm._v(_vm._s(_vm.bookmarkCount))])])])};
 var __vue_staticRenderFns__$9 = [];
-__vue_render__$9._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$9 = function (inject) {
     if (!inject) return
-    inject("data-v-0ca010a8_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n/*\n@pixiv.override.css\n:root {\n  --new-default-image-item-square-size: 184px;\n}\n*/\n.illust-item-root[data-v-0ca010a8] {\n  margin: 0 12px 24px;\n}\n.illust-main[data-v-0ca010a8] {\n  text-decoration: none;\n}\n.illust-main-indicators[data-v-0ca010a8] {\n  display: flex;\n  position: absolute;\n  width: var(--new-default-image-item-square-size);\n  justify-content: end;\n}\n.illust-main-img[data-v-0ca010a8] {\n  align-items: center;\n  background-color: #fff;\n  background-position: 50%;\n  background-repeat: no-repeat;\n  background-size: cover;\n  border-radius: 4px;\n  display: flex;\n  height: var(--new-default-image-item-square-size);\n  justify-content: center;\n  margin-bottom: 8px;\n  position: relative;\n  width: var(--new-default-image-item-square-size);\n}\n.illust-main-img[data-v-0ca010a8]::before {\n  background-color: rgba(0, 0, 0, 0.02);\n  content: \"\";\n  display: block;\n  height: 100%;\n  left: 0;\n  position: absolute;\n  top: 0;\n  width: 100%;\n}\n.illust-main-ugoira[data-v-0ca010a8] {\n  object-fit: contain;\n  height: var(--new-default-image-item-square-size);\n  width: var(--new-default-image-item-square-size);\n}\n.illust-buttons[data-v-0ca010a8] {\n  display: flex;\n  height: 32px;\n  justify-content: flex-end;\n  margin-bottom: 8px;\n  margin-top: -40px;\n}\n.illust-buttons > div[data-v-0ca010a8] {\n  z-index: 1;\n}\n.illust-buttons > div > button[data-v-0ca010a8] {\n  background: none;\n  border: none;\n  box-sizing: content-box;\n  cursor: pointer;\n  display: inline-block;\n  height: 32px;\n  line-height: 1;\n  padding: 0;\n}\n.illust-title[data-v-0ca010a8] {\n  color: #177082;\n  display: block;\n  font-size: 14px;\n  font-weight: 700;\n  line-height: 1;\n  margin: 0 0 4px;\n  overflow: hidden;\n  text-decoration: none;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  width: var(--new-default-image-item-square-size);\n}\n.user-profile[data-v-0ca010a8] {\n  align-items: center;\n  display: flex;\n  width: var(--new-default-image-item-square-size);\n  margin-bottom: 4px;\n}\n.user-profile > div[data-v-0ca010a8] {\n  display: inline-block;\n  margin-right: 4px;\n}\n.user-profile-img[data-v-0ca010a8] {\n  background-size: cover;\n  border-radius: 50%;\n  display: block;\n  flex: none;\n  position: relative;\n  overflow: hidden;\n  width: 16px;\n  height: 16px;\n}\n.user-profile-name[data-v-0ca010a8] {\n  color: #999;\n  font-size: 12px;\n  line-height: 1;\n  overflow: hidden;\n  text-decoration: none;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  flex: 1;\n}\n.user-followed-indicator[data-v-0ca010a8] {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n.illust-popularity[data-v-0ca010a8] {\n  display: flex;\n  width: 100%;\n  justify-content: center;\n}\n.illust-popularity > span[data-v-0ca010a8] {\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  padding: 2px 8px;\n  border-radius: 8px;\n  font-weight: bold;\n}\n.illust-popularity > span[data-v-0ca010a8]::before {\n  content: \"❤️\";\n  margin-right: 4px;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/NewDefaultImageItem.vue"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;AA2OA;;;;;EAKA;AACA;EACA,oBAAA;CACA;AACA;EACA,sBAAA;CACA;AACA;EACA,cAAA;EACA,mBAAA;EACA,iDAAA;EACA,qBAAA;CACA;AACA;EACA,oBAAA;EACA,uBAAA;EACA,yBAAA;EACA,6BAAA;EACA,uBAAA;EACA,mBAAA;EACA,cAAA;EACA,kDAAA;EACA,wBAAA;EACA,mBAAA;EACA,mBAAA;EACA,iDAAA;CACA;AACA;EACA,sCAAA;EACA,YAAA;EACA,eAAA;EACA,aAAA;EACA,QAAA;EACA,mBAAA;EACA,OAAA;EACA,YAAA;CACA;AACA;EACA,oBAAA;EACA,kDAAA;EACA,iDAAA;CACA;AACA;EACA,cAAA;EACA,aAAA;EACA,0BAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;EACA,WAAA;CACA;AACA;EACA,iBAAA;EACA,aAAA;EACA,wBAAA;EACA,gBAAA;EACA,sBAAA;EACA,aAAA;EACA,eAAA;EACA,WAAA;CACA;AACA;EACA,eAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,sBAAA;EACA,wBAAA;EACA,oBAAA;EACA,iDAAA;CACA;AACA;EACA,oBAAA;EACA,cAAA;EACA,iDAAA;EACA,mBAAA;CACA;AACA;EACA,sBAAA;EACA,kBAAA;CACA;AACA;EACA,uBAAA;EACA,mBAAA;EACA,eAAA;EACA,WAAA;EACA,mBAAA;EACA,iBAAA;EACA,YAAA;EACA,aAAA;CACA;AACA;EACA,YAAA;EACA,gBAAA;EACA,eAAA;EACA,iBAAA;EACA,sBAAA;EACA,wBAAA;EACA,oBAAA;EACA,QAAA;CACA;AACA;EACA,sBAAA;EACA,iBAAA;EACA,YAAA;EACA,aAAA;EACA,kBAAA;CACA;AACA;EACA,cAAA;EACA,YAAA;EACA,wBAAA;CACA;AACA;EACA,uBAAA;EACA,wBAAA;EACA,iBAAA;EACA,mBAAA;EACA,kBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;CACA","file":"NewDefaultImageItem.vue","sourcesContent":["<template>\n  <li class=\"illust-item-root\">\n    <a\n      :href=\"illustPageUrl\"\n      class=\"illust-main\"\n      @click.right=\"activateContextMenu\"\n      @mouseenter=\"controlUgoira\"\n      @mouseleave=\"controlUgoira\">\n      <div class=\"illust-main-indicators\">\n        <IndicatorMultiple v-if=\"illustPageCount > 1\" :illust-page-count=\"illustPageCount\"/>\n      </div>\n      <div\n        :style=\"illustMainImgStyle\"\n        class=\"illust-main-img\">\n        <IconUgoiraPlay v-if=\"isUgoira\" v-show=\"!ugoiraPlayed\"/>\n        <canvas\n          v-if=\"isUgoira\"\n          v-show=\"ugoiraPlayed\"\n          ref=\"smallUgoiraPreview\"\n          class=\"illust-main-ugoira\"/>\n      </div>\n    </a>\n    <div class=\"illust-buttons\">\n      <div>\n        <button type=\"button\" @click.left.prevent.stop=\"oneClickBookmarkAdd\">\n          <IconBookmarkHeart :actived=\"selfIsBookmarked\"/>\n        </button>\n      </div>\n    </div>\n    <a\n      :href=\"illustPageUrl\"\n      class=\"illust-title\"\n      @click.right=\"activateContextMenu\">{{ illustTitle }}</a>\n    <div v-show=\"showUserProfile\" class=\"user-profile\">\n      <div>\n        <a\n          :href=\"illustPageUrl\"\n          :style=\"profileImgStyle\"\n          class=\"user-profile-img\"/>\n      </div>\n      <a\n        :href=\"userPageUrl\"\n        class=\"user-profile-name\"\n        @click.right=\"activateContextMenu\">{{ userName }}</a>\n      <i v-if=\"isFollowed\" class=\"fas fa-rss user-followed-indicator\"/>\n    </div>\n    <div v-show=\"bookmarkCount > 0\" class=\"illust-popularity\">\n      <span>{{ bookmarkCount }}</span>\n    </div>\n  </li>\n</template>\n\n<script>\nimport IconBookmarkHeart from './IconBookmarkHeart.vue';\nimport IconUgoiraPlay from './IconUgoiraPlay.vue';\nimport IndicatorMultiple from './IndicatorMultiple.vue';\nimport { $print } from '../lib/utils';\nimport { PixivAPI } from '../lib/pixiv';\n\nexport default {\n  components: { IconBookmarkHeart, IconUgoiraPlay, IndicatorMultiple },\n  props: {\n    bookmarkCount: {\n      default: 0,\n      type: Number,\n    },\n    bookmarkId: {\n      default: '',\n      type: String,\n    },\n    illustId: {\n      default: '',\n      type: String,\n    },\n    illustPageCount: {\n      default: 1,\n      type: Number,\n    },\n    illustTitle: {\n      default: '',\n      type: String,\n    },\n    isBookmarked: {\n      default: false,\n      type: Boolean,\n    },\n    isFollowed: {\n      default: false,\n      type: Boolean,\n    },\n    isUgoira: {\n      default: false,\n      type: Boolean,\n    },\n    profileImgUrl: {\n      default: '',\n      type: String,\n    },\n    showUserProfile: {\n      default: true,\n      type: Boolean,\n    },\n    thumbImgUrl: {\n      default: '',\n      type: String,\n    },\n    userId: {\n      default: '',\n      type: String,\n    },\n    userName: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      selfBookmarkId: this.bookmarkId,\n      selfIsBookmarked: this.isBookmarked,\n      ugoiraMeta: null,\n      ugoiraPlayed: false,\n      ugoiraPlayer: null,\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    canHoverPlay() {\n      return this.$store.getters.config.hoverPlay;\n    },\n    illustMainImgStyle() {\n      return {\n        backgroundImage: this.ugoiraPlayed ? 'none' : `url(${this.thumbImgUrl})`,\n      };\n    },\n    illustPageUrl() {\n      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;\n    },\n    profileImgStyle() {\n      return {\n        backgroundImage: `url(${this.profileImgUrl})`,\n      };\n    },\n    userPageUrl() {\n      return `/member_illust.php?id=${this.userId}`;\n    },\n  },\n  mounted() {\n    this.$nextTick(async() => {\n      if (this.isUgoira && this.canHoverPlay) {\n        this.ugoiraMeta = await PixivAPI.getIllustUgoiraMetaData(this.illustId);\n      }\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    activateContextMenu(event) {\n      $print.debug('NewDefaultImageItem#activateContextMenu', event);\n      if (this.$store.getters.config.contextMenu) {\n        event.preventDefault();\n\n        const payload = {\n          position: {\n            x: event.clientX,\n            y: event.clientY,\n          },\n        };\n\n        const ct = event.currentTarget;\n        if (ct.classList.contains('user-profile-name')) {\n          payload.data = {\n            illustId: this.illustId,\n            type: 'image-item-title-user',\n          };\n        } else {\n          payload.data = {\n            illustId: this.illustId,\n            type: 'image-item-image',\n          };\n        }\n\n        this.$store.commit('contextMenu/activate', payload);\n      }\n    },\n    controlUgoira(event) {\n      if (!this.ugoiraMeta) {\n        return;\n      }\n      if (!this.ugoiraPlayer) {\n        try {\n          this.ugoiraPlayer = new ZipImagePlayer({\n            autosize: true,\n            canvas: this.$refs.smallUgoiraPreview,\n            chunkSize: 300000,\n            loop: true,\n            metadata: this.ugoiraMeta,\n            source: this.ugoiraMeta.src,\n          });\n        } catch (error) {\n          $print.error(error);\n        }\n      }\n      if (this.canHoverPlay) {\n        if (event.type === 'mouseenter') {\n          this.ugoiraPlayed = true;\n          this.ugoiraPlayer.play();\n        } else {\n          this.ugoiraPlayed = false;\n          this.ugoiraPlayer.pause();\n          this.ugoiraPlayer.rewind();\n        }\n      }\n    },\n    async oneClickBookmarkAdd() {\n      if (!this.selfIsBookmarked) {\n        if (await PixivAPI.postRPCAddBookmark(this.illustId)) {\n          this.selfIsBookmarked = true;\n        }\n      } else {\n        // this.selfBookmarkId might be empty...\n        // Because RPC API has no bookmarkId returned...\n        if (!this.selfBookmarkId) {\n          const data = await PixivAPI.getIllustBookmarkData(this.illustId);\n          this.selfBookmarkId = data.bookmarkData.id;\n        }\n        if (await PixivAPI.postRPCDeleteBookmark(this.selfBookmarkId)) {\n          this.selfIsBookmarked = false;\n        }\n      }\n    },\n  },\n};\n</script>\n\n<style scoped>\n/*\n@pixiv.override.css\n:root {\n  --new-default-image-item-square-size: 184px;\n}\n*/\n.illust-item-root {\n  margin: 0 12px 24px;\n}\n.illust-main {\n  text-decoration: none;\n}\n.illust-main-indicators {\n  display: flex;\n  position: absolute;\n  width: var(--new-default-image-item-square-size);\n  justify-content: end;\n}\n.illust-main-img {\n  align-items: center;\n  background-color: #fff;\n  background-position: 50%;\n  background-repeat: no-repeat;\n  background-size: cover;\n  border-radius: 4px;\n  display: flex;\n  height: var(--new-default-image-item-square-size);\n  justify-content: center;\n  margin-bottom: 8px;\n  position: relative;\n  width: var(--new-default-image-item-square-size);\n}\n.illust-main-img::before {\n  background-color: rgba(0, 0, 0, 0.02);\n  content: \"\";\n  display: block;\n  height: 100%;\n  left: 0;\n  position: absolute;\n  top: 0;\n  width: 100%;\n}\n.illust-main-ugoira {\n  object-fit: contain;\n  height: var(--new-default-image-item-square-size);\n  width: var(--new-default-image-item-square-size);\n}\n.illust-buttons {\n  display: flex;\n  height: 32px;\n  justify-content: flex-end;\n  margin-bottom: 8px;\n  margin-top: -40px;\n}\n.illust-buttons > div {\n  z-index: 1;\n}\n.illust-buttons > div > button {\n  background: none;\n  border: none;\n  box-sizing: content-box;\n  cursor: pointer;\n  display: inline-block;\n  height: 32px;\n  line-height: 1;\n  padding: 0;\n}\n.illust-title {\n  color: #177082;\n  display: block;\n  font-size: 14px;\n  font-weight: 700;\n  line-height: 1;\n  margin: 0 0 4px;\n  overflow: hidden;\n  text-decoration: none;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  width: var(--new-default-image-item-square-size);\n}\n.user-profile {\n  align-items: center;\n  display: flex;\n  width: var(--new-default-image-item-square-size);\n  margin-bottom: 4px;\n}\n.user-profile > div {\n  display: inline-block;\n  margin-right: 4px;\n}\n.user-profile-img {\n  background-size: cover;\n  border-radius: 50%;\n  display: block;\n  flex: none;\n  position: relative;\n  overflow: hidden;\n  width: 16px;\n  height: 16px;\n}\n.user-profile-name {\n  color: #999;\n  font-size: 12px;\n  line-height: 1;\n  overflow: hidden;\n  text-decoration: none;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  flex: 1;\n}\n.user-followed-indicator {\n  display: inline-block;\n  margin-left: 4px;\n  width: 16px;\n  height: 16px;\n  color: dodgerblue;\n}\n.illust-popularity {\n  display: flex;\n  width: 100%;\n  justify-content: center;\n}\n.illust-popularity > span {\n  background-color: #cef;\n  color: rgb(0, 105, 177);\n  padding: 2px 8px;\n  border-radius: 8px;\n  font-weight: bold;\n}\n.illust-popularity > span::before {\n  content: \"❤️\";\n  margin-right: 4px;\n}\n</style>\n\n\n"]}, media: undefined });
+    inject("data-v-6ea6f540_0", { source: "\n.illust-item-root[data-v-6ea6f540]{margin:0 12px 24px\n}\n.illust-main[data-v-6ea6f540]{text-decoration:none\n}\n.illust-main-indicators[data-v-6ea6f540]{display:flex;position:absolute;width:var(--new-default-image-item-square-size);justify-content:end\n}\n.illust-main-img[data-v-6ea6f540]{align-items:center;background-color:#fff;background-position:50%;background-repeat:no-repeat;background-size:cover;border-radius:4px;display:flex;height:var(--new-default-image-item-square-size);justify-content:center;margin-bottom:8px;position:relative;width:var(--new-default-image-item-square-size)\n}\n.illust-main-img[data-v-6ea6f540]::before{background-color:rgba(0,0,0,.02);content:\"\";display:block;height:100%;left:0;position:absolute;top:0;width:100%\n}\n.illust-main-ugoira[data-v-6ea6f540]{object-fit:contain;height:var(--new-default-image-item-square-size);width:var(--new-default-image-item-square-size)\n}\n.illust-buttons[data-v-6ea6f540]{display:flex;height:32px;justify-content:flex-end;margin-bottom:8px;margin-top:-40px\n}\n.illust-buttons>div[data-v-6ea6f540]{z-index:1\n}\n.illust-buttons>div>button[data-v-6ea6f540]{background:0 0;border:none;box-sizing:content-box;cursor:pointer;display:inline-block;height:32px;line-height:1;padding:0\n}\n.illust-title[data-v-6ea6f540]{color:#177082;display:block;font-size:14px;font-weight:700;line-height:1;margin:0 0 4px;overflow:hidden;text-decoration:none;text-overflow:ellipsis;white-space:nowrap;width:var(--new-default-image-item-square-size)\n}\n.user-profile[data-v-6ea6f540]{align-items:center;display:flex;width:var(--new-default-image-item-square-size);margin-bottom:4px\n}\n.user-profile>div[data-v-6ea6f540]{display:inline-block;margin-right:4px\n}\n.user-profile-img[data-v-6ea6f540]{background-size:cover;border-radius:50%;display:block;flex:none;position:relative;overflow:hidden;width:16px;height:16px\n}\n.user-profile-name[data-v-6ea6f540]{color:#999;font-size:12px;line-height:1;overflow:hidden;text-decoration:none;text-overflow:ellipsis;white-space:nowrap;flex:1\n}\n.user-followed-indicator[data-v-6ea6f540]{display:inline-block;margin-left:4px;width:16px;height:16px;color:#1e90ff\n}\n.illust-popularity[data-v-6ea6f540]{display:flex;width:100%;justify-content:center\n}\n.illust-popularity>span[data-v-6ea6f540]{background-color:#cef;color:#0069b1;padding:2px 8px;border-radius:8px;font-weight:700\n}\n.illust-popularity>span[data-v-6ea6f540]::before{content:\"❤️\";margin-right:4px\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$9 = "data-v-0ca010a8";
+  const __vue_scope_id__$9 = "data-v-6ea6f540";
   /* module identifier */
   const __vue_module_identifier__$9 = undefined;
   /* functional template */
@@ -4843,7 +3712,7 @@ __vue_render__$9._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/NewDefaultImageItem.vue";
+    component.__file = "NewDefaultImageItem.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -4900,6 +3769,17 @@ __vue_render__$9._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -4975,48 +3855,17 @@ var script$a = {};
             const __vue_script__$a = script$a;
             
 /* template */
-var __vue_render__$a = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _vm._m(0)
-};
-var __vue_staticRenderFns__$a = [
-  function() {
-    var _vm = this;
-    var _h = _vm.$createElement;
-    var _c = _vm._self._c || _h;
-    return _c("div", { staticClass: "sk-cube-grid" }, [
-      _c("div", { staticClass: "sk-cube sk-cube1" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "sk-cube sk-cube2" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "sk-cube sk-cube3" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "sk-cube sk-cube4" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "sk-cube sk-cube5" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "sk-cube sk-cube6" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "sk-cube sk-cube7" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "sk-cube sk-cube8" }),
-      _vm._v(" "),
-      _c("div", { staticClass: "sk-cube sk-cube9" })
-    ])
-  }
-];
-__vue_render__$a._withStripped = true;
+var __vue_render__$a = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _vm._m(0)};
+var __vue_staticRenderFns__$a = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"sk-cube-grid"},[_c('div',{staticClass:"sk-cube sk-cube1"}),_vm._v(" "),_c('div',{staticClass:"sk-cube sk-cube2"}),_vm._v(" "),_c('div',{staticClass:"sk-cube sk-cube3"}),_vm._v(" "),_c('div',{staticClass:"sk-cube sk-cube4"}),_vm._v(" "),_c('div',{staticClass:"sk-cube sk-cube5"}),_vm._v(" "),_c('div',{staticClass:"sk-cube sk-cube6"}),_vm._v(" "),_c('div',{staticClass:"sk-cube sk-cube7"}),_vm._v(" "),_c('div',{staticClass:"sk-cube sk-cube8"}),_vm._v(" "),_c('div',{staticClass:"sk-cube sk-cube9"})])}];
 
   /* style */
   const __vue_inject_styles__$a = function (inject) {
     if (!inject) return
-    inject("data-v-3f445ab8_0", { source: "\n.sk-cube-grid[data-v-3f445ab8] {\n  width: var(--loading-icon-size);\n  height: var(--loading-icon-size);\n  margin: 100px auto;\n}\n.sk-cube-grid .sk-cube[data-v-3f445ab8] {\n  width: 33%;\n  height: 33%;\n  background-color: var(--loading-icon-color);\n  float: left;\n  -webkit-animation: sk-cubeGridScaleDelay-data-v-3f445ab8 1.3s infinite ease-in-out;\n  animation: sk-cubeGridScaleDelay-data-v-3f445ab8 1.3s infinite ease-in-out;\n}\n.sk-cube-grid .sk-cube1[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n.sk-cube-grid .sk-cube2[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s;\n}\n.sk-cube-grid .sk-cube3[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.4s;\n  animation-delay: 0.4s;\n}\n.sk-cube-grid .sk-cube4[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s;\n}\n.sk-cube-grid .sk-cube5[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n.sk-cube-grid .sk-cube6[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s;\n}\n.sk-cube-grid .sk-cube7[data-v-3f445ab8] {\n  -webkit-animation-delay: 0s;\n  animation-delay: 0s;\n}\n.sk-cube-grid .sk-cube8[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s;\n}\n.sk-cube-grid .sk-cube9[data-v-3f445ab8] {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n@-webkit-keyframes sk-cubeGridScaleDelay-data-v-3f445ab8 {\n0%,\n  70%,\n  100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1);\n}\n35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1);\n}\n}\n@keyframes sk-cubeGridScaleDelay-data-v-3f445ab8 {\n0%,\n  70%,\n  100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1);\n}\n35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1);\n}\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/IconLoadingSpin.vue"],"names":[],"mappings":";AAoBA;EACA,gCAAA;EACA,iCAAA;EACA,mBAAA;CACA;AAEA;EACA,WAAA;EACA,YAAA;EACA,4CAAA;EACA,YAAA;EACA,mFAAA;EACA,2EAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,4BAAA;EACA,oBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AACA;EACA,8BAAA;EACA,sBAAA;CACA;AAEA;AACA;;;IAGA,oCAAA;IACA,4BAAA;CACA;AACA;IACA,oCAAA;IACA,4BAAA;CACA;CACA;AAEA;AACA;;;IAGA,oCAAA;IACA,4BAAA;CACA;AACA;IACA,oCAAA;IACA,4BAAA;CACA;CACA","file":"IconLoadingSpin.vue","sourcesContent":["<template>\n  <!-- copy from: https://github.com/tobiasahlin/SpinKit -->\n  <div class=\"sk-cube-grid\">\n    <div class=\"sk-cube sk-cube1\"/>\n    <div class=\"sk-cube sk-cube2\"/>\n    <div class=\"sk-cube sk-cube3\"/>\n    <div class=\"sk-cube sk-cube4\"/>\n    <div class=\"sk-cube sk-cube5\"/>\n    <div class=\"sk-cube sk-cube6\"/>\n    <div class=\"sk-cube sk-cube7\"/>\n    <div class=\"sk-cube sk-cube8\"/>\n    <div class=\"sk-cube sk-cube9\"/>\n  </div>\n</template>\n\n<script>\nexport default {};\n</script>\n\n<style scoped>\n.sk-cube-grid {\n  width: var(--loading-icon-size);\n  height: var(--loading-icon-size);\n  margin: 100px auto;\n}\n\n.sk-cube-grid .sk-cube {\n  width: 33%;\n  height: 33%;\n  background-color: var(--loading-icon-color);\n  float: left;\n  -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;\n  animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;\n}\n.sk-cube-grid .sk-cube1 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n.sk-cube-grid .sk-cube2 {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s;\n}\n.sk-cube-grid .sk-cube3 {\n  -webkit-animation-delay: 0.4s;\n  animation-delay: 0.4s;\n}\n.sk-cube-grid .sk-cube4 {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s;\n}\n.sk-cube-grid .sk-cube5 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n.sk-cube-grid .sk-cube6 {\n  -webkit-animation-delay: 0.3s;\n  animation-delay: 0.3s;\n}\n.sk-cube-grid .sk-cube7 {\n  -webkit-animation-delay: 0s;\n  animation-delay: 0s;\n}\n.sk-cube-grid .sk-cube8 {\n  -webkit-animation-delay: 0.1s;\n  animation-delay: 0.1s;\n}\n.sk-cube-grid .sk-cube9 {\n  -webkit-animation-delay: 0.2s;\n  animation-delay: 0.2s;\n}\n\n@-webkit-keyframes sk-cubeGridScaleDelay {\n  0%,\n  70%,\n  100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1);\n  }\n  35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1);\n  }\n}\n\n@keyframes sk-cubeGridScaleDelay {\n  0%,\n  70%,\n  100% {\n    -webkit-transform: scale3D(1, 1, 1);\n    transform: scale3D(1, 1, 1);\n  }\n  35% {\n    -webkit-transform: scale3D(0, 0, 1);\n    transform: scale3D(0, 0, 1);\n  }\n}\n</style>\n\n\n"]}, media: undefined });
+    inject("data-v-117e5120_0", { source: "\n.sk-cube-grid[data-v-117e5120]{width:var(--loading-icon-size);height:var(--loading-icon-size);margin:100px auto\n}\n.sk-cube-grid .sk-cube[data-v-117e5120]{width:33%;height:33%;background-color:var(--loading-icon-color);float:left;-webkit-animation:sk-cubeGridScaleDelay-data-v-117e5120 1.3s infinite ease-in-out;animation:sk-cubeGridScaleDelay-data-v-117e5120 1.3s infinite ease-in-out\n}\n.sk-cube-grid .sk-cube1[data-v-117e5120]{-webkit-animation-delay:.2s;animation-delay:.2s\n}\n.sk-cube-grid .sk-cube2[data-v-117e5120]{-webkit-animation-delay:.3s;animation-delay:.3s\n}\n.sk-cube-grid .sk-cube3[data-v-117e5120]{-webkit-animation-delay:.4s;animation-delay:.4s\n}\n.sk-cube-grid .sk-cube4[data-v-117e5120]{-webkit-animation-delay:.1s;animation-delay:.1s\n}\n.sk-cube-grid .sk-cube5[data-v-117e5120]{-webkit-animation-delay:.2s;animation-delay:.2s\n}\n.sk-cube-grid .sk-cube6[data-v-117e5120]{-webkit-animation-delay:.3s;animation-delay:.3s\n}\n.sk-cube-grid .sk-cube7[data-v-117e5120]{-webkit-animation-delay:0s;animation-delay:0s\n}\n.sk-cube-grid .sk-cube8[data-v-117e5120]{-webkit-animation-delay:.1s;animation-delay:.1s\n}\n.sk-cube-grid .sk-cube9[data-v-117e5120]{-webkit-animation-delay:.2s;animation-delay:.2s\n}\n@-webkit-keyframes sk-cubeGridScaleDelay-data-v-117e5120{\n0%,100%,70%{-webkit-transform:scale3D(1,1,1);transform:scale3D(1,1,1)\n}\n35%{-webkit-transform:scale3D(0,0,1);transform:scale3D(0,0,1)\n}\n}\n@keyframes sk-cubeGridScaleDelay-data-v-117e5120{\n0%,100%,70%{-webkit-transform:scale3D(1,1,1);transform:scale3D(1,1,1)\n}\n35%{-webkit-transform:scale3D(0,0,1);transform:scale3D(0,0,1)\n}\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$a = "data-v-3f445ab8";
+  const __vue_scope_id__$a = "data-v-117e5120";
   /* module identifier */
   const __vue_module_identifier__$a = undefined;
   /* functional template */
@@ -5030,7 +3879,7 @@ __vue_render__$a._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/IconLoadingSpin.vue";
+    component.__file = "IconLoadingSpin.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -5087,6 +3936,17 @@ __vue_render__$a._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -5256,312 +4116,17 @@ var script$b = {
             const __vue_script__$b = script$b;
             
 /* template */
-var __vue_render__$b = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c("div", { attrs: { id: "patchouli-new-profile-page" } }, [
-    _c("nav", { attrs: { id: "patchouli-npp-nav" } }, [
-      _c(
-        "a",
-        {
-          class: { current: _vm.nppType === 0 },
-          attrs: { id: "patchouli-npp-all", href: "/member.php?id=" + _vm.uid },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              $event.preventDefault();
-              return _vm.clickRoute($event)
-            }
-          }
-        },
-        [_vm._v(_vm._s(_vm.$t("mainView.newProfilePage.contents")))]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          class: { current: _vm.nppType === 1 },
-          attrs: {
-            id: "patchouli-npp-illust",
-            href: "/member_illust.php?id=" + _vm.uid + "&type=illust"
-          },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              $event.preventDefault();
-              return _vm.clickRoute($event)
-            }
-          }
-        },
-        [_vm._v(_vm._s(_vm.$t("mainView.newProfilePage.illustrations")))]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          class: { current: _vm.nppType === 2 },
-          attrs: {
-            id: "patchouli-npp-manga",
-            href: "/member_illust.php?id=" + _vm.uid + "&type=manga"
-          },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              $event.preventDefault();
-              return _vm.clickRoute($event)
-            }
-          }
-        },
-        [_vm._v(_vm._s(_vm.$t("mainView.newProfilePage.manga")))]
-      ),
-      _vm._v(" "),
-      _c(
-        "a",
-        {
-          class: { current: _vm.nppType === 3 },
-          attrs: {
-            id: "patchouli-npp-bookmark",
-            href: "/bookmark.php?id=" + _vm.uid + "&rest=show"
-          },
-          on: {
-            click: function($event) {
-              if (
-                !("button" in $event) &&
-                _vm._k($event.keyCode, "left", 37, $event.key, [
-                  "Left",
-                  "ArrowLeft"
-                ])
-              ) {
-                return null
-              }
-              if ("button" in $event && $event.button !== 0) {
-                return null
-              }
-              $event.preventDefault();
-              return _vm.clickRoute($event)
-            }
-          }
-        },
-        [_vm._v(_vm._s(_vm.$t("mainView.newProfilePage.bookmarks")))]
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { attrs: { id: "patchouli-npp-view" } }, [
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.isSelfBookmarkPage,
-              expression: "isSelfBookmarkPage"
-            }
-          ],
-          staticClass: "ω",
-          attrs: { id: "patchouli-npp-view-bookmark-switch" }
-        },
-        [
-          _c("nav", [
-            _c(
-              "a",
-              {
-                class: { current: _vm.nppType === 3 },
-                attrs: {
-                  id: "patchouli-npp-view-bookmark-switch-public",
-                  href: "/bookmark.php?id=" + _vm.uid + "&rest=show"
-                },
-                on: {
-                  click: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "left", 37, $event.key, [
-                        "Left",
-                        "ArrowLeft"
-                      ])
-                    ) {
-                      return null
-                    }
-                    if ("button" in $event && $event.button !== 0) {
-                      return null
-                    }
-                    $event.preventDefault();
-                    return _vm.clickRoute($event)
-                  }
-                }
-              },
-              [_vm._v(_vm._s(_vm.$t("mainView.newProfilePage.publicBookmark")))]
-            ),
-            _vm._v(" "),
-            _c(
-              "a",
-              {
-                class: { current: _vm.nppType === 4 },
-                attrs: {
-                  id: "patchouli-npp-view-bookmark-switch-private",
-                  href: "/bookmark.php?id=" + _vm.uid + "&rest=hide"
-                },
-                on: {
-                  click: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "left", 37, $event.key, [
-                        "Left",
-                        "ArrowLeft"
-                      ])
-                    ) {
-                      return null
-                    }
-                    if ("button" in $event && $event.button !== 0) {
-                      return null
-                    }
-                    $event.preventDefault();
-                    return _vm.clickRoute($event)
-                  }
-                }
-              },
-              [
-                _vm._v(
-                  _vm._s(_vm.$t("mainView.newProfilePage.privateBookmark"))
-                )
-              ]
-            )
-          ])
-        ]
-      ),
-      _vm._v(" "),
-      _c("div", { attrs: { id: "patchouli-npp-view-header" } }),
-      _vm._v(" "),
-      _c(
-        "ul",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: !_vm.hasNoResult,
-              expression: "!hasNoResult"
-            }
-          ],
-          staticClass: "ω",
-          attrs: { id: "patchouli-npp-view-image-item-list" }
-        },
-        _vm._l(_vm.nppProcessedLibrary, function(d, index) {
-          return _c("NewDefaultImageItem", {
-            directives: [
-              {
-                name: "show",
-                rawName: "v-show",
-                value: index < _vm.imageToShowCount,
-                expression: "index < imageToShowCount"
-              }
-            ],
-            key: d.illustId,
-            attrs: {
-              "illust-id": d.illustId,
-              "bookmark-count": d.bookmarkCount,
-              "bookmark-id": d.bookmarkId,
-              "is-bookmarked": d.isBookmarked,
-              "is-followed": d.isFollowed,
-              "is-ugoira": d.isUgoira,
-              "illust-page-count": d.illustPageCount,
-              "illust-title": d.illustTitle,
-              "thumb-img-url": d.urls.thumb,
-              "profile-img-url": d.profileImg,
-              "user-id": d.userId,
-              "user-name": d.userName,
-              "show-user-profile": _vm.uid !== d.userId
-            }
-          })
-        })
-      ),
-      _vm._v(" "),
-      _c(
-        "span",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.hasNoResult,
-              expression: "hasNoResult"
-            }
-          ],
-          attrs: { id: "patchouli-npp-view-no-result" }
-        },
-        [
-          _vm._v(
-            "\n      " +
-              _vm._s(_vm.$t("mainView.newProfilePage.noResult")) +
-              "\n    "
-          )
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "span",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: !_vm.status.isPaused && !_vm.status.isEnded,
-              expression: "!status.isPaused && !status.isEnded"
-            }
-          ],
-          attrs: { id: "patchouli-npp-view-loading" }
-        },
-        [_c("IconLoadingSpin")],
-        1
-      )
-    ])
-  ])
-};
+var __vue_render__$b = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":"patchouli-new-profile-page"}},[_c('nav',{attrs:{"id":"patchouli-npp-nav"}},[_c('a',{class:{'current': _vm.nppType === 0},attrs:{"id":"patchouli-npp-all","href":("/member.php?id=" + _vm.uid)},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }$event.preventDefault();return _vm.clickRoute($event)}}},[_vm._v(_vm._s(_vm.$t('mainView.newProfilePage.contents')))]),_vm._v(" "),_c('a',{class:{'current': _vm.nppType === 1},attrs:{"id":"patchouli-npp-illust","href":("/member_illust.php?id=" + _vm.uid + "&type=illust")},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }$event.preventDefault();return _vm.clickRoute($event)}}},[_vm._v(_vm._s(_vm.$t('mainView.newProfilePage.illustrations')))]),_vm._v(" "),_c('a',{class:{'current': _vm.nppType === 2},attrs:{"id":"patchouli-npp-manga","href":("/member_illust.php?id=" + _vm.uid + "&type=manga")},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }$event.preventDefault();return _vm.clickRoute($event)}}},[_vm._v(_vm._s(_vm.$t('mainView.newProfilePage.manga')))]),_vm._v(" "),_c('a',{class:{'current': _vm.nppType === 3},attrs:{"id":"patchouli-npp-bookmark","href":("/bookmark.php?id=" + _vm.uid + "&rest=show")},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }$event.preventDefault();return _vm.clickRoute($event)}}},[_vm._v(_vm._s(_vm.$t('mainView.newProfilePage.bookmarks')))])]),_vm._v(" "),_c('div',{attrs:{"id":"patchouli-npp-view"}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.isSelfBookmarkPage),expression:"isSelfBookmarkPage"}],staticClass:"ω",attrs:{"id":"patchouli-npp-view-bookmark-switch"}},[_c('nav',[_c('a',{class:{'current': _vm.nppType === 3},attrs:{"id":"patchouli-npp-view-bookmark-switch-public","href":("/bookmark.php?id=" + _vm.uid + "&rest=show")},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }$event.preventDefault();return _vm.clickRoute($event)}}},[_vm._v(_vm._s(_vm.$t('mainView.newProfilePage.publicBookmark')))]),_vm._v(" "),_c('a',{class:{'current': _vm.nppType === 4},attrs:{"id":"patchouli-npp-view-bookmark-switch-private","href":("/bookmark.php?id=" + _vm.uid + "&rest=hide")},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }$event.preventDefault();return _vm.clickRoute($event)}}},[_vm._v(_vm._s(_vm.$t('mainView.newProfilePage.privateBookmark')))])])]),_vm._v(" "),_c('div',{attrs:{"id":"patchouli-npp-view-header"}}),_vm._v(" "),_c('ul',{directives:[{name:"show",rawName:"v-show",value:(!_vm.hasNoResult),expression:"!hasNoResult"}],staticClass:"ω",attrs:{"id":"patchouli-npp-view-image-item-list"}},_vm._l((_vm.nppProcessedLibrary),function(d,index){return _c('NewDefaultImageItem',{directives:[{name:"show",rawName:"v-show",value:(index < _vm.imageToShowCount),expression:"index < imageToShowCount"}],key:d.illustId,attrs:{"illust-id":d.illustId,"bookmark-count":d.bookmarkCount,"bookmark-id":d.bookmarkId,"is-bookmarked":d.isBookmarked,"is-followed":d.isFollowed,"is-ugoira":d.isUgoira,"illust-page-count":d.illustPageCount,"illust-title":d.illustTitle,"thumb-img-url":d.urls.thumb,"profile-img-url":d.profileImg,"user-id":d.userId,"user-name":d.userName,"show-user-profile":_vm.uid !== d.userId}})})),_vm._v(" "),_c('span',{directives:[{name:"show",rawName:"v-show",value:(_vm.hasNoResult),expression:"hasNoResult"}],attrs:{"id":"patchouli-npp-view-no-result"}},[_vm._v("\n      "+_vm._s(_vm.$t('mainView.newProfilePage.noResult'))+"\n    ")]),_vm._v(" "),_c('span',{directives:[{name:"show",rawName:"v-show",value:(!_vm.status.isPaused && !_vm.status.isEnded),expression:"!status.isPaused && !status.isEnded"}],attrs:{"id":"patchouli-npp-view-loading"}},[_c('IconLoadingSpin')],1)])])};
 var __vue_staticRenderFns__$b = [];
-__vue_render__$b._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$b = function (inject) {
     if (!inject) return
-    inject("data-v-0a3d7a84_0", { source: "\n#patchouli-npp-nav[data-v-0a3d7a84] {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a[data-v-0a3d7a84] {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a[data-v-0a3d7a84]:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current[data-v-0a3d7a84] {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view[data-v-0a3d7a84] {\n  display: flex;\n  flex-flow: column;\n  min-height: 340px;\n  align-items: center;\n}\n#patchouli-npp-view-bookmark-switch[data-v-0a3d7a84] {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current[data-v-0a3d7a84] {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a[data-v-0a3d7a84] {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list[data-v-0a3d7a84] {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result[data-v-0a3d7a84] {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n}\n#patchouli-npp-view-loading[data-v-0a3d7a84] {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/NewProfilePage.vue"],"names":[],"mappings":";AAiMA;EACA,cAAA;EACA,wBAAA;EACA,0BAAA;EACA,YAAA;CACA;AACA;EACA,kCAAA;EACA,YAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;EACA,mBAAA;EACA,sBAAA;EACA,uBAAA;CACA;AACA;EACA,YAAA;EACA,gBAAA;CACA;AACA;EACA,YAAA;EACA,iCAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,kBAAA;EACA,oBAAA;CACA;AACA;EACA,cAAA;EACA,0BAAA;EACA,uBAAA;EACA,cAAA;CACA;AACA;EACA,0BAAA;EACA,eAAA;CACA;AACA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,mBAAA;EACA,sBAAA;CACA;AACA;EACA,iBAAA;EACA,cAAA;EACA,0BAAA;EACA,wBAAA;EACA,gBAAA;EACA,gBAAA;EACA,eAAA;EACA,cAAA;CACA;AACA;EACA,QAAA;EACA,qBAAA;EACA,oBAAA;EACA,eAAA;EACA,gBAAA;EACA,iBAAA;EACA,eAAA;CACA;AACA;EACA,QAAA;EACA,qBAAA;EACA,oBAAA;CACA","file":"NewProfilePage.vue","sourcesContent":["<template>\n  <div id=\"patchouli-new-profile-page\">\n    <nav id=\"patchouli-npp-nav\">\n      <a\n        id=\"patchouli-npp-all\"\n        :class=\"{'current': nppType === 0}\"\n        :href=\"`/member.php?id=${uid}`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.contents') }}</a>\n      <a\n        id=\"patchouli-npp-illust\"\n        :class=\"{'current': nppType === 1}\"\n        :href=\"`/member_illust.php?id=${uid}&type=illust`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.illustrations') }}</a>\n      <a\n        id=\"patchouli-npp-manga\"\n        :class=\"{'current': nppType === 2}\"\n        :href=\"`/member_illust.php?id=${uid}&type=manga`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.manga') }}</a>\n      <a\n        id=\"patchouli-npp-bookmark\"\n        :class=\"{'current': nppType === 3}\"\n        :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n        @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.bookmarks') }}</a>\n    </nav>\n    <div id=\"patchouli-npp-view\">\n      <div\n        v-show=\"isSelfBookmarkPage\"\n        id=\"patchouli-npp-view-bookmark-switch\"\n        class=\"ω\">\n        <nav>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-public\"\n            :class=\"{'current': nppType === 3}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=show`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.publicBookmark') }}</a>\n          <a\n            id=\"patchouli-npp-view-bookmark-switch-private\"\n            :class=\"{'current': nppType === 4}\"\n            :href=\"`/bookmark.php?id=${uid}&rest=hide`\"\n            @click.left.prevent=\"clickRoute\">{{ $t('mainView.newProfilePage.privateBookmark') }}</a>\n        </nav>\n      </div>\n      <div id=\"patchouli-npp-view-header\"/>\n      <ul\n        v-show=\"!hasNoResult\"\n        id=\"patchouli-npp-view-image-item-list\"\n        class=\"ω\">\n        <NewDefaultImageItem\n          v-for=\"(d, index) in nppProcessedLibrary\"\n          v-show=\"index < imageToShowCount\"\n          :key=\"d.illustId\"\n          :illust-id=\"d.illustId\"\n          :bookmark-count=\"d.bookmarkCount\"\n          :bookmark-id=\"d.bookmarkId\"\n          :is-bookmarked=\"d.isBookmarked\"\n          :is-followed=\"d.isFollowed\"\n          :is-ugoira=\"d.isUgoira\"\n          :illust-page-count=\"d.illustPageCount\"\n          :illust-title=\"d.illustTitle\"\n          :thumb-img-url=\"d.urls.thumb\"\n          :profile-img-url=\"d.profileImg\"\n          :user-id=\"d.userId\"\n          :user-name=\"d.userName\"\n          :show-user-profile=\"uid !== d.userId\"/>\n      </ul>\n      <span v-show=\"hasNoResult\" id=\"patchouli-npp-view-no-result\">\n        {{ $t('mainView.newProfilePage.noResult') }}\n      </span>\n      <span v-show=\"!status.isPaused && !status.isEnded\" id=\"patchouli-npp-view-loading\">\n        <IconLoadingSpin/>\n      </span>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { MAIN_PAGE_TYPE as MPT, NPP_TYPE_COUNT } from '../lib/enums';\nimport { $el } from '../lib/utils';\nimport NewDefaultImageItem from './NewDefaultImageItem.vue';\nimport IconLoadingSpin from './IconLoadingSpin.vue';\n\nexport default {\n  components: { IconLoadingSpin, NewDefaultImageItem },\n  data() {\n    return {\n      routeIsInited: Array(NPP_TYPE_COUNT).fill(false),\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    displayIndices() {\n      return this.$store.getters['pixiv/nppDisplayIndices'];\n    },\n    hasNoResult() {\n      return !this.imageToShowCount;\n    },\n    imageToShowCount() {\n      const { shows } = this.displayIndices;\n      return shows.length;\n    },\n    isSelfBookmarkPage() {\n      return this.$store.getters.isSelfBookmarkPage;\n    },\n    nppProcessedLibrary() {\n      const { shows, hides } = this.displayIndices;\n      const iiLib = this.$store.getters['pixiv/imageItemLibrary'];\n\n      return shows.concat(hides).map(idx => iiLib[idx]);\n    },\n    nppType() {\n      return this.$store.getters['pixiv/nppType'];\n    },\n    rest() {\n      return this.$store.getters.sp.rest;\n    },\n    status() {\n      return this.$store.getters['pixiv/status'];\n    },\n    uid() {\n      return this.$store.getters.sp.id;\n    },\n  },\n  mounted() {\n    this.$nextTick(() => {\n      this.routeIsInited[this.nppType] = true;\n    });\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    async clickRoute(event) {\n      await this.$store.dispatch('pixiv/pause');\n      const tid = event.currentTarget.id;\n      const thref = event.currentTarget.href;\n\n      if (this.isSamePath(location.href, thref)) {\n        return;\n      }\n\n      history.pushState(null, '', thref);\n\n      switch (tid) {\n      case 'patchouli-npp-all':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE,\n        });\n        break;\n      case 'patchouli-npp-illust':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_ILLUST,\n        });\n        break;\n      case 'patchouli-npp-manga':\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_MANGA,\n        });\n        break;\n      case 'patchouli-npp-bookmark':\n      case 'patchouli-npp-view-bookmark-switch-public':\n      case 'patchouli-npp-view-bookmark-switch-private':\n        this.$store.commit('updateSearchParam');\n        this.$store.commit('setMainPageType', {\n          forceSet: MPT.NEW_PROFILE_BOOKMARK,\n        });\n        break;\n      default:\n        break;\n      }\n      if (!this.routeIsInited[this.nppType]) {\n        this.$store.dispatch('pixiv/start', { force: true, times: 1 });\n        this.routeIsInited[this.nppType] = true;\n      }\n    },\n    isSamePath(href0, href1) {\n      const a0 = $el('a', { href: href0 });\n      const a1 = $el('a', { href: href1 });\n      if (a0.pathname !== a1.pathname) {\n        return false;\n      }\n      const sp0 = new URLSearchParams(a0.search);\n      const sp1 = new URLSearchParams(a1.search);\n      const keysSet = new Set([...sp0.keys(), ...sp1.keys()]);\n      for (const k of keysSet) {\n        if (sp0.get(k) !== sp1.get(k)) {\n          return false;\n        }\n      }\n      return true;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#patchouli-npp-nav {\n  display: flex;\n  justify-content: center;\n  background-color: #f9f8ff;\n  width: 100%;\n}\n#patchouli-npp-nav > a {\n  border-top: 4px solid transparent;\n  color: #999;\n  font-size: 16px;\n  font-weight: 700;\n  margin: 0 10px;\n  padding: 10px 20px;\n  text-decoration: none;\n  transition: color 0.2s;\n}\n#patchouli-npp-nav > a:hover {\n  color: #333;\n  cursor: pointer;\n}\n#patchouli-npp-nav > a.current {\n  color: #333;\n  border-bottom: 4px solid #0096fa;\n}\n#patchouli-npp-view {\n  display: flex;\n  flex-flow: column;\n  min-height: 340px;\n  align-items: center;\n}\n#patchouli-npp-view-bookmark-switch {\n  display: flex;\n  justify-content: flex-end;\n  margin: 24px auto 48px;\n  width: 1300px;\n}\n#patchouli-npp-view-bookmark-switch a.current {\n  background-color: #f5f5f5;\n  color: #5c5c5c;\n}\n#patchouli-npp-view-bookmark-switch a {\n  border-radius: 24px;\n  color: #8f8f8f;\n  font-size: 16px;\n  font-weight: 700;\n  padding: 16px 24px;\n  text-decoration: none;\n}\n#patchouli-npp-view-image-item-list {\n  list-style: none;\n  display: flex;\n  align-content: flex-start;\n  justify-content: center;\n  flex-wrap: wrap;\n  padding: 14px 0;\n  margin: 0 auto;\n  width: 1300px;\n}\n#patchouli-npp-view-no-result {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n  color: #b8b8b8;\n  font-size: 20px;\n  font-weight: 700;\n  line-height: 1;\n}\n#patchouli-npp-view-loading {\n  flex: 1;\n  display: inline-flex;\n  align-items: center;\n}\n</style>\n\n\n"]}, media: undefined });
+    inject("data-v-501dcecc_0", { source: "\n#patchouli-npp-nav[data-v-501dcecc]{display:flex;justify-content:center;background-color:#f9f8ff;width:100%\n}\n#patchouli-npp-nav>a[data-v-501dcecc]{border-top:4px solid transparent;color:#999;font-size:16px;font-weight:700;margin:0 10px;padding:10px 20px;text-decoration:none;transition:color .2s\n}\n#patchouli-npp-nav>a[data-v-501dcecc]:hover{color:#333;cursor:pointer\n}\n#patchouli-npp-nav>a.current[data-v-501dcecc]{color:#333;border-bottom:4px solid #0096fa\n}\n#patchouli-npp-view[data-v-501dcecc]{display:flex;flex-flow:column;min-height:340px;align-items:center\n}\n#patchouli-npp-view-bookmark-switch[data-v-501dcecc]{display:flex;justify-content:flex-end;margin:24px auto 48px;width:1300px\n}\n#patchouli-npp-view-bookmark-switch a.current[data-v-501dcecc]{background-color:#f5f5f5;color:#5c5c5c\n}\n#patchouli-npp-view-bookmark-switch a[data-v-501dcecc]{border-radius:24px;color:#8f8f8f;font-size:16px;font-weight:700;padding:16px 24px;text-decoration:none\n}\n#patchouli-npp-view-image-item-list[data-v-501dcecc]{list-style:none;display:flex;align-content:flex-start;justify-content:center;flex-wrap:wrap;padding:14px 0;margin:0 auto;width:1300px\n}\n#patchouli-npp-view-no-result[data-v-501dcecc]{flex:1;display:inline-flex;align-items:center;color:#b8b8b8;font-size:20px;font-weight:700;line-height:1\n}\n#patchouli-npp-view-loading[data-v-501dcecc]{flex:1;display:inline-flex;align-items:center\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$b = "data-v-0a3d7a84";
+  const __vue_scope_id__$b = "data-v-501dcecc";
   /* module identifier */
   const __vue_module_identifier__$b = undefined;
   /* functional template */
@@ -5575,7 +4140,7 @@ __vue_render__$b._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/NewProfilePage.vue";
+    component.__file = "NewProfilePage.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -5632,6 +4197,17 @@ __vue_render__$b._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -5707,32 +4283,13 @@ var script$c = {
             const __vue_script__$c = script$c;
             
 /* template */
-var __vue_render__$c = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    { attrs: { id: _vm.id } },
-    [
-      _vm.isNewProfilePage ? _c("NewProfilePage") : _c("DefaultImageItemPage"),
-      _vm._v(" "),
-      _c("ContextMenu")
-    ],
-    1
-  )
-};
+var __vue_render__$c = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{attrs:{"id":_vm.id}},[(_vm.isNewProfilePage)?_c('NewProfilePage'):_c('DefaultImageItemPage'),_vm._v(" "),_c('ContextMenu')],1)};
 var __vue_staticRenderFns__$c = [];
-__vue_render__$c._withStripped = true;
 
   /* style */
-  const __vue_inject_styles__$c = function (inject) {
-    if (!inject) return
-    inject("data-v-4ab1002e_0", { source: "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", map: {"version":3,"sources":[],"names":[],"mappings":"","file":"MainView.vue"}, media: undefined });
-
-  };
+  const __vue_inject_styles__$c = undefined;
   /* scoped */
-  const __vue_scope_id__$c = "data-v-4ab1002e";
+  const __vue_scope_id__$c = "data-v-642adf9e";
   /* module identifier */
   const __vue_module_identifier__$c = undefined;
   /* functional template */
@@ -5746,7 +4303,7 @@ __vue_render__$c._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/MainView.vue";
+    component.__file = "MainView.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -5757,30 +4314,6 @@ __vue_render__$c._withStripped = true;
     }
 
     component._scopeId = scope;
-
-    {
-      let hook;
-      if (style) {
-        hook = function(context) {
-          style.call(this, createInjector(context));
-        };
-      }
-
-      if (hook !== undefined) {
-        if (component.functional) {
-          // register for functional component in vue file
-          const originalRender = component.render;
-          component.render = function renderWithStyleInjection(h, context) {
-            hook.call(context);
-            return originalRender(h, context)
-          };
-        } else {
-          // inject component registration as beforeCreate hook
-          const existing = component.beforeCreate;
-          component.beforeCreate = existing ? [].concat(existing, hook) : [hook];
-        }
-      }
-    }
 
     return component
   }
@@ -5803,6 +4336,17 @@ __vue_render__$c._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
@@ -6030,421 +4574,17 @@ var script$d = {
             const __vue_script__$d = script$d;
             
 /* template */
-var __vue_render__$d = function() {
-  var _vm = this;
-  var _h = _vm.$createElement;
-  var _c = _vm._self._c || _h;
-  return _c(
-    "div",
-    {
-      directives: [
-        {
-          name: "show",
-          rawName: "v-show",
-          value: _vm.xmode,
-          expression: "xmode"
-        }
-      ],
-      ref: "coverLayerRoot",
-      attrs: { id: _vm.id, tabindex: "0" },
-      on: {
-        keyup: _vm.jumpByKeyup,
-        click: function($event) {
-          if (
-            !("button" in $event) &&
-            _vm._k($event.keyCode, "left", 37, $event.key, [
-              "Left",
-              "ArrowLeft"
-            ])
-          ) {
-            return null
-          }
-          if ("button" in $event && $event.button !== 0) {
-            return null
-          }
-          return _vm.clickBase($event)
-        },
-        scroll: function($event) {
-          $event.stopPropagation();
-          $event.preventDefault();
-        },
-        wheel: function($event) {
-          $event.stopPropagation();
-          $event.preventDefault();
-          return _vm.jumpByWheel($event)
-        }
-      }
-    },
-    [
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.xmode === "config",
-              expression: "xmode === 'config'"
-            }
-          ],
-          attrs: { id: "marisa-config-mode" },
-          on: {
-            click: function($event) {
-              $event.stopPropagation();
-            }
-          }
-        },
-        [
-          _c(
-            "a",
-            {
-              attrs: { id: "config-context-menu-switch" },
-              on: {
-                click: function($event) {
-                  if (
-                    !("button" in $event) &&
-                    _vm._k($event.keyCode, "left", 37, $event.key, [
-                      "Left",
-                      "ArrowLeft"
-                    ])
-                  ) {
-                    return null
-                  }
-                  if ("button" in $event && $event.button !== 0) {
-                    return null
-                  }
-                  return _vm.clickSwitch($event)
-                }
-              }
-            },
-            [
-              _c(
-                "a",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.xc.contextMenu,
-                      expression: "xc.contextMenu"
-                    }
-                  ],
-                  attrs: { id: "config-context-menu-switch-on", role: "button" }
-                },
-                [_c("i", { staticClass: "fas fa-toggle-on" })]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: !_vm.xc.contextMenu,
-                      expression: "!xc.contextMenu"
-                    }
-                  ],
-                  attrs: {
-                    id: "config-context-menu-switch-off",
-                    role: "button"
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-toggle-off" })]
-              ),
-              _vm._v(" "),
-              _c("span", { attrs: { id: "config-context-menu-label" } }, [
-                _vm._v(_vm._s(_vm.$t("config.contextMenuExtension")))
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              attrs: { id: "config-user-tooltip-switch" },
-              on: {
-                click: function($event) {
-                  if (
-                    !("button" in $event) &&
-                    _vm._k($event.keyCode, "left", 37, $event.key, [
-                      "Left",
-                      "ArrowLeft"
-                    ])
-                  ) {
-                    return null
-                  }
-                  if ("button" in $event && $event.button !== 0) {
-                    return null
-                  }
-                  return _vm.clickSwitch($event)
-                }
-              }
-            },
-            [
-              _c(
-                "a",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.xc.userTooltip,
-                      expression: "xc.userTooltip"
-                    }
-                  ],
-                  attrs: { id: "config-user-tooltip-switch-on", role: "button" }
-                },
-                [_c("i", { staticClass: "fas fa-toggle-on" })]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: !_vm.xc.userTooltip,
-                      expression: "!xc.userTooltip"
-                    }
-                  ],
-                  attrs: {
-                    id: "config-user-tooltip-switch-off",
-                    role: "button"
-                  }
-                },
-                [_c("i", { staticClass: "fas fa-toggle-off" })]
-              ),
-              _vm._v(" "),
-              _c("span", { attrs: { id: "config-user-tooltip-label" } }, [
-                _vm._v(_vm._s(_vm.$t("config.userTooltip")))
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "a",
-            {
-              attrs: { id: "config-hover-play-switch" },
-              on: {
-                click: function($event) {
-                  if (
-                    !("button" in $event) &&
-                    _vm._k($event.keyCode, "left", 37, $event.key, [
-                      "Left",
-                      "ArrowLeft"
-                    ])
-                  ) {
-                    return null
-                  }
-                  if ("button" in $event && $event.button !== 0) {
-                    return null
-                  }
-                  return _vm.clickSwitch($event)
-                }
-              }
-            },
-            [
-              _c(
-                "a",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.xc.hoverPlay,
-                      expression: "xc.hoverPlay"
-                    }
-                  ],
-                  attrs: { id: "config-hover-play-switch-on", role: "button" }
-                },
-                [_c("i", { staticClass: "fas fa-toggle-on" })]
-              ),
-              _vm._v(" "),
-              _c(
-                "a",
-                {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: !_vm.xc.hoverPlay,
-                      expression: "!xc.hoverPlay"
-                    }
-                  ],
-                  attrs: { id: "config-hover-play-switch-off", role: "button" }
-                },
-                [_c("i", { staticClass: "fas fa-toggle-off" })]
-              ),
-              _vm._v(" "),
-              _c("span", { attrs: { id: "config-hover-play-label" } }, [
-                _vm._v(_vm._s(_vm.$t("config.hoverPlay")))
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c("a", { attrs: { id: "marisa-config-blacklist-label" } }, [
-            _c("i", { staticClass: "far fa-eye-slash" }),
-            _vm._v(_vm._s(_vm.$t("config.blacklist")) + "\n    ")
-          ]),
-          _vm._v(" "),
-          _c("textarea", {
-            ref: "blacklistTextarea",
-            attrs: {
-              id: "marisa-config-blacklist-textarea",
-              spellcheck: "false",
-              rows: "5"
-            },
-            domProps: { value: _vm.xc.blacklist.join("\n") }
-          })
-        ]
-      ),
-      _vm._v(" "),
-      _c(
-        "div",
-        {
-          directives: [
-            {
-              name: "show",
-              rawName: "v-show",
-              value: _vm.xmode === "preview",
-              expression: "xmode === 'preview'"
-            }
-          ],
-          attrs: { id: "marisa-preview-mode" },
-          on: {
-            click: function($event) {
-              $event.stopPropagation();
-            }
-          }
-        },
-        [
-          _c("div", { attrs: { id: "marisa-preview-display-area" } }, [
-            _c(
-              "a",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !_vm.previewUgoiraMetaData,
-                    expression: "!previewUgoiraMetaData"
-                  }
-                ],
-                attrs: {
-                  href: _vm.previewSrcList[_vm.previewCurrentIndex],
-                  target: "_blank"
-                }
-              },
-              [
-                _c("img", {
-                  attrs: { src: _vm.previewSrcList[_vm.previewCurrentIndex] }
-                })
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                directives: [
-                  {
-                    name: "show",
-                    rawName: "v-show",
-                    value: !!_vm.previewUgoiraMetaData,
-                    expression: "!!previewUgoiraMetaData"
-                  }
-                ]
-              },
-              [
-                _c("canvas", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.previewCurrentIndex === 0,
-                      expression: "previewCurrentIndex === 0"
-                    }
-                  ],
-                  ref: "previewUgoiraCanvas"
-                }),
-                _vm._v(" "),
-                _c("canvas", {
-                  directives: [
-                    {
-                      name: "show",
-                      rawName: "v-show",
-                      value: _vm.previewCurrentIndex === 1,
-                      expression: "previewCurrentIndex === 1"
-                    }
-                  ],
-                  ref: "previewOriginalUgoiraCanvas"
-                })
-              ]
-            )
-          ]),
-          _vm._v(" "),
-          _c(
-            "ul",
-            {
-              directives: [
-                {
-                  name: "show",
-                  rawName: "v-show",
-                  value: _vm.previewSrcList.length > 1,
-                  expression: "previewSrcList.length > 1"
-                }
-              ],
-              attrs: { id: "marisa-preview-thumbnails-area" }
-            },
-            _vm._l(_vm.previewSrcList, function(pSrc, index) {
-              return _c("li", { key: pSrc }, [
-                _c(
-                  "a",
-                  {
-                    class:
-                      index === _vm.previewCurrentIndex
-                        ? "current-preview"
-                        : "",
-                    on: {
-                      click: function($event) {
-                        if (
-                          !("button" in $event) &&
-                          _vm._k($event.keyCode, "left", 37, $event.key, [
-                            "Left",
-                            "ArrowLeft"
-                          ])
-                        ) {
-                          return null
-                        }
-                        if ("button" in $event && $event.button !== 0) {
-                          return null
-                        }
-                        _vm.jumpTo(index);
-                      }
-                    }
-                  },
-                  [_c("img", { attrs: { src: pSrc } })]
-                )
-              ])
-            })
-          )
-        ]
-      )
-    ]
-  )
-};
+var __vue_render__$d = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.xmode),expression:"xmode"}],ref:"coverLayerRoot",attrs:{"id":_vm.id,"tabindex":"0"},on:{"keyup":_vm.jumpByKeyup,"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickBase($event)},"scroll":function($event){$event.stopPropagation();$event.preventDefault();},"wheel":function($event){$event.stopPropagation();$event.preventDefault();return _vm.jumpByWheel($event)}}},[_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.xmode === 'config'),expression:"xmode === 'config'"}],attrs:{"id":"marisa-config-mode"},on:{"click":function($event){$event.stopPropagation();}}},[_c('a',{attrs:{"id":"config-context-menu-switch"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickSwitch($event)}}},[_c('a',{directives:[{name:"show",rawName:"v-show",value:(_vm.xc.contextMenu),expression:"xc.contextMenu"}],attrs:{"id":"config-context-menu-switch-on","role":"button"}},[_c('i',{staticClass:"fas fa-toggle-on"})]),_vm._v(" "),_c('a',{directives:[{name:"show",rawName:"v-show",value:(!_vm.xc.contextMenu),expression:"!xc.contextMenu"}],attrs:{"id":"config-context-menu-switch-off","role":"button"}},[_c('i',{staticClass:"fas fa-toggle-off"})]),_vm._v(" "),_c('span',{attrs:{"id":"config-context-menu-label"}},[_vm._v(_vm._s(_vm.$t('config.contextMenuExtension')))])]),_vm._v(" "),_c('a',{attrs:{"id":"config-user-tooltip-switch"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickSwitch($event)}}},[_c('a',{directives:[{name:"show",rawName:"v-show",value:(_vm.xc.userTooltip),expression:"xc.userTooltip"}],attrs:{"id":"config-user-tooltip-switch-on","role":"button"}},[_c('i',{staticClass:"fas fa-toggle-on"})]),_vm._v(" "),_c('a',{directives:[{name:"show",rawName:"v-show",value:(!_vm.xc.userTooltip),expression:"!xc.userTooltip"}],attrs:{"id":"config-user-tooltip-switch-off","role":"button"}},[_c('i',{staticClass:"fas fa-toggle-off"})]),_vm._v(" "),_c('span',{attrs:{"id":"config-user-tooltip-label"}},[_vm._v(_vm._s(_vm.$t('config.userTooltip')))])]),_vm._v(" "),_c('a',{attrs:{"id":"config-hover-play-switch"},on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }return _vm.clickSwitch($event)}}},[_c('a',{directives:[{name:"show",rawName:"v-show",value:(_vm.xc.hoverPlay),expression:"xc.hoverPlay"}],attrs:{"id":"config-hover-play-switch-on","role":"button"}},[_c('i',{staticClass:"fas fa-toggle-on"})]),_vm._v(" "),_c('a',{directives:[{name:"show",rawName:"v-show",value:(!_vm.xc.hoverPlay),expression:"!xc.hoverPlay"}],attrs:{"id":"config-hover-play-switch-off","role":"button"}},[_c('i',{staticClass:"fas fa-toggle-off"})]),_vm._v(" "),_c('span',{attrs:{"id":"config-hover-play-label"}},[_vm._v(_vm._s(_vm.$t('config.hoverPlay')))])]),_vm._v(" "),_c('a',{attrs:{"id":"marisa-config-blacklist-label"}},[_c('i',{staticClass:"far fa-eye-slash"}),_vm._v(_vm._s(_vm.$t('config.blacklist'))+"\n    ")]),_vm._v(" "),_c('textarea',{ref:"blacklistTextarea",attrs:{"id":"marisa-config-blacklist-textarea","spellcheck":"false","rows":"5"},domProps:{"value":_vm.xc.blacklist.join('\n')}})]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(_vm.xmode === 'preview'),expression:"xmode === 'preview'"}],attrs:{"id":"marisa-preview-mode"},on:{"click":function($event){$event.stopPropagation();}}},[_c('div',{attrs:{"id":"marisa-preview-display-area"}},[_c('a',{directives:[{name:"show",rawName:"v-show",value:(!_vm.previewUgoiraMetaData),expression:"!previewUgoiraMetaData"}],attrs:{"href":_vm.previewSrcList[_vm.previewCurrentIndex],"target":"_blank"}},[_c('img',{attrs:{"src":_vm.previewSrcList[_vm.previewCurrentIndex]}})]),_vm._v(" "),_c('div',{directives:[{name:"show",rawName:"v-show",value:(!!_vm.previewUgoiraMetaData),expression:"!!previewUgoiraMetaData"}]},[_c('canvas',{directives:[{name:"show",rawName:"v-show",value:(_vm.previewCurrentIndex === 0),expression:"previewCurrentIndex === 0"}],ref:"previewUgoiraCanvas"}),_vm._v(" "),_c('canvas',{directives:[{name:"show",rawName:"v-show",value:(_vm.previewCurrentIndex === 1),expression:"previewCurrentIndex === 1"}],ref:"previewOriginalUgoiraCanvas"})])]),_vm._v(" "),_c('ul',{directives:[{name:"show",rawName:"v-show",value:(_vm.previewSrcList.length > 1),expression:"previewSrcList.length > 1"}],attrs:{"id":"marisa-preview-thumbnails-area"}},_vm._l((_vm.previewSrcList),function(pSrc,index){return _c('li',{key:pSrc},[_c('a',{class:(index === _vm.previewCurrentIndex) ? 'current-preview' : '',on:{"click":function($event){if(!('button' in $event)&&_vm._k($event.keyCode,"left",37,$event.key,["Left","ArrowLeft"])){ return null; }if('button' in $event && $event.button !== 0){ return null; }_vm.jumpTo(index);}}},[_c('img',{attrs:{"src":pSrc}})])])}))])])};
 var __vue_staticRenderFns__$d = [];
-__vue_render__$d._withStripped = true;
 
   /* style */
   const __vue_inject_styles__$d = function (inject) {
     if (!inject) return
-    inject("data-v-6e5f249a_0", { source: "\n#Marisa[data-v-6e5f249a] {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#marisa-config-mode[data-v-6e5f249a],\n#marisa-preview-mode[data-v-6e5f249a] {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#marisa-config-mode[data-v-6e5f249a] {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#marisa-config-mode a[data-v-6e5f249a] {\n  color: #00186c;\n  text-decoration: none;\n}\n#marisa-config-mode [id$=\"switch\"][data-v-6e5f249a] {\n  text-align: center;\n}\n#marisa-config-mode [id$=\"switch\"][data-v-6e5f249a]:hover {\n  cursor: pointer;\n}\n#marisa-config-mode [id$=\"label\"][data-v-6e5f249a] {\n  text-align: center;\n  margin: 0 5px;\n}\n#marisa-config-blacklist-label > .fa-eye-slash[data-v-6e5f249a] {\n  margin: 0 4px;\n}\n#marisa-config-blacklist-textarea[data-v-6e5f249a] {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#marisa-preview-mode[data-v-6e5f249a] {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#marisa-preview-display-area[data-v-6e5f249a] {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#marisa-preview-display-area > a[data-v-6e5f249a],\n#marisa-preview-display-area > div[data-v-6e5f249a] {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#marisa-preview-display-area > a > img[data-v-6e5f249a],\n#marisa-preview-display-area > div > canvas[data-v-6e5f249a] {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#marisa-preview-thumbnails-area[data-v-6e5f249a] {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n#marisa-preview-thumbnails-area > li[data-v-6e5f249a] {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#marisa-preview-thumbnails-area > li > a[data-v-6e5f249a] {\n  cursor: pointer;\n  display: inline-flex;\n  border: 3px solid transparent;\n}\n#marisa-preview-thumbnails-area > li > a.current-preview[data-v-6e5f249a] {\n  border: 3px solid palevioletred;\n}\n#marisa-preview-thumbnails-area > li > a > img[data-v-6e5f249a] {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n", map: {"version":3,"sources":["/home/flandre/dev/Patchouli/src/components/CoverLayer.vue"],"names":[],"mappings":";AAgRA;EACA,wBAAA;EACA,gBAAA;EACA,aAAA;EACA,YAAA;EACA,WAAA;EACA,OAAA;EACA,QAAA;EACA,cAAA;EACA,oBAAA;EACA,wBAAA;CACA;AACA;;EAEA,iBAAA;EACA,kBAAA;EACA,uBAAA;CACA;AACA;EACA,cAAA;EACA,kBAAA;EACA,cAAA;EACA,oBAAA;EACA,gBAAA;EACA,oBAAA;CACA;AACA;EACA,eAAA;EACA,sBAAA;CACA;AACA;EACA,mBAAA;CACA;AACA;EACA,gBAAA;CACA;AACA;EACA,mBAAA;EACA,cAAA;CACA;AACA;EACA,cAAA;CACA;AACA;EACA,uBAAA;EACA,QAAA;EACA,aAAA;EACA,gBAAA;EACA,aAAA;CACA;AACA;EACA,WAAA;EACA,aAAA;EACA,uBAAA;EACA,cAAA;EACA,gDAAA;CACA;AACA;EACA,0BAAA;EACA,uBAAA;EACA,mBAAA;CACA;AACA;;EAEA,qBAAA;EACA,aAAA;EACA,wBAAA;EACA,oBAAA;CACA;AACA;;EAEA,oBAAA;EACA,gBAAA;EACA,iBAAA;CACA;AACA;EACA,6BAAA;EACA,cAAA;EACA,oBAAA;EACA,iBAAA;EACA,mBAAA;EACA,aAAA;EACA,uBAAA;EACA,uBAAA;EACA,cAAA;EACA,UAAA;EACA,WAAA;EACA,iBAAA;CACA;AACA;EACA,eAAA;EACA,qBAAA;CACA;AACA;EACA,gBAAA;EACA,qBAAA;EACA,8BAAA;CACA;AACA;EACA,gCAAA;CACA;AACA;EACA,kBAAA;EACA,uBAAA;EACA,sBAAA;CACA","file":"CoverLayer.vue","sourcesContent":["<template>\n  <div\n    v-show=\"xmode\"\n    ref=\"coverLayerRoot\"\n    :id=\"id\"\n    tabindex=\"0\"\n    @keyup=\"jumpByKeyup\"\n    @click.left=\"clickBase\"\n    @scroll.stop.prevent=\"0\"\n    @wheel.stop.prevent=\"jumpByWheel\">\n    <div\n      v-show=\"xmode === 'config'\"\n      id=\"marisa-config-mode\"\n      @click.stop=\"0\">\n      <a id=\"config-context-menu-switch\" @click.left=\"clickSwitch\">\n        <a\n          v-show=\"xc.contextMenu\"\n          id=\"config-context-menu-switch-on\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-on\"/>\n        </a>\n        <a\n          v-show=\"!xc.contextMenu\"\n          id=\"config-context-menu-switch-off\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-off\"/>\n        </a>\n        <span id=\"config-context-menu-label\">{{ $t('config.contextMenuExtension') }}</span>\n      </a>\n      <a id=\"config-user-tooltip-switch\" @click.left=\"clickSwitch\">\n        <a\n          v-show=\"xc.userTooltip\"\n          id=\"config-user-tooltip-switch-on\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-on\"/>\n        </a>\n        <a\n          v-show=\"!xc.userTooltip\"\n          id=\"config-user-tooltip-switch-off\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-off\"/>\n        </a>\n        <span id=\"config-user-tooltip-label\">{{ $t('config.userTooltip') }}</span>\n      </a>\n      <a id=\"config-hover-play-switch\" @click.left=\"clickSwitch\">\n        <a\n          v-show=\"xc.hoverPlay\"\n          id=\"config-hover-play-switch-on\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-on\"/>\n        </a>\n        <a\n          v-show=\"!xc.hoverPlay\"\n          id=\"config-hover-play-switch-off\"\n          role=\"button\">\n          <i class=\"fas fa-toggle-off\"/>\n        </a>\n        <span id=\"config-hover-play-label\">{{ $t('config.hoverPlay') }}</span>\n      </a>\n      <a id=\"marisa-config-blacklist-label\">\n        <i class=\"far fa-eye-slash\"/>{{ $t('config.blacklist') }}\n      </a>\n      <textarea\n        id=\"marisa-config-blacklist-textarea\"\n        ref=\"blacklistTextarea\"\n        :value=\"xc.blacklist.join('\\n')\"\n        spellcheck=\"false\"\n        rows=\"5\"/>\n    </div>\n    <div\n      v-show=\"xmode === 'preview'\"\n      id=\"marisa-preview-mode\"\n      @click.stop=\"0\">\n      <div id=\"marisa-preview-display-area\">\n        <a\n          v-show=\"!previewUgoiraMetaData\"\n          :href=\"previewSrcList[previewCurrentIndex]\"\n          target=\"_blank\">\n          <img :src=\"previewSrcList[previewCurrentIndex]\">\n        </a>\n        <div v-show=\"!!previewUgoiraMetaData\">\n          <canvas v-show=\"previewCurrentIndex === 0\" ref=\"previewUgoiraCanvas\"/>\n          <canvas v-show=\"previewCurrentIndex === 1\" ref=\"previewOriginalUgoiraCanvas\"/>\n        </div>\n      </div>\n      <ul v-show=\"previewSrcList.length > 1\" id=\"marisa-preview-thumbnails-area\">\n        <li v-for=\"(pSrc, index) in previewSrcList\" :key=\"pSrc\">\n          <a\n            :class=\"(index === previewCurrentIndex) ? 'current-preview' : ''\"\n            @click.left=\"jumpTo(index)\" >\n            <img :src=\"pSrc\">\n          </a>\n        </li>\n      </ul>\n    </div>\n  </div>\n</template>\n\n<script>\nimport { PixivAPI } from '../lib/pixiv';\nimport { $print, toInt } from '../lib/utils';\n\nexport default {\n  props: {\n    id: {\n      default: '',\n      type: String,\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  data() {\n    return {\n      previewCurrentIndex: 0,\n      previewSrcList: [],\n      previewUgoiraMetaData: null,\n      ugoiraPlayers: [],\n    };\n  },\n  // eslint-disable-next-line sort-keys\n  computed: {\n    // vue'x' 'c'onfig\n    xc() {\n      return this.$store.getters.config;\n    },\n    xdata() {\n      return this.$store.getters['coverLayer/data'];\n    },\n    xmode() {\n      return this.$store.getters['coverLayer/mode'];\n    },\n  },\n  watch: {\n    async xmode(value) {\n      $print.debug('watch xmode change:', value);\n\n      if (value === 'preview') {\n        const imageItem = this.xdata;\n        if (imageItem.isUgoira) {\n          this.previewUgoiraMetaData = await PixivAPI.getIllustUgoiraMetaData(\n            imageItem.illustId\n          );\n          this.initZipImagePlayer();\n          this.previewSrcList.push(imageItem.urls.thumb);\n          this.previewSrcList.push(imageItem.urls.original);\n        } else if (imageItem.illustPageCount > 1) {\n          const indexArray = Array.from(\n            Array(imageItem.illustPageCount).keys()\n          );\n          const srcs = indexArray.map(idx =>\n            imageItem.urls.original.replace('p0', `p${idx}`)\n          );\n          this.previewSrcList.push(...srcs);\n        } else {\n          this.previewSrcList.push(imageItem.urls.original);\n        }\n      } else if (!value) {\n        this.previewSrcList.length = 0;\n        this.previewCurrentIndex = 0;\n        this.previewUgoiraMetaData = null;\n        this.ugoiraPlayers.forEach(player => player.stop());\n        this.ugoiraPlayers.length = 0;\n      }\n    },\n  },\n  // eslint-disable-next-line sort-keys\n  updated() {\n    if (this.xmode === 'preview') {\n      this.$refs.coverLayerRoot.focus();\n    }\n  },\n  // eslint-disable-next-line sort-keys\n  methods: {\n    clickBase(event) {\n      $print.debug('CoverLayer#clickBase: event', event);\n      this.$store.commit('coverLayer/close');\n\n      const blacklist = [\n        ...new Set(\n          this.$refs.blacklistTextarea.value\n            .split('\\n')\n            .map(s => s.trim())\n            .filter(Boolean)\n        ),\n      ];\n\n      blacklist.sort((a, b) => a - b);\n\n      this.$store.commit('setConfig', { blacklist });\n      this.$store.commit('saveConfig');\n    },\n    clickSwitch(event) {\n      $print.debug('CoverLayer#clickSwitch: event', event);\n\n      if (event.currentTarget.id === 'config-context-menu-switch') {\n        this.xc.contextMenu = toInt(!this.xc.contextMenu);\n      }\n\n      if (event.currentTarget.id === 'config-user-tooltip-switch') {\n        this.xc.userTooltip = toInt(!this.xc.userTooltip);\n      }\n\n      if (event.currentTarget.id === 'config-hover-play-switch') {\n        this.xc.hoverPlay = toInt(!this.xc.hoverPlay);\n      }\n    },\n    initZipImagePlayer() {\n      const meta = this.previewUgoiraMetaData;\n      // resize as clear\n      this.$refs.previewOriginalUgoiraCanvas.width = 0;\n      this.$refs.previewUgoiraCanvas.width = 0;\n\n      const opt = {\n        autoStart: true,\n        autosize: true,\n        canvas: this.$refs.previewUgoiraCanvas,\n        chunkSize: 300000,\n        loop: true,\n        metadata: meta,\n        source: meta.src,\n      };\n\n      this.ugoiraPlayers.push(new ZipImagePlayer(opt));\n\n      this.ugoiraPlayers.push(\n        new ZipImagePlayer(\n          Object.assign({}, opt, {\n            canvas: this.$refs.previewOriginalUgoiraCanvas,\n            source: meta.originalSrc,\n          })\n        )\n      );\n    },\n    jumpByKeyup(event) {\n      $print.debug('CoverLayer#jumpByKeyup: event', event);\n\n      if (this.xmode === 'preview') {\n        if (event.key === 'ArrowLeft') {\n          this.jumpPrev();\n        } else if (event.key === 'ArrowRight') {\n          this.jumpNext();\n        }\n      }\n    },\n    jumpByWheel(event) {\n      $print.debug('CoverLayer#jumpByWheel: event', event);\n\n      if (this.xmode === 'preview') {\n        if (event.deltaY < 0) {\n          this.jumpPrev();\n        } else if (event.deltaY > 0) {\n          this.jumpNext();\n        }\n      }\n    },\n    jumpNext() {\n      const t = this.previewSrcList.length;\n      const c = this.previewCurrentIndex;\n      this.jumpTo((c + 1) % t);\n    },\n    jumpPrev() {\n      const t = this.previewSrcList.length;\n      const c = this.previewCurrentIndex;\n      this.jumpTo((c + t - 1) % t);\n    },\n    jumpTo(index) {\n      this.previewCurrentIndex = index;\n    },\n  },\n};\n</script>\n\n<style scoped>\n#Marisa {\n  background-color: #000a;\n  position: fixed;\n  height: 100%;\n  width: 100%;\n  z-index: 5;\n  top: 0;\n  left: 0;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n#marisa-config-mode,\n#marisa-preview-mode {\n  min-width: 100px;\n  min-height: 100px;\n  background-color: #eef;\n}\n#marisa-config-mode {\n  display: flex;\n  flex-flow: column;\n  padding: 10px;\n  border-radius: 10px;\n  font-size: 18px;\n  white-space: nowrap;\n}\n#marisa-config-mode a {\n  color: #00186c;\n  text-decoration: none;\n}\n#marisa-config-mode [id$=\"switch\"] {\n  text-align: center;\n}\n#marisa-config-mode [id$=\"switch\"]:hover {\n  cursor: pointer;\n}\n#marisa-config-mode [id$=\"label\"] {\n  text-align: center;\n  margin: 0 5px;\n}\n#marisa-config-blacklist-label > .fa-eye-slash {\n  margin: 0 4px;\n}\n#marisa-config-blacklist-textarea {\n  box-sizing: border-box;\n  flex: 1;\n  resize: none;\n  font-size: 11pt;\n  height: 90px;\n}\n#marisa-preview-mode {\n  width: 70%;\n  height: 100%;\n  box-sizing: border-box;\n  display: grid;\n  grid-template-rows: minmax(0, auto) max-content;\n}\n#marisa-preview-display-area {\n  border: 2px #00186c solid;\n  box-sizing: border-box;\n  text-align: center;\n}\n#marisa-preview-display-area > a,\n#marisa-preview-display-area > div {\n  display: inline-flex;\n  height: 100%;\n  justify-content: center;\n  align-items: center;\n}\n#marisa-preview-display-area > a > img,\n#marisa-preview-display-area > div > canvas {\n  object-fit: contain;\n  max-width: 100%;\n  max-height: 100%;\n}\n#marisa-preview-thumbnails-area {\n  background-color: ghostwhite;\n  display: flex;\n  align-items: center;\n  overflow-x: auto;\n  overflow-y: hidden;\n  height: 100%;\n  border: 2px solid #014;\n  box-sizing: border-box;\n  border-top: 0;\n  margin: 0;\n  padding: 0;\n  list-style: none;\n}\n#marisa-preview-thumbnails-area > li {\n  margin: 0 10px;\n  display: inline-flex;\n}\n#marisa-preview-thumbnails-area > li > a {\n  cursor: pointer;\n  display: inline-flex;\n  border: 3px solid transparent;\n}\n#marisa-preview-thumbnails-area > li > a.current-preview {\n  border: 3px solid palevioletred;\n}\n#marisa-preview-thumbnails-area > li > a > img {\n  max-height: 100px;\n  box-sizing: border-box;\n  display: inline-block;\n}\n</style>\n"]}, media: undefined });
+    inject("data-v-45254152_0", { source: "\n#Marisa[data-v-45254152]{background-color:#000a;position:fixed;height:100%;width:100%;z-index:5;top:0;left:0;display:flex;align-items:center;justify-content:center\n}\n#marisa-config-mode[data-v-45254152],#marisa-preview-mode[data-v-45254152]{min-width:100px;min-height:100px;background-color:#eef\n}\n#marisa-config-mode[data-v-45254152]{display:flex;flex-flow:column;padding:10px;border-radius:10px;font-size:18px;white-space:nowrap\n}\n#marisa-config-mode a[data-v-45254152]{color:#00186c;text-decoration:none\n}\n#marisa-config-mode [id$=switch][data-v-45254152]{text-align:center\n}\n#marisa-config-mode [id$=switch][data-v-45254152]:hover{cursor:pointer\n}\n#marisa-config-mode [id$=label][data-v-45254152]{text-align:center;margin:0 5px\n}\n#marisa-config-blacklist-label>.fa-eye-slash[data-v-45254152]{margin:0 4px\n}\n#marisa-config-blacklist-textarea[data-v-45254152]{box-sizing:border-box;flex:1;resize:none;font-size:11pt;height:90px\n}\n#marisa-preview-mode[data-v-45254152]{width:70%;height:100%;box-sizing:border-box;display:grid;grid-template-rows:minmax(0,auto) max-content\n}\n#marisa-preview-display-area[data-v-45254152]{border:2px #00186c solid;box-sizing:border-box;text-align:center\n}\n#marisa-preview-display-area>a[data-v-45254152],#marisa-preview-display-area>div[data-v-45254152]{display:inline-flex;height:100%;justify-content:center;align-items:center\n}\n#marisa-preview-display-area>a>img[data-v-45254152],#marisa-preview-display-area>div>canvas[data-v-45254152]{object-fit:contain;max-width:100%;max-height:100%\n}\n#marisa-preview-thumbnails-area[data-v-45254152]{background-color:#f8f8ff;display:flex;align-items:center;overflow-x:auto;overflow-y:hidden;height:100%;border:2px solid #014;box-sizing:border-box;border-top:0;margin:0;padding:0;list-style:none\n}\n#marisa-preview-thumbnails-area>li[data-v-45254152]{margin:0 10px;display:inline-flex\n}\n#marisa-preview-thumbnails-area>li>a[data-v-45254152]{cursor:pointer;display:inline-flex;border:3px solid transparent\n}\n#marisa-preview-thumbnails-area>li>a.current-preview[data-v-45254152]{border:3px solid #db7093\n}\n#marisa-preview-thumbnails-area>li>a>img[data-v-45254152]{max-height:100px;box-sizing:border-box;display:inline-block\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$d = "data-v-6e5f249a";
+  const __vue_scope_id__$d = "data-v-45254152";
   /* module identifier */
   const __vue_module_identifier__$d = undefined;
   /* functional template */
@@ -6458,7 +4598,7 @@ __vue_render__$d._withStripped = true;
     const component = (typeof script === 'function' ? script.options : script) || {};
 
     // For security concerns, we use only base name in production mode.
-    component.__file = "/home/flandre/dev/Patchouli/src/components/CoverLayer.vue";
+    component.__file = "CoverLayer.vue";
 
     if (!component.render) {
       component.render = template.render;
@@ -6515,6 +4655,17 @@ __vue_render__$d._withStripped = true;
         let index = style.ids.length;
 
         style.ids.push(id);
+
+        if (css.map) {
+          // https://developer.chrome.com/devtools/docs/javascript-debugging
+          // this makes source maps inside style tags work properly in Chrome
+          code += '\n/*# sourceURL=' + css.map.sources[0] + ' */';
+          // http://stackoverflow.com/a/26603875
+          code +=
+            '\n/*# sourceMappingURL=data:application/json;base64,' +
+            btoa(unescape(encodeURIComponent(JSON.stringify(css.map)))) +
+            ' */';
+        }
 
         if (isOldIE) {
           style.element = style.element || document.querySelector('style[data-group=' + group + ']');
