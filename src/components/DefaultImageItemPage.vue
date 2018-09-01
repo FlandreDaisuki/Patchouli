@@ -13,6 +13,7 @@
       :user-id="d.userId"
       :profile-img-url="d.profileImg"
       :bookmark-count="d.bookmarkCount"
+      :is-private-bookmark="d.isPrivateBookmark"
       :is-bookmarked="d.isBookmarked"
       :is-followed="d.isFollowed"
       :bookmark-id="d.bookmarkId" />

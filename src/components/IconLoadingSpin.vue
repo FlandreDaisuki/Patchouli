@@ -1,15 +1,15 @@
 <template>
   <!-- copy from: https://github.com/tobiasahlin/SpinKit -->
-  <div class="sk-cube-grid">
-    <div class="sk-cube sk-cube1"/>
-    <div class="sk-cube sk-cube2"/>
-    <div class="sk-cube sk-cube3"/>
-    <div class="sk-cube sk-cube4"/>
-    <div class="sk-cube sk-cube5"/>
-    <div class="sk-cube sk-cube6"/>
-    <div class="sk-cube sk-cube7"/>
-    <div class="sk-cube sk-cube8"/>
-    <div class="sk-cube sk-cube9"/>
+  <div class="ils-grid">
+    <div class="ils-cell ils-1"/>
+    <div class="ils-cell ils-2"/>
+    <div class="ils-cell ils-3"/>
+    <div class="ils-cell ils-4"/>
+    <div class="ils-cell ils-5"/>
+    <div class="ils-cell ils-6"/>
+    <div class="ils-cell ils-7"/>
+    <div class="ils-cell ils-8"/>
+    <div class="ils-cell ils-9"/>
   </div>
 </template>
 
@@ -18,58 +18,58 @@ export default {};
 </script>
 
 <style scoped>
-.sk-cube-grid {
+.ils-grid {
   width: var(--loading-icon-size);
   height: var(--loading-icon-size);
   margin: 100px auto;
 }
 
-.sk-cube-grid .sk-cube {
+.ils-grid .ils-cell {
   width: 33%;
   height: 33%;
   background-color: var(--loading-icon-color);
   float: left;
-  -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
-  animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
+  -webkit-animation: ilsGridScaleDelay 1.3s infinite ease-in-out;
+  animation: ilsGridScaleDelay 1.3s infinite ease-in-out;
 }
-.sk-cube-grid .sk-cube1 {
+.ils-grid .ils-1 {
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
 }
-.sk-cube-grid .sk-cube2 {
+.ils-grid .ils-2 {
   -webkit-animation-delay: 0.3s;
   animation-delay: 0.3s;
 }
-.sk-cube-grid .sk-cube3 {
+.ils-grid .ils-3 {
   -webkit-animation-delay: 0.4s;
   animation-delay: 0.4s;
 }
-.sk-cube-grid .sk-cube4 {
+.ils-grid .ils-4 {
   -webkit-animation-delay: 0.1s;
   animation-delay: 0.1s;
 }
-.sk-cube-grid .sk-cube5 {
+.ils-grid .ils-5 {
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
 }
-.sk-cube-grid .sk-cube6 {
+.ils-grid .ils-6 {
   -webkit-animation-delay: 0.3s;
   animation-delay: 0.3s;
 }
-.sk-cube-grid .sk-cube7 {
+.ils-grid .ils-7 {
   -webkit-animation-delay: 0s;
   animation-delay: 0s;
 }
-.sk-cube-grid .sk-cube8 {
+.ils-grid .ils-8 {
   -webkit-animation-delay: 0.1s;
   animation-delay: 0.1s;
 }
-.sk-cube-grid .sk-cube9 {
+.ils-grid .ils-9 {
   -webkit-animation-delay: 0.2s;
   animation-delay: 0.2s;
 }
 
-@-webkit-keyframes sk-cubeGridScaleDelay {
+@-webkit-keyframes ilsGridScaleDelay {
   0%,
   70%,
   100% {
@@ -82,7 +82,7 @@ export default {};
   }
 }
 
-@keyframes sk-cubeGridScaleDelay {
+@keyframes ilsGridScaleDelay {
   0%,
   70%,
   100% {

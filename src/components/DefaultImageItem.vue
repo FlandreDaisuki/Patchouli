@@ -7,6 +7,7 @@
         :illust-page-count="illustPageCount"
         :is-ugoira="isUgoira"
         :is-bookmarked="isBookmarked"
+        :is-private-bookmark="isPrivateBookmark"
         :bookmark-id="bookmarkId"/>
       <DefaultImageItemTitle
         :illust-id="illustId"
@@ -56,6 +57,10 @@ export default {
       type: Boolean,
     },
     isFollowed: {
+      default: false,
+      type: Boolean,
+    },
+    isPrivateBookmark: {
       default: false,
       type: Boolean,
     },

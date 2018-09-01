@@ -20,14 +20,17 @@
       <IconUgoiraPlay
         v-if="isUgoira"
         v-show="!ugoiraPlayed"
-        :size="60"/>
+        :size="60"
+        class="ugoira-icon"/>
       <canvas
         v-if="isUgoira"
         v-show="ugoiraPlayed"
         ref="smallUgoiraPreview"/>
     </a>
-    <div class="bookmark-heart-block">
-      <IconBookmarkHeart :actived="selfIsBookmarked" @click.left.prevent.stop="oneClickBookmarkAdd"/>
+    <div class="bookmark-heart-block" @click.left.stop="oneClickBookmarkAdd">
+      <IconBookmarkHeart
+        :actived="selfIsBookmarked"
+        :is-private="selfIsPrivateBookmark"/>
     </div>
     <div v-if="isSelfBookmarkPage" class="bookmark-input-container">
       <input
@@ -67,6 +70,10 @@ export default {
       default: false,
       type: Boolean,
     },
+    isPrivateBookmark: {
+      default: false,
+      type: Boolean,
+    },
     isUgoira: {
       default: false,
       type: Boolean,
@@ -76,6 +83,7 @@ export default {
   data() {
     return {
       selfIsBookmarked: this.isBookmarked,
+      selfIsPrivateBookmark: this.isPrivateBookmark,
       ugoiraMeta: null,
       ugoiraPlayed: false,
       ugoiraPlayer: null,
@@ -151,6 +159,7 @@ export default {
       }
     },
     async oneClickBookmarkAdd() {
+      $print.debug('DefaultImageItemImage#oneClickBookmarkAdd');
       if (!this.selfIsBookmarked) {
         if (await PixivAPI.postRPCAddBookmark(this.illustId)) {
           this.selfIsBookmarked = true;
@@ -165,6 +174,7 @@ export default {
         }
         if (await PixivAPI.postRPCDeleteBookmark(bookmarkId)) {
           this.selfIsBookmarked = false;
+          this.selfIsPrivateBookmark = false;
         }
       }
     },

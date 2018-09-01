@@ -2,9 +2,9 @@
   <svg
     :style="inlineStyle"
     viewBox="0 0 24 24"
-    class="ugoira-icon">
+    class="iup">
     <circle
-      class="ugoira-icon-circle"
+      class="iup-circle"
       cx="12"
       cy="12"
       r="10"/>
@@ -30,11 +30,11 @@ export default {
 </script>
 
 <style scoped>
-.ugoira-icon-circle {
+.iup-circle {
   fill: #000;
   fill-opacity: 0.4;
 }
-.ugoira-icon {
+.iup {
   fill: #fff;
   font-size: 0;
   line-height: 0;
