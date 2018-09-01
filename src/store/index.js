@@ -84,6 +84,13 @@ const getters = {
 
 const mutations = {
   afterInit: (state) => {
+    const _sbp = _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id);
+    if (_sbp) {
+      state.config.sort = ST.BOOKMARK_ID;
+    } else if (state.config.sort === ST.BOOKMARK_ID) {
+      state.config.sort = ST.ILLUST_ID;
+    }
+
     if (state.mainPageType === MPT.SELF_BOOKMARK) {
       for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
         marker.addEventListener('click', () => {
