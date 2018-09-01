@@ -92,6 +92,13 @@ const mutations = {
           });
         });
       }
+
+      const sp = state.searchParam;
+      if (sp.order && sp.order.includes('date')) {
+        state.config.sort = ST.ILLUST_ID;
+      } else {
+        state.config.sort = ST.BOOKMARK_ID;
+      }
     }
 
     removeAnnoyings();

@@ -1299,6 +1299,13 @@ const mutations$3 = {
           });
         });
       }
+
+      const sp = state.searchParam;
+      if (sp.order && sp.order.includes('date')) {
+        state.config.sort = SORT_TYPE.ILLUST_ID;
+      } else {
+        state.config.sort = SORT_TYPE.BOOKMARK_ID;
+      }
     }
 
     removeAnnoyings();

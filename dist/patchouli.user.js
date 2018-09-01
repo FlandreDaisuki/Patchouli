@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.2.0-alpha.17
+// @version           4.2.0-alpha.18
 // @grant             unsafeWindow
 // @grant             GM_getValue
 // @grant             GM.getValue
@@ -1160,6 +1160,12 @@
               el.checked = marker.classList.contains('js-legacy-mark-all');
             });
           });
+        }
+        const sp = state.searchParam;
+        if (sp.order && sp.order.includes('date')) {
+          state.config.sort = SORT_TYPE.ILLUST_ID;
+        } else {
+          state.config.sort = SORT_TYPE.BOOKMARK_ID;
         }
       }
       removeAnnoyings();
