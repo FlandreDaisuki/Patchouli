@@ -40,7 +40,7 @@ export const toInt = (x) => {
 
 export const toFormUrlencoded = (o) => {
   // application/x-www-form-urlencoded
-  return new URLSearchParams(o).toString()
+  return new URLSearchParams(o).toString();
 };
 
 export async function waitUntil(func, { ms = 100, maxCount = 20 } = {}) {

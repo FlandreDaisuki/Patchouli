@@ -36,8 +36,6 @@
 (function (Vue,VueI18n,Vuex) {
   'use strict';
 
-  
-
   function __$styleInject ( css ) {
       if(!css) return ;
 
@@ -103,9 +101,7 @@
     return isNaN(t) ? 0 : Math.floor(t);
   };
   const toFormUrlencoded = (o) => {
-    return Object.entries(o)
-      .map(p => p.map(encodeURIComponent).join('='))
-      .join('&');
+    return new URLSearchParams(o).toString();
   };
   async function waitUntil(func, { ms = 100, maxCount = 20 } = {}) {
     return new Promise((resolve, reject) => {

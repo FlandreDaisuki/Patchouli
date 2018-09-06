@@ -36,8 +36,6 @@
 (function (Vue,VueI18n,Vuex) {
   'use strict';
 
-  
-
   function __$styleInject ( css ) {
       if(!css) return ;
 
@@ -119,9 +117,7 @@
 
   const toFormUrlencoded = (o) => {
     // application/x-www-form-urlencoded
-    return Object.entries(o)
-      .map(p => p.map(encodeURIComponent).join('='))
-      .join('&');
+    return new URLSearchParams(o).toString();
   };
 
   async function waitUntil(func, { ms = 100, maxCount = 20 } = {}) {
