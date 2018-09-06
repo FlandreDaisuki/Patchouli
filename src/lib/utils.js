@@ -40,9 +40,7 @@ export const toInt = (x) => {
 
 export const toFormUrlencoded = (o) => {
   // application/x-www-form-urlencoded
-  return Object.entries(o)
-    .map(p => p.map(encodeURIComponent).join('='))
-    .join('&');
+  return new URLSearchParams(o).toString()
 };
 
 export async function waitUntil(func, { ms = 100, maxCount = 20 } = {}) {
