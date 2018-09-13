@@ -47,6 +47,12 @@ ul.menu-items > li.current > a {
   margin: 10px 20px;
 }
 
+._28nOzbY {
+  /* Fix Koakuma will cover pixiv recommended popup
+     when follow user in NewProfilePage */
+  z-index: 4;
+}
+
 /* annoyings, ref: lib/pixiv.js */
 
 iframe,
