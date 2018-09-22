@@ -17,13 +17,13 @@
           v-show="xc.contextMenu"
           id="config-context-menu-switch-on"
           role="button">
-          <i class="fas fa-toggle-on"/>
+          <FontAwesomeIcon :icon="'toggle-on'"/>
         </a>
         <a
           v-show="!xc.contextMenu"
           id="config-context-menu-switch-off"
           role="button">
-          <i class="fas fa-toggle-off"/>
+          <FontAwesomeIcon :icon="'toggle-off'"/>
         </a>
         <span id="config-context-menu-label">{{ $t('config.contextMenuExtension') }}</span>
       </a>
@@ -32,13 +32,13 @@
           v-show="xc.userTooltip"
           id="config-user-tooltip-switch-on"
           role="button">
-          <i class="fas fa-toggle-on"/>
+          <FontAwesomeIcon :icon="'toggle-on'"/>
         </a>
         <a
           v-show="!xc.userTooltip"
           id="config-user-tooltip-switch-off"
           role="button">
-          <i class="fas fa-toggle-off"/>
+          <FontAwesomeIcon :icon="'toggle-off'"/>
         </a>
         <span id="config-user-tooltip-label">{{ $t('config.userTooltip') }}</span>
       </a>
@@ -47,18 +47,18 @@
           v-show="xc.hoverPlay"
           id="config-hover-play-switch-on"
           role="button">
-          <i class="fas fa-toggle-on"/>
+          <FontAwesomeIcon :icon="'toggle-on'"/>
         </a>
         <a
           v-show="!xc.hoverPlay"
           id="config-hover-play-switch-off"
           role="button">
-          <i class="fas fa-toggle-off"/>
+          <FontAwesomeIcon :icon="'toggle-off'"/>
         </a>
         <span id="config-hover-play-label">{{ $t('config.hoverPlay') }}</span>
       </a>
       <a id="marisa-config-blacklist-label">
-        <i class="far fa-eye-slash"/>{{ $t('config.blacklist') }}
+        <FontAwesomeIcon :icon="'eye-slash'"/>{{ $t('config.blacklist') }}
       </a>
       <textarea
         id="marisa-config-blacklist-textarea"
@@ -100,7 +100,10 @@
 import { PixivAPI } from '../lib/pixiv';
 import { $print, toInt } from '../lib/utils';
 
+import FontAwesomeIcon from './FontAwesomeIcon.vue';
+
 export default {
+  components: { FontAwesomeIcon },
   props: {
     id: {
       default: '',
@@ -299,18 +302,18 @@ export default {
 #marisa-config-mode a {
   color: #00186c;
   text-decoration: none;
+  display: inline-flex;
+}
+#marisa-config-mode > a {
+  align-items: center;
+  justify-content: center;
+  margin: 2px 0;
 }
 #marisa-config-mode [id$="switch"] {
-  text-align: center;
-}
-#marisa-config-mode [id$="switch"]:hover {
   cursor: pointer;
 }
-#marisa-config-mode [id$="label"] {
-  text-align: center;
-  margin: 0 5px;
-}
-#marisa-config-blacklist-label > .fa-eye-slash {
+#marisa-config-mode svg {
+  height: 18px;
   margin: 0 4px;
 }
 #marisa-config-blacklist-textarea {

@@ -18,7 +18,10 @@
           <span :style="profileImgStyle" class="user-img"/>
           <span>{{ userName }}</span>
         </a>
-        <i v-if="isFollowed" class="fas fa-rss"/>
+        <FontAwesomeIcon
+          v-if="isFollowed"
+          :icon="'rss'"
+          class="user-followed-indicator"/>
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
@@ -40,7 +43,11 @@
 <script>
 import { $print } from '../lib/utils';
 
+// import FaRSS from './icons/FaRSS.vue';
+import FontAwesomeIcon from './FontAwesomeIcon.vue';
+
 export default {
+  components: { FontAwesomeIcon },
   props: {
     bookmarkCount: {
       default: 0,
@@ -162,7 +169,7 @@ export default {
   border-radius: 50%;
   margin-right: 4px;
 }
-i.fa-rss {
+.user-followed-indicator {
   display: inline-block;
   margin-left: 4px;
   width: 16px;

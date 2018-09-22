@@ -3,19 +3,19 @@
     <ul v-show="currentType === 'image-item-image'">
       <li>
         <a role="button" @click.left="thumbUp">
-          <i class="far fa-thumbs-up"/>
+          <FontAwesomeIcon :icon="'thumbs-up'"/>
           {{ $t('contextMenu.thumbUp') }}
         </a>
       </li>
       <li v-show="isDownloadable">
         <a role="button" @click.left="downloadOne">
-          <i class="fas fa-download"/>
+          <FontAwesomeIcon :icon="'download'"/>
           {{ $t('contextMenu.download') }}
         </a>
       </li>
       <li>
         <a role="button" @click.left="openPreview">
-          <i class="fas fa-search-plus"/>
+          <FontAwesomeIcon :icon="'search-plus'"/>
           {{ $t('contextMenu.preview') }}
         </a>
       </li>
@@ -24,7 +24,7 @@
           :href="bookmarkPageLink"
           role="button"
           target="_blank">
-          <i class="far fa-bookmark"/>
+          <FontAwesomeIcon :icon="'bookmark'"/>
           {{ $t('contextMenu.openBookmarkPage') }}
         </a>
       </li>
@@ -32,13 +32,13 @@
     <ul v-show="currentType === 'image-item-title-user'">
       <li>
         <a role="button" @click.left="addToBlacklist">
-          <i class="far fa-eye-slash"/>
+          <FontAwesomeIcon :icon="'eye-slash'"/>
           {{ $t('contextMenu.addToBlacklist') }}
         </a>
       </li>
       <li v-show="currentImageItem && !currentImageItem.isFollowed">
         <a role="button" @click.left="followUser">
-          <i class="fas fa-rss"/>
+          <FontAwesomeIcon :icon="'rss'"/>
           {{ $t('contextMenu.followUser') }}
         </a>
       </li>
@@ -52,7 +52,10 @@ import { PixivAPI } from '../lib/pixiv';
 import { $el } from '../lib/utils';
 import GMC from '../lib/gmc';
 
+import FontAwesomeIcon from './FontAwesomeIcon.vue';
+
 export default {
+  components: { FontAwesomeIcon },
   computed: {
     bookmarkPageLink() {
       if (!this.xdata) {
@@ -207,10 +210,8 @@ export default {
   color: #fff;
   cursor: pointer;
 }
-#patchouli-context-menu > ul i.far,
-#patchouli-context-menu > ul i.fas {
+#patchouli-context-menu > ul svg[role="img"] {
   height: 18px;
-  width: 18px;
   margin: 0 4px;
 }
 </style>

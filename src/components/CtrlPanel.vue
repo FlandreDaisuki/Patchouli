@@ -19,7 +19,7 @@
         id="koakuma-bookmark-input-usual-switch"
         role="button"
         @click.left="usualSwitchOn = !usualSwitchOn">
-        <i class="fas fa-angle-down"/>
+        <FontAwesomeIcon :icon="'angle-down'"/>
       </a>
       <ul v-show="usualSwitchOn" id="koakuma-bookmark-input-usual-list">
         <li v-for="usual in usualList" :key="usual">
@@ -53,7 +53,7 @@
         role="button"
         @click.left="sortingOrderSwitchOn = !sortingOrderSwitchOn">
         <output id="koakuma-sorting-order-select-output" v-html="sortingOrderMsg"/>
-        <i class="fas fa-angle-down"/>
+        <FontAwesomeIcon :icon="'angle-down'"/>
       </a>
       <ul v-show="sortingOrderSwitchOn" id="koakuma-sorting-order-select-list">
         <li>
@@ -83,23 +83,18 @@
       </ul>
     </div>
     <div id="koakuma-options-block" class="koakuma-block">
-      <div>
-        <i
+      <div @click.left="optionsChange">
+        <FontAwesomeIcon
           v-show="xc.fitwidth"
           id="koakuma-options-width-compress"
-          class="fas fa-compress"
-          @click.left="optionsChange"/>
-        <i
+          :icon="'compress'"/>
+        <FontAwesomeIcon
           v-show="!xc.fitwidth"
           id="koakuma-options-width-expand"
-          class="fas fa-expand"
-          @click.left="optionsChange"/>
+          :icon="'expand'"/>
       </div>
-      <div>
-        <i
-          id="koakuma-options-config"
-          class="fas fa-cog"
-          @click.left="openCoverLayerInConfigMode"/>
+      <div @click.left="openCoverLayerInConfigMode">
+        <FontAwesomeIcon id="koakuma-options-config" :icon="'cog'"/>
       </div>
     </div>
   </div>
@@ -108,7 +103,11 @@
 <script>
 import { $print, toInt } from '../lib/utils';
 import { SORT_TYPE as ST } from '../lib/enums';
+
+import FontAwesomeIcon from './FontAwesomeIcon.vue';
+
 export default {
+  components: { FontAwesomeIcon },
   props: {
     id: {
       default: '',
@@ -220,9 +219,10 @@ export default {
     },
     optionsChange(event) {
       $print.debug('Koakuma#optionsChange: event', event);
-      if (event.target.id === 'koakuma-options-width-compress') {
+
+      if (event.target.closest('#koakuma-options-width-compress')) {
         this.$store.commit('setConfig', { fitwidth: false });
-      } else if (event.target.id === 'koakuma-options-width-expand') {
+      } else if (event.target.closest('#koakuma-options-width-expand')) {
         this.$store.commit('setConfig', { fitwidth: true });
       }
       this.$store.commit('saveConfig');
@@ -272,6 +272,7 @@ a {
 }
 a[role="button"] > .fa-angle-down {
   padding: 2px;
+  height: 16px;
 }
 #Koakuma {
   display: flex;
@@ -437,6 +438,8 @@ a[role="button"] > .fa-angle-down {
 }
 #koakuma-options-block > * {
   margin: 0 5px;
+  display: inline-flex;
+  align-items: center;
 }
 #koakuma-main-button {
   border: none;
@@ -471,6 +474,7 @@ a[role="button"] > .fa-angle-down {
 #koakuma-options-width-compress,
 #koakuma-options-width-expand,
 #koakuma-options-config {
+  height: 18px;
   cursor: pointer;
 }
 </style>

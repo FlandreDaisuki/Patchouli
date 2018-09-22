@@ -13,7 +13,7 @@
   - [Image items](#image-items)
   - [Preview Mode](#preview-mode)
 - [Contribution](#contribution)
-- [Lisence](#lisence)
+- [Lisence and Credits](#lisence-and-credits)
 - [Changelog](#changelog)
 
 ## Introduction
@@ -94,11 +94,15 @@ Support single, multiple, and ugoira illustration, and manipulate with mouse cli
 - And also welcome source contribution: [pull request](https://github.com/FlandreDaisuki/Patchouli/pulls) ⌨️⌨️
 - Share and give me a ⭐️ to encourage me to maintain this project, and thanks [contributors](https://github.com/FlandreDaisuki/Patchouli/graphs/contributors) 👍👍
 
-## Lisence
+## Lisence and Credits
 
 The MIT License (MIT)
 
 Copyright (c) 2016-2018 FlandreDaisuki
+
+Font Awesome Free
+
+[Icons — CC BY 4.0 License](https://fontawesome.com/license/free)
 
 ## Changelog
 

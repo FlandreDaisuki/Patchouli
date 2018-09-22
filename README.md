@@ -13,7 +13,7 @@
   - [插圖簡介](#插圖簡介)
   - [預覽原圖](#預覽原圖)
 - [貢獻](#貢獻)
-- [授權](#授權)
+- [授權條款與素材聲明](#授權條款與素材聲明)
 - [更新訊息](#更新訊息)
 
 ## 簡介
@@ -95,11 +95,15 @@
 - 或是歡迎直接貢獻原始碼：[pull request](https://github.com/FlandreDaisuki/Patchouli/pulls) ⌨️⌨️
 - 分享並點個 ⭐️ 讓我有動力繼續無償維護下去，並感謝曾經給予幫助的[貢獻者們](https://github.com/FlandreDaisuki/Patchouli/graphs/contributors) 👍👍
 
-## 授權
+## 授權條款與素材聲明
 
 The MIT License (MIT)
 
 Copyright (c) 2016-2018 FlandreDaisuki
+
+Font Awesome Free
+
+[Icons — CC BY 4.0 License](https://fontawesome.com/license/free)
 
 ## 更新訊息
 

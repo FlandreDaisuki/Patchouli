@@ -8,10 +8,7 @@
       @mouseenter="controlUgoira"
       @mouseleave="controlUgoira">
 
-      <div v-if="illustPageCount > 1" class="top-right-slot">
-        <span><i class="far fa-images"/>
-          {{ illustPageCount }}</span>
-      </div>
+      <IndicatorMultiple v-if="illustPageCount > 1" :illust-page-count="illustPageCount"/>
 
       <img
         v-show="!ugoiraPlayed"
@@ -44,11 +41,13 @@
 <script>
 import { $print } from '../lib/utils';
 import { PixivAPI } from '../lib/pixiv';
+
 import IconUgoiraPlay from './IconUgoiraPlay.vue';
 import IconBookmarkHeart from './IconBookmarkHeart.vue';
+import IndicatorMultiple from './IndicatorMultiple.vue';
 
 export default {
-  components: { IconBookmarkHeart, IconUgoiraPlay },
+  components: { IconBookmarkHeart, IconUgoiraPlay, IndicatorMultiple },
   props: {
     bookmarkId: {
       default: '',

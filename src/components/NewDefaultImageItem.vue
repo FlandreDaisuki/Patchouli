@@ -42,7 +42,10 @@
         :href="userPageUrl"
         class="user-profile-name"
         @click.right="activateContextMenu">{{ userName }}</a>
-      <i v-if="isFollowed" class="fas fa-rss user-followed-indicator"/>
+      <FontAwesomeIcon
+        v-if="isFollowed"
+        :icon="'rss'"
+        class="user-followed-indicator"/>
     </div>
     <div v-show="bookmarkCount > 0" class="illust-popularity">
       <span>{{ bookmarkCount }}</span>
@@ -51,14 +54,23 @@
 </template>
 
 <script>
-import IconBookmarkHeart from './IconBookmarkHeart.vue';
-import IconUgoiraPlay from './IconUgoiraPlay.vue';
-import IndicatorMultiple from './IndicatorMultiple.vue';
 import { $print } from '../lib/utils';
 import { PixivAPI } from '../lib/pixiv';
 
+// import FaRSS from './icons/FaRSS.vue';
+
+import FontAwesomeIcon from './FontAwesomeIcon.vue';
+import IconBookmarkHeart from './IconBookmarkHeart.vue';
+import IconUgoiraPlay from './IconUgoiraPlay.vue';
+import IndicatorMultiple from './IndicatorMultiple.vue';
+
 export default {
-  components: { IconBookmarkHeart, IconUgoiraPlay, IndicatorMultiple },
+  components: {
+    FontAwesomeIcon,
+    IconBookmarkHeart,
+    IconUgoiraPlay,
+    IndicatorMultiple,
+  },
   props: {
     bookmarkCount: {
       default: 0,
