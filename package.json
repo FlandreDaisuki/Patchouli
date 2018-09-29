@@ -1,6 +1,6 @@
 {
   "name": "patchouli",
-  "version": "4.2.0-alpha.21",
+  "version": "4.2.0-alpha.22",
   "description": "An image searching and browsing tool on pixiv.",
   "main": "main.js",
   "scripts": {
@@ -24,12 +24,12 @@
     "eslint-plugin-compat": "^2.5.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-node": "^7.0.1",
-    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-vue": "^4.7.1",
     "magic-string": "^0.25.1",
     "mocha": "^5.2.0",
-    "postcss": "^7.0.2",
-    "rollup": "^0.64.1",
+    "postcss": "^7.0.4",
+    "rollup": "^0.66.2",
     "rollup-plugin-cleanup": "^3.0.0",
     "rollup-plugin-userscript-css": "^1.2.0",
     "rollup-plugin-userscript-metablock": "^0.1.1",

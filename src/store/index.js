@@ -173,14 +173,16 @@ const mutations = {
         }
         break;
       case '/bookmark.php': {
-        if (sp.rest && sp.id) {
-          // ?id={userId}&rest=show
-          // ?id={userId}&rest=hide
-          state.mainPageType =  MPT.NEW_PROFILE_BOOKMARK;
-        } else if (sp.type === 'user' || sp.type === 'reg_user') {
+        if (sp.type === 'user' || sp.type === 'reg_user') {
           // ?id={userId}&type=user
           // ?id={userId}&type=reg_user
           state.mainPageType = MPT.NO_SUPPORT;
+        }
+        else if (sp.id) {
+          // ?id={userId}
+          // ?id={userId}&rest=show
+          // ?id={userId}&rest=hide
+          state.mainPageType =  MPT.NEW_PROFILE_BOOKMARK;
         } else {
           // ?
           // ?untagged=1

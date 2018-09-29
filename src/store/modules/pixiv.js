@@ -312,7 +312,7 @@ const actions = {
   startMovingWindowBased: async({ state, dispatch, getters, rootGetters }, { times = Infinity, rest = null } = {}) => {
     while (!getters.status.isPaused && !getters.status.isEnded && times) {
       let illustIds = [], maxTotal = Infinity;
-      const _rest = rest || rootGetters.sp.rest;
+      const _rest = rest || rootGetters.sp.rest || 'show';
       const _uid = rootGetters.sp.id;
       let cIndex = (_rest === 'show') ? state.moveWindowIndex : state.moveWindowPrivateBookmarkIndex;
       if (getters.nppType >= 0) {

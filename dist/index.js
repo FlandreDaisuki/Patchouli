@@ -986,7 +986,7 @@ const actions = {
   startMovingWindowBased: async({ state, dispatch, getters, rootGetters }, { times = Infinity, rest = null } = {}) => {
     while (!getters.status.isPaused && !getters.status.isEnded && times) {
       let illustIds = [], maxTotal = Infinity;
-      const _rest = rest || rootGetters.sp.rest;
+      const _rest = rest || rootGetters.sp.rest || 'show';
       const _uid = rootGetters.sp.id;
       let cIndex = (_rest === 'show') ? state.moveWindowIndex : state.moveWindowPrivateBookmarkIndex;
       if (getters.nppType >= 0) {
@@ -1378,14 +1378,16 @@ const mutations$3 = {
         }
         break;
       case '/bookmark.php': {
-        if (sp.rest && sp.id) {
-          // ?id={userId}&rest=show
-          // ?id={userId}&rest=hide
-          state.mainPageType =  MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
-        } else if (sp.type === 'user' || sp.type === 'reg_user') {
+        if (sp.type === 'user' || sp.type === 'reg_user') {
           // ?id={userId}&type=user
           // ?id={userId}&type=reg_user
           state.mainPageType = MAIN_PAGE_TYPE.NO_SUPPORT;
+        }
+        else if (sp.id) {
+          // ?id={userId}
+          // ?id={userId}&rest=show
+          // ?id={userId}&rest=hide
+          state.mainPageType =  MAIN_PAGE_TYPE.NEW_PROFILE_BOOKMARK;
         } else {
           // ?
           // ?untagged=1
