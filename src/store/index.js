@@ -41,7 +41,6 @@ const state = {
     sort: ST.ILLUST_ID,
     userTooltip: 1,
   },
-  ctrlPanelOffsetY: 0,
   filters: {
     limit: 0,
     query: '',
@@ -58,7 +57,6 @@ const state = {
 const getters = {
   MPT: (state) => state.mainPageType,
   config: (state) => state.config,
-  ctrlPanelOffsetY: (state) => state.ctrlPanelOffsetY,
   filters: (state) => state.filters,
   isSelfBookmarkPage: (state) => _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id),
   locale: (state) => state.locale,
@@ -251,7 +249,6 @@ const actions = {
       } else {
         $('header._global-header').insertAdjacentElement('afterend', el);
       }
-      state.ctrlPanelOffsetY = el.getBoundingClientRect().y;
     });
 
     switch (state.mainPageType) {
