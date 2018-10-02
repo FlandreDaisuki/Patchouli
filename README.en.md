@@ -54,6 +54,7 @@ A simple pixiv crawler. Naming is inspired from **Touhou Project**.
    - More details in [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
 - Sort by **bookmarks count**or **upload time** or **bookmark added time**
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-off.svg" width="12"> to switch that shows unbookmarked only
 - Settings:
    - Switch right click extension
    - Switch illustrator tooltip (the popup when mouse over illustrator name)

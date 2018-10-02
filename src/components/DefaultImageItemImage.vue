@@ -176,6 +176,12 @@ export default {
           this.selfIsPrivateBookmark = false;
         }
       }
+
+      this.$store.commit('pixiv/editImgItem', {
+        illustId: this.illustId,
+        isBookmarked: this.selfIsBookmarked,
+        type: 'edit-bookmarked',
+      });
     },
   },
 };

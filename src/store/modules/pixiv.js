@@ -83,7 +83,8 @@ const getters = {
     const isToShow = (d) => {
       return d.bookmarkCount >= filters.limit &&
         tagFilterQuerier.isMatched(filters.query, d.tags) &&
-        !config.blacklist.includes(d.userId);
+        !config.blacklist.includes(d.userId) &&
+        !(rootGetters.unbookmarkedOnly && d.isBookmarked);
     };
 
     const shows = [], hides = [];
@@ -131,6 +132,7 @@ const getters = {
         d.bookmarkCount >= filters.limit,
         tagFilterQuerier.isMatched(filters.query, d.tags),
         !config.blacklist.includes(d.userId),
+        !(rootGetters.unbookmarkedOnly && d.isBookmarked),
       ];
 
       switch (nppType) {
@@ -226,6 +228,17 @@ const mutations = {
         .filter(i => i.userId === opt.userId)
         .forEach(i => {
           i.isFollowed = true;
+        });
+    } else if (opt.type === 'edit-bookmarked' && opt.illustId) {
+      state.imageItemLibrary
+        .filter(i => i.illustId === opt.illustId)
+        .forEach(i => {
+          if (typeof opt.isBookmarked === 'boolean' ) {
+            i.isBookmarked = opt.isBookmarked;
+            if (!opt.isBookmarked) {
+              i.isPrivateBookmark = false;
+            }
+          }
         });
     }
   },

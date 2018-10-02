@@ -82,6 +82,11 @@
         </li>
       </ul>
     </div>
+    <div id="koakuma-display-options-block" class="koakuma-block">
+      <div v-show="!isSelfBookmarkPage" @click.left="toggleUnbookmarkedOnly">
+        <IconLayeredHearts id="koakuma-display-options-unbookmarked-only" :double="unbookmarkedOnly"/>
+      </div>
+    </div>
     <div id="koakuma-options-block" class="koakuma-block">
       <div @click.left="optionsChange">
         <FontAwesomeIcon
@@ -105,9 +110,10 @@ import { $print, toInt } from '../lib/utils';
 import { SORT_TYPE as ST } from '../lib/enums';
 
 import FontAwesomeIcon from './FontAwesomeIcon.vue';
+import IconLayeredHearts from './IconLayeredHearts.vue';
 
 export default {
-  components: { FontAwesomeIcon },
+  components: { FontAwesomeIcon, IconLayeredHearts },
   props: {
     id: {
       default: '',
@@ -120,6 +126,7 @@ export default {
       debounceId4sortInput: null,
       debounceId4tagsFilter: null,
       sortingOrderSwitchOn: false,
+      unbookmarkedOnly: this.$store.getters.unbookmarkedOnly,
       usualList: [100, 500, 1000, 3000, 5000, 10000],
       usualSwitchOn: false,
     };
@@ -260,6 +267,10 @@ export default {
           query: event.target.value,
         });
       }, 1500);
+    },
+    toggleUnbookmarkedOnly() {
+      this.$store.commit('toggleUnbookmarkedOnly');
+      this.unbookmarkedOnly = this.$store.getters.unbookmarkedOnly;
     },
   },
 };
@@ -436,6 +447,7 @@ a[role="button"] > .fa-angle-down {
 #koakuma-sorting-order-select {
   font-size: 14px;
 }
+#koakuma-display-options-block > *,
 #koakuma-options-block > * {
   margin: 0 5px;
   display: inline-flex;
@@ -471,10 +483,11 @@ a[role="button"] > .fa-angle-down {
   color: #fff;
   opacity: 0.87;
 }
+#koakuma-display-options-unbookmarked-only,
 #koakuma-options-width-compress,
 #koakuma-options-width-expand,
 #koakuma-options-config {
-  height: 18px;
+  height: 20px;
   cursor: pointer;
 }
 </style>

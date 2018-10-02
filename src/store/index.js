@@ -52,6 +52,7 @@ const state = {
   mountPointCtrlPanel: null,
   mountPointMainView: null,
   searchParam: {},
+  unbookmarkedOnly: false, // need not save to config
 };
 
 const getters = {
@@ -78,6 +79,7 @@ const getters = {
     }
   },
   sp: (state) => state.searchParam,
+  unbookmarkedOnly: (state) => state.unbookmarkedOnly,
 };
 
 const mutations = {
@@ -199,6 +201,9 @@ const mutations = {
     if (!_sbp && state.config.sort === ST.BOOKMARK_ID) {
       state.config.sort = ST.ILLUST_ID;
     }
+  },
+  toggleUnbookmarkedOnly: (state) => {
+    state.unbookmarkedOnly = !state.unbookmarkedOnly;
   },
   updateSearchParam: (state) => {
     state.searchParam = _getSearchParam();

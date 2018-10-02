@@ -1,6 +1,6 @@
 {
   "name": "patchouli",
-  "version": "4.2.0-alpha.22",
+  "version": "4.2.0-alpha.23",
   "description": "An image searching and browsing tool on pixiv.",
   "main": "main.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "eslint-plugin-vue": "^4.7.1",
     "magic-string": "^0.25.1",
     "mocha": "^5.2.0",
-    "postcss": "^7.0.4",
+    "postcss": "^7.0.5",
     "rollup": "^0.66.2",
     "rollup-plugin-cleanup": "^3.0.0",
     "rollup-plugin-userscript-css": "^1.2.0",

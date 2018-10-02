@@ -54,6 +54,7 @@
    - 詳細請見 [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
 - 以 **人氣／日期／加入書籤日期** 排序結果
 - 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> 切換寬度
+- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-off.svg" width="12"> 切換是否只顯示未收藏
 - 設定：
    - 開關擴充右鍵功能
    - 開關彈出畫師小資訊 (滑鼠游標移到畫師名字時跳出的那個)
