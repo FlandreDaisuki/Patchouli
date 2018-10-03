@@ -9,6 +9,8 @@
   - [Compatibility Table](#compatibility-table)
 - [Functions](#functions)
   - [Demo Video](#demo-video)
+    - [Basic Funtions](#basic-funtions)
+    - [v4.2.0 Added functions](#v420-added-functions)
   - [Control Panel](#control-panel)
   - [Image items](#image-items)
   - [Preview Mode](#preview-mode)
@@ -42,7 +44,11 @@ If you are already in new profile page, you can [download the alpha version here
 
 ### Demo Video
 
+#### Basic Funtions
 [![demo video](https://img.youtube.com/vi/zIoCwdpZr0M/0.jpg)](https://www.youtube.com/watch?v=zIoCwdpZr0M)
+
+#### v4.2.0 Added functions
+[![v4.2.0 demo video](https://img.youtube.com/vi/TM9na7UGSPw/0.jpg)](https://www.youtube.com/watch?v=TM9na7UGSPw)
 
 ### Control Panel
 

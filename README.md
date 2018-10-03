@@ -9,6 +9,8 @@
   - [瀏覽器腳本管理器相容表](#瀏覽器腳本管理器相容表)
 - [功能](#功能)
   - [範例影片](#範例影片)
+    - [基本功能介紹](#基本功能介紹)
+    - [v4.2.0 新增功能介紹](#v420-新增功能介紹)
   - [主控欄](#主控欄)
   - [插圖簡介](#插圖簡介)
   - [預覽原圖](#預覽原圖)
@@ -38,7 +40,11 @@
 
 ### 範例影片
 
+#### 基本功能介紹
 [![demo video](https://img.youtube.com/vi/zIoCwdpZr0M/0.jpg)](https://www.youtube.com/watch?v=zIoCwdpZr0M)
+
+#### v4.2.0 新增功能介紹
+[![v4.2.0 demo video](https://img.youtube.com/vi/TM9na7UGSPw/0.jpg)](https://www.youtube.com/watch?v=TM9na7UGSPw)
 
 ### 主控欄
 
