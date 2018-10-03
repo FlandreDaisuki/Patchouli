@@ -1,8 +1,20 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.1.10](https://img.shields.io/badge/latest-v4.1.10-blue.svg)](#)
+[![latest-v4.2.0](https://img.shields.io/badge/latest-v4.2.0-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
+
+- [Introduction](#introduction)
+- [Installation](#installation)
+  - [Compatibility Table](#compatibility-table)
+- [Functions](#functions)
+  - [Demo Video](#demo-video)
+  - [Control Panel](#control-panel)
+  - [Image items](#image-items)
+  - [Preview Mode](#preview-mode)
+- [Contribution](#contribution)
+- [Lisence and Credits](#lisence-and-credits)
+- [Changelog](#changelog)
 
 ## Introduction
 
@@ -17,45 +29,95 @@ If you are already in new profile page, you can [download the alpha version here
 1. First, install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome or [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) for Firefox or [other userscript managers](https://greasyfork.org/help/installing-user-scripts) you like.
 2. Then, click [**`here`**](https://rawgit.com/FlandreDaisuki/Patchouli/master/dist/patchouli.user.js)
 
+### Compatibility Table
+
+|×|![tampermonkey](assets/tm32.png)|![violentmonkey](assets/vm32.png)|![greasemonkey](assets/gm32.png)|
+|:--:|:--:|:--:|:--:|
+|![Firefox](assets/fx32.png)|✔️|✔️|🔺|
+|![Google Chrome](assets/gc32.png)|✔️|✔️| N/A |
+
+🔺 Not support Greasemonkey ugoira autoplay ([#22](https://github.com/FlandreDaisuki/Patchouli/issues/22))
+
 ## Functions
 
-- Find pictures automatically
-- The UI with i18n (en, ja, zh, zh-tw)
-- Filter by **bookmarks count**<br>
-  ![bookmark count filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-count-filter.png)
-- Filter by **tags with regexp**<br>
-  ![tags filter](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tags-filter.png)
-   - example of tags or part of tags: `flandre`, `users入り`
-   - example of regexp: `flandre|koishi`, `\d{3,}users入り`
-- Sort by **bookmarks count or upload time**<br>
-  ![sorting by](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/sorting-by.png)
-- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
-- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> to indicate following illustrator
-- Right click extension
-   - Click on image
-      - Like
-      - Download original size image (only support single image)
-      - Preview  original size images
-      - Open add bookmark page (Just click <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> if you want to add bookmark without adding tags)
-   - Click on illustrator name
-      - Follow
-      - Blacklist (fake mute)
-
-## Usage
+### Demo Video
 
 [![demo video](https://img.youtube.com/vi/zIoCwdpZr0M/0.jpg)](https://www.youtube.com/watch?v=zIoCwdpZr0M)
 
+### Control Panel
+
+![koakuma](assets/koakuma-en.png)
+
+- Press `GO`, find all. (No need pagination any more)
+- The UI with i18n (en, ja, zh-cn, zh-tw) **Welcome translation PR**
+- Filter by **bookmarks count**
+- Filter by **Tag Filter Query**<br>
+   - Basic examples: `flandre`, `users入り`, `-R-18`
+   - Logical operator examples: `flandre || koishi`, `touhou && R-18`
+   - complicated examples: `touhou && {flandre || alice}`
+   - More details in [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
+- Sort by **bookmarks count**or **upload time** or **bookmark added time**
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-off.svg" width="12"> to switch that shows unbookmarked only
+- Settings:
+   - Switch right click extension
+   - Switch illustrator tooltip (the popup when mouse over illustrator name)
+   - Switch ugoira autoplay
+   - Blacklist
+
+### Image items
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> to indicate following illustrator
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12">to indicate bookmarked (public/private) or not, click icon can add or remove bookmark directly
+
+![imageitem](assets/imageitem.png)
+
+Autoplay ugoira when mouse over ⚠️ This feature uses network bandwith quite heavily ⚠️
+
+![ugoira](assets/ugoira.gif)
+
+Right click extension
+- Click on image
+   - Like
+   - Download original size image (only support single image)
+   - Preview images in preview mode
+   - Open add bookmark (with tags) page
+- Click on illustrator name
+   - Follow
+   - Blacklist (simulate mute function)
+
+
+### Preview Mode
+
+Support single, multiple, and ugoira illustration, and manipulate with mouse click and wheel scroll.
+
+![preview mode](assets/preview-mode.png)
+
 ## Contribution
 
-Questions or suggestions, post [issue](https://github.com/FlandreDaisuki/Patchouli/issues) :coffee:
+- Please tell me if you found bugs: [Bug report](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Bug_report.md) 🐛🐛
+- Also, welcome feature request: [Feature request](https://github.com/FlandreDaisuki/Patchouli/issues/new?template=Feature_request.md) 💡💡
+- And also welcome source contribution: [pull request](https://github.com/FlandreDaisuki/Patchouli/pulls) ⌨️⌨️
+- Share and give me a ⭐️ to encourage me to maintain this project, and thanks [contributors](https://github.com/FlandreDaisuki/Patchouli/graphs/contributors) 👍👍
 
-## Lisence
+## Lisence and Credits
 
 The MIT License (MIT)
 
 Copyright (c) 2016-2018 FlandreDaisuki
 
+Font Awesome Free
+
+[Icons — CC BY 4.0 License](https://fontawesome.com/license/free)
+
 ## Changelog
+
+2018-99-99 v4.2.0
+
+- Refactoring code
+- Support [new profile page](https://www.pixiv.net/info.php?id=4704)
+- Support mouse wheel in showing original images
+- Change tag filter from **RegExp** to **Tag Filter Query**
+- Adjust styles
 
 2018-08-03 v4.1.10
 

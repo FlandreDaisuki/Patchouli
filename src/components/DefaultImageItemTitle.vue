@@ -5,7 +5,6 @@
         <a :href="illustPageUrl" :title="illustTitle">{{ illustTitle }}</a>
       </li>
       <li
-        v-if="!isMemberIllistPage"
         class="user-info"
         @click.right="activateContextMenu">
         <a
@@ -19,14 +18,17 @@
           <span :style="profileImgStyle" class="user-img"/>
           <span>{{ userName }}</span>
         </a>
-        <i v-if="isFollowed" class="fas fa-rss"/>
+        <FontAwesomeIcon
+          v-if="isFollowed"
+          :icon="'rss'"
+          class="user-followed-indicator"/>
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
           <li>
             <a
               :href="bookmarkDetailUrl"
-              :data-tooltip="$t('patchouli.bookmarkTooltip', { count: bookmarkCount })"
+              :data-tooltip="$t('mainView.bookmarkTooltip', { count: bookmarkCount })"
               class="_ui-tooltip bookmark-count">
               <i class="_icon _bookmark-icon-inline"/>
               {{ bookmarkCount }}
@@ -41,62 +43,64 @@
 <script>
 import { $print } from '../lib/utils';
 
+// import FaRSS from './icons/FaRSS.vue';
+import FontAwesomeIcon from './FontAwesomeIcon.vue';
+
 export default {
+  components: { FontAwesomeIcon },
   props: {
+    bookmarkCount: {
+      default: 0,
+      type: Number,
+    },
     illustId: {
-      type: String,
       default: '',
+      type: String,
     },
     illustTitle: {
-      type: String,
       default: '',
-    },
-    userName: {
       type: String,
-      default: '',
-    },
-    userId: {
-      type: String,
-      default: '',
-    },
-    profileImgUrl: {
-      type: String,
-      default: '',
-    },
-    bookmarkCount: {
-      type: Number,
-      default: 0,
     },
     isFollowed: {
-      type: Boolean,
       default: false,
+      type: Boolean,
+    },
+    profileImgUrl: {
+      default: '',
+      type: String,
+    },
+    userId: {
+      default: '',
+      type: String,
+    },
+    userName: {
+      default: '',
+      type: String,
     },
   },
+  // eslint-disable-next-line sort-keys
   computed: {
-    illustPageUrl() {
-      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
-    },
-    userPageUrl() {
-      return `/member_illust.php?id=${this.userId}`;
-    },
     bookmarkDetailUrl() {
       return `/bookmark_detail.php?illust_id=${this.illustId}`;
     },
     bookmarkTooltipMsg() {
-      return this.$t('patchouli.bookmarkTooltip', {
+      return this.$t('mainView.bookmarkTooltip', {
         count: this.bookmarkCount,
       });
+    },
+    illustPageUrl() {
+      return `/member_illust.php?mode=medium&illust_id=${this.illustId}`;
+    },
+    isEnableUserTooltip() {
+      return this.$store.state.config.userTooltip;
     },
     profileImgStyle() {
       return {
         backgroundImage: `url(${this.profileImgUrl})`,
       };
     },
-    isMemberIllistPage() {
-      return this.$store.state.pageType === 'MEMBER_ILLIST';
-    },
-    isEnableUserTooltip() {
-      return this.$store.state.config.userTooltip;
+    userPageUrl() {
+      return `/member_illust.php?id=${this.userId}`;
     },
   },
   methods: {
@@ -104,14 +108,15 @@ export default {
       $print.debug('DefaultImageItemTitle#activateContextMenu', event);
       if (this.$store.state.config.contextMenu) {
         event.preventDefault();
-        const payload = {};
 
-        payload.position = {
-          x: event.clientX,
-          y: event.clientY,
+        const payload = {
+          position: {
+            x: event.clientX,
+            y: event.clientY,
+          },
         };
-        const ct = event.currentTarget;
 
+        const ct = event.currentTarget;
         if (ct.classList.contains('user-info')) {
           payload.data = {
             illustId: this.illustId,
@@ -124,7 +129,7 @@ export default {
           };
         }
 
-        this.$store.commit('activateContextMenu', payload);
+        this.$store.commit('contextMenu/activate', payload);
       }
     },
   },
@@ -164,7 +169,7 @@ export default {
   border-radius: 50%;
   margin-right: 4px;
 }
-i.fa-rss {
+.user-followed-indicator {
   display: inline-block;
   margin-left: 4px;
   width: 16px;

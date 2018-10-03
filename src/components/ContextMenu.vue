@@ -1,21 +1,21 @@
 <template>
   <div id="patchouli-context-menu" :style="inlineStyle">
-    <ul v-show="currentType === 'image-item-image'" id="patchouli-context-menu-list-image-item-image" >
+    <ul v-show="currentType === 'image-item-image'">
       <li>
         <a role="button" @click.left="thumbUp">
-          <i class="far fa-thumbs-up"/>
+          <FontAwesomeIcon :icon="'thumbs-up'"/>
           {{ $t('contextMenu.thumbUp') }}
         </a>
       </li>
       <li v-show="isDownloadable">
         <a role="button" @click.left="downloadOne">
-          <i class="fas fa-download"/>
+          <FontAwesomeIcon :icon="'download'"/>
           {{ $t('contextMenu.download') }}
         </a>
       </li>
       <li>
         <a role="button" @click.left="openPreview">
-          <i class="fas fa-search-plus"/>
+          <FontAwesomeIcon :icon="'search-plus'"/>
           {{ $t('contextMenu.preview') }}
         </a>
       </li>
@@ -24,21 +24,21 @@
           :href="bookmarkPageLink"
           role="button"
           target="_blank">
-          <i class="far fa-bookmark"/>
+          <FontAwesomeIcon :icon="'bookmark'"/>
           {{ $t('contextMenu.openBookmarkPage') }}
         </a>
       </li>
     </ul>
-    <ul v-show="currentType === 'image-item-title-user'" id="patchouli-context-menu-list-image-item-title-user" >
+    <ul v-show="currentType === 'image-item-title-user'">
       <li>
         <a role="button" @click.left="addToBlacklist">
-          <i class="far fa-eye-slash"/>
+          <FontAwesomeIcon :icon="'eye-slash'"/>
           {{ $t('contextMenu.addToBlacklist') }}
         </a>
       </li>
       <li v-show="currentImageItem && !currentImageItem.isFollowed">
         <a role="button" @click.left="followUser">
-          <i class="fas fa-rss"/>
+          <FontAwesomeIcon :icon="'rss'"/>
           {{ $t('contextMenu.followUser') }}
         </a>
       </li>
@@ -52,34 +52,34 @@ import { PixivAPI } from '../lib/pixiv';
 import { $el } from '../lib/utils';
 import GMC from '../lib/gmc';
 
+import FontAwesomeIcon from './FontAwesomeIcon.vue';
+
 export default {
+  components: { FontAwesomeIcon },
   computed: {
-    // vue'x' state 'm'odule
-    xm() {
-      return this.$store.state.contextMenu;
-    },
-    xmd() {
-      return this.xm.data;
-    },
-    currentType() {
-      if (!this.xmd) {
-        return '';
+    bookmarkPageLink() {
+      if (!this.xdata) {
+        return '#';
       }
-      return this.xmd.type;
+      return `bookmark_add.php?type=illust&illust_id=${this.xdata.illustId}`;
     },
     currentImageItem() {
-      if (!this.xmd) {
+      if (!this.xdata) {
         return null;
       }
-      const illustId = this.xmd.illustId;
-      const found = this.$store.state.pixiv.imgLibrary.find(
-        i => i.illustId === illustId
-      );
+      const lib = this.$store.getters['pixiv/imageItemLibrary'];
+      const found = lib.find(i => i.illustId === this.xdata.illustId);
       return found ? found : null;
     },
+    currentType() {
+      if (!this.xdata) {
+        return '';
+      }
+      return this.xdata.type;
+    },
     inlineStyle() {
-      const RIGHT_BOUND = 200; // Magic Number ~
-      const position = this.xm.position;
+      const RIGHT_BOUND = 200; // magic number
+      const position = this.xpos;
       const ow = document.body.offsetWidth;
 
       let style = `top: ${position.y}px;`;
@@ -89,13 +89,6 @@ export default {
         style += `left: ${position.x}px;`;
       }
       return style;
-    },
-    bookmarkPageLink() {
-      if (!this.xmd) {
-        return '#';
-      }
-      const illustId = this.xmd.illustId;
-      return `bookmark_add.php?type=illust&illust_id=${illustId}`;
     },
     isDownloadable() {
       return (
@@ -107,11 +100,22 @@ export default {
     isUgoira() {
       return this.currentImageItem && this.currentImageItem.isUgoira;
     },
+    xdata() {
+      return this.$store.getters['contextMenu/data'];
+    },
+    xpos() {
+      return this.$store.getters['contextMenu/pos'];
+    },
   },
   methods: {
-    thumbUp() {
+    addToBlacklist() {
       if (this.currentImageItem) {
-        PixivAPI.postIllustLike(this.currentImageItem.illustId);
+        const userId = this.currentImageItem.userId;
+        const blacklist = this.$store.getters.config.blacklist;
+        blacklist.push(userId);
+        blacklist.sort((a, b) => a - b);
+        this.$store.commit('setConfig', { blacklist });
+        this.$store.commit('saveConfig');
       }
     },
     async downloadOne() {
@@ -124,7 +128,7 @@ export default {
         .split('.')
         .pop()
         .toLowerCase();
-
+      /* eslint-disable sort-keys */
       const response = await GMC.XHR({
         method: 'GET',
         url: imgUrl,
@@ -136,6 +140,7 @@ export default {
           Referer: `https://www.pixiv.net/member_illust.php?mode=medium&illust_id=${illustId}`,
         },
       });
+      /* eslint-enable sort-keys */
 
       if (ext === 'jpg' || ext === 'jpeg') {
         saveAs(new File([response.response], filename, { type: 'image/jpeg' }));
@@ -143,30 +148,27 @@ export default {
         saveAs(new File([response.response], filename, { type: 'image/png' }));
       }
     },
-    addToBlacklist() {
-      if (this.currentImageItem) {
-        const userId = this.currentImageItem.userId;
-        this.$store.state.config.blacklist.push(userId);
-        this.$store.state.config.blacklist.sort((a, b) => a - b);
-        this.$store.commit('saveConfig');
-      }
-    },
-    openPreview() {
-      this.$store.commit('openBigComponent', {
-        mode: 'preview',
-        data: this.currentImageItem,
-      });
-    },
     async followUser() {
       if (this.currentImageItem) {
         const userId = this.currentImageItem.userId;
 
         if (await PixivAPI.postFollowUser(userId)) {
-          this.$store.commit('editImgItem', {
+          this.$store.commit('pixiv/editImgItem', {
             type: 'follow-user',
             userId: this.currentImageItem.userId,
           });
         }
+      }
+    },
+    openPreview() {
+      this.$store.commit('coverLayer/open', {
+        data: this.currentImageItem,
+        mode: 'preview',
+      });
+    },
+    thumbUp() {
+      if (this.currentImageItem) {
+        PixivAPI.postIllustLike(this.currentImageItem.illustId);
       }
     },
   },
@@ -182,7 +184,12 @@ export default {
   background-color: #fff;
   font-size: 16px;
   overflow: hidden;
-  border-radius: 6px;
+  border-radius: 5px;
+}
+#patchouli-context-menu > ul {
+  margin: 0;
+  padding: 0;
+  line-height: 20px;
 }
 #patchouli-context-menu > ul > li {
   display: flex;
@@ -192,7 +199,6 @@ export default {
   color: #85a;
   padding: 3px;
   flex: 1;
-  border-radius: 5px;
   text-decoration: none;
   white-space: nowrap;
   display: inline-flex;
@@ -204,10 +210,8 @@ export default {
   color: #fff;
   cursor: pointer;
 }
-#patchouli-context-menu > ul i.far,
-#patchouli-context-menu > ul i.fas {
+#patchouli-context-menu > ul svg[role="img"] {
   height: 18px;
-  width: 18px;
   margin: 0 4px;
 }
 </style>

@@ -10,6 +10,11 @@
      but it should preserve 42px to keep all spacing correct */
   margin-bottom: 42px;
 }
+ul.menu-items > li.current > a {
+  color: black;
+  font-weight: bold;
+  text-decoration: none;
+}
 #toolbar-items {
   z-index: 5;
 }
@@ -40,4 +45,54 @@
 .ω.↔ .layout-body,
 .ω.↔ .layout-a {
   margin: 10px 20px;
+}
+
+._28nOzbY {
+  /* Fix Koakuma will cover pixiv recommended popup
+     when follow user in NewProfilePage */
+  z-index: 4;
+}
+
+/* annoyings, ref: lib/pixiv.js */
+
+iframe,
+/* Ad */
+.ad,
+.ads_area,
+.ad-footer,
+.ads_anchor,
+.ads-top-info,
+.comic-hot-works,
+.user-ad-container,
+.ads_area_no_margin,
+/* Premium */
+.hover-item,
+.ad-printservice,
+.bookmark-ranges,
+.require-premium,
+.showcase-reminder,
+.sample-user-search,
+.popular-introduction,
+._premium-lead-tag-search-bar,
+._premium-lead-popular-d-body,
+._premium-lead-promotion-banner {
+  display: none !important;
+}
+
+:root {
+  --new-default-image-item-square-size: 184px;
+  --default-image-item-image-square-size: 200px;
+  --loading-icon-size: 72px;
+  --loading-icon-color: #0096fa;
+}
+
+/* dotted focus */
+a::-moz-focus-inner,
+button::-moz-focus-inner {
+  border: 0 !important;
+  outline: 0 !important;
+}
+a:focus,
+button:focus {
+  outline: 0 !important;
 }

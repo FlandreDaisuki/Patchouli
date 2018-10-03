@@ -13,17 +13,27 @@ const pkg = require('./package.json');
 const external = ['vue', 'vuex', 'vue-i18n'];
 const globals = {
   vue: 'Vue',
-  vuex: 'Vuex',
   'vue-i18n': 'VueI18n',
+  vuex: 'Vuex',
 };
+
+// prevent absolute path in script
+process.env.NODE_ENV = 'production';
+
+// entry
+preBuild().then(() => {
+  buildRel();
+  buildDev();
+  updateReadme();
+});
 
 async function preBuild() {
   const bundle = await rollup.rollup({
-    input: 'src/index.js',
+    external,
+    input: 'src/main.js',
     plugins: [
       VuePlugin(),
     ],
-    external,
   });
 
   const { code } = await bundle.generate({
@@ -31,7 +41,7 @@ async function preBuild() {
     globals,
   });
 
-  const codeAppendCSS = code + `import '../src/pixiv.override.css';`;
+  const codeAppendCSS = code + 'import \'../src/pixiv.override.css\';';
 
   writeFileSync('dist/index.js', codeAppendCSS);
 
@@ -94,6 +104,7 @@ function removeDebuggers(code) {
 
 async function buildRel() {
   const bundle = await rollup.rollup({
+    external,
     input: 'dist/index.js',
     plugins: [
       userscriptCSS(),
@@ -103,7 +114,6 @@ async function buildRel() {
         version: pkg.version,
       }),
     ],
-    external,
   });
 
   const { code } = await bundle.generate({
@@ -120,6 +130,7 @@ async function buildRel() {
 
 async function buildDev() {
   const bundle = await rollup.rollup({
+    external,
     input: 'dist/index.js',
     plugins: [
       userscriptCSS(),
@@ -128,7 +139,6 @@ async function buildDev() {
         version: pkg.version,
       }),
     ],
-    external,
   });
 
   await bundle.write({
@@ -163,9 +173,3 @@ function updateReadme() {
   }
 }
 
-// entry
-preBuild().then(() => {
-  buildRel();
-  buildDev();
-  updateReadme();
-});

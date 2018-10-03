@@ -3,7 +3,8 @@
     "es6": true,
     "node": true,
     "browser": true,
-    "greasemonkey": true
+    "greasemonkey": true,
+    "mocha": true
   },
   "globals": {
     "saveAs": true,
@@ -13,6 +14,9 @@
     "sourceType": "module",
     "ecmaVersion": 8
   },
+  "plugins": [
+    "compat"
+  ],
   "extends": [
     "eslint:recommended",
     "plugin:vue/recommended"
@@ -49,6 +53,14 @@
       "error",
       "never"
     ],
+    "sort-keys": [
+      "error",
+      "asc",
+      {
+        "caseSensitive": true,
+        "natural": false
+      }
+    ],
     "vue/max-attributes-per-line": [
       2,
       {
@@ -58,6 +70,7 @@
           "allowFirstLine": false
         }
       }
-    ]
+    ],
+    "compat/compat": "warn"
   }
 }
