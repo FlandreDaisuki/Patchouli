@@ -108,7 +108,7 @@ Font Awesome Free
 
 ## 更新訊息
 
-2018-99-99 v4.2.0
+2018-10-3 v4.2.0
 
 - 內部程式碼重構
 - 支援[新版作者頁](https://www.pixiv.net/info.php?id=4704)

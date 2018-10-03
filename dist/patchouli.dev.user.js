@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.2.0-alpha.23
+// @version           4.2.0
 // @grant             unsafeWindow
 // @grant             GM_getValue
 // @grant             GM.getValue

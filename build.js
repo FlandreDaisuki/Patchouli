@@ -158,7 +158,7 @@ function updateReadme() {
       writeFileSync(file, replaced);
 
       const lines = replaced.split(/\r?\n/);
-      const changelogIdx = lines.findIndex(line => line.includes('## Changelog'));
+      const changelogIdx = lines.findIndex(line => line.includes('## Changelog') || line.includes('## 更新訊息'));
       let hasChangelog = false;
       for (const line of lines.slice(changelogIdx, -1)) {
         if (line.includes(pkg.version)) {
