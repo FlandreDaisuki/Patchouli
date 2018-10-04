@@ -33,10 +33,10 @@ If you are already in new profile page, you can [download the alpha version here
 
 ### Compatibility Table
 
-|×|![tampermonkey](assets/tm32.png)|![violentmonkey](assets/vm32.png)|![greasemonkey](assets/gm32.png)|
+|×|![tampermonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tm32.png)|![violentmonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/vm32.png)|![greasemonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/gm32.png)|
 |:--:|:--:|:--:|:--:|
-|![Firefox](assets/fx32.png)|✔️|✔️|🔺|
-|![Google Chrome](assets/gc32.png)|✔️|✔️| N/A |
+|![Firefox](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fx32.png)|✔️|✔️|🔺|
+|![Google Chrome](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/gc32.png)|✔️|✔️| N/A |
 
 🔺 Not support Greasemonkey ugoira autoplay ([#22](https://github.com/FlandreDaisuki/Patchouli/issues/22))
 
@@ -52,7 +52,7 @@ If you are already in new profile page, you can [download the alpha version here
 
 ### Control Panel
 
-![koakuma](assets/koakuma-en.png)
+![koakuma](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/koakuma-en.png)
 
 - Press `GO`, find all. (No need pagination any more)
 - The UI with i18n (en, ja, zh-cn, zh-tw) **Welcome translation PR**
@@ -75,11 +75,11 @@ If you are already in new profile page, you can [download the alpha version here
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss.svg" width="12"> to indicate following illustrator
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12">to indicate bookmarked (public/private) or not, click icon can add or remove bookmark directly
 
-![imageitem](assets/imageitem.png)
+![imageitem](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
 
 Autoplay ugoira when mouse over ⚠️ This feature uses network bandwith quite heavily ⚠️
 
-![ugoira](assets/ugoira.gif)
+![ugoira](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/ugoira.gif)
 
 Right click extension
 - Click on image
@@ -96,7 +96,7 @@ Right click extension
 
 Support single, multiple, and ugoira illustration, and manipulate with mouse click and wheel scroll.
 
-![preview mode](assets/preview-mode.png)
+![preview mode](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/preview-mode.png)
 
 ## Contribution
 

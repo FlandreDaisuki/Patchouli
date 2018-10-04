@@ -29,10 +29,10 @@
 
 ### 瀏覽器腳本管理器相容表
 
-|×|![tampermonkey](assets/tm32.png)|![violentmonkey](assets/vm32.png)|![greasemonkey](assets/gm32.png)|
+|×|![tampermonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tm32.png)|![violentmonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/vm32.png)|![greasemonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/gm32.png)|
 |:--:|:--:|:--:|:--:|
-|![Firefox](assets/fx32.png)|✔️|✔️|🔺|
-|![Google Chrome](assets/gc32.png)|✔️|✔️| N/A |
+|![Firefox](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fx32.png)|✔️|✔️|🔺|
+|![Google Chrome](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/gc32.png)|✔️|✔️| N/A |
 
 🔺 目前不支援 Greasemonkey 動圖自動播放功能 ([#22](https://github.com/FlandreDaisuki/Patchouli/issues/22))
 
@@ -48,7 +48,7 @@
 
 ### 主控欄
 
-![koakuma](assets/koakuma.png)
+![koakuma](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/koakuma.png)
 
 - 自動找圖，再也不需要*頁數*
 - 界面有部份 i18n (en, ja, zh-cn, zh-tw) **歡迎翻譯 PR**
@@ -72,11 +72,11 @@
 - 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.svg" width="12"> 標注已關注繪師
 - 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12">表示已收藏(公開/非公開)/未收藏，點擊則可直接添加收藏及取消收藏
 
-![imageitem](assets/imageitem.png)
+![imageitem](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
 
 可自動播放動圖 ⚠️ 請斟酌自己的電腦效能及頻寬 ⚠️
 
-![ugoira](assets/ugoira.gif)
+![ugoira](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/ugoira.gif)
 
 擴充右鍵功能
 
@@ -93,7 +93,7 @@
 
 支援單張、多張、動圖，並可用鍵盤方向鍵、滑鼠滾輪操作
 
-![preview mode](assets/preview-mode.png)
+![preview mode](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/preview-mode.png)
 
 ## 貢獻
 
