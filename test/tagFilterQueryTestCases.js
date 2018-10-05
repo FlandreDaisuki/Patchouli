@@ -15,45 +15,49 @@ const tagStrList = [
 export default [{
   answer: [1, 1, 1, 1, 0, 1, 0, 1, 1, 0].map(Boolean),
   problem: tagStrList,
-  rule: 'users入り',
+  rule: 'users入り', // include case
 }, {
   answer: [1, 0, 0, 1, 1, 1, 1, 1, 1, 1].map(Boolean),
   problem: tagStrList,
-  rule: '-fate',
+  rule: '-fate', // exclude case
 }, {
   answer: [1, 0, 1, 1, 1, 1, 1, 1, 1, 1].map(Boolean),
   problem: tagStrList,
-  rule: '-fate || フラン',
+  rule: '-fate || フラン', // or case
 }, {
   answer: [0, 0, 0, 1, 1, 0, 1, 0, 0, 0].map(Boolean),
   problem: tagStrList,
-  rule: '-レミ && スカーレット',
+  rule: '-レミ && スカーレット', // and case
 }, {
   answer: [0, 0, 0, 1, 1, 0, 1, 0, 0, 0].map(Boolean),
   problem: tagStrList,
-  rule: '-レミ スカーレット',
+  rule: '-レミ スカーレット', // implicit and case
 }, {
   answer: [1, 0, 0, 1, 1, 0, 1, 0, 0, 0].map(Boolean),
   problem: tagStrList,
-  rule: '{-レミ && スカーレット} || 風景',
+  rule: '{-レミ && スカーレット} || 風景', // group case
 }, {
   answer: [1, 0, 0, 1, 1, 0, 1, 0, 0, 0].map(Boolean),
   problem: tagStrList,
-  rule: '-レミ && {スカーレット || 風景}',
+  rule: '-レミ && {スカーレット || 風景}', // group case 2
 }, {
   answer: [1, 0, 0, 1, 1, 0, 1, 0, 0, 0].map(Boolean),
   problem: tagStrList,
-  rule: '-レミ {スカーレット || 風景}',
+  rule: '-レミ {スカーレット || 風景}', // group case 3
+}, {
+  answer: [1, 0, 0, 1, 1, 0, 1, 0, 0, 0].map(Boolean),
+  problem: tagStrList,
+  rule: '-レミ { スカーレット || 風景 }', // group case 4
 }, {
   answer: [1, 1, 1, 1, 1, 1, 0, 1, 1, 0].map(Boolean),
   problem: tagStrList,
-  rule: '-R-18',
+  rule: '-R-18', // tag with operator case
 }, {
   answer: [0, 1, 1, 0, 0, 0, 0, 1, 0, 0].map(Boolean),
   problem: tagStrList,
-  rule: 'fgo || |-ﾟ)',
+  rule: 'fgo || |-ﾟ)', // tag with operator case 2
 }, {
   answer: [0, 0, 0, 0, 0, 0, 0, 0, 0, 1].map(Boolean),
   problem: tagStrList,
-  rule: 'ガールズ&パンツァー && R-18',
+  rule: 'ガールズ&パンツァー && R-18', // tag with operator case 3
 }];
