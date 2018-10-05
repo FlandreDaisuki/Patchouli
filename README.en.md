@@ -54,7 +54,7 @@ If you are already in new profile page, you can [download the alpha version here
 
 ![koakuma](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/koakuma-en.png)
 
-- Press `GO`, find all. (No need pagination any more)
+- Press <kbd> Go </kbd>, find all. (No need pagination any more)
 - The UI with i18n (en, ja, zh-cn, zh-tw) **Welcome translation PR**
 - Filter by **bookmarks count**
 - Filter by **Tag Filter Query**<br>
@@ -73,7 +73,7 @@ If you are already in new profile page, you can [download the alpha version here
 
 ### Image items
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.svg" width="12"> to indicate following illustrator
-- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12">to indicate bookmarked (public/private) or not, click icon can add or remove bookmark directly
+- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> to indicate bookmarked (public/private) or not, click icon can add or remove bookmark directly
 
 ![imageitem](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
 
