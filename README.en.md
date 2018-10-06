@@ -62,7 +62,7 @@ If you are already in new profile page, you can [download the alpha version here
    - Logical operator examples: `flandre || koishi`, `touhou && R-18`
    - complicated examples: `touhou && {flandre || alice}`
    - More details in [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
-- Sort by **bookmarks count**or **upload time** or **bookmark added time**
+- Sort by **bookmarks count** or **upload time** or **bookmark added time**
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
 - Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-off.svg" width="12"> to switch that shows unbookmarked only
 - Settings:
