@@ -63,8 +63,8 @@ If you are already in new profile page, you can [download the alpha version here
    - complicated examples: `touhou && {flandre || alice}`
    - More details in [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
 - Sort by **bookmarks count** or **upload time** or **bookmark added time**
-- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> to switch width
-- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-off.svg" width="12"> to switch that shows unbookmarked only
+- Use icon ![fas-compress](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.png) ![fas-expand](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.png) to switch width
+- Use icon ![unbookmarked-only-on](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-on.png) ![unbookmarked-only-off](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-off.png) to switch that shows unbookmarked only
 - Settings:
    - Switch right click extension
    - Switch illustrator tooltip (the popup when mouse over illustrator name)
@@ -72,8 +72,8 @@ If you are already in new profile page, you can [download the alpha version here
    - Blacklist
 
 ### Image items
-- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.svg" width="12"> to indicate following illustrator
-- Use icon <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> to indicate bookmarked (public/private) or not, click icon can add or remove bookmark directly
+- Use icon ![fas-rss-dodgerblue](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.png) to indicate following illustrator
+- Use icon ![bookmark-heart-on](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.png) ![bookmark-heart-private](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.png) ![bookmark-heart-off](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.png) to indicate bookmarked (public/private) or not, click icon can add or remove bookmark directly
 
 ![imageitem](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
 

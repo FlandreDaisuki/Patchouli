@@ -59,8 +59,8 @@
    - 複雜範例：`東方 && {フラン || アリス}`
    - 詳細請見 [wiki](https://github.com/FlandreDaisuki/Patchouli/wiki/Tag-Filter-Query-Usage)
 - 以 **人氣／日期／加入書籤日期** 排序結果
-- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.svg" width="12"> 切換寬度
-- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-off.svg" width="12"> 切換是否只顯示未收藏
+- 以圖示 ![fas-compress](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fas-compress.png) ![fas-expand](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fas-expand.png) 切換寬度
+- 以圖示 ![unbookmarked-only-on](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-on.png) ![unbookmarked-only-off](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/unbookmarked-only-off.png) 切換是否只顯示未收藏
 - 設定：
    - 開關擴充右鍵功能
    - 開關彈出畫師小資訊 (滑鼠游標移到畫師名字時跳出的那個)
@@ -69,8 +69,8 @@
 
 ### 插圖簡介
 
-- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.svg" width="12"> 標注已關注繪師
-- 以圖示 <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.svg" width="12"> <img src="https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.svg" width="12"> 表示已收藏(公開/非公開)/未收藏，點擊則可直接添加收藏及取消收藏
+- 以圖示 ![fas-rss-dodgerblue](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.png) 標注已關注繪師
+- 以圖示 ![bookmark-heart-on](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.png) ![bookmark-heart-private](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.png) ![bookmark-heart-off](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.png) 表示已收藏(公開/非公開)/未收藏，點擊則可直接添加收藏及取消收藏
 
 ![imageitem](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
 
