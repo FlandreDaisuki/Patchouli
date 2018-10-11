@@ -212,6 +212,7 @@ export default {
 }
 #patchouli-context-menu > ul svg[role="img"] {
   height: 18px;
+  width: 18px;
   margin: 0 4px;
 }
 </style>

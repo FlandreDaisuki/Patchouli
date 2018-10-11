@@ -2420,11 +2420,11 @@ var __vue_staticRenderFns__$3 = [];
   /* style */
   const __vue_inject_styles__$3 = function (inject) {
     if (!inject) return
-    inject("data-v-1a29ed1c_0", { source: "\n#patchouli-context-menu[data-v-1a29ed1c]{box-sizing:border-box;border:1px solid #b28fce;position:fixed;z-index:10;background-color:#fff;font-size:16px;overflow:hidden;border-radius:5px\n}\n#patchouli-context-menu>ul[data-v-1a29ed1c]{margin:0;padding:0;line-height:20px\n}\n#patchouli-context-menu>ul>li[data-v-1a29ed1c]{display:flex;align-items:center\n}\n#patchouli-context-menu>ul a[data-v-1a29ed1c]{color:#85a;padding:3px;flex:1;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;text-align:center\n}\n#patchouli-context-menu>ul a[data-v-1a29ed1c]:hover{background-color:#b28fce;color:#fff;cursor:pointer\n}\n#patchouli-context-menu>ul svg[role=img][data-v-1a29ed1c]{height:18px;margin:0 4px\n}", map: undefined, media: undefined });
+    inject("data-v-325b629a_0", { source: "\n#patchouli-context-menu[data-v-325b629a]{box-sizing:border-box;border:1px solid #b28fce;position:fixed;z-index:10;background-color:#fff;font-size:16px;overflow:hidden;border-radius:5px\n}\n#patchouli-context-menu>ul[data-v-325b629a]{margin:0;padding:0;line-height:20px\n}\n#patchouli-context-menu>ul>li[data-v-325b629a]{display:flex;align-items:center\n}\n#patchouli-context-menu>ul a[data-v-325b629a]{color:#85a;padding:3px;flex:1;text-decoration:none;white-space:nowrap;display:inline-flex;align-items:center;text-align:center\n}\n#patchouli-context-menu>ul a[data-v-325b629a]:hover{background-color:#b28fce;color:#fff;cursor:pointer\n}\n#patchouli-context-menu>ul svg[role=img][data-v-325b629a]{height:18px;width:18px;margin:0 4px\n}", map: undefined, media: undefined });
 
   };
   /* scoped */
-  const __vue_scope_id__$3 = "data-v-1a29ed1c";
+  const __vue_scope_id__$3 = "data-v-325b629a";
   /* module identifier */
   const __vue_module_identifier__$3 = undefined;
   /* functional template */
