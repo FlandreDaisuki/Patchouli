@@ -51,6 +51,7 @@
 import { PixivAPI } from '../lib/pixiv';
 import { $el } from '../lib/utils';
 import GMC from '../lib/gmc';
+import { COVER_LAYER_MODE as CLM } from '../lib/enums';
 
 import FontAwesomeIcon from './FontAwesomeIcon.vue';
 
@@ -163,7 +164,7 @@ export default {
     openPreview() {
       this.$store.commit('coverLayer/open', {
         data: this.currentImageItem,
-        mode: 'preview',
+        mode: CLM.PREVIEW,
       });
     },
     thumbUp() {

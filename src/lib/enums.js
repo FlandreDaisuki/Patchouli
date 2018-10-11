@@ -22,4 +22,10 @@ export const SORT_TYPE = {
   ILLUST_ID: 0,
 };
 
+export const COVER_LAYER_MODE = {
+  CONFIG: Symbol('CONFIG'),
+  NONE: Symbol('NONE'),
+  PREVIEW: Symbol('PREVIEW'),
+};
+
 export const NPP_TYPE_COUNT = 5;

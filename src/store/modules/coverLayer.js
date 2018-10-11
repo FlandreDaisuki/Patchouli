@@ -1,11 +1,13 @@
+import { COVER_LAYER_MODE as CLM } from '../../lib/enums';
+
 const state = {
   data: null,
-  mode: null,
+  mode: CLM.NONE,
 };
 
 const mutations = {
   close: (state) => {
-    state.mode = null;
+    state.mode = CLM.NONE;
   },
   open: (state, payload) => {
     Object.assign(state, payload);

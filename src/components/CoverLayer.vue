@@ -1,23 +1,24 @@
 <template>
   <div
-    v-show="xmode"
+    v-show="showRoot"
     :id="id"
     @click.left="clickBase"
     @scroll.stop.prevent="0"
     @wheel.stop.prevent="0">
     <CoverLayerConfig
-      v-show="xmode === 'config'"
+      v-show="showConfig"
       id="marisa-config-mode"
-      :active="xmode === 'config'"/>
+      :active="showConfig"/>
     <CoverLayerPreview
-      v-show="xmode === 'preview'"
+      v-show="showPreview"
       id="marisa-preview-mode"
-      :active="xmode === 'preview'"/>
+      :active="showPreview"/>
   </div>
 </template>
 
 <script>
 import { $print } from '../lib/utils';
+import { COVER_LAYER_MODE as CLM } from '../lib/enums';
 
 import FontAwesomeIcon from './FontAwesomeIcon.vue';
 import CoverLayerConfig from './CoverLayerConfig.vue';
@@ -33,6 +34,15 @@ export default {
   },
   // eslint-disable-next-line sort-keys
   computed: {
+    showConfig() {
+      return this.xmode === CLM.CONFIG;
+    },
+    showPreview() {
+      return this.xmode === CLM.PREVIEW;
+    },
+    showRoot() {
+      return this.xmode !== CLM.NONE;
+    },
     xmode() {
       return this.$store.getters['coverLayer/mode'];
     },

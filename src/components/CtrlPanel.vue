@@ -107,7 +107,7 @@
 
 <script>
 import { $print, toInt } from '../lib/utils';
-import { SORT_TYPE as ST } from '../lib/enums';
+import { SORT_TYPE as ST, COVER_LAYER_MODE as CLM } from '../lib/enums';
 
 import FontAwesomeIcon from './FontAwesomeIcon.vue';
 import IconLayeredHearts from './IconLayeredHearts.vue';
@@ -222,7 +222,7 @@ export default {
       this.usualSwitchOn = false;
     },
     openCoverLayerInConfigMode() {
-      this.$store.commit('coverLayer/open', { data: null, mode: 'config' });
+      this.$store.commit('coverLayer/open', { data: null, mode: CLM.CONFIG });
     },
     optionsChange(event) {
       $print.debug('Koakuma#optionsChange: event', event);
