@@ -15,7 +15,7 @@
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vuex/3.0.1/vuex.min.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/vue-i18n/8.1.0/vue-i18n.min.js
 // @require           https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js
-// @require           https://cdn.rawgit.com/FlandreDaisuki/zip_player/ecf3751317079fcabef70af4bd0e92411288303d/dist/zip_player.iife.min.js
+// @require           https://www.gitcdn.xyz/repo/FlandreDaisuki/zip_player/ecf3751317079fcabef70af4bd0e92411288303d/dist/zip_player.iife.min.js
 // @icon              http://i.imgur.com/VwoYc5w.png
 // @connect           i.pximg.net
 // @noframes
@@ -23,7 +23,7 @@
 // @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
-// @version           4.2.0
+// @version           4.2.1
 // @grant             unsafeWindow
 // @grant             GM_getValue
 // @grant             GM.getValue

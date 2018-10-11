@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.2.0](https://img.shields.io/badge/latest-v4.2.0-blue.svg)](#)
+[![latest-v4.2.1](https://img.shields.io/badge/latest-v4.2.1-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
@@ -116,6 +116,10 @@ Font Awesome Free
 [Icons — CC BY 4.0 License](https://fontawesome.com/license/free)
 
 ## Changelog
+
+2018-10-11 v4.2.1
+
+- [RawGit will end](https://rawgit.com/), move dependencies back to GitCDN
 
 2018-10-3 v4.2.0
 
