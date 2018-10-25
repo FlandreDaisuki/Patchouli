@@ -14,56 +14,28 @@
     "sourceType": "module",
     "ecmaVersion": 8
   },
-  "plugins": [
-    "compat"
-  ],
-  "extends": [
-    "eslint:recommended",
-    "plugin:vue/recommended"
-  ],
+  "plugins": ["compat"],
+  "extends": ["eslint:recommended", "plugin:vue/recommended"],
   "rules": {
-    "quotes": [
-      "error",
-      "single"
-    ],
+    "quotes": ["error", "single"],
     "no-console": "off",
     "key-spacing": "error",
-    "indent": [
-      "error",
-      2
-    ],
+    "indent": ["error", 2],
     "comma-spacing": "error",
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
+    "comma-dangle": ["error", "always-multiline"],
     "arrow-spacing": "error",
     "keyword-spacing": "error",
     "space-infix-ops": "error",
-    "semi": [
-      "error",
-      "always"
-    ],
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
+    "semi": ["error", "always"],
+    "object-curly-spacing": ["error", "always"],
     "space-before-blocks": "error",
-    "space-before-function-paren": [
-      "error",
-      "never"
-    ],
-    "sort-keys": [
-      "error",
-      "asc",
-      {
+    "space-before-function-paren": ["error", "never"],
+    "sort-keys": ["error", "asc", {
         "caseSensitive": true,
         "natural": false
       }
     ],
-    "vue/max-attributes-per-line": [
-      2,
-      {
+    "vue/max-attributes-per-line": [2, {
         "singleline": 2,
         "multiline": {
           "max": 1,
