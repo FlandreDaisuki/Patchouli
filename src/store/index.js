@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { InitError } from '../lib/errors';
 import { MAIN_PAGE_TYPE as MPT, SORT_TYPE as ST } from '../lib/enums';
-import { $, $el, $$, $print, $ready } from '../lib/utils';
+import { $, $el, $$, $print } from '../lib/utils';
 import { removeAnnoyings } from '../lib/pixiv';
 import pixiv from './modules/pixiv';
 import contextMenu from './modules/contextMenu';
@@ -240,17 +240,18 @@ const actions = {
       commit('saveConfig');
     }
   },
-  setMountPoints: async({ state, getters }) => {
+  setMountPoints: ({ state, getters }) => {
     $$('#wrapper').forEach(el => el.classList.add('ω'));
 
     state.mountPointCoverLayer = $el('div', null, (el) => {
       document.body.appendChild(el);
     });
 
-    state.mountPointCtrlPanel = $el('div', null, async(el) => {
+    state.mountPointCtrlPanel = $el('div', null, (el) => {
       if (getters['pixiv/nppType'] >= 0) {
-        await $ready(() => $('.sLHPYEz, ._3CsQgM9'));
-        $('.sLHPYEz, ._3CsQgM9').parentNode.insertAdjacentElement('afterend', el);
+        sentinel.on('.sLHPYEz, ._3CsQgM9', (targetEl) => {
+          targetEl.parentNode.insertAdjacentElement('afterend', el);
+        });
       } else {
         $('header._global-header').insertAdjacentElement('afterend', el);
       }
@@ -270,8 +271,9 @@ const actions = {
     case MPT.NEW_PROFILE_BOOKMARK:
     case MPT.NEW_PROFILE_ILLUST:
     case MPT.NEW_PROFILE_MANGA:
-      await $ready(() => $('.g4R-bsH, ._9GTeZI7'));
-      state.mountPointMainView = $('.g4R-bsH, ._9GTeZI7');
+      sentinel.on('.g4R-bsH, ._9GTeZI7', (targetEl) => {
+        state.mountPointMainView = targetEl;
+      });
       break;
     case MPT.SELF_BOOKMARK:
       state.mountPointMainView = $('.display_editable_works');
