@@ -59,6 +59,7 @@ const getters = {
   MPT: (state) => state.mainPageType,
   config: (state) => state.config,
   filters: (state) => state.filters,
+  isMountPointsReady: (state) => state.mountPointCoverLayer && state.mountPointCtrlPanel && state.mountPointMainView,
   isSelfBookmarkPage: (state) => _isSelfBookmarkPage(state.mainPageType, state.loginData.id, state.searchParam.id),
   locale: (state) => state.locale,
   loginData: (state) => state.loginData,

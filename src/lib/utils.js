@@ -42,3 +42,24 @@ export const toFormUrlencoded = (o) => {
   // application/x-www-form-urlencoded
   return new URLSearchParams(o).toString();
 };
+
+export const waitUntil = async(func, { ms = 0, maxCount = 60 } = {}) => {
+  return new Promise((resolve, reject) => {
+
+    (function wait(c) {
+      setTimeout(() => {
+        if (c <= 0) {
+          reject();
+        }
+        const r = func();
+        $print.debug('utils#waitUntil: r, countdown', [r, c]);
+        if (r) {
+          resolve(r);
+        } else  {
+          wait(c - 1);
+        }
+      }, ms);
+    })(toInt(maxCount));
+
+  });
+};
