@@ -100,9 +100,9 @@ vuexStore.dispatch('init')
       $('._global-header').classList.add('koakuma-placeholder');
     }
 
-    // mount after vuexStore has data
+    // mount after (1) vuexStore has data, and (2) mount points are ready
     vuexStore.dispatch('pixiv/start', { isFirst: true, times: 1 })
-      .then(waitUntil(() => vuexStore.getters.isMountPointsReady))
+      .then(() => waitUntil(() => vuexStore.getters.isMountPointsReady, { maxCount: Infinity }))
       .then(() => {
         Patchouli.$mount(vuexStore.getters.mountPointMainView);
         Koakuma.$mount(vuexStore.getters.mountPointCtrlPanel);

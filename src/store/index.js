@@ -252,6 +252,7 @@ const actions = {
       if (getters['pixiv/nppType'] >= 0) {
         sentinel.on('.sLHPYEz, ._3CsQgM9', (targetEl) => {
           targetEl.parentNode.insertAdjacentElement('afterend', el);
+          sentinel.off('.sLHPYEz, ._3CsQgM9');
         });
       } else {
         $('header._global-header').insertAdjacentElement('afterend', el);
@@ -274,6 +275,7 @@ const actions = {
     case MPT.NEW_PROFILE_MANGA:
       sentinel.on('.g4R-bsH, ._9GTeZI7', (targetEl) => {
         state.mountPointMainView = targetEl;
+        sentinel.off('.g4R-bsH');
       });
       break;
     case MPT.SELF_BOOKMARK:

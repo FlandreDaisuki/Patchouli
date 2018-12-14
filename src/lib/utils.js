@@ -46,6 +46,7 @@ export const toFormUrlencoded = (o) => {
 export const waitUntil = async(func, { ms = 0, maxCount = 60 } = {}) => {
   return new Promise((resolve, reject) => {
 
+    console.time('utils#waitUntil: time');
     (function wait(c) {
       setTimeout(() => {
         if (c <= 0) {
@@ -54,6 +55,7 @@ export const waitUntil = async(func, { ms = 0, maxCount = 60 } = {}) => {
         const r = func();
         $print.debug('utils#waitUntil: r, countdown', [r, c]);
         if (r) {
+          console.timeEnd('utils#waitUntil: time');
           resolve(r);
         } else  {
           wait(c - 1);
