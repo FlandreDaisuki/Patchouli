@@ -303,7 +303,7 @@ export const PixivAPI = new Pixiv();
 export function removeAnnoyings(doc = document) {
   const annoyings = [
     'iframe',
-    // Ad
+    /* Ad */
     '.ad',
     '.ads_area',
     '.ad-footer',
@@ -312,7 +312,9 @@ export function removeAnnoyings(doc = document) {
     '.comic-hot-works',
     '.user-ad-container',
     '.ads_area_no_margin',
-    // Premium
+    /* React Ad */
+    '._2NeW0Vf',
+    /* Premium */
     '.hover-item',
     '.ad-printservice',
     '.bookmark-ranges',
