@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import { InitError } from '../lib/errors';
 import { MAIN_PAGE_TYPE as MPT, SORT_TYPE as ST } from '../lib/enums';
-import { $, $el, $$, $print } from '../lib/utils';
+import { $, $el, $$, $print, waitUntil } from '../lib/utils';
 import { removeAnnoyings } from '../lib/pixiv';
 import pixiv from './modules/pixiv';
 import contextMenu from './modules/contextMenu';
@@ -273,9 +273,11 @@ const actions = {
     case MPT.NEW_PROFILE_BOOKMARK:
     case MPT.NEW_PROFILE_ILLUST:
     case MPT.NEW_PROFILE_MANGA:
-      sentinel.on('.g4R-bsH, ._9GTeZI7', (targetEl) => {
-        state.mountPointMainView = targetEl;
-        sentinel.off('.g4R-bsH');
+      // .g60vh0k: page load progress bar
+      sentinel.on('.g60vh0k', async(el) => {
+        await waitUntil(() => !el.offsetParent, { maxCount: Infinity });
+        state.mountPointMainView = $('.g4R-bsH, ._9GTeZI7');
+        sentinel.off('.g60vh0k');
       });
       break;
     case MPT.SELF_BOOKMARK:

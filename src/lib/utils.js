@@ -48,10 +48,11 @@ export const waitUntil = async(func, { ms = 0, maxCount = 60 } = {}) => {
 
     console.time('utils#waitUntil: time');
     (function wait(c) {
+      if (c <= 0) {
+        reject();
+        return;
+      }
       setTimeout(() => {
-        if (c <= 0) {
-          reject();
-        }
         const r = func();
         $print.debug('utils#waitUntil: r, countdown', [r, c]);
         if (r) {

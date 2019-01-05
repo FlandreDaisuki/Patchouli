@@ -102,7 +102,7 @@ vuexStore.dispatch('init')
 
     // mount after (1) vuexStore has data, and (2) mount points are ready
     vuexStore.dispatch('pixiv/start', { isFirst: true, times: 1 })
-      .then(() => waitUntil(() => vuexStore.getters.isMountPointsReady, { maxCount: Infinity }))
+      .then(() => waitUntil(() => vuexStore.getters.isMountPointsReady, { maxCount: Infinity, ms: 100 }))
       .then(() => {
         Patchouli.$mount(vuexStore.getters.mountPointMainView);
         Koakuma.$mount(vuexStore.getters.mountPointCtrlPanel);
