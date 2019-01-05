@@ -280,6 +280,37 @@ class Pixiv {
     return Boolean(data);
   }
 
+  async postAddBookmark(illustId, optSearchParams = {}) {
+    const url = `/bookmark_add.php?id=${illustId}`;
+
+    const searchParams = Object.assign({
+      comment: '',
+      from_sid: '',
+      id: illustId,
+      mode: 'add',
+      original_order: '',
+      original_p: 1,
+      original_rest: '',
+      original_tag: '',
+      original_untagged: 0,
+      restrict: 0, // 0 ⇒ public, 1 ⇒ private
+      tag: '', // (TagString[]).join(' ')
+      tt: this.tt,
+      type: 'illust',
+    }, optSearchParams);
+
+    /* eslint-disable sort-keys */
+    const data = await this.fetchHTML(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+      },
+      body: toFormUrlencoded(searchParams),
+    });
+    /* eslint-enable sort-keys */
+    return Boolean(data);
+  }
+
   async postRPCAddBookmark(illustId) {
     const searchParams = {
       comment: '',
