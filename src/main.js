@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 import { MAIN_PAGE_TYPE as MPT } from './lib/enums';
-import { $, $print, $el, waitUntil } from './lib/utils';
+import { $, $print, $el, waitReady } from './lib/utils';
 import i18n from './lib/i18n';
 import vuexStore from './store/index';
 
@@ -102,7 +102,7 @@ vuexStore.dispatch('init')
 
     // mount after (1) vuexStore has data, and (2) mount points are ready
     vuexStore.dispatch('pixiv/start', { isFirst: true, times: 1 })
-      .then(() => waitUntil(() => vuexStore.getters.isMountPointsReady, { maxCount: Infinity, ms: 100 }))
+      .then(() => waitReady(() => vuexStore.getters.isMountPointsReady, { ms: 100 }))
       .then(() => {
         Patchouli.$mount(vuexStore.getters.mountPointMainView);
         Koakuma.$mount(vuexStore.getters.mountPointCtrlPanel);

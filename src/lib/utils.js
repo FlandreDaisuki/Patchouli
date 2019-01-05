@@ -43,10 +43,10 @@ export const toFormUrlencoded = (o) => {
   return new URLSearchParams(o).toString();
 };
 
-export const waitUntil = async(func, { ms = 0, maxCount = 60 } = {}) => {
+export const waitUntil = async(func, { ms = 33, maxCount = 60 } = {}) => {
+  const _t = Date.now();
   return new Promise((resolve, reject) => {
 
-    console.time('utils#waitUntil: time');
     (function wait(c) {
       if (c <= 0) {
         reject();
@@ -56,7 +56,7 @@ export const waitUntil = async(func, { ms = 0, maxCount = 60 } = {}) => {
         const r = func();
         $print.debug('utils#waitUntil: r, countdown', [r, c]);
         if (r) {
-          console.timeEnd('utils#waitUntil: time');
+          $print.debug(`utils#waitUntil: time: ${Date.now() - _t}ms`);
           resolve(r);
         } else  {
           wait(c - 1);
@@ -66,3 +66,5 @@ export const waitUntil = async(func, { ms = 0, maxCount = 60 } = {}) => {
 
   });
 };
+
+export const waitReady = async(func, { ms } = {}) => waitUntil(func, { maxCount: Infinity, ms });
