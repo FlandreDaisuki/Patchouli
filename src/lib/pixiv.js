@@ -345,6 +345,9 @@ export function removeAnnoyings(doc = document) {
     '.ads_area_no_margin',
     /* React Ad */
     '._2NeW0Vf',
+    '._3M6FtEB',
+    '._1N-LC6t',
+    '._9_Apz4k',
     /* Premium */
     '.hover-item',
     '.ad-printservice',
