@@ -273,12 +273,10 @@ const actions = {
     case MPT.NEW_PROFILE_BOOKMARK:
     case MPT.NEW_PROFILE_ILLUST:
     case MPT.NEW_PROFILE_MANGA:
-      // .g60vh0k: page load progress bar
-      sentinel.on('.g60vh0k', async(el) => {
-        await waitReady(() => !el.offsetParent);
+      (async() => {
+        await waitReady(() => $('.g4R-bsH, ._9GTeZI7'));
         state.mountPointMainView = $('.g4R-bsH, ._9GTeZI7');
-        sentinel.off('.g60vh0k');
-      });
+      })();
       break;
     case MPT.SELF_BOOKMARK:
       state.mountPointMainView = $('.display_editable_works');
