@@ -249,8 +249,8 @@ const actions = {
 
     state.mountPointCtrlPanel = $el('div', null, async(el) => {
       if (getters['pixiv/nppType'] >= 0) {
-        await $ready(() => $('.sLHPYEz'));
-        $('.sLHPYEz').parentNode.insertAdjacentElement('afterend', el);
+        await $ready(() => $('.sLHPYEz, ._3CsQgM9'));
+        $('.sLHPYEz, ._3CsQgM9').parentNode.insertAdjacentElement('afterend', el);
       } else {
         $('header._global-header').insertAdjacentElement('afterend', el);
       }
@@ -270,8 +270,8 @@ const actions = {
     case MPT.NEW_PROFILE_BOOKMARK:
     case MPT.NEW_PROFILE_ILLUST:
     case MPT.NEW_PROFILE_MANGA:
-      await $ready(() => $('.g4R-bsH'));
-      state.mountPointMainView = $('.g4R-bsH');
+      await $ready(() => $('.g4R-bsH, ._9GTeZI7'));
+      state.mountPointMainView = $('.g4R-bsH, ._9GTeZI7');
       break;
     case MPT.SELF_BOOKMARK:
       state.mountPointMainView = $('.display_editable_works');

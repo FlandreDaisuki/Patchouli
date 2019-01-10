@@ -2,7 +2,7 @@ const { writeFileSync, readFileSync } = require('fs');
 
 const rollup = require('rollup');
 const acorn = require('acorn');
-const walk = require('acorn/dist/walk');
+const walk = require('acorn-walk');
 const MagicString = require('magic-string');
 const VuePlugin = require('rollup-plugin-vue').default;
 const userscriptCSS = require('rollup-plugin-userscript-css');
@@ -50,22 +50,15 @@ async function preBuild() {
   const metablockJSON = require('./src/metablock.json');
   const metablockDevJSON = require('./src/metablock.dev.json');
 
-  pkg.dependencies['FileSaver.js'] = pkg.dependencies['file-saver']; // special name
-
   Object.entries(pkg.dependencies).forEach(([depName, depVersion]) => {
-    metablockJSON.require.forEach((cdn, idx, arr) => {
-      const depRegex = new RegExp(`${depName}/[\\d.]+`);
-      if (cdn.match(depRegex)) {
-        arr[idx] = cdn.replace(depRegex, `${depName}/${depVersion.slice(1)}`);
-      }
-    });
-
-    metablockDevJSON.require.forEach((cdn, idx, arr) => {
-      const depRegex = new RegExp(`${depName}/[\\d.]+`);
-      if (cdn.match(depRegex)) {
-        arr[idx] = cdn.replace(depRegex, `${depName}/${depVersion.slice(1)}`);
-      }
-    });
+    for (const metaJSON of [metablockJSON, metablockDevJSON]) {
+      metaJSON.require.forEach((cdn, idx, arr) => {
+        const depRegex = new RegExp(`${depName}@[\\d.]+`);
+        if (cdn.match(depRegex)) {
+          arr[idx] = cdn.replace(depRegex, `${depName}@${depVersion.slice(1)}`);
+        }
+      });
+    }
   });
 
   writeFileSync('src/metablock.json', JSON.stringify(metablockJSON, null, 2));
