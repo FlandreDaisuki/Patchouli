@@ -20,7 +20,7 @@
 // @connect           i.pximg.net
 // @noframes
 // @author            FlandreDaisuki
-// @license           The MIT License (MIT) Copyright (c) 2016-2018 FlandreDaisuki
+// @license           The MIT License (MIT) Copyright (c) 2016-2019 FlandreDaisuki
 // @compatible        firefox >=52
 // @compatible        chrome >=55
 // @version           4.2.2
