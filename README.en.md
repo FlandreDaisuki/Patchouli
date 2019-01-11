@@ -109,7 +109,7 @@ Support single, multiple, and ugoira illustration, and manipulate with mouse cli
 
 The MIT License (MIT)
 
-Copyright (c) 2016-2018 FlandreDaisuki
+Copyright (c) 2016-2019 FlandreDaisuki
 
 Font Awesome Free
 
