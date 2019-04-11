@@ -6,7 +6,7 @@
   "scripts": {
     "test": "cd test && rollup test.js -f cjs -e assert -o test.cjs.js && mocha test.cjs.js",
     "build": "npm test && node build.js",
-    "publish": "rm package-lock.json && npm i && node build.js"
+    "publish": "rm package-lock.json && npm i && npm run build"
   },
   "repository": {
     "type": "git",
@@ -19,31 +19,33 @@
   },
   "homepage": "https://github.com/FlandreDaisuki/Patchouli#readme",
   "devDependencies": {
-    "acorn": "^6.0.4",
+    "acorn": "^6.1.1",
     "acorn-walk": "^6.1.1",
-    "eslint": "^5.10.0",
-    "eslint-plugin-compat": "^2.6.3",
-    "eslint-plugin-import": "^2.14.0",
+    "eslint": "^5.16.0",
+    "eslint-plugin-compat": "^3.1.1",
+    "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-node": "^8.0.0",
-    "eslint-plugin-promise": "^4.0.1",
-    "eslint-plugin-vue": "^5.0.0",
-    "magic-string": "^0.25.1",
-    "mocha": "^5.2.0",
-    "postcss": "^7.0.6",
-    "rollup": "^0.67.4",
-    "rollup-plugin-cleanup": "^3.0.0",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-vue": "^5.2.2",
+    "esm": "^3.2.22",
+    "magic-string": "^0.25.2",
+    "mocha": "^6.1.2",
+    "postcss": "^7.0.14",
+    "rollup": "^1.10.0",
+    "rollup-plugin-cleanup": "^3.1.1",
+    "rollup-plugin-commonjs": "^9.3.4",
     "rollup-plugin-userscript-css": "^1.2.0",
-    "rollup-plugin-userscript-metablock": "^0.1.2",
-    "rollup-plugin-vue": "^4.3.2",
-    "vue-eslint-parser": "^4.0.3",
-    "vue-template-compiler": "^2.5.19"
+    "rollup-plugin-userscript-metablock": "^0.2.2",
+    "rollup-plugin-vue": "^5.0.0",
+    "vue-eslint-parser": "^6.0.3",
+    "vue-template-compiler": "^2.6.10"
   },
   "dependencies": {
-    "file-saver": "^2.0.0",
+    "file-saver": "^2.0.1",
     "sentinel-js": "^0.0.5",
-    "vue": "^2.5.19",
-    "vue-i18n": "^8.4.0",
-    "vuex": "^3.0.1"
+    "vue": "^2.6.10",
+    "vue-i18n": "^8.10.0",
+    "vuex": "^3.1.0"
   },
   "browserslist": [
     "last 4 Chrome versions",

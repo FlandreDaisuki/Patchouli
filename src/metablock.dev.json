@@ -18,11 +18,11 @@
     "*://www.pixiv.net/*"
   ],
   "require": [
-    "https://unpkg.com/vue@2.5.19/dist/vue.js",
-    "https://unpkg.com/vuex@3.0.1/dist/vuex.js",
-    "https://unpkg.com/vue-i18n@8.4.0/dist/vue-i18n.js",
+    "https://unpkg.com/vue@2.6.10/dist/vue.js",
+    "https://unpkg.com/vuex@3.1.0/dist/vuex.js",
+    "https://unpkg.com/vue-i18n@8.10.0/dist/vue-i18n.js",
     "https://unpkg.com/sentinel-js@0.0.5/dist/sentinel.js",
-    "https://unpkg.com/file-saver@2.0.0/dist/FileSaver.js",
+    "https://unpkg.com/file-saver@2.0.1/dist/FileSaver.js",
     "https://www.gitcdn.xyz/repo/FlandreDaisuki/zip_player/ecf3751317079fcabef70af4bd0e92411288303d/dist/zip_player.iife.min.js"
   ],
   "icon": "http://i.imgur.com/VwoYc5w.png",
@@ -41,8 +41,8 @@
   "noframes": true,
   "author": "FlandreDaisuki",
   "license": "The MIT License (MIT) Copyright (c) 2016-2019 FlandreDaisuki",
-  "compatible": {
-    "firefox": ">=52",
-    "chrome": ">=55"
-  }
+  "compatible": [
+    "firefox>=52",
+    "chrome>=55"
+  ]
 }

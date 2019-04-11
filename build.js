@@ -4,7 +4,8 @@ const rollup = require('rollup');
 const acorn = require('acorn');
 const walk = require('acorn-walk');
 const MagicString = require('magic-string');
-const VuePlugin = require('rollup-plugin-vue').default;
+const commonjs = require('rollup-plugin-commonjs');
+const VuePlugin = require('rollup-plugin-vue');
 const userscriptCSS = require('rollup-plugin-userscript-css');
 const metablock = require('rollup-plugin-userscript-metablock');
 const cleanup = require('rollup-plugin-cleanup');
@@ -32,16 +33,16 @@ async function preBuild() {
     external,
     input: 'src/main.js',
     plugins: [
+      commonjs(),
       VuePlugin(),
     ],
   });
 
-  const { code } = await bundle.generate({
+  const bundleOut = await bundle.generate({
     format: 'es',
     globals,
   });
-
-  const codeAppendCSS = code + 'import \'../src/pixiv.override.css\';';
+  const codeAppendCSS = bundleOut.output[0].code + 'import \'../src/pixiv.override.css\';';
 
   writeFileSync('dist/index.js', codeAppendCSS);
 
@@ -104,17 +105,19 @@ async function buildRel() {
       cleanup(),
       metablock({
         file: 'src/metablock.json',
-        version: pkg.version,
+        override: {
+          version: pkg.version,
+        },
       }),
     ],
   });
 
-  const { code } = await bundle.generate({
+  const bundleOut = await bundle.generate({
     format: 'iife',
     globals,
   });
 
-  const relCode = removeDebuggers(code);
+  const relCode = removeDebuggers(bundleOut.output[0].code);
 
   writeFileSync('dist/patchouli.user.js', relCode);
 
@@ -129,7 +132,9 @@ async function buildDev() {
       userscriptCSS(),
       metablock({
         file: 'src/metablock.dev.json',
-        version: pkg.version,
+        override: {
+          version: pkg.version,
+        },
       }),
     ],
   });
