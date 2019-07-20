@@ -333,7 +333,6 @@ export const PixivAPI = new Pixiv();
 
 export function removeAnnoyings(doc = document) {
   const annoyings = [
-    'iframe',
     /* Ad */
     '.ad',
     '.ads_area',
