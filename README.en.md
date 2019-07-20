@@ -1,22 +1,22 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.2.2](https://img.shields.io/badge/latest-v4.2.2-blue.svg)](#)
+[![latest-v4.2.3](https://img.shields.io/badge/latest-v4.2.3-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
-- [Introduction](#introduction)
-- [Installation](#installation)
-  - [Compatibility Table](#compatibility-table)
-- [Functions](#functions)
-  - [Demo Video](#demo-video)
-    - [Basic Funtions](#basic-funtions)
-    - [v4.2.0 Added functions](#v420-added-functions)
-  - [Control Panel](#control-panel)
-  - [Image items](#image-items)
-  - [Preview Mode](#preview-mode)
-- [Contribution](#contribution)
-- [Lisence and Credits](#lisence-and-credits)
-- [Changelog](#changelog)
+- [Introduction](#Introduction)
+- [Installation](#Installation)
+  - [Compatibility Table](#Compatibility-Table)
+- [Functions](#Functions)
+  - [Demo Video](#Demo-Video)
+    - [Basic Funtions](#Basic-Funtions)
+    - [v4.2.0 Added functions](#v420-Added-functions)
+  - [Control Panel](#Control-Panel)
+  - [Image items](#Image-items)
+  - [Preview Mode](#Preview-Mode)
+- [Contribution](#Contribution)
+- [Lisence and Credits](#Lisence-and-Credits)
+- [Changelog](#Changelog)
 
 ## Introduction
 
@@ -116,6 +116,11 @@ Font Awesome Free
 [Icons — CC BY 4.0 License](https://fontawesome.com/license/free)
 
 ## Changelog
+
+2019-07-20 v4.2.3
+
+- Update depenencies
+- Do not hide iframe
 
 2019-01-10 v4.2.2
 
