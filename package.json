@@ -1,6 +1,6 @@
 {
   "name": "patchouli",
-  "version": "4.3.0-alpha",
+  "version": "4.3.0-alpha2",
   "description": "An image searching and browsing tool on pixiv.",
   "main": "main.js",
   "scripts": {
@@ -21,7 +21,7 @@
   "devDependencies": {
     "acorn": "^6.2.0",
     "acorn-walk": "^6.2.0",
-    "eslint": "^6.0.1",
+    "eslint": "^5.16.0",
     "eslint-plugin-compat": "^3.3.0",
     "eslint-plugin-import": "^2.18.2",
     "eslint-plugin-node": "^9.1.0",
