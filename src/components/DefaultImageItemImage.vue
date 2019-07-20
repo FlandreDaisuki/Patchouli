@@ -6,34 +6,40 @@
       rel="noopener"
       @click.right="activateContextMenu"
       @mouseenter="controlUgoira"
-      @mouseleave="controlUgoira">
+      @mouseleave="controlUgoira"
+    >
 
-      <IndicatorMultiple v-if="illustPageCount > 1" :illust-page-count="illustPageCount"/>
+      <IndicatorMultiple v-if="illustPageCount > 1" :illust-page-count="illustPageCount" />
 
       <img
         v-show="!ugoiraPlayed"
         :data-src="imgUrl"
-        :src="imgUrl">
+        :src="imgUrl"
+      >
       <IconUgoiraPlay
         v-if="isUgoira"
         v-show="!ugoiraPlayed"
         :size="60"
-        class="ugoira-icon"/>
+        class="ugoira-icon"
+      />
       <canvas
         v-if="isUgoira"
         v-show="ugoiraPlayed"
-        ref="smallUgoiraPreview"/>
+        ref="smallUgoiraPreview"
+      />
     </a>
     <div class="bookmark-heart-block" @click.left.stop="oneClickBookmarkAdd">
       <IconBookmarkHeart
         :actived="selfIsBookmarked"
-        :is-private="selfIsPrivateBookmark"/>
+        :is-private="selfIsPrivateBookmark"
+      />
     </div>
     <div v-if="isSelfBookmarkPage" class="bookmark-input-container">
       <input
         :value="bookmarkId"
         type="checkbox"
-        name="book_id[]">
+        name="book_id[]"
+      >
     </div>
   </div>
 </template>

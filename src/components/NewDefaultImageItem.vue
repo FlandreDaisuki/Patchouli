@@ -5,47 +5,54 @@
       class="illust-main"
       @click.right="activateContextMenu"
       @mouseenter="controlUgoira"
-      @mouseleave="controlUgoira">
+      @mouseleave="controlUgoira"
+    >
       <div class="illust-main-indicators">
-        <IndicatorMultiple v-if="illustPageCount > 1" :illust-page-count="illustPageCount"/>
+        <IndicatorMultiple v-if="illustPageCount > 1" :illust-page-count="illustPageCount" />
       </div>
       <div
         :style="illustMainImgStyle"
-        class="illust-main-img">
-        <IconUgoiraPlay v-if="isUgoira" v-show="!ugoiraPlayed"/>
+        class="illust-main-img"
+      >
+        <IconUgoiraPlay v-if="isUgoira" v-show="!ugoiraPlayed" />
         <canvas
           v-if="isUgoira"
           v-show="ugoiraPlayed"
           ref="smallUgoiraPreview"
-          class="illust-main-ugoira"/>
+          class="illust-main-ugoira"
+        />
       </div>
     </a>
     <div class="illust-buttons">
       <div>
         <button type="button" @click.left.prevent.stop="oneClickBookmarkAdd">
-          <IconBookmarkHeart :actived="selfIsBookmarked"/>
+          <IconBookmarkHeart :actived="selfIsBookmarked" />
         </button>
       </div>
     </div>
     <a
       :href="illustPageUrl"
       class="illust-title"
-      @click.right="activateContextMenu">{{ illustTitle }}</a>
+      @click.right="activateContextMenu"
+    >{{ illustTitle }}</a>
     <div v-show="showUserProfile" class="user-profile">
       <div>
         <a
           :href="illustPageUrl"
           :style="profileImgStyle"
-          class="user-profile-img"/>
+          class="user-profile-img"
+        />
       </div>
       <a
         :href="userPageUrl"
         class="user-profile-name"
-        @click.right="activateContextMenu">{{ userName }}</a>
+        @click.right="activateContextMenu"
+      >{{ userName }}</a>
       <FontAwesomeIcon
         v-if="isFollowed"
         :icon="'rss'"
-        class="user-followed-indicator"/>
+        class="user-followed-indicator"
+      />
     </div>
     <div v-show="bookmarkCount > 0" class="illust-popularity">
       <span>{{ bookmarkCount }}</span>

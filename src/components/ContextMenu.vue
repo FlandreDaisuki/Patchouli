@@ -3,19 +3,19 @@
     <ul v-show="currentType === 'image-item-image'">
       <li>
         <a role="button" @click.left="thumbUp">
-          <FontAwesomeIcon :icon="'thumbs-up'"/>
+          <FontAwesomeIcon :icon="'thumbs-up'" />
           {{ $t('contextMenu.thumbUp') }}
         </a>
       </li>
       <li v-show="isDownloadable">
         <a role="button" @click.left="downloadOne">
-          <FontAwesomeIcon :icon="'download'"/>
+          <FontAwesomeIcon :icon="'download'" />
           {{ $t('contextMenu.download') }}
         </a>
       </li>
       <li>
         <a role="button" @click.left="openPreview">
-          <FontAwesomeIcon :icon="'search-plus'"/>
+          <FontAwesomeIcon :icon="'search-plus'" />
           {{ $t('contextMenu.preview') }}
         </a>
       </li>
@@ -23,8 +23,10 @@
         <a
           :href="bookmarkPageLink"
           role="button"
-          target="_blank">
-          <FontAwesomeIcon :icon="'bookmark'"/>
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          <FontAwesomeIcon :icon="'bookmark'" />
           {{ $t('contextMenu.openBookmarkPage') }}
         </a>
       </li>
@@ -32,13 +34,13 @@
     <ul v-show="currentType === 'image-item-title-user'">
       <li>
         <a role="button" @click.left="addToBlacklist">
-          <FontAwesomeIcon :icon="'eye-slash'"/>
+          <FontAwesomeIcon :icon="'eye-slash'" />
           {{ $t('contextMenu.addToBlacklist') }}
         </a>
       </li>
       <li v-show="currentImageItem && !currentImageItem.isFollowed">
         <a role="button" @click.left="followUser">
-          <FontAwesomeIcon :icon="'rss'"/>
+          <FontAwesomeIcon :icon="'rss'" />
           {{ $t('contextMenu.followUser') }}
         </a>
       </li>

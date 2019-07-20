@@ -1,15 +1,15 @@
 <template>
   <!-- copy from: https://github.com/tobiasahlin/SpinKit -->
   <div class="ils-grid">
-    <div class="ils-cell ils-1"/>
-    <div class="ils-cell ils-2"/>
-    <div class="ils-cell ils-3"/>
-    <div class="ils-cell ils-4"/>
-    <div class="ils-cell ils-5"/>
-    <div class="ils-cell ils-6"/>
-    <div class="ils-cell ils-7"/>
-    <div class="ils-cell ils-8"/>
-    <div class="ils-cell ils-9"/>
+    <div class="ils-cell ils-1" />
+    <div class="ils-cell ils-2" />
+    <div class="ils-cell ils-3" />
+    <div class="ils-cell ils-4" />
+    <div class="ils-cell ils-5" />
+    <div class="ils-cell ils-6" />
+    <div class="ils-cell ils-7" />
+    <div class="ils-cell ils-8" />
+    <div class="ils-cell ils-9" />
   </div>
 </template>
 

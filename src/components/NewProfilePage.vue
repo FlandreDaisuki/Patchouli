@@ -5,46 +5,54 @@
         id="patchouli-npp-all"
         :class="{'current': nppType === 0}"
         :href="`/member.php?id=${uid}`"
-        @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.contents') }}</a>
+        @click.left.prevent="clickRoute"
+      >{{ $t('mainView.newProfilePage.contents') }}</a>
       <a
         id="patchouli-npp-illust"
         :class="{'current': nppType === 1}"
         :href="`/member_illust.php?id=${uid}&type=illust`"
-        @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.illustrations') }}</a>
+        @click.left.prevent="clickRoute"
+      >{{ $t('mainView.newProfilePage.illustrations') }}</a>
       <a
         id="patchouli-npp-manga"
         :class="{'current': nppType === 2}"
         :href="`/member_illust.php?id=${uid}&type=manga`"
-        @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.manga') }}</a>
+        @click.left.prevent="clickRoute"
+      >{{ $t('mainView.newProfilePage.manga') }}</a>
       <a
         id="patchouli-npp-bookmark"
         :class="{'current': nppType === 3}"
         :href="`/bookmark.php?id=${uid}&rest=show`"
-        @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.bookmarks') }}</a>
+        @click.left.prevent="clickRoute"
+      >{{ $t('mainView.newProfilePage.bookmarks') }}</a>
     </nav>
     <div id="patchouli-npp-view">
       <div
         v-show="isSelfBookmarkPage"
         id="patchouli-npp-view-bookmark-switch"
-        class="ω">
+        class="ω"
+      >
         <nav>
           <a
             id="patchouli-npp-view-bookmark-switch-public"
             :class="{'current': nppType === 3}"
             :href="`/bookmark.php?id=${uid}&rest=show`"
-            @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.publicBookmark') }}</a>
+            @click.left.prevent="clickRoute"
+          >{{ $t('mainView.newProfilePage.publicBookmark') }}</a>
           <a
             id="patchouli-npp-view-bookmark-switch-private"
             :class="{'current': nppType === 4}"
             :href="`/bookmark.php?id=${uid}&rest=hide`"
-            @click.left.prevent="clickRoute">{{ $t('mainView.newProfilePage.privateBookmark') }}</a>
+            @click.left.prevent="clickRoute"
+          >{{ $t('mainView.newProfilePage.privateBookmark') }}</a>
         </nav>
       </div>
-      <div id="patchouli-npp-view-header"/>
+      <div id="patchouli-npp-view-header" />
       <ul
         v-show="!hasNoResult"
         id="patchouli-npp-view-image-item-list"
-        class="ω">
+        class="ω"
+      >
         <NewDefaultImageItem
           v-for="(d, index) in nppProcessedLibrary"
           v-show="index < imageToShowCount"
@@ -61,13 +69,14 @@
           :profile-img-url="d.profileImg"
           :user-id="d.userId"
           :user-name="d.userName"
-          :show-user-profile="uid !== d.userId"/>
+          :show-user-profile="uid !== d.userId"
+        />
       </ul>
       <span v-show="hasNoResult" id="patchouli-npp-view-no-result">
         {{ $t('mainView.newProfilePage.noResult') }}
       </span>
       <span v-show="!status.isPaused && !status.isEnded" id="patchouli-npp-view-loading">
-        <IconLoadingSpin/>
+        <IconLoadingSpin />
       </span>
     </div>
   </div>

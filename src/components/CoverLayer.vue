@@ -4,15 +4,18 @@
     :id="id"
     @click.left="clickBase"
     @scroll.stop.prevent="0"
-    @wheel.stop.prevent="0">
+    @wheel.stop.prevent="0"
+  >
     <CoverLayerConfig
       v-show="showConfig"
       id="marisa-config-mode"
-      :active="showConfig"/>
+      :active="showConfig"
+    />
     <CoverLayerPreview
       v-show="showPreview"
       id="marisa-preview-mode"
-      :active="showPreview"/>
+      :active="showPreview"
+    />
   </div>
 </template>
 

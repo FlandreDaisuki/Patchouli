@@ -8,7 +8,8 @@
         :is-ugoira="isUgoira"
         :is-bookmarked="isBookmarked"
         :is-private-bookmark="isPrivateBookmark"
-        :bookmark-id="bookmarkId"/>
+        :bookmark-id="bookmarkId"
+      />
       <DefaultImageItemTitle
         :illust-id="illustId"
         :illust-title="illustTitle"
@@ -16,7 +17,8 @@
         :user-id="userId"
         :is-followed="isFollowed"
         :profile-img-url="profileImgUrl"
-        :bookmark-count="bookmarkCount"/>
+        :bookmark-count="bookmarkCount"
+      />
     </figure>
   </div>
 </template>

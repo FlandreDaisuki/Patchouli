@@ -6,7 +6,8 @@
       </li>
       <li
         class="user-info"
-        @click.right="activateContextMenu">
+        @click.right="activateContextMenu"
+      >
         <a
           :href="userPageUrl"
           :title="userName"
@@ -14,14 +15,17 @@
           :data-user_name="userName"
           :class="isEnableUserTooltip ? 'ui-profile-popup' : ''"
           class="user-link"
-          target="_blank">
-          <span :style="profileImgStyle" class="user-img"/>
+          rel="noreferrer noopener"
+          target="_blank"
+        >
+          <span :style="profileImgStyle" class="user-img" />
           <span>{{ userName }}</span>
         </a>
         <FontAwesomeIcon
           v-if="isFollowed"
           :icon="'rss'"
-          class="user-followed-indicator"/>
+          class="user-followed-indicator"
+        />
       </li>
       <li v-if="bookmarkCount > 0">
         <ul class="count-list">
@@ -29,8 +33,9 @@
             <a
               :href="bookmarkDetailUrl"
               :data-tooltip="$t('mainView.bookmarkTooltip', { count: bookmarkCount })"
-              class="_ui-tooltip bookmark-count">
-              <i class="_icon _bookmark-icon-inline"/>
+              class="_ui-tooltip bookmark-count"
+            >
+              <i class="_icon _bookmark-icon-inline" />
               {{ bookmarkCount }}
             </a>
           </li>

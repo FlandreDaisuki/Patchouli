@@ -1,8 +1,8 @@
 <template>
   <div :id="id">
-    <NewProfilePage v-if="isNewProfilePage"/>
-    <DefaultImageItemPage v-else/>
-    <ContextMenu/>
+    <NewProfilePage v-if="isNewProfilePage" />
+    <DefaultImageItemPage v-else />
+    <ContextMenu />
   </div>
 </template>
 

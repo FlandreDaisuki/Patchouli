@@ -4,24 +4,28 @@
     tabindex="0"
     @keyup="jumpByKeyup"
     @wheel.stop.prevent="jumpByWheel"
-    @click.stop="0">
+    @click.stop="0"
+  >
     <div id="marisa-preview-display-area">
       <a
         v-show="!previewUgoiraMetaData"
         :href="previewSrcList[previewCurrentIndex]"
-        target="_blank">
+        rel="noreferrer noopener"
+        target="_blank"
+      >
         <img :src="previewSrcList[previewCurrentIndex]">
       </a>
       <div v-show="!!previewUgoiraMetaData">
-        <canvas v-show="previewCurrentIndex === 0" ref="previewUgoiraCanvas"/>
-        <canvas v-show="previewCurrentIndex === 1" ref="previewOriginalUgoiraCanvas"/>
+        <canvas v-show="previewCurrentIndex === 0" ref="previewUgoiraCanvas" />
+        <canvas v-show="previewCurrentIndex === 1" ref="previewOriginalUgoiraCanvas" />
       </div>
     </div>
     <ul v-show="previewSrcList.length > 1" id="marisa-preview-thumbnails-area">
       <li v-for="(pSrc, index) in previewSrcList" :key="pSrc">
         <a
           :class="(index === previewCurrentIndex) ? 'current-preview' : ''"
-          @click.left="jumpTo(index)" >
+          @click.left="jumpTo(index)"
+        >
           <img :src="pSrc">
         </a>
       </li>
