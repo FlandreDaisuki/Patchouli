@@ -27,11 +27,7 @@
       >{{ $t('mainView.newProfilePage.bookmarks') }}</a>
     </nav>
     <div id="patchouli-npp-view">
-      <div
-        v-show="isSelfBookmarkPage"
-        id="patchouli-npp-view-bookmark-switch"
-        class="ω"
-      >
+      <div v-show="isSelfBookmarkPage" id="patchouli-npp-view-bookmark-switch" class="ω">
         <nav>
           <a
             id="patchouli-npp-view-bookmark-switch-public"
@@ -47,12 +43,8 @@
           >{{ $t('mainView.newProfilePage.privateBookmark') }}</a>
         </nav>
       </div>
-      <div id="patchouli-npp-view-header" />
-      <ul
-        v-show="!hasNoResult"
-        id="patchouli-npp-view-image-item-list"
-        class="ω"
-      >
+      <div id="patchouli-npp-view-header"></div>
+      <ul v-show="!hasNoResult" id="patchouli-npp-view-image-item-list" class="ω">
         <NewDefaultImageItem
           v-for="(d, index) in nppProcessedLibrary"
           v-show="index < imageToShowCount"
@@ -72,9 +64,10 @@
           :show-user-profile="uid !== d.userId"
         />
       </ul>
-      <span v-show="hasNoResult" id="patchouli-npp-view-no-result">
-        {{ $t('mainView.newProfilePage.noResult') }}
-      </span>
+      <span
+        v-show="hasNoResult"
+        id="patchouli-npp-view-no-result"
+      >{{ $t('mainView.newProfilePage.noResult') }}</span>
       <span v-show="!status.isPaused && !status.isEnded" id="patchouli-npp-view-loading">
         <IconLoadingSpin />
       </span>

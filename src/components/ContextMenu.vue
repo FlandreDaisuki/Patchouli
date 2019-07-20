@@ -20,12 +20,7 @@
         </a>
       </li>
       <li>
-        <a
-          :href="bookmarkPageLink"
-          role="button"
-          rel="noreferrer noopener"
-          target="_blank"
-        >
+        <a :href="bookmarkPageLink" role="button" rel="noreferrer noopener" target="_blank">
           <FontAwesomeIcon :icon="'bookmark'" />
           {{ $t('contextMenu.openBookmarkPage') }}
         </a>

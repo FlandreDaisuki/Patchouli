@@ -6,16 +6,8 @@
     @scroll.stop.prevent="0"
     @wheel.stop.prevent="0"
   >
-    <CoverLayerConfig
-      v-show="showConfig"
-      id="marisa-config-mode"
-      :active="showConfig"
-    />
-    <CoverLayerPreview
-      v-show="showPreview"
-      id="marisa-preview-mode"
-      :active="showPreview"
-    />
+    <CoverLayerConfig v-show="showConfig" id="marisa-config-mode" :active="showConfig" />
+    <CoverLayerPreview v-show="showPreview" id="marisa-preview-mode" :active="showPreview" />
   </div>
 </template>
 

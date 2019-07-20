@@ -1,11 +1,5 @@
 <template>
-  <svg
-    :class="classes"
-    class="ibh-effect"
-    viewBox="0 0 32 32"
-    width="32"
-    height="32"
-  >
+  <svg :class="classes" class="ibh-effect" viewBox="0 0 32 32" width="32" height="32">
     <path
       class="ibh-filled-heart"
       fill-rule="evenodd"

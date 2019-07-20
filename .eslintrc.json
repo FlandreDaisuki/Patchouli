@@ -13,7 +13,7 @@
   },
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 8
+    "ecmaVersion": 10
   },
   "plugins": ["compat"],
   "extends": ["eslint:recommended", "plugin:vue/recommended"],
@@ -36,14 +36,29 @@
         "natural": false
       }
     ],
-    "vue/max-attributes-per-line": [2, {
-        "singleline": 2,
-        "multiline": {
-          "max": 1,
-          "allowFirstLine": false
-        }
+    "vue/max-attributes-per-line": ["error", {
+      "singleline": 5,
+      "multiline": {
+        "max": 1,
+        "allowFirstLine": false
       }
-    ],
+    }],
+    "vue/html-self-closing": ["error", {
+      "html": {
+        "void": "always",
+        "normal": "never",
+        "component": "always"
+      },
+      "svg": "always",
+      "math": "always"
+    }],
+    "vue/html-indent": ["error", 2, {
+      "attribute": 1,
+      "baseIndent": 1,
+      "closeBracket": 0,
+      "alignAttributesVertically": true,
+      "ignores": []
+    }],
     "compat/compat": "warn"
   }
 }

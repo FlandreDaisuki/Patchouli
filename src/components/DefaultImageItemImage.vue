@@ -8,38 +8,17 @@
       @mouseenter="controlUgoira"
       @mouseleave="controlUgoira"
     >
-
       <IndicatorMultiple v-if="illustPageCount > 1" :illust-page-count="illustPageCount" />
 
-      <img
-        v-show="!ugoiraPlayed"
-        :data-src="imgUrl"
-        :src="imgUrl"
-      >
-      <IconUgoiraPlay
-        v-if="isUgoira"
-        v-show="!ugoiraPlayed"
-        :size="60"
-        class="ugoira-icon"
-      />
-      <canvas
-        v-if="isUgoira"
-        v-show="ugoiraPlayed"
-        ref="smallUgoiraPreview"
-      />
+      <img v-show="!ugoiraPlayed" :data-src="imgUrl" :src="imgUrl" />
+      <IconUgoiraPlay v-if="isUgoira" v-show="!ugoiraPlayed" :size="60" class="ugoira-icon" />
+      <canvas v-if="isUgoira" v-show="ugoiraPlayed" ref="smallUgoiraPreview"></canvas>
     </a>
     <div class="bookmark-heart-block" @click.left.stop="oneClickBookmarkAdd">
-      <IconBookmarkHeart
-        :actived="selfIsBookmarked"
-        :is-private="selfIsPrivateBookmark"
-      />
+      <IconBookmarkHeart :actived="selfIsBookmarked" :is-private="selfIsPrivateBookmark" />
     </div>
     <div v-if="isSelfBookmarkPage" class="bookmark-input-container">
-      <input
-        :value="bookmarkId"
-        type="checkbox"
-        name="book_id[]"
-      >
+      <input :value="bookmarkId" type="checkbox" name="book_id[]" />
     </div>
   </div>
 </template>

@@ -13,11 +13,11 @@
         rel="noreferrer noopener"
         target="_blank"
       >
-        <img :src="previewSrcList[previewCurrentIndex]">
+        <img :src="previewSrcList[previewCurrentIndex]" />
       </a>
       <div v-show="!!previewUgoiraMetaData">
-        <canvas v-show="previewCurrentIndex === 0" ref="previewUgoiraCanvas" />
-        <canvas v-show="previewCurrentIndex === 1" ref="previewOriginalUgoiraCanvas" />
+        <canvas v-show="previewCurrentIndex === 0" ref="previewUgoiraCanvas"></canvas>
+        <canvas v-show="previewCurrentIndex === 1" ref="previewOriginalUgoiraCanvas"></canvas>
       </div>
     </div>
     <ul v-show="previewSrcList.length > 1" id="marisa-preview-thumbnails-area">
@@ -26,7 +26,7 @@
           :class="(index === previewCurrentIndex) ? 'current-preview' : ''"
           @click.left="jumpTo(index)"
         >
-          <img :src="pSrc">
+          <img :src="pSrc" />
         </a>
       </li>
     </ul>
