@@ -59,6 +59,11 @@
       "alignAttributesVertically": true,
       "ignores": []
     }],
+    "vue/multiline-html-element-content-newline": ["error", {
+      "ignoreWhenEmpty": true,
+      "ignores": ["pre", "textarea", "button", "a"],
+      "allowEmptyLines": false
+    }],
     "compat/compat": "warn"
   }
 }

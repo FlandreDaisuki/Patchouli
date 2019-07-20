@@ -41,9 +41,8 @@
         id="koakuma-main-button"
         :disabled="status.isEnded"
         :class="statusClass"
-        :value="buttonMsg"
         @mouseup.left="clickMainButton"
-      ></button>
+      >{{ buttonMsg }}</button>
     </div>
     <div id="koakuma-sorting-order-block" class="koakuma-block">
       <a
