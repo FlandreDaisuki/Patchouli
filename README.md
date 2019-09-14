@@ -1,6 +1,6 @@
 <p align="center"><a href="https://github.com/FlandreDaisuki/Patchouli" target="_blank"><img width="50"src="https://i.imgur.com/VwoYc5w.png"></a></p>
 
-[![latest-v4.2.3](https://img.shields.io/badge/latest-v4.2.3-blue.svg)](#)
+[![latest-v4.2.4](https://img.shields.io/badge/latest-v4.2.4-blue.svg)](#)
 
 [English](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.en.md) - [中文](https://github.com/FlandreDaisuki/Patchouli/blob/master/README.md)
 
@@ -113,6 +113,10 @@ Font Awesome Free
 [Icons — CC BY 4.0 License](https://fontawesome.com/license/free)
 
 ## 更新訊息
+
+2019-09-14 v4.2.4
+
+- 增加 切方縮圖/原圖縮圖 選項按鈕
 
 2019-07-20 v4.2.3
 

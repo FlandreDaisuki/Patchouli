@@ -4,7 +4,7 @@
       v-for="(d, index) in defaultProcessedLibrary"
       v-show="index < imageToShowCount"
       :key="d.illustId"
-      :img-url="d.urls.thumb"
+      :img-url="getThumbUrl(d.urls)"
       :illust-id="d.illustId"
       :illust-title="d.illustTitle"
       :illust-page-count="d.illustPageCount"
@@ -39,6 +39,14 @@ export default {
     imageToShowCount() {
       const { shows } = this.displayIndices;
       return shows.length;
+    },
+  },
+  methods: {
+    getThumbUrl(urls) {
+      if (this.$store.getters.config.croppedThumb) {
+        return urls.thumb;
+      }
+      return urls.regular;
     },
   },
 };

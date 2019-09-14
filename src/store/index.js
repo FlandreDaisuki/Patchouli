@@ -36,6 +36,7 @@ const state = {
   config: {
     blacklist: [],
     contextMenu: 1,
+    croppedThumb: 1,
     fitwidth: 1,
     hoverPlay: 1,
     sort: ST.ILLUST_ID,

@@ -91,6 +91,11 @@
         />
       </div>
     </div>
+    <div id="koakuma-crop-thumb-options-block" class="koakuma-block">
+      <div @click.left="toggleCroppedThumb">
+        <IconCropThumb id="koakuma-crop-thumb-options-icon" :cropped="!!xc.croppedThumb" />
+      </div>
+    </div>
     <div id="koakuma-options-block" class="koakuma-block">
       <div @click.left="optionsChange">
         <FontAwesomeIcon
@@ -112,10 +117,15 @@ import { $print, toInt } from '../lib/utils';
 import { SORT_TYPE as ST } from '../lib/enums';
 
 import FontAwesomeIcon from './FontAwesomeIcon.vue';
+import IconCropThumb from './IconCropThumb.vue';
 import IconLayeredHearts from './IconLayeredHearts.vue';
 
 export default {
-  components: { FontAwesomeIcon, IconLayeredHearts },
+  components: {
+    FontAwesomeIcon,
+    IconCropThumb,
+    IconLayeredHearts,
+  },
   props: {
     id: {
       default: '',
@@ -269,6 +279,12 @@ export default {
           query: event.target.value,
         });
       }, 1500);
+    },
+    toggleCroppedThumb() {
+      this.$store.commit('setConfig', {
+        croppedThumb: !this.xc.croppedThumb,
+      });
+      this.$store.commit('saveConfig');
     },
     toggleUnbookmarkedOnly() {
       this.$store.commit('toggleUnbookmarkedOnly');
@@ -449,6 +465,7 @@ a[role="button"] > .fa-angle-down {
 #koakuma-sorting-order-select {
   font-size: 14px;
 }
+#koakuma-crop-thumb-options-block > *,
 #koakuma-display-options-block > *,
 #koakuma-options-block > * {
   margin: 0 5px;
@@ -485,6 +502,7 @@ a[role="button"] > .fa-angle-down {
   color: #fff;
   opacity: 0.87;
 }
+#koakuma-crop-thumb-options-icon,
 #koakuma-display-options-unbookmarked-only,
 #koakuma-options-width-compress,
 #koakuma-options-width-expand,

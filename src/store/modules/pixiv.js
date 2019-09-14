@@ -35,6 +35,7 @@ const makeLibraryData = ({ illustDataGroup, userDataGroup }) => {
       tags: allTags,
       urls: {
         original: illustData.urls.original,
+        regular: illustData.urls.regular,
         thumb: illustData.urls.thumb,
       },
       userId: illustData.userId,
