@@ -8,5 +8,14 @@
         "javascript",
         "javascriptreact",
         {"autoFix": true, "language": "vue"}
+    ],
+    "cSpell.words": [
+        "metablock",
+        "pixiv",
+        "userscript"
+    ],
+    "cSpell.ignoreWords": [
+        "browserslist",
+        "compat",
     ]
 }
