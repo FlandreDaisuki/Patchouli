@@ -1,7 +1,5 @@
 <template>
-  <div
-    :id="id"
-    :ref="id">
+  <div :id="id" :ref="id">
     <div id="koakuma-processed-block" class="koakuma-block">{{ processedCountMsg }}</div>
     <div id="koakuma-bookmark-sort-block" class="koakuma-block">
       <label id="koakuma-bookmark-sort-label" for="koakuma-bookmark-sort-input">
@@ -13,21 +11,20 @@
           min="0"
           step="1"
           @wheel.stop.prevent="sortInputWheel"
-          @input="sortInputInput">
+          @input="sortInputInput"
+        />
       </label>
       <a
         id="koakuma-bookmark-input-usual-switch"
         role="button"
-        @click.left="usualSwitchOn = !usualSwitchOn">
-        <FontAwesomeIcon :icon="'angle-down'"/>
+        @click.left="usualSwitchOn = !usualSwitchOn"
+      >
+        <FontAwesomeIcon :icon="'angle-down'" />
       </a>
       <ul v-show="usualSwitchOn" id="koakuma-bookmark-input-usual-list">
         <li v-for="usual in usualList" :key="usual">
           <span class="sort-order-apply-indicator">⮬</span>
-          <a
-            role="button"
-            class="usual-list-link"
-            @click.left="clickUsual">{{ usual }}</a>
+          <a role="button" class="usual-list-link" @click.left="clickUsual">{{ usual }}</a>
         </li>
       </ul>
     </div>
@@ -36,24 +33,25 @@
         id="koakuma-bookmark-tags-filter-input"
         :placeholder="$t('ctrlPanel.tagFilterQueryPlaceholder')"
         type="text"
-        @input="tagsFilterInput">
+        @input="tagsFilterInput"
+      />
     </div>
     <div class="koakuma-block">
       <button
         id="koakuma-main-button"
         :disabled="status.isEnded"
         :class="statusClass"
-        @mouseup.left="clickMainButton">
-        {{ buttonMsg }}
-      </button>
+        @mouseup.left="clickMainButton"
+      >{{ buttonMsg }}</button>
     </div>
     <div id="koakuma-sorting-order-block" class="koakuma-block">
       <a
         id="koakuma-sorting-order-select-switch"
         role="button"
-        @click.left="sortingOrderSwitchOn = !sortingOrderSwitchOn">
-        <output id="koakuma-sorting-order-select-output" v-html="sortingOrderMsg"/>
-        <FontAwesomeIcon :icon="'angle-down'"/>
+        @click.left="sortingOrderSwitchOn = !sortingOrderSwitchOn"
+      >
+        <output id="koakuma-sorting-order-select-output">{{ sortingOrderMsg }}</output>
+        <FontAwesomeIcon :icon="'angle-down'" />
       </a>
       <ul v-show="sortingOrderSwitchOn" id="koakuma-sorting-order-select-list">
         <li>
@@ -62,7 +60,8 @@
             id="koakuma-sorting-order-by-popularity"
             class="sorting-order-link"
             role="button"
-            @click.left="clickSortingOrder">{{ $t('ctrlPanel.sortByPopularity') }}</a>
+            @click.left="clickSortingOrder"
+          >{{ $t('ctrlPanel.sortByPopularity') }}</a>
         </li>
         <li>
           <span class="sort-order-apply-indicator">⮬</span>
@@ -70,7 +69,8 @@
             id="koakuma-sorting-order-by-date"
             class="sorting-order-link"
             role="button"
-            @click.left="clickSortingOrder">{{ $t('ctrlPanel.sortByDate') }}</a>
+            @click.left="clickSortingOrder"
+          >{{ $t('ctrlPanel.sortByDate') }}</a>
         </li>
         <li v-show="isSelfBookmarkPage">
           <span class="sort-order-apply-indicator">⮬</span>
@@ -78,13 +78,17 @@
             id="koakuma-sorting-order-by-bookmark-id"
             class="sorting-order-link"
             role="button"
-            @click.left="clickSortingOrder">{{ $t('ctrlPanel.sortByBookmarkId') }}</a>
+            @click.left="clickSortingOrder"
+          >{{ $t('ctrlPanel.sortByBookmarkId') }}</a>
         </li>
       </ul>
     </div>
     <div id="koakuma-display-options-block" class="koakuma-block">
       <div v-show="!isSelfBookmarkPage" @click.left="toggleUnbookmarkedOnly">
-        <IconLayeredHearts id="koakuma-display-options-unbookmarked-only" :double="unbookmarkedOnly"/>
+        <IconLayeredHearts
+          id="koakuma-display-options-unbookmarked-only"
+          :double="unbookmarkedOnly"
+        />
       </div>
     </div>
     <div id="koakuma-options-block" class="koakuma-block">
@@ -92,14 +96,12 @@
         <FontAwesomeIcon
           v-show="xc.fitwidth"
           id="koakuma-options-width-compress"
-          :icon="'compress'"/>
-        <FontAwesomeIcon
-          v-show="!xc.fitwidth"
-          id="koakuma-options-width-expand"
-          :icon="'expand'"/>
+          :icon="'compress'"
+        />
+        <FontAwesomeIcon v-show="!xc.fitwidth" id="koakuma-options-width-expand" :icon="'expand'" />
       </div>
       <div @click.left="openCoverLayerInConfigMode">
-        <FontAwesomeIcon id="koakuma-options-config" :icon="'cog'"/>
+        <FontAwesomeIcon id="koakuma-options-config" :icon="'cog'" />
       </div>
     </div>
   </div>

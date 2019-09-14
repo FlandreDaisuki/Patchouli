@@ -61,16 +61,18 @@
         "natural": false
       }
     ],
-    "vue/max-attributes-per-line": [
-      2,
-      {
-        "singleline": 2,
-        "multiline": {
-          "max": 1,
-          "allowFirstLine": false
-        }
-      }
-    ],
+    "vue/max-attributes-per-line": "off",
+    "vue/html-self-closing": ["error", {
+      "html": {
+        "void": "always",
+        "normal": "always",
+        "component": "always"
+      },
+      "svg": "always",
+      "math": "always"
+    }],
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/multiline-html-element-content-newline": "off",
     "compat/compat": "warn"
   }
 }

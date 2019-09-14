@@ -10,12 +10,43 @@
         {"autoFix": true, "language": "vue"}
     ],
     "cSpell.words": [
+        "afterend",
+        "annoyings",
+        "conds",
+        "csrf",
+        "dataid",
+        "differents",
+        "failv",
+        "fitwidth",
+        "greasemonkey",
+        "htmls",
+        "illusts",
+        "koakuma",
         "metablock",
+        "multiline",
+        "noframes",
+        "paren",
         "pixiv",
+        "prefetch",
+        "romaji",
+        "rtok",
+        "rtoks",
+        "singleline",
+        "toks",
+        "ugoira",
+        "unbookmark",
+        "unbookmarked",
+        "unmark",
         "userscript"
     ],
     "cSpell.ignoreWords": [
         "browserslist",
         "compat",
+        "ez",
+        "lhpy",
+        "mypixiv",
+        "printservice",
+        "pximg",
+        "s"
     ]
 }

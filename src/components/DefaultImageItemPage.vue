@@ -16,7 +16,8 @@
       :is-private-bookmark="d.isPrivateBookmark"
       :is-bookmarked="d.isBookmarked"
       :is-followed="d.isFollowed"
-      :bookmark-id="d.bookmarkId" />
+      :bookmark-id="d.bookmarkId"
+    />
   </div>
 </template>
 

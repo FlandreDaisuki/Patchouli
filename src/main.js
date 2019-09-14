@@ -95,7 +95,7 @@ vuexStore.dispatch('init')
     });
     /* eslint-enable sort-keys */
 
-    // setup koamuma placeholder
+    // setup koakuma placeholder
     if (vuexStore.getters['pixiv/nppType'] < 0) {
       $('._global-header').classList.add('koakuma-placeholder');
     }
@@ -109,7 +109,7 @@ vuexStore.dispatch('init')
 
         vuexStore.commit('applyConfig');
 
-        // unset koamuma placeholder
+        // unset koakuma placeholder
         if (vuexStore.getters['pixiv/nppType'] < 0) {
           $('._global-header').classList.remove('koakuma-placeholder');
         }

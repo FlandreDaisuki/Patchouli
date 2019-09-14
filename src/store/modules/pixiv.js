@@ -291,11 +291,11 @@ const actions = {
       state.prefetchPool.illusts.sort((i, j) => j - i);
       state.prefetchPool.manga.sort((i, j) => j - i);
 
-      $print.debug('vuexMudule/pixiv#start: prefetchPool.illusts:', state.prefetchPool.illusts);
-      $print.debug('vuexMudule/pixiv#start: prefetchPool.manga:', state.prefetchPool.manga);
+      $print.debug('vuexModule/pixiv#start: prefetchPool.illusts:', state.prefetchPool.illusts);
+      $print.debug('vuexModule/pixiv#start: prefetchPool.manga:', state.prefetchPool.manga);
     }
 
-    $print.debug('vuexMudule/pixiv#start: MPT:', rootGetters.MPT);
+    $print.debug('vuexModule/pixiv#start: MPT:', rootGetters.MPT);
 
     switch (rootGetters.MPT) {
     case MPT.SEARCH:
@@ -331,7 +331,7 @@ const actions = {
       if (getters.nppType >= 0) {
         const opt = { limit: getters.batchSize, offset: cIndex, rest: _rest };
         const { works, total } = await PixivAPI.getUserBookmarkData(_uid, opt);
-        $print.debug('vuexMudule/pixiv#startMovingWindowBased: works:', works);
+        $print.debug('vuexModule/pixiv#startMovingWindowBased: works:', works);
         if (!works) {
           await dispatch('stop');
           break;
@@ -343,17 +343,19 @@ const actions = {
       cIndex += getters.batchSize;
 
       if (getters.nppType >= 0 && _rest === 'hide') {
+        // eslint-disable-next-line require-atomic-updates
         state.moveWindowPrivateBookmarkIndex = cIndex;
       } else {
+        // eslint-disable-next-line require-atomic-updates
         state.moveWindowIndex = cIndex;
       }
 
       const illustDataGroup = await PixivAPI.getIllustDataGroup(illustIds);
-      $print.debug('vuexMudule/pixiv#startMovingWindowBased: illustDataGroup:', illustDataGroup);
+      $print.debug('vuexModule/pixiv#startMovingWindowBased: illustDataGroup:', illustDataGroup);
 
       const userIds = Object.values(illustDataGroup).map(d => d.userId);
       const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
-      $print.debug('vuexMudule/pixiv#startMovingWindowBased: userDataGroup:', userDataGroup);
+      $print.debug('vuexModule/pixiv#startMovingWindowBased: userDataGroup:', userDataGroup);
 
       const libraryData = makeLibraryData({
         illustDataGroup,
@@ -387,16 +389,17 @@ const actions = {
       } else {
         page = await PixivAPI.getIllustIdsInLegacyPageHTML(state.nextUrl);
       }
-      $print.debug('vuexMudule/pixiv#startNextUrlBased: page:', page);
+      $print.debug('vuexModule/pixiv#startNextUrlBased: page:', page);
 
+      // eslint-disable-next-line require-atomic-updates
       state.nextUrl = page.nextUrl;
 
       const illustDataGroup = await PixivAPI.getIllustDataGroup(page.illustIds);
-      $print.debug('vuexMudule/pixiv#startNextUrlBased: illustDataGroup:', illustDataGroup);
+      $print.debug('vuexModule/pixiv#startNextUrlBased: illustDataGroup:', illustDataGroup);
 
       const userIds = Object.values(illustDataGroup).map(d => d.userId);
       const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
-      $print.debug('vuexMudule/pixiv#startNextUrlBased: userDataGroup:', userDataGroup);
+      $print.debug('vuexModule/pixiv#startNextUrlBased: userDataGroup:', userDataGroup);
 
       const libraryData = makeLibraryData({
         illustDataGroup,
@@ -430,7 +433,7 @@ const actions = {
     } else {
       todoPool.push(...pPool[pool]);
     }
-    $print.debug('vuexMudule/pixiv#startPrefetchBased: todoPool:', todoPool);
+    $print.debug('vuexModule/pixiv#startPrefetchBased: todoPool:', todoPool);
 
     while (!getters.status.isPaused && !getters.status.isEnded && times) {
       if (!todoPool.length) {
@@ -453,11 +456,11 @@ const actions = {
       }
 
       const illustDataGroup = await PixivAPI.getIllustDataGroup(illustIds);
-      $print.debug('vuexMudule/pixiv#startPrefetchBased: illustDataGroup:', illustDataGroup);
+      $print.debug('vuexModule/pixiv#startPrefetchBased: illustDataGroup:', illustDataGroup);
 
       const userIds = Object.values(illustDataGroup).map(d => d.userId);
       const userDataGroup = await PixivAPI.getUserDataGroup(userIds);
-      $print.debug('vuexMudule/pixiv#startPrefetchBased: userDataGroup:', userDataGroup);
+      $print.debug('vuexModule/pixiv#startPrefetchBased: userDataGroup:', userDataGroup);
 
       const libraryData = makeLibraryData({
         illustDataGroup,

@@ -1,94 +1,75 @@
 <template>
   <div
     v-show="xmode"
-    ref="coverLayerRoot"
     :id="id"
+    ref="coverLayerRoot"
     tabindex="0"
     @keyup="jumpByKeyup"
     @click.left="clickBase"
     @scroll.stop.prevent="0"
-    @wheel.stop.prevent="jumpByWheel">
-    <div
-      v-show="xmode === 'config'"
-      id="marisa-config-mode"
-      @click.stop="0">
+    @wheel.stop.prevent="jumpByWheel"
+  >
+    <div v-show="xmode === 'config'" id="marisa-config-mode" @click.stop="0">
       <a id="config-context-menu-switch" @click.left="clickSwitch">
-        <a
-          v-show="xc.contextMenu"
-          id="config-context-menu-switch-on"
-          role="button">
-          <FontAwesomeIcon :icon="'toggle-on'"/>
+        <a v-show="xc.contextMenu" id="config-context-menu-switch-on" role="button">
+          <FontAwesomeIcon :icon="'toggle-on'" />
         </a>
-        <a
-          v-show="!xc.contextMenu"
-          id="config-context-menu-switch-off"
-          role="button">
-          <FontAwesomeIcon :icon="'toggle-off'"/>
+        <a v-show="!xc.contextMenu" id="config-context-menu-switch-off" role="button">
+          <FontAwesomeIcon :icon="'toggle-off'" />
         </a>
         <span id="config-context-menu-label">{{ $t('config.contextMenuExtension') }}</span>
       </a>
       <a id="config-user-tooltip-switch" @click.left="clickSwitch">
-        <a
-          v-show="xc.userTooltip"
-          id="config-user-tooltip-switch-on"
-          role="button">
-          <FontAwesomeIcon :icon="'toggle-on'"/>
+        <a v-show="xc.userTooltip" id="config-user-tooltip-switch-on" role="button">
+          <FontAwesomeIcon :icon="'toggle-on'" />
         </a>
-        <a
-          v-show="!xc.userTooltip"
-          id="config-user-tooltip-switch-off"
-          role="button">
-          <FontAwesomeIcon :icon="'toggle-off'"/>
+        <a v-show="!xc.userTooltip" id="config-user-tooltip-switch-off" role="button">
+          <FontAwesomeIcon :icon="'toggle-off'" />
         </a>
         <span id="config-user-tooltip-label">{{ $t('config.userTooltip') }}</span>
       </a>
       <a id="config-hover-play-switch" @click.left="clickSwitch">
-        <a
-          v-show="xc.hoverPlay"
-          id="config-hover-play-switch-on"
-          role="button">
-          <FontAwesomeIcon :icon="'toggle-on'"/>
+        <a v-show="xc.hoverPlay" id="config-hover-play-switch-on" role="button">
+          <FontAwesomeIcon :icon="'toggle-on'" />
         </a>
-        <a
-          v-show="!xc.hoverPlay"
-          id="config-hover-play-switch-off"
-          role="button">
-          <FontAwesomeIcon :icon="'toggle-off'"/>
+        <a v-show="!xc.hoverPlay" id="config-hover-play-switch-off" role="button">
+          <FontAwesomeIcon :icon="'toggle-off'" />
         </a>
         <span id="config-hover-play-label">{{ $t('config.hoverPlay') }}</span>
       </a>
       <a id="marisa-config-blacklist-label">
-        <FontAwesomeIcon :icon="'eye-slash'"/>{{ $t('config.blacklist') }}
+        <FontAwesomeIcon :icon="'eye-slash'" />
+        {{ $t('config.blacklist') }}
       </a>
       <textarea
         id="marisa-config-blacklist-textarea"
         ref="blacklistTextarea"
         :value="xc.blacklist.join('\n')"
         spellcheck="false"
-        rows="5"/>
+        rows="5"
+      />
     </div>
-    <div
-      v-show="xmode === 'preview'"
-      id="marisa-preview-mode"
-      @click.stop="0">
+    <div v-show="xmode === 'preview'" id="marisa-preview-mode" @click.stop="0">
       <div id="marisa-preview-display-area">
         <a
           v-show="!previewUgoiraMetaData"
           :href="previewSrcList[previewCurrentIndex]"
-          target="_blank">
-          <img :src="previewSrcList[previewCurrentIndex]">
+          target="_blank"
+        >
+          <img :src="previewSrcList[previewCurrentIndex]" />
         </a>
         <div v-show="!!previewUgoiraMetaData">
-          <canvas v-show="previewCurrentIndex === 0" ref="previewUgoiraCanvas"/>
-          <canvas v-show="previewCurrentIndex === 1" ref="previewOriginalUgoiraCanvas"/>
+          <canvas v-show="previewCurrentIndex === 0" ref="previewUgoiraCanvas" />
+          <canvas v-show="previewCurrentIndex === 1" ref="previewOriginalUgoiraCanvas" />
         </div>
       </div>
       <ul v-show="previewSrcList.length > 1" id="marisa-preview-thumbnails-area">
         <li v-for="(pSrc, index) in previewSrcList" :key="pSrc">
           <a
             :class="(index === previewCurrentIndex) ? 'current-preview' : ''"
-            @click.left="jumpTo(index)" >
-            <img :src="pSrc">
+            @click.left="jumpTo(index)"
+          >
+            <img :src="pSrc" />
           </a>
         </li>
       </ul>

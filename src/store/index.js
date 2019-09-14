@@ -271,6 +271,7 @@ const actions = {
     case MPT.NEW_PROFILE_ILLUST:
     case MPT.NEW_PROFILE_MANGA:
       await $ready(() => $('.g4R-bsH, ._9GTeZI7'));
+      // eslint-disable-next-line require-atomic-updates
       state.mountPointMainView = $('.g4R-bsH, ._9GTeZI7');
       break;
     case MPT.SELF_BOOKMARK:
