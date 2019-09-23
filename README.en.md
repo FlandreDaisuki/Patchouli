@@ -29,14 +29,14 @@ If you are already in new profile page, you can [download the alpha version here
 ## Installation
 
 1. First, install [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) for Chrome or [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) for Firefox or [other userscript managers](https://greasyfork.org/help/installing-user-scripts) you like.
-2. Then, click [**`here`**](https://rawgit.com/FlandreDaisuki/Patchouli/master/dist/patchouli.user.js)
+2. Then, click [**`here`**](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/dist/patchouli.user.js)
 
 ### Compatibility Table
 
-|×|![tampermonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tm32.png)|![violentmonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/vm32.png)|![greasemonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/gm32.png)|
+|×|![tampermonkey](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/tm32.png)|![violentmonkey](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/vm32.png)|![greasemonkey](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/gm32.png)|
 |:--:|:--:|:--:|:--:|
-|![Firefox](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fx32.png)|✔️|✔️|🔺|
-|![Google Chrome](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/gc32.png)|✔️|✔️| N/A |
+|![Firefox](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fx32.png)|✔️|✔️|🔺|
+|![Google Chrome](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/gc32.png)|✔️|✔️| N/A |
 
 🔺 Not support Greasemonkey ugoira autoplay ([#22](https://github.com/FlandreDaisuki/Patchouli/issues/22))
 
@@ -52,7 +52,7 @@ If you are already in new profile page, you can [download the alpha version here
 
 ### Control Panel
 
-![koakuma](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/koakuma-en.png)
+![koakuma](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/koakuma-en.png)
 
 - Press <kbd> Go </kbd>, find all. (No need pagination any more)
 - The UI with i18n (en, ja, zh-cn, zh-tw) **Welcome translation PR**
@@ -72,16 +72,18 @@ If you are already in new profile page, you can [download the alpha version here
    - Blacklist
 
 ### Image items
+
 - Use icon ![fas-rss-dodgerblue](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.png) to indicate following illustrator
 - Use icon ![bookmark-heart-on](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.png) ![bookmark-heart-private](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.png) ![bookmark-heart-off](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.png) to indicate bookmarked (public/private) or not, click icon can add or remove bookmark directly
 
-![imageitem](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
+![imageitem](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
 
 Autoplay ugoira when mouse over ⚠️ This feature uses network bandwith quite heavily ⚠️
 
-![ugoira](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/ugoira.gif)
+![ugoira](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/ugoira.gif)
 
 Right click extension
+
 - Click on image
    - Like
    - Download original size image (only support single image)
@@ -91,12 +93,11 @@ Right click extension
    - Follow
    - Blacklist (simulate mute function)
 
-
 ### Preview Mode
 
 Support single, multiple, and ugoira illustration, and manipulate with mouse click and wheel scroll.
 
-![preview mode](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/preview-mode.png)
+![preview mode](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/preview-mode.png)
 
 ## Contribution
 

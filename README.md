@@ -25,14 +25,14 @@
 ## 安裝
 
 1. 安裝 Chrome 的 [Tampermonkey](https://chrome.google.com/webstore/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) 或 Firefox 的 [Tampermonkey](https://addons.mozilla.org/zh-TW/firefox/addon/tampermonkey/) 或[其他你喜歡的腳本管理器](https://greasyfork.org/help/installing-user-scripts)
-2. 安裝完成後按 [**`這裡`**](https://rawgit.com/FlandreDaisuki/Patchouli/master/dist/patchouli.user.js)
+2. 安裝完成後按 [**`這裡`**](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/dist/patchouli.user.js)
 
 ### 瀏覽器腳本管理器相容表
 
-|×|![tampermonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/tm32.png)|![violentmonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/vm32.png)|![greasemonkey](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/gm32.png)|
+|×|![tampermonkey](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/tm32.png)|![violentmonkey](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/vm32.png)|![greasemonkey](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/gm32.png)|
 |:--:|:--:|:--:|:--:|
-|![Firefox](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/fx32.png)|✔️|✔️|🔺|
-|![Google Chrome](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/gc32.png)|✔️|✔️| N/A |
+|![Firefox](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fx32.png)|✔️|✔️|🔺|
+|![Google Chrome](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/gc32.png)|✔️|✔️| N/A |
 
 🔺 目前不支援 Greasemonkey 動圖自動播放功能 ([#22](https://github.com/FlandreDaisuki/Patchouli/issues/22))
 
@@ -48,7 +48,7 @@
 
 ### 主控欄
 
-![koakuma](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/koakuma.png)
+![koakuma](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/koakuma.png)
 
 - 自動找圖，再也不需要*頁數*
 - 界面有部份 i18n (en, ja, zh-cn, zh-tw) **歡迎翻譯 PR**
@@ -72,11 +72,11 @@
 - 以圖示 ![fas-rss-dodgerblue](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/fas-rss-dodgerblue.png) 標注已關注繪師
 - 以圖示 ![bookmark-heart-on](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-on.png) ![bookmark-heart-private](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-private.png) ![bookmark-heart-off](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/bookmark-heart-off.png) 表示已收藏(公開/非公開)/未收藏，點擊則可直接添加收藏及取消收藏
 
-![imageitem](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
+![imageitem](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/imageitem.png)
 
 可自動播放動圖 ⚠️ 請斟酌自己的電腦效能及頻寬 ⚠️
 
-![ugoira](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/ugoira.gif)
+![ugoira](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/ugoira.gif)
 
 擴充右鍵功能
 
@@ -93,7 +93,7 @@
 
 支援單張、多張、動圖，並可用鍵盤方向鍵、滑鼠滾輪操作
 
-![preview mode](https://rawgit.com/FlandreDaisuki/Patchouli/master/assets/preview-mode.png)
+![preview mode](https://raw.githubusercontent.com/FlandreDaisuki/Patchouli/master/assets/preview-mode.png)
 
 ## 貢獻
 
