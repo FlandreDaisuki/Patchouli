@@ -272,8 +272,6 @@ class ExtendableError extends Error {
     }
   }
 }
-
-class InitError extends ExtendableError {}
 class ConnectionError extends ExtendableError {}
 
 // (get|post)Name(HTMLDetail|APIDetail)s?
@@ -1316,7 +1314,7 @@ const mutations$3 = {
     if (state.mainPageType === MAIN_PAGE_TYPE.SELF_BOOKMARK) {
       for (const marker of $$('.js-legacy-mark-all, .js-legacy-unmark-all')) {
         marker.addEventListener('click', () => {
-          $$('input[name="book_id[]"]').forEach(el => {
+          $$('input[name="book_id[]"]').forEach((el) => {
             el.checked = marker.classList.contains('js-legacy-mark-all');
           });
         });
@@ -1335,9 +1333,9 @@ const mutations$3 = {
   applyConfig: (state) => {
     if (state.mainPageType !== MAIN_PAGE_TYPE.NO_SUPPORT) {
       if (state.config.fitwidth) {
-        $$('.ω').forEach(el => el.classList.add('↔'));
+        $$('.ω').forEach((el) => el.classList.add('↔'));
       } else {
-        $$('.ω').forEach(el => el.classList.remove('↔'));
+        $$('.ω').forEach((el) => el.classList.remove('↔'));
       }
     }
   },
@@ -1442,7 +1440,19 @@ const actions$1 = {
       const u = window.pixiv.user;
       state.loginData = { id: u.id };
     } else {
-      throw new InitError('The page has no any login user data.');
+      const idFreqMap = Object.keys(localStorage)
+        .flatMap((k) => k.match(/\d+/g))
+        .filter(Boolean)
+        .reduce((c, v) => {
+          if (c[v]) { c[v] += 1; }
+          else { c[v] = 1; }
+          return c;
+        }, {});
+
+      const bestIdCandidate = Object.entries(idFreqMap).reduce((prev, curr) => curr[1] > prev[1] ? curr : prev);
+      state.loginData = { id: bestIdCandidate[0] };
+
+      // throw new InitError('The page has no any login user data.');
     }
 
     commit('updateSearchParam');
@@ -1463,7 +1473,7 @@ const actions$1 = {
     }
   },
   setMountPoints: async({ state, getters }) => {
-    $$('#wrapper').forEach(el => el.classList.add('ω'));
+    $$('#wrapper').forEach((el) => el.classList.add('ω'));
 
     state.mountPointCoverLayer = $el('div', null, (el) => {
       document.body.appendChild(el);
