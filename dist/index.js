@@ -285,6 +285,16 @@ class ConnectionError extends ExtendableError {}
 class Pixiv {
   constructor() {
     this._tt = null;
+    this.getCSRFToken();
+  }
+
+  async getCSRFToken() {
+    const html = await this.fetchHTML('https://www.pixiv.net/');
+    const tokenRegex = /"token":"([^"]+)"/g;
+    const matched = html.match(tokenRegex);
+    if (matched.length) {
+      this._tt = matched[0].replace(tokenRegex, '$1');
+    }
   }
 
   get tt() {
@@ -384,7 +394,7 @@ class Pixiv {
 
   async getIllustDataGroup(illustIds) {
     const uniqIllustIds = [...new Set(illustIds)];
-    const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
+    const illustDataGroup = await Promise.all(uniqIllustIds.map((id) => this.getIllustData(id)));
     $print.debug('Pixiv#getIllustDataGroup: illustDataGroup:', illustDataGroup);
     return illustDataGroup
       .filter(Boolean)
@@ -424,7 +434,7 @@ class Pixiv {
 
   async getUserDataGroup(userIds) {
     const uniqUserIds = [...new Set(userIds)];
-    const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
+    const userDataGroup = await Promise.all(uniqUserIds.map((id) => this.getUserData(id)));
     return userDataGroup
       .filter(Boolean)
       .reduce((collect, d) => {

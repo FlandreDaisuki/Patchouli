@@ -23,7 +23,7 @@
 // @license    The MIT License (MIT) Copyright (c) 2016-2019 FlandreDaisuki
 // @compatible firefox>=52
 // @compatible chrome>=55
-// @version    4.2.5
+// @version    4.2.6
 // @grant      unsafeWindow
 // @grant      GM_getValue
 // @grant      GM.getValue
@@ -305,6 +305,15 @@
   class Pixiv {
     constructor() {
       this._tt = null;
+      this.getCSRFToken();
+    }
+    async getCSRFToken() {
+      const html = await this.fetchHTML('https://www.pixiv.net/');
+      const tokenRegex = /"token":"([^"]+)"/g;
+      const matched = html.match(tokenRegex);
+      if (matched.length) {
+        this._tt = matched[0].replace(tokenRegex, '$1');
+      }
     }
     get tt() {
       if (this._tt) {
@@ -386,7 +395,7 @@
     }
     async getIllustDataGroup(illustIds) {
       const uniqIllustIds = [...new Set(illustIds)];
-      const illustDataGroup = await Promise.all(uniqIllustIds.map(id => this.getIllustData(id)));
+      const illustDataGroup = await Promise.all(uniqIllustIds.map((id) => this.getIllustData(id)));
       return illustDataGroup
         .filter(Boolean)
         .reduce((collect, d) => {
@@ -417,7 +426,7 @@
     }
     async getUserDataGroup(userIds) {
       const uniqUserIds = [...new Set(userIds)];
-      const userDataGroup = await Promise.all(uniqUserIds.map(id => this.getUserData(id)));
+      const userDataGroup = await Promise.all(uniqUserIds.map((id) => this.getUserData(id)));
       return userDataGroup
         .filter(Boolean)
         .reduce((collect, d) => {
