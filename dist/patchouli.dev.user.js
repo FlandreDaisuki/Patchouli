@@ -23,7 +23,7 @@
 // @license    The MIT License (MIT) Copyright (c) 2016-2019 FlandreDaisuki
 // @compatible firefox>=52
 // @compatible chrome>=55
-// @version    4.2.6
+// @version    4.2.7
 // @grant      unsafeWindow
 // @grant      GM_getValue
 // @grant      GM.getValue
@@ -507,7 +507,6 @@
       try {
         const html = await this.fetchHTML(url);
         const nextTag = html.match(/class="next"[^/]*/);
-
         let nextUrl = '';
         if (nextTag) {
           const nextHref = nextTag[0].match(/href="([^"]+)"/);
@@ -519,7 +518,9 @@
           }
         }
 
-        const iidHTMLs = html.match(/;illust_id=\d+"\s*class="work/g) || [];
+        const iidHTMLs = html.match(/illust_id=\d+/g) || [];
+        $print.debug('getIllustIdsInLegacyPageHTML::iidHTMLs', iidHTMLs);
+
         const illustIds = [];
         for (const dataid of iidHTMLs) {
           const iid = dataid.replace(/\D+(\d+).*/, '$1');

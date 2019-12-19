@@ -454,7 +454,6 @@ class Pixiv {
     try {
       const html = await this.fetchHTML(url);
       const nextTag = html.match(/class="next"[^/]*/);
-
       let nextUrl = '';
       if (nextTag) {
         const nextHref = nextTag[0].match(/href="([^"]+)"/);
@@ -466,7 +465,9 @@ class Pixiv {
         }
       }
 
-      const iidHTMLs = html.match(/;illust_id=\d+"\s*class="work/g) || [];
+      const iidHTMLs = html.match(/illust_id=\d+/g) || [];
+      $print.debug('getIllustIdsInLegacyPageHTML::iidHTMLs', iidHTMLs);
+
       const illustIds = [];
       for (const dataid of iidHTMLs) {
         const iid = dataid.replace(/\D+(\d+).*/, '$1');
