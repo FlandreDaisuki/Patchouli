@@ -1,13 +1,12 @@
 {
-    "eslint.autoFixOnSave": true,
     "editor.tabSize": 2,
-    "[vue]": {
-        "editor.formatOnSave": true
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
     },
     "eslint.validate": [
         "javascript",
         "javascriptreact",
-        {"autoFix": true, "language": "vue"}
+        "vue"
     ],
     "cSpell.words": [
         "afterend",
