@@ -19,7 +19,7 @@
   },
   "homepage": "https://github.com/FlandreDaisuki/Patchouli#readme",
   "devDependencies": {
-    "acorn": "^7.0.0",
+    "acorn": "^7.1.1",
     "acorn-walk": "^7.0.0",
     "eslint": "^5.16.0",
     "eslint-plugin-compat": "^3.3.0",
